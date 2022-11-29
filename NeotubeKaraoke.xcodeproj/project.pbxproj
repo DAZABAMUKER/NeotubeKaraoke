@@ -1,0 +1,477 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */; };
+		03962DD6291F781500A376F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD5291F781500A376F3 /* Assets.xcassets */; };
+		03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD8291F781500A376F3 /* Preview Assets.xcassets */; };
+		03962DDB291F781500A376F3 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DDA291F781500A376F3 /* Persistence.swift */; };
+		03962DDE291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */; };
+		03962DE6291FDD2700A376F3 /* learn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DE5291FDD2700A376F3 /* learn.swift */; };
+		03962DE8291FDFF000A376F3 /* MYVStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DE7291FDFF000A376F3 /* MYVStackView.swift */; };
+		03962DEA291FEC4000A376F3 /* NaviView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DE9291FEC4000A376F3 /* NaviView.swift */; };
+		03962DEC2920D7B300A376F3 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEB2920D7B300A376F3 /* MyWebView.swift */; };
+		03962DEE2921C80500A376F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DED2921C80500A376F3 /* ContentView.swift */; };
+		03962DF029230D7D00A376F3 /* searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEF29230D7C00A376F3 /* searcher.swift */; };
+		B3BAF51E131814E14B5703BA /* Pods_NeotubeKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838C16F50F271924003136CB /* Pods_NeotubeKaraoke.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03962DCE291F781400A376F3 /* NeotubeKaraoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeotubeKaraoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeotubeKaraokeApp.swift; sourceTree = "<group>"; };
+		03962DD5291F781500A376F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		03962DD8291F781500A376F3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		03962DDA291F781500A376F3 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		03962DDD291F781500A376F3 /* NeotubeKaraoke.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NeotubeKaraoke.xcdatamodel; sourceTree = "<group>"; };
+		03962DDF291F781500A376F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03962DE5291FDD2700A376F3 /* learn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = learn.swift; sourceTree = "<group>"; };
+		03962DE7291FDFF000A376F3 /* MYVStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MYVStackView.swift; sourceTree = "<group>"; };
+		03962DE9291FEC4000A376F3 /* NaviView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviView.swift; sourceTree = "<group>"; };
+		03962DEB2920D7B300A376F3 /* MyWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
+		03962DED2921C80500A376F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		03962DEF29230D7C00A376F3 /* searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searcher.swift; sourceTree = "<group>"; };
+		22570699C9B62AF5D57FE9E0 /* Pods-NeotubeKaraoke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.debug.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.debug.xcconfig"; sourceTree = "<group>"; };
+		838C16F50F271924003136CB /* Pods_NeotubeKaraoke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NeotubeKaraoke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10929044399B963FCA74F46 /* Pods-NeotubeKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		03962DCB291F781400A376F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3BAF51E131814E14B5703BA /* Pods_NeotubeKaraoke.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00DFA3E20672786FFCD27357 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				22570699C9B62AF5D57FE9E0 /* Pods-NeotubeKaraoke.debug.xcconfig */,
+				A10929044399B963FCA74F46 /* Pods-NeotubeKaraoke.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		03962DC5291F781400A376F3 = {
+			isa = PBXGroup;
+			children = (
+				03962DD0291F781400A376F3 /* NeotubeKaraoke */,
+				03962DCF291F781400A376F3 /* Products */,
+				00DFA3E20672786FFCD27357 /* Pods */,
+				AFDCA9AF9B1DEA5DA4B3A321 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		03962DCF291F781400A376F3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				03962DCE291F781400A376F3 /* NeotubeKaraoke.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		03962DD0291F781400A376F3 /* NeotubeKaraoke */ = {
+			isa = PBXGroup;
+			children = (
+				03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */,
+				03962DD5291F781500A376F3 /* Assets.xcassets */,
+				03962DDA291F781500A376F3 /* Persistence.swift */,
+				03962DDF291F781500A376F3 /* Info.plist */,
+				03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */,
+				03962DD7291F781500A376F3 /* Preview Content */,
+				03962DE7291FDFF000A376F3 /* MYVStackView.swift */,
+				03962DE5291FDD2700A376F3 /* learn.swift */,
+				03962DE9291FEC4000A376F3 /* NaviView.swift */,
+				03962DEB2920D7B300A376F3 /* MyWebView.swift */,
+				03962DED2921C80500A376F3 /* ContentView.swift */,
+				03962DEF29230D7C00A376F3 /* searcher.swift */,
+			);
+			path = NeotubeKaraoke;
+			sourceTree = "<group>";
+		};
+		03962DD7291F781500A376F3 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				03962DD8291F781500A376F3 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		AFDCA9AF9B1DEA5DA4B3A321 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				838C16F50F271924003136CB /* Pods_NeotubeKaraoke.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		03962DCD291F781400A376F3 /* NeotubeKaraoke */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 03962DE2291F781500A376F3 /* Build configuration list for PBXNativeTarget "NeotubeKaraoke" */;
+			buildPhases = (
+				56DAA103DF7EE21504BB38AF /* [CP] Check Pods Manifest.lock */,
+				03962DCA291F781400A376F3 /* Sources */,
+				03962DCB291F781400A376F3 /* Frameworks */,
+				03962DCC291F781400A376F3 /* Resources */,
+				F684ABD579621393C11C47DF /* [CP] Embed Pods Frameworks */,
+				3825A7AC6FA200F3DB345DE8 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NeotubeKaraoke;
+			productName = NeotubeKaraoke;
+			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		03962DC6291F781400A376F3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					03962DCD291F781400A376F3 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+				};
+			};
+			buildConfigurationList = 03962DC9291F781400A376F3 /* Build configuration list for PBXProject "NeotubeKaraoke" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 03962DC5291F781400A376F3;
+			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				03962DCD291F781400A376F3 /* NeotubeKaraoke */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		03962DCC291F781400A376F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */,
+				03962DD6291F781500A376F3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3825A7AC6FA200F3DB345DE8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		56DAA103DF7EE21504BB38AF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NeotubeKaraoke-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F684ABD579621393C11C47DF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		03962DCA291F781400A376F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03962DE8291FDFF000A376F3 /* MYVStackView.swift in Sources */,
+				03962DE6291FDD2700A376F3 /* learn.swift in Sources */,
+				03962DEE2921C80500A376F3 /* ContentView.swift in Sources */,
+				03962DDB291F781500A376F3 /* Persistence.swift in Sources */,
+				03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */,
+				03962DEC2920D7B300A376F3 /* MyWebView.swift in Sources */,
+				03962DEA291FEC4000A376F3 /* NaviView.swift in Sources */,
+				03962DF029230D7D00A376F3 /* searcher.swift in Sources */,
+				03962DDE291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		03962DE0291F781500A376F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		03962DE1291F781500A376F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		03962DE3291F781500A376F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22570699C9B62AF5D57FE9E0 /* Pods-NeotubeKaraoke.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"NeotubeKaraoke/Preview Content\"";
+				DEVELOPMENT_TEAM = CRJ3674QVG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NeotubeKaraoke/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.Dazabamuker.NeotubeKaraoke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		03962DE4291F781500A376F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A10929044399B963FCA74F46 /* Pods-NeotubeKaraoke.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"NeotubeKaraoke/Preview Content\"";
+				DEVELOPMENT_TEAM = CRJ3674QVG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NeotubeKaraoke/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.Dazabamuker.NeotubeKaraoke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		03962DC9291F781400A376F3 /* Build configuration list for PBXProject "NeotubeKaraoke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03962DE0291F781500A376F3 /* Debug */,
+				03962DE1291F781500A376F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		03962DE2291F781500A376F3 /* Build configuration list for PBXNativeTarget "NeotubeKaraoke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03962DE3291F781500A376F3 /* Debug */,
+				03962DE4291F781500A376F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				03962DDD291F781500A376F3 /* NeotubeKaraoke.xcdatamodel */,
+			);
+			currentVersion = 03962DDD291F781500A376F3 /* NeotubeKaraoke.xcdatamodel */;
+			path = NeotubeKaraoke.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 03962DC6291F781400A376F3 /* Project object */;
+}
