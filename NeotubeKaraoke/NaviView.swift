@@ -31,6 +31,9 @@ struct NaviView: View {
         Color.gray
     ]
     
+    
+    
+    
     var body: some View {
         VStack {
             Spacer()
