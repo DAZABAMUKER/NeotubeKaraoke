@@ -21,7 +21,6 @@
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
 		03D77A2F2935D4E80037061E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2E2935D4E80037061E /* Video.swift */; };
 		03D77A312935D5EC0037061E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A302935D5EC0037061E /* Model.swift */; };
-		B3BAF51E131814E14B5703BA /* Pods_NeotubeKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838C16F50F271924003136CB /* Pods_NeotubeKaraoke.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,9 +40,6 @@
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		03D77A2E2935D4E80037061E /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		03D77A302935D5EC0037061E /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		22570699C9B62AF5D57FE9E0 /* Pods-NeotubeKaraoke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.debug.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.debug.xcconfig"; sourceTree = "<group>"; };
-		838C16F50F271924003136CB /* Pods_NeotubeKaraoke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NeotubeKaraoke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A10929044399B963FCA74F46 /* Pods-NeotubeKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,29 +47,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3BAF51E131814E14B5703BA /* Pods_NeotubeKaraoke.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00DFA3E20672786FFCD27357 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				22570699C9B62AF5D57FE9E0 /* Pods-NeotubeKaraoke.debug.xcconfig */,
-				A10929044399B963FCA74F46 /* Pods-NeotubeKaraoke.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		03962DC5291F781400A376F3 = {
 			isa = PBXGroup;
 			children = (
 				03962DD0291F781400A376F3 /* NeotubeKaraoke */,
 				03962DCF291F781400A376F3 /* Products */,
-				00DFA3E20672786FFCD27357 /* Pods */,
-				AFDCA9AF9B1DEA5DA4B3A321 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,14 +99,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		AFDCA9AF9B1DEA5DA4B3A321 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				838C16F50F271924003136CB /* Pods_NeotubeKaraoke.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -130,12 +106,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 03962DE2291F781500A376F3 /* Build configuration list for PBXNativeTarget "NeotubeKaraoke" */;
 			buildPhases = (
-				56DAA103DF7EE21504BB38AF /* [CP] Check Pods Manifest.lock */,
 				03962DCA291F781400A376F3 /* Sources */,
 				03962DCB291F781400A376F3 /* Frameworks */,
 				03962DCC291F781400A376F3 /* Resources */,
-				F684ABD579621393C11C47DF /* [CP] Embed Pods Frameworks */,
-				3825A7AC6FA200F3DB345DE8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -190,65 +163,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3825A7AC6FA200F3DB345DE8 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		56DAA103DF7EE21504BB38AF /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NeotubeKaraoke-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F684ABD579621393C11C47DF /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		03962DCA291F781400A376F3 /* Sources */ = {
@@ -389,7 +303,6 @@
 		};
 		03962DE3291F781500A376F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22570699C9B62AF5D57FE9E0 /* Pods-NeotubeKaraoke.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -398,6 +311,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NeotubeKaraoke/Preview Content\"";
 				DEVELOPMENT_TEAM = CRJ3674QVG;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NeotubeKaraoke/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -421,7 +336,6 @@
 		};
 		03962DE4291F781500A376F3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A10929044399B963FCA74F46 /* Pods-NeotubeKaraoke.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -430,6 +344,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NeotubeKaraoke/Preview Content\"";
 				DEVELOPMENT_TEAM = CRJ3674QVG;
 				ENABLE_PREVIEWS = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NeotubeKaraoke/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
