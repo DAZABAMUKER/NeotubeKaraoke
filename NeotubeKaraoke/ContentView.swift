@@ -18,6 +18,8 @@ struct ContentView: View {
     @State var tabIndex: TabIndex
     @State var LargerScale: CGFloat = 1.5
     
+    var model = Model()
+    
     func changeView(tabIndex: TabIndex) -> NaviView{
         switch tabIndex {
         case .Home:
@@ -61,6 +63,7 @@ struct ContentView: View {
     
     
     var body: some View {
+        let _ = model.getVideos()
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 changeView(tabIndex: self.tabIndex)
@@ -72,7 +75,7 @@ struct ContentView: View {
                     .shadow(radius: 10)
                  */
                 TabView(selection: $tabIndex) {
-                    MyWebView(UrlTOLoad: "https://www.youtube.com")
+                    NaviView(title: "Home")
                         .tag(TabIndex.Home)
                     NaviView(title: "profile")
                         .tag(TabIndex.Profile)

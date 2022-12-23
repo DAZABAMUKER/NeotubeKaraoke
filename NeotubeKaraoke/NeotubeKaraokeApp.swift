@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct NeotubeKaraokeApp: App {
     let persistenceController = PersistenceController.shared
+    
 
     var body: some Scene {
         WindowGroup {
             ContentView(tabIndex: .Home)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+
         }
     }
 }

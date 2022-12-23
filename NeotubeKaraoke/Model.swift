@@ -11,9 +11,13 @@ class Model {
     func getVideos() {
         
         //Create URL object
-        let url = URL(string: Constant.API_URL)
+        let urls = Constant.API_URL
+        let urlEncoded = urls.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let url = URL(string: urlEncoded)
+        
         
         guard url != nil else {
+
             return
         }
         
@@ -26,9 +30,19 @@ class Model {
             if error != nil || data == nil {
                 return
             }
-            //parsing the data into video onject
+            do {
+                //parsing the data into video onject
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let response = try decoder.decode(Response.self, from: data! )
+                
+                dump(response)
+                print("did")
+            }
+            catch {
+                
+            }
         }
-        
         // kick off the task
         dataTask.resume()
     }
