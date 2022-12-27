@@ -75,8 +75,7 @@ struct ContentView: View {
                     .shadow(radius: 10)
                  */
                 TabView(selection: $tabIndex) {
-                    NaviView(title: "Home")
-                        .tag(TabIndex.Home)
+                    searcher()
                     NaviView(title: "profile")
                         .tag(TabIndex.Profile)
                     NaviView(title: "setting")
