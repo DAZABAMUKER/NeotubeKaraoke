@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
+		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
 		036EF0092955559E00789D57 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036EF0082955559E00789D57 /* Response.swift */; };
 		03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */; };
 		03962DD6291F781500A376F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD5291F781500A376F3 /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
+		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		036EF0082955559E00789D57 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		03962DCE291F781400A376F3 /* NeotubeKaraoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeotubeKaraoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeotubeKaraokeApp.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				03D77A2E2935D4E80037061E /* Video.swift */,
 				036EF0082955559E00789D57 /* Response.swift */,
 				0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */,
+				0316559D295BAC5C00B18342 /* TableCell.swift */,
 			);
 			path = NeotubeKaraoke;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0316559E295BAC5C00B18342 /* TableCell.swift in Sources */,
 				03962DE8291FDFF000A376F3 /* MYVStackView.swift in Sources */,
 				0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */,
 				03962DE6291FDD2700A376F3 /* learn.swift in Sources */,

@@ -12,6 +12,8 @@ struct searcher: View {
     @State private var inputVal: String = ""
     @State private var isEditing: Bool = false
     
+    @State var videos = [Video]()
+    
     var body: some View {
         
         GeometryReader { geometry in
@@ -22,7 +24,7 @@ struct searcher: View {
                     .edgesIgnoringSafeArea(.all)
                 LinearGradient(gradient: .init(
                     colors: [
-                      Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)),
+                      Color(UIColor(red: 0, green: 0, blue: 0, alpha: 1.00)),
                       Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 0.00))
                     ]
                   ),
@@ -47,6 +49,20 @@ struct searcher: View {
                         .offset(x:-170,y:-12)
                     Spacer()
                 }*/
+                NavigationView{
+                    List(videos, id : \.videoID){ Item in
+                        TableCell(Video: videos)
+                        
+                    }
+                    //.frame(width: geometry.size.width, height: geometry.size.height - 60)
+                    .background(Color.red)
+                    .scrollContentBackground(.hidden)
+                    .listRowBackground(Color.yellow)
+                    .padding(.top, 60)
+                    .listStyle(.plain)
+                    .environment(\.defaultMinListRowHeight, 70)
+                }
+
                 VStack{
                     HStack{
                         Image(systemName: "music.mic.circle")
@@ -61,6 +77,10 @@ struct searcher: View {
                             .padding(.trailing, 30)
                             .padding(.leading, 30)
                             .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
+                            .onSubmit {
+                                self.videos = Model().getVideos(vals: inputVal)
+
+                            }
                         Button {
                             self.inputVal = ""
                         } label: {
@@ -73,6 +93,7 @@ struct searcher: View {
                     }
                     .background(
                         Rectangle()
+                            .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1)))
                             .frame(width: geometry.size.width, height: 120)
                             //.offset(y: -geometry.safeAreaInsets.bottom+10)
                             .edgesIgnoringSafeArea(.all)
@@ -85,6 +106,7 @@ struct searcher: View {
                 .padding(.horizontal)
                 .padding(.vertical, 0)
                 //.background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                .preferredColorScheme(.dark)
             }
         }
     }
@@ -95,7 +117,6 @@ struct searcher: View {
                 .frame(height: 40)
                 .padding(-20)
                 .foregroundColor(Color(UIColor(red: 67/255, green: 66/255, blue: 66/255, alpha: 0.2)))
-             
             RoundedRectangle(cornerRadius: 20)
                 .strokeBorder(LinearGradient(gradient: .init(
                     colors: [

@@ -4,7 +4,7 @@
 //
 //  Created by 안병욱 on 2022/11/29.
 //
-
+import SwiftUI
 import Foundation
 struct Video : Decodable{
     

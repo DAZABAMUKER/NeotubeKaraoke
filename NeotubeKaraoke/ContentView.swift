@@ -18,8 +18,6 @@ struct ContentView: View {
     @State var tabIndex: TabIndex
     @State var LargerScale: CGFloat = 1.5
     
-    var model = Model()
-    
     func changeView(tabIndex: TabIndex) -> NaviView{
         switch tabIndex {
         case .Home:
@@ -63,7 +61,6 @@ struct ContentView: View {
     
     
     var body: some View {
-        let _ = model.getVideos()
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 changeView(tabIndex: self.tabIndex)
@@ -93,7 +90,7 @@ struct ContentView: View {
                     TabButtonSel(tabIndex: .Home, img: "music.mic", geometry: geometry)
                     TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     
-                }
+                }.preferredColorScheme(.light)
             }
         }
     }
