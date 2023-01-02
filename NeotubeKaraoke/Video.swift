@@ -7,7 +7,6 @@
 import SwiftUI
 import Foundation
 struct Video : Decodable{
-    
     var videoID: String = ""
     var title: String = ""
     var thumbnail: String = ""
@@ -19,7 +18,7 @@ struct Video : Decodable{
         case snippet
         case thumbnails
         case high
-        case ressourceId
+        case ressourceId = "id"
         
         
         case videoID  = "videoId"
@@ -40,9 +39,9 @@ struct Video : Decodable{
         let thumbnailContainer = try snippetContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .thumbnails)
         let highContainer = try thumbnailContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .high)
         self.thumbnail = try highContainer.decode(String.self, forKey: .thumbnail)
-        
-        let resourceIdContainer = try snippetContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .ressourceId)
+        let resourceIdContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .ressourceId)
         self.videoID = try resourceIdContainer.decode(String.self, forKey: .videoID)
+        
     }
     
 }

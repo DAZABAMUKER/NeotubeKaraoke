@@ -9,9 +9,9 @@ import SwiftUI
 
 struct TableCell: View {
     
-    private var Video: [Video]?
+    private var Video: Video
     
-    init(Video: [Video]? = nil) {
+    init(Video: Video ) {
         self.Video = Video
     }
     
@@ -34,13 +34,13 @@ struct TableCell: View {
                         .aspectRatio(1, contentMode: .fit)
                         .foregroundColor(Color.white)
                 }*/
-                
+                //Image(Video.th)
                 VStack(alignment: .leading) {
-                    Text("Title")
+                    Text(Video.title)
                         .bold()
                         .lineLimit(2)
                         .background(Color.green)
-                    Text("musition")
+                    Text(Video.description)
                         .lineLimit(1)
                         .background(.blue)
                 }
@@ -52,9 +52,9 @@ struct TableCell: View {
         }
     }
 }
-
+/*
 struct TableCell_preview: PreviewProvider {
     static var previews: some View {
         TableCell()
     }
-}
+}*/

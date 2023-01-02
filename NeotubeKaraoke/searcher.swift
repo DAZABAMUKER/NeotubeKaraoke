@@ -7,15 +7,17 @@
 
 import SwiftUI
 
-struct searcher: View {
+struct searcher: View{
+
     
     @State private var inputVal: String = ""
     @State private var isEditing: Bool = false
+    @State private var isUpdating: Bool = false
     
-    @State var videos = [Video]()
+    
+    public var ResponseItems: [Video]? = []
     
     var body: some View {
-        
         GeometryReader { geometry in
             ZStack{
                 Image("background")
@@ -31,6 +33,8 @@ struct searcher: View {
                   startPoint: .bottom,
                   endPoint: .top
                 ).edgesIgnoringSafeArea(.all)
+                
+                
 /*
                 VStack{
                     Rectangle()
@@ -48,11 +52,29 @@ struct searcher: View {
                         .shadow(radius: 10)
                         .offset(x:-170,y:-12)
                     Spacer()
-                }*/
+                }
                 NavigationView{
+        
                     List(videos, id : \.videoID){ Item in
-                        TableCell(Video: videos)
-                        
+                        //TableCell(Video: Item)
+                        /*ForEach(videos, id: \.videoID) { video in
+                            HStack() {
+                                Image(video.thumbnail)
+                                VStack(alignment: .leading) {
+                                    Text(video.title)
+                                        .bold()
+                                        .lineLimit(2)
+                                        .background(Color.green)
+                                    Text(video.description)
+                                        .lineLimit(1)
+                                        .background(.blue)
+                                }
+                                .foregroundColor(Color.white)
+                                Spacer()
+                            }
+                            .frame(width: geometry.size.width, height: 60)
+                            //.background(.black)
+                        }*/
                     }
                     //.frame(width: geometry.size.width, height: geometry.size.height - 60)
                     .background(Color.red)
@@ -62,7 +84,10 @@ struct searcher: View {
                     .listStyle(.plain)
                     .environment(\.defaultMinListRowHeight, 70)
                 }
-
+*/
+                //MARK: - TableView
+                TableView(isUpdating: $isUpdating)
+                    .padding(.top, 60)
                 VStack{
                     HStack{
                         Image(systemName: "music.mic.circle")
@@ -78,8 +103,9 @@ struct searcher: View {
                             .padding(.leading, 30)
                             .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
                             .onSubmit {
-                                self.videos = Model().getVideos(vals: inputVal)
-
+                                let _ = Model().getVideos(vals: inputVal)
+                                self.isUpdating = true
+                                
                             }
                         Button {
                             self.inputVal = ""
@@ -135,7 +161,62 @@ struct searcher: View {
         }
     }
 }
-
+struct TableView: UIViewRepresentable {
+    @Binding var isUpdating: Bool
+    
+    var model = Model()
+    func makeUIView(context: Context) -> UITableView {
+        let view = UITableView()
+        //model.delegate = context.coordinator
+        return view
+    }
+    func updateUIView(_ uiView: UITableView, context: Context) {
+        uiView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        uiView.delegate = context.coordinator
+        uiView.dataSource = context.coordinator
+        //model.delegate = context.coordinator
+        
+        if self.isUpdating {
+            //uiView.reloadData()
+            
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator()
+    }
+    class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate, ModelDelegate {
+        //MARK: - ModelDelegate method
+        var table: UITableView!
+        
+        func videoFetched(_ videos: [Video]) {
+            print("Food")
+            self.videos = videos
+            print("?")
+            table.reloadData()
+        }
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            //let title = self.videos[indexPath.row].title
+            //cell.textLabel?.text = title
+            cell.textLabel?.text = _contents[indexPath.row]
+            return cell
+        }
+        
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            //return self.videos.count
+            return _contents.count
+        }
+        
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            
+        }
+        
+        var videos = [Video]()
+        var _contents = [
+            "Apple", "Banana", "Melon", "Banana", "Melon", "Banana", "Melon", "Banana", "Melon"]
+    }
+}
 
 
 struct searcher_Previews: PreviewProvider {

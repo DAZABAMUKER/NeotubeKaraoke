@@ -7,11 +7,16 @@
 import SwiftUI
 import Foundation
 
+protocol ModelDelegate {
+    func videoFetched(_ videos: [Video])
+}
+
 class Model {
-    var responseItems: [Video]!
     
-    func getVideos(vals: String) -> [Video]{
-        
+    //public var responseItems: [Video]? = []
+    var delegate: ModelDelegate? = TableView.Coordinator()
+    
+    func getVideos(vals: String = "노래방") {
         
         print(vals)
         //Create URL object
@@ -19,12 +24,21 @@ class Model {
         let urlEncoded = urls.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: urlEncoded)
         
-        /*guard url != nil else {
-            return nil
-        }*/
+        guard url != nil else {
+            return
+        }
         
         //Get URL Session Object
         let session = URLSession.shared
+        /*
+        let js = Bundle.main.url(forResource: "ex", withExtension: "json")
+        let data = try? Data(contentsOf: js!)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let response = try? decoder.decode(Response.self, from: data!)
+        self.responseItems = response!.items!
+        */
+        
         
         //Get dataTask form URL Session Object
         let dataTask = session.dataTask(with: url!) { data, response, error in
@@ -36,10 +50,17 @@ class Model {
                 //parsing the data into video onject
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
-                let response = try decoder.decode(Response.self, from: data! )
-                self.responseItems = response.items!
-                print(self.responseItems)
-                dump(response)
+                let response = try decoder.decode(Response.self, from: data!)
+                
+                if response.items != nil {
+                    DispatchQueue.main.async {
+                        // Call the "videosFetched" method of the delegate
+                        self.delegate?.videoFetched(response.items!)
+                        print("~")
+                    }
+                }
+                print(response.items![0].title)
+                //dump(response)
             }
             catch {
                 
@@ -47,7 +68,5 @@ class Model {
         }
         // kick off the task
         dataTask.resume()
-        return responseItems
-        
     }
 }
