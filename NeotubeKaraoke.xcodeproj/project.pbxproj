@@ -24,7 +24,7 @@
 		03962DF029230D7D00A376F3 /* searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEF29230D7C00A376F3 /* searcher.swift */; };
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
 		03D77A2F2935D4E80037061E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2E2935D4E80037061E /* Video.swift */; };
-		03D77A312935D5EC0037061E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A302935D5EC0037061E /* Model.swift */; };
+		03F36CC12963DE61001AEB7A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F36CC02963DE61001AEB7A /* Models.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +47,7 @@
 		03962DEF29230D7C00A376F3 /* searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searcher.swift; sourceTree = "<group>"; };
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		03D77A2E2935D4E80037061E /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
-		03D77A302935D5EC0037061E /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		03F36CC02963DE61001AEB7A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,11 +94,11 @@
 				03962DED2921C80500A376F3 /* ContentView.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				03D77A2C2935D2290037061E /* Constant.swift */,
-				03D77A302935D5EC0037061E /* Model.swift */,
 				03D77A2E2935D4E80037061E /* Video.swift */,
 				036EF0082955559E00789D57 /* Response.swift */,
 				0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */,
 				0316559D295BAC5C00B18342 /* TableCell.swift */,
+				03F36CC02963DE61001AEB7A /* Models.swift */,
 			);
 			path = NeotubeKaraoke;
 			sourceTree = "<group>";
@@ -183,11 +183,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				0316559E295BAC5C00B18342 /* TableCell.swift in Sources */,
+				03F36CC12963DE61001AEB7A /* Models.swift in Sources */,
 				03962DE8291FDFF000A376F3 /* MYVStackView.swift in Sources */,
 				0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */,
 				03962DE6291FDD2700A376F3 /* learn.swift in Sources */,
 				03962DEE2921C80500A376F3 /* ContentView.swift in Sources */,
-				03D77A312935D5EC0037061E /* Model.swift in Sources */,
 				03962DDB291F781500A376F3 /* Persistence.swift in Sources */,
 				03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */,
 				036EF0092955559E00789D57 /* Response.swift in Sources */,

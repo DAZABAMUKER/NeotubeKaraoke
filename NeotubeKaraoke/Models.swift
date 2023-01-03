@@ -1,26 +1,18 @@
 //
-//  Model.swift
+//  Models.swift
 //  NeotubeKaraoke
 //
-//  Created by 안병욱 on 2022/11/29.
+//  Created by 안병욱 on 2023/01/03.
 //
-import SwiftUI
-import Foundation
 
-protocol ModelDelegate {
-    func videoFetched(_ videos: [Video])
-}
+import UIKit
 
-class Model {
+class Models: ObservableObject {
+    @Published var responseitems = [Video]()
     
-    //public var responseItems: [Video]? = []
-    var delegate: ModelDelegate? = TableView.Coordinator()
-    
-    func getVideos(vals: String = "노래방") {
-        
-        print(vals)
-        //Create URL object
-        var urls = "https://www.googleapis.com/youtube/v3/search?part=\(Constant.API_PART)&q=\(vals)&key=\(Constant.API_KEY)"
+    func getVideos(val: String = "노래방") {
+        print(val)
+        var urls = "https://www.googleapis.com/youtube/v3/search?part=\(Constant.API_PART)&q=\(val)&order=viewCount&type=video&maxResults=20&key=\(Constant.API_KEY)"
         let urlEncoded = urls.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: urlEncoded)
         
@@ -36,9 +28,9 @@ class Model {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let response = try? decoder.decode(Response.self, from: data!)
-        self.responseItems = response!.items!
-        */
+        self.responseitems = response!.items!
         
+        */
         
         //Get dataTask form URL Session Object
         let dataTask = session.dataTask(with: url!) { data, response, error in
@@ -51,14 +43,12 @@ class Model {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
                 let response = try decoder.decode(Response.self, from: data!)
-                
-                if response.items != nil {
-                    DispatchQueue.main.async {
-                        // Call the "videosFetched" method of the delegate
-                        self.delegate?.videoFetched(response.items!)
-                        print("~")
+                DispatchQueue.main.async {
+                    if response.items != nil {
+                        self.responseitems = response.items!
                     }
                 }
+                
                 //print(response.items![0].title)
                 //dump(response)
             }

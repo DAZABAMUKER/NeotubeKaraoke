@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct searcher: View{
+    
 
     
     @State private var inputVal: String = ""
     @State private var isEditing: Bool = false
-    @State private var isUpdating: Bool = false
     
+    @ObservedObject var models = Models()
     
-    public var ResponseItems: [Video]? = []
+    //public var ResponseItems: [Video]? = []
     
     var body: some View {
         GeometryReader { geometry in
@@ -35,58 +36,48 @@ struct searcher: View{
                 ).edgesIgnoringSafeArea(.all)
                 
                 
-/*
-                VStack{
-                    Rectangle()
-                        .frame(height: 120)
-                        .edgesIgnoringSafeArea(.all)
-                        .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                        .shadow(radius: 10)
-                    Spacer()
-                }
-                VStack{
-                    Circle()
-                        .frame(width: 80)
-                        //.foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                        .foregroundColor(Color.gray)
-                        .shadow(radius: 10)
-                        .offset(x:-170,y:-12)
-                    Spacer()
-                }
-                NavigationView{
-        
-                    List(videos, id : \.videoID){ Item in
-                        //TableCell(Video: Item)
-                        /*ForEach(videos, id: \.videoID) { video in
-                            HStack() {
-                                Image(video.thumbnail)
-                                VStack(alignment: .leading) {
-                                    Text(video.title)
-                                        .bold()
-                                        .lineLimit(2)
-                                        .background(Color.green)
-                                    Text(video.description)
-                                        .lineLimit(1)
-                                        .background(.blue)
-                                }
-                                .foregroundColor(Color.white)
-                                Spacer()
+                NavigationView {
+                    VStack{
+                        /*
+                        Rectangle()
+                            .frame(height: 120)
+                            .edgesIgnoringSafeArea(.all)
+                            //.foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                            .foregroundColor(.yellow)
+                            .shadow(radius: 10)
+                        //Spacer()*/
+                        List(models.responseitems, id: \.videoID){ responseitems in
+                            NavigationLink(destination: EmptyView()) {
+                                Text(responseitems.title)
+                                /*HStack() {
+                                    Image(responseitems.thumbnail)
+                                    VStack(alignment: .leading) {
+                                        Text(responseitems.title)
+                                            .bold()
+                                            .lineLimit(2)
+                                            .background(Color.green)
+                                        Text(responseitems.description)
+                                            .lineLimit(1)
+                                            .background(.blue)
+                                    }
+                                    .foregroundColor(Color.white)
+                                    Spacer()
+                                }*/
+                                //.frame(width: geometry.size.width, height: 60)
                             }
-                            .frame(width: geometry.size.width, height: 60)
-                            //.background(.black)
-                        }*/
+                        }
+                        
+                        //.frame(width: geometry.size.width, height: geometry.size.height - 60)
+                        .background(Color.black)
+                        .scrollContentBackground(.hidden)
+                        .listRowBackground(Color.yellow)
+                        //.padding(.top, 60)
+                        .listStyle(.plain)
+                        .environment(\.defaultMinListRowHeight, 70)
                     }
-                    //.frame(width: geometry.size.width, height: geometry.size.height - 60)
-                    .background(Color.red)
-                    .scrollContentBackground(.hidden)
-                    .listRowBackground(Color.yellow)
-                    .padding(.top, 60)
-                    .listStyle(.plain)
-                    .environment(\.defaultMinListRowHeight, 70)
                 }
-*/
                 //MARK: - TableView
-                TableView(isUpdating: $isUpdating)
+                //TableView(isUpdating: $isUpdating)//.onAppear(perform: {isUpdating = true})
                     .padding(.top, 60)
                 VStack{
                     HStack{
@@ -97,14 +88,14 @@ struct searcher: View{
                         TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                         //.textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
+                            .disableAutocorrection(true)
                             .background(border)
                             .foregroundColor(.white)
                             .padding(.trailing, 30)
                             .padding(.leading, 30)
                             .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
                             .onSubmit {
-                                let _ = Model().getVideos(vals: inputVal)
-                                self.isUpdating = true
+                                let _ = models.getVideos(val: inputVal)
                                 
                             }
                         Button {
@@ -161,64 +152,6 @@ struct searcher: View{
         }
     }
 }
-struct TableView: UIViewRepresentable {
-    @Binding var isUpdating: Bool
-    
-    var model = Model()
-    func makeUIView(context: Context) -> UITableView {
-        let view = UITableView()
-        //model.delegate = context.coordinator
-        return view
-    }
-    func updateUIView(_ uiView: UITableView, context: Context) {
-        uiView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        uiView.delegate = context.coordinator
-        uiView.dataSource = context.coordinator
-        //model.delegate = context.coordinator
-        
-        if self.isUpdating {
-            //uiView.reloadData()
-            
-        }
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        return Coordinator()
-    }
-    class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate, ModelDelegate {
-        //MARK: - ModelDelegate method
-        var table: UITableView!
-        
-        func videoFetched(_ videos: [Video]) {
-            print("Food")
-            self.videos = videos
-            print("?")
-            table.reloadData()
-        }
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            //let title = self.videos[indexPath.row].title
-            //cell.textLabel?.text = title
-            cell.textLabel?.text = _contents[indexPath.row]
-            return cell
-        }
-        
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            //return self.videos.count
-            return _contents.count
-        }
-        
-        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            
-        }
-        
-        var videos = [Video]()
-        var _contents = [
-            "Apple", "Banana", "Melon", "Banana", "Melon", "Banana", "Melon", "Banana", "Melon"]
-    }
-}
-
-
 struct searcher_Previews: PreviewProvider {
     static var previews: some View {
         searcher()
