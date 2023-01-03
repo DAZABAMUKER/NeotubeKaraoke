@@ -16,11 +16,11 @@ struct searcher: View{
     
     @ObservedObject var models = Models()
     
-    //public var ResponseItems: [Video]? = []
     
     var body: some View {
         GeometryReader { geometry in
             ZStack{
+                let _ = models.getVideos()
                 Image("background")
                     .resizable()
                     .aspectRatio(geometry.size, contentMode: .fill)
@@ -38,32 +38,42 @@ struct searcher: View{
                 
                 NavigationView {
                     VStack{
-                        /*
-                        Rectangle()
-                            .frame(height: 120)
-                            .edgesIgnoringSafeArea(.all)
-                            //.foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                            .foregroundColor(.yellow)
-                            .shadow(radius: 10)
-                        //Spacer()*/
+                        HStack{
+                            Image(systemName: "music.mic.circle")
+                                .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
+                                //.foregroundColor(Color.white)
+                                .font(.system(size: 50))
+                            TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .background(border)
+                                .foregroundColor(.white)
+                                .padding(.trailing, 30)
+                                .padding(.leading, 30)
+                                .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
+                                .onSubmit {
+                                    let _ = models.getVideos(val: inputVal)
+                                }
+                            Button {
+                                self.inputVal = ""
+                            } label: {
+                                if (self.inputVal.count > 0) {
+                                    Image(systemName: "multiply.circle.fill")
+                                        .foregroundColor(.gray)
+                                        .font(.system(size: 20))
+                                }
+                            }
+                        }
+                            .background(
+                                Rectangle()
+                                    .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1)))
+                                    .frame(width: geometry.size.width, height: 120)
+                                    .edgesIgnoringSafeArea(.all)
+                                    .shadow(radius: 10)
+                        )
                         List(models.responseitems, id: \.videoID){ responseitems in
                             NavigationLink(destination: EmptyView()) {
-                                Text(responseitems.title)
-                                /*HStack() {
-                                    Image(responseitems.thumbnail)
-                                    VStack(alignment: .leading) {
-                                        Text(responseitems.title)
-                                            .bold()
-                                            .lineLimit(2)
-                                            .background(Color.green)
-                                        Text(responseitems.description)
-                                            .lineLimit(1)
-                                            .background(.blue)
-                                    }
-                                    .foregroundColor(Color.white)
-                                    Spacer()
-                                }*/
-                                //.frame(width: geometry.size.width, height: 60)
+                                TableCell(Video: responseitems)
                             }
                         }
                         
@@ -71,59 +81,12 @@ struct searcher: View{
                         .background(Color.black)
                         .scrollContentBackground(.hidden)
                         .listRowBackground(Color.yellow)
-                        //.padding(.top, 60)
+                        .padding(.top, -8)
                         .listStyle(.plain)
                         .environment(\.defaultMinListRowHeight, 70)
+                        .preferredColorScheme(.dark)
                     }
                 }
-                //MARK: - TableView
-                //TableView(isUpdating: $isUpdating)//.onAppear(perform: {isUpdating = true})
-                    .padding(.top, 60)
-                VStack{
-                    HStack{
-                        Image(systemName: "music.mic.circle")
-                            .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
-                            //.foregroundColor(Color.white)
-                            .font(.system(size: 50))
-                        TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
-                        //.textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .background(border)
-                            .foregroundColor(.white)
-                            .padding(.trailing, 30)
-                            .padding(.leading, 30)
-                            .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
-                            .onSubmit {
-                                let _ = models.getVideos(val: inputVal)
-                                
-                            }
-                        Button {
-                            self.inputVal = ""
-                        } label: {
-                            if (self.inputVal.count > 0) {
-                                Image(systemName: "multiply.circle.fill")
-                                    .foregroundColor(.gray)
-                                    .font(.system(size: 20))
-                            }
-                        }
-                    }
-                    .background(
-                        Rectangle()
-                            .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1)))
-                            .frame(width: geometry.size.width, height: 120)
-                            //.offset(y: -geometry.safeAreaInsets.bottom+10)
-                            .edgesIgnoringSafeArea(.all)
-                            .shadow(radius: 10)
-                        
-                    )
-                    //.padding(.horizontal,-20)
-                    Spacer()
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 0)
-                //.background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                .preferredColorScheme(.dark)
             }
         }
     }

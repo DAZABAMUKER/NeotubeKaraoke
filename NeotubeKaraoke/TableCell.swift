@@ -10,7 +10,7 @@ import SwiftUI
 struct TableCell: View {
     
     private var Video: Video
-    
+    private var image: UIImageView!
     init(Video: Video ) {
         self.Video = Video
     }
@@ -18,31 +18,24 @@ struct TableCell: View {
     var body: some View {
         GeometryReader{ geometry in
             HStack() {
-                /*ZStack(){
-                    Rectangle()
-                        .fill(LinearGradient(colors: [
-                            Color.pink,
-                            Color(red: 253 / 255, green: 138 / 255, blue: 138 / 255)
-                        ], startPoint: .top, endPoint: .bottom))
-                        .aspectRatio(16/9, contentMode: .fill)
-                        .scaledToFit()
-                        .cornerRadius(8)
-                        
+                AsyncImage(url: URL(string: Video.thumbnail)){ image in
+                    image.resizable()
+                } placeholder: {
                     Image(systemName: "music.note.tv")
-                        .resizable()
-                        .frame(height: 50)
-                        .aspectRatio(1, contentMode: .fit)
-                        .foregroundColor(Color.white)
-                }*/
-                //Image(Video.th)
+                }
+                    .aspectRatio(480/360, contentMode: .fit)
+                    .frame(height: 70)
+                    .padding(.leading, -13)
                 VStack(alignment: .leading) {
                     Text(Video.title)
                         .bold()
                         .lineLimit(2)
-                        .background(Color.green)
-                    Text(Video.description)
+                        //.background(Color.green)
+                        .font(.system(size: 20))
+                    Text(Video.channelTitle)
                         .lineLimit(1)
-                        .background(.blue)
+                        //.background(.blue)
+                        .font(.system(size: 12))
                 }
                 .foregroundColor(Color.white)
                 Spacer()
