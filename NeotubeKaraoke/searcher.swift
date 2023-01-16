@@ -20,7 +20,7 @@ struct searcher: View{
     var body: some View {
         GeometryReader { geometry in
             ZStack{
-                let _ = models.getVideos()
+                //let _ = models.getVideos()
                 Image("background")
                     .resizable()
                     .aspectRatio(geometry.size, contentMode: .fill)
@@ -38,18 +38,20 @@ struct searcher: View{
                 
                 NavigationView {
                     VStack{
+                        //MARK: - SearchBar
                         HStack{
                             Image(systemName: "music.mic.circle")
                                 .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
                                 //.foregroundColor(Color.white)
                                 .font(.system(size: 50))
+                                .padding(.leading, 10)
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
                                 .background(border)
                                 .foregroundColor(.white)
                                 .padding(.trailing, 30)
-                                .padding(.leading, 30)
+                                .padding(.leading, 20)
                                 .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
                                 .onSubmit {
                                     let _ = models.getVideos(val: inputVal)
@@ -71,8 +73,10 @@ struct searcher: View{
                                     .edgesIgnoringSafeArea(.all)
                                     .shadow(radius: 10)
                         )
+                        //MARK: - 리스트
+                        
                         List(models.responseitems, id: \.videoID){ responseitems in
-                            NavigationLink(destination: EmptyView()) {
+                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
                                 TableCell(Video: responseitems)
                             }
                         }

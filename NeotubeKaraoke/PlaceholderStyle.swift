@@ -15,7 +15,7 @@ public struct PlaceholderStyle: ViewModifier {
             if showPlaceHolder {
                 Text(placeholder)
                     .foregroundColor(Color.white)
-                .padding(.horizontal, 35)
+                .padding(.horizontal, 25)
             }
             content
             .padding(5.0)

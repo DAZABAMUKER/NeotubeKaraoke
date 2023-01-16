@@ -49,7 +49,7 @@ class Models: ObservableObject {
                     }
                 }
                 
-                //print(response.items![0].title)
+                print(response.items![0].title)
                 //dump(response)
             }
             catch {
