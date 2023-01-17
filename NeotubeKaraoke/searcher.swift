@@ -77,22 +77,36 @@ struct searcher: View{
                                     .shadow(radius: 10)
                         )
                         //MARK: - 리스트
-                        
-                        List(models.responseitems, id: \.videoID){ responseitems in
-                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
-                                TableCell(Video: responseitems)
-                                    .onAppear(){
-                                        self.ResponseItems = models.responseitems
-                                    }
+                        if models.responseitems.count == 0 {
+                            List(self.ResponseItems, id: \.videoID){ responseitems in
+                                NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
+                                    TableCell(Video: responseitems)
+                                }
                             }
+                            .background(Color.black)
+                            .scrollContentBackground(.hidden)
+                            .listRowBackground(Color.yellow)
+                            .padding(.top, -8)
+                            .listStyle(.plain)
+                            .environment(\.defaultMinListRowHeight, 70)
+                            .preferredColorScheme(.dark)
+                        } else {
+                            List(models.responseitems, id: \.videoID){ responseitems in
+                                NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
+                                    TableCell(Video: responseitems)
+                                        .onAppear(){
+                                            self.ResponseItems = models.responseitems
+                                        }
+                                }
+                            }
+                            .background(Color.black)
+                            .scrollContentBackground(.hidden)
+                            .listRowBackground(Color.yellow)
+                            .padding(.top, -8)
+                            .listStyle(.plain)
+                            .environment(\.defaultMinListRowHeight, 70)
+                            .preferredColorScheme(.dark)
                         }
-                        .background(Color.black)
-                        .scrollContentBackground(.hidden)
-                        .listRowBackground(Color.yellow)
-                        .padding(.top, -8)
-                        .listStyle(.plain)
-                        .environment(\.defaultMinListRowHeight, 70)
-                        .preferredColorScheme(.dark)
                     }
                 }
             }
