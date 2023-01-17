@@ -16,7 +16,7 @@ struct ContentView: View {
     }
     
     @State var tabIndex: TabIndex
-    @State var LargerScale: CGFloat = 1.5
+    @State var sheeet: Bool = false
     
     func changeView(tabIndex: TabIndex) -> NaviView{
         switch tabIndex {
@@ -29,6 +29,16 @@ struct ContentView: View {
         case .Setting:
             return NaviView(title: "설정")
             //return MyWebView(UrlTOLoad: "https://www.daum.net")
+        }
+    }
+    func changeColor(tabIndex: TabIndex) -> Color{
+        switch tabIndex {
+        case .Home:
+            return Color.red
+        case .Setting:
+            return Color.white
+        case .Profile:
+            return Color.green
         }
     }
     
@@ -47,14 +57,14 @@ struct ContentView: View {
         Button(action: {
             print("click")
             self.tabIndex = tabIndex
-            withAnimation{self.tabIndex = tabIndex
-            }}) {
+            }) {
             Image(systemName: img)
                 .font(.system(size: 30))
-                .scaleEffect(self.tabIndex == tabIndex ? self.LargerScale : 1.0)
-                .foregroundColor(self.tabIndex == tabIndex ? Color.red : Color.gray)
+                .scaleEffect(self.tabIndex == tabIndex ? 1.7 : 1.0)
+                .foregroundColor(self.tabIndex == tabIndex ? changeColor(tabIndex: tabIndex) : Color.gray)
                 .frame(width: geometry.size.width / 3, height: 50)
                 .offset(y: self.tabIndex == tabIndex ? -5 : 0)
+                .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
         }
         .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
     }
@@ -63,26 +73,25 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
-                changeView(tabIndex: self.tabIndex)
-                /*
-                Rectangle()
-                    .frame(width: geometry.size.width, height: geometry.safeAreaInsets.bottom + 60)
-                    .offset(y: geometry.safeAreaInsets.bottom)
-                    .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                    .shadow(radius: 10)
-                 */
                 TabView(selection: $tabIndex) {
                     searcher()
-                    NaviView(title: "profile")
+                        .toolbar(.hidden, for: .tabBar)
+                        .tag(TabIndex.Home)
+                    Text("안녕하세요")
                         .tag(TabIndex.Profile)
-                    NaviView(title: "setting")
+                    Text("반가워요")
                         .tag(TabIndex.Setting)
+                        .onTapGesture {
+                            self.sheeet = true
+                        }.sheet(isPresented: $sheeet) {
+                            learn()
+                        }
                 }
                 Circle()
                     .frame(width: 100)
                     .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
                     .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                    .animation(.easeOut)
+                    .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                     .shadow(radius: 10)
 
                 HStack(spacing: 0) {

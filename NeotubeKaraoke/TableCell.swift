@@ -34,22 +34,31 @@ struct TableCell: View {
                                          Image(systemName: "music.note.tv")
                                              .resizable()
                                              .frame(height: 30)
-                                             .aspectRatio(1, contentMode: .fit)
+                                             .aspectRatio(0.92, contentMode: .fit)
                                              .foregroundColor(Color.white)
-                    }.padding(.leading,10)
+                    }.padding(.leading,7)
                 }
                     .aspectRatio(16/12, contentMode: .fit)
                     .frame(height: 90)
                     .padding(.leading, -13)
                     .padding(.bottom, 10)
                 VStack(alignment: .leading) {
-                    Text(Video.title)
-                        .bold()
-                        .lineLimit(2)
-                        .frame(height: 45)
-                        //.background(Color.green)
-                        .foregroundColor(.orange)
-                        .font(.system(size: 18))
+                    LinearGradient(colors: [
+                        Color(red: 1, green: 112 / 255.0, blue: 0),
+                        Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
+                    ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                )
+                    .mask(alignment: .leading) {
+                        Text(Video.title)
+                            .bold()
+                            .lineLimit(2)
+                            .frame(height: 45)
+                            //.background(Color.green)
+                            //.foregroundColor(.orange)
+                            .font(.system(size: 18))
+                    }
                     Text(Video.channelTitle)
                         .lineLimit(1)
                         //.background(.blue)
