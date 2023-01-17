@@ -88,7 +88,7 @@ struct searcher: View{
                             .listRowBackground(Color.yellow)
                             .padding(.top, -8)
                             .listStyle(.plain)
-                            .environment(\.defaultMinListRowHeight, 70)
+                            .environment(\.defaultMinListRowHeight, 80)
                             .preferredColorScheme(.dark)
                         } else {
                             List(models.responseitems, id: \.videoID){ responseitems in
@@ -104,7 +104,7 @@ struct searcher: View{
                             .listRowBackground(Color.yellow)
                             .padding(.top, -8)
                             .listStyle(.plain)
-                            .environment(\.defaultMinListRowHeight, 70)
+                            .environment(\.defaultMinListRowHeight, 80)
                             .preferredColorScheme(.dark)
                         }
                     }

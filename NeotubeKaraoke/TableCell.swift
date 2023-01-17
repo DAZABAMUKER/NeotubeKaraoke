@@ -21,26 +21,47 @@ struct TableCell: View {
                 AsyncImage(url: URL(string: Video.thumbnail)){ image in
                     image.resizable()
                 } placeholder: {
-                    Image(systemName: "music.note.tv")
+                    ZStack(){
+                                         Rectangle()
+                                             .fill(LinearGradient(colors: [
+                                                 Color.pink,
+                                                 Color(red: 253 / 255, green: 138 / 255, blue: 138 / 255)
+                                             ], startPoint: .top, endPoint: .bottom))
+                                             .aspectRatio(16/9, contentMode: .fill)
+                                             .scaledToFit()
+                                             .cornerRadius(8)
+                                             .frame(height: 60)
+                                         Image(systemName: "music.note.tv")
+                                             .resizable()
+                                             .frame(height: 30)
+                                             .aspectRatio(1, contentMode: .fit)
+                                             .foregroundColor(Color.white)
+                    }.padding(.leading,10)
                 }
-                    .aspectRatio(480/360, contentMode: .fit)
-                    .frame(height: 70)
+                    .aspectRatio(16/12, contentMode: .fit)
+                    .frame(height: 90)
                     .padding(.leading, -13)
+                    .padding(.bottom, 10)
                 VStack(alignment: .leading) {
                     Text(Video.title)
                         .bold()
                         .lineLimit(2)
+                        .frame(height: 45)
                         //.background(Color.green)
-                        .font(.system(size: 20))
+                        .foregroundColor(.orange)
+                        .font(.system(size: 18))
                     Text(Video.channelTitle)
                         .lineLimit(1)
                         //.background(.blue)
-                        .font(.system(size: 12))
+                        //.bold()
+                        .font(.system(size: 13))
+                        .padding(.top, 0)
+                    Spacer()
                 }
                 .foregroundColor(Color.white)
                 Spacer()
             }
-            .frame(width: geometry.size.width, height: 60)
+            .frame(width: geometry.size.width, height: 80)
             //.background(.black)
         }
     }

@@ -35,9 +35,12 @@ struct Video : Decodable{
         
         let snippetContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .snippet)
         self.title = try snippetContainer.decode(String.self, forKey: .title)
+        self.title = String(htmlEncodedString: self.title)!
         self.description = try snippetContainer.decode(String.self, forKey: .description)
+        self.description = String(htmlEncodedString: self.description)!
         self.published = try snippetContainer.decode(Date.self, forKey: .published)
         self.channelTitle = try snippetContainer.decode(String.self, forKey: .channelTitle)
+        self.channelTitle = String(htmlEncodedString: self.channelTitle)!
         
         let thumbnailContainer = try snippetContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .thumbnails)
         let highContainer = try thumbnailContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .high)
@@ -47,4 +50,27 @@ struct Video : Decodable{
         
     }
     
+}
+
+extension String {
+
+    init?(htmlEncodedString: String) {
+
+        guard let data = htmlEncodedString.data(using: .utf8) else {
+            return nil
+        }
+
+        let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue
+        ]
+
+        guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else {
+            return nil
+        }
+
+        self.init(attributedString.string)
+
+    }
+
 }
