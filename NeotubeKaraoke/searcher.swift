@@ -16,6 +16,9 @@ struct searcher: View{
     
     @ObservedObject var models = Models()
     
+    @State var ResponseItems = [Video]()
+    
+    
     
     var body: some View {
         GeometryReader { geometry in
@@ -78,10 +81,11 @@ struct searcher: View{
                         List(models.responseitems, id: \.videoID){ responseitems in
                             NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
                                 TableCell(Video: responseitems)
+                                    .onAppear(){
+                                        self.ResponseItems = models.responseitems
+                                    }
                             }
                         }
-                        
-                        //.frame(width: geometry.size.width, height: geometry.size.height - 60)
                         .background(Color.black)
                         .scrollContentBackground(.hidden)
                         .listRowBackground(Color.yellow)
