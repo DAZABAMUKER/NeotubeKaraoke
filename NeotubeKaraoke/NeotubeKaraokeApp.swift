@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PythonSupport
+import YoutubeDL
 
 @main
 struct NeotubeKaraokeApp: App {
@@ -19,4 +21,12 @@ struct NeotubeKaraokeApp: App {
 
         }
     }
+    init() {
+            PythonSupport.initialize()
+            YoutubeDL.downloadPythonModule { error in
+                guard error == nil else { fatalError() }
+                let ydl = try? YoutubeDL()
+                print(ydl?.version)
+            }
+        }
 }

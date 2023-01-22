@@ -13,7 +13,6 @@
 		0337C0CE297277920069899A /* YoutubeVideoExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CD297277920069899A /* YoutubeVideoExtractor.swift */; };
 		036DCB30297C9C3200326F62 /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 036DCB2F297C9C3200326F62 /* YoutubeDL */; };
 		036EF0092955559E00789D57 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036EF0082955559E00789D57 /* Response.swift */; };
-		037D444E295D82DE008124FD /* ex.json in Resources */ = {isa = PBXBuildFile; fileRef = 037D444D295D82DE008124FD /* ex.json */; };
 		03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */; };
 		03962DD6291F781500A376F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD5291F781500A376F3 /* Assets.xcassets */; };
 		03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD8291F781500A376F3 /* Preview Assets.xcassets */; };
@@ -36,7 +35,6 @@
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
 		0337C0CD297277920069899A /* YoutubeVideoExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideoExtractor.swift; sourceTree = "<group>"; };
 		036EF0082955559E00789D57 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
-		037D444D295D82DE008124FD /* ex.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = ex.json; path = ../../ex.json; sourceTree = "<group>"; };
 		03962DCE291F781400A376F3 /* NeotubeKaraoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeotubeKaraoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeotubeKaraokeApp.swift; sourceTree = "<group>"; };
 		03962DD5291F781500A376F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -86,7 +84,6 @@
 		03962DD0291F781400A376F3 /* NeotubeKaraoke */ = {
 			isa = PBXGroup;
 			children = (
-				037D444D295D82DE008124FD /* ex.json */,
 				03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */,
 				03962DD5291F781500A376F3 /* Assets.xcassets */,
 				03962DDA291F781500A376F3 /* Persistence.swift */,
@@ -183,7 +180,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				037D444E295D82DE008124FD /* ex.json in Resources */,
 				03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */,
 				03962DD6291F781500A376F3 /* Assets.xcassets in Resources */,
 			);
