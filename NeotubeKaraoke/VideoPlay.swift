@@ -18,15 +18,16 @@ struct VideoPlay: View {
     @State var progress: Progress?
     @State var youtubeDL: YoutubeDL?
     @State var info: Info?
+    @State var format: [Format]?
     @State var url: URL? {
-            didSet {
-                guard let url = URL(string: "https://www.youtube.com/watch?v=\(videoId)") else {
-                    return
-                }
-                
-                extractInfo(url: url)
+        didSet {
+            guard let url = url else {
+                return
             }
+            
+            extractInfo(url: url)
         }
+    }
     @State var error: Error?
     @State var formatsSheet: ActionSheet?
         
@@ -61,10 +62,12 @@ struct VideoPlay: View {
             indeterminateProgressKey = "Extracting info..."
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
-                    let (_, info) = try youtubeDL.extractInfo(url: url)
+                    let (mp4, info) = try youtubeDL.extractInfo(url: url)
                     DispatchQueue.main.async {
                         indeterminateProgressKey = nil
                         self.info = info
+                        self.format?.append(contentsOf: mp4)
+                        let reqquest = mp4.last?.urlRequest
                     }
                 }
                 catch {
@@ -119,19 +122,29 @@ struct VideoPlay: View {
     
     var body: some View {
         //Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-        
+        if info != nil {
+            Text(info?.title ?? "nil")
+            //Text(info?.formats.description ?? "nil")
+        }
         VideoPlayer(player: player)
             .frame(width: 400, height: 300, alignment: .center)
             .onAppear() {
+                url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
                 //player = AVPlayer(url:URL(string: info.)
-                print(url)
+                //print(url)
             }
         
     }
 }
-
+/*
 struct VideoPlay_Previews: PreviewProvider {
     static var previews: some View {
         VideoPlay()
+    }
+}*/
+
+struct Previews_VideoPlay_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }
