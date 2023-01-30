@@ -14,7 +14,7 @@ struct searcher: View{
     @State private var inputVal: String = ""
     @State private var isEditing: Bool = false
     
-    @ObservedObject var models = Models()
+    @StateObject var models = Models()
     
     @State var ResponseItems = [Video]()
     
@@ -80,7 +80,8 @@ struct searcher: View{
                         if models.responseitems.count == 0 {
                             List(self.ResponseItems, id: \.videoID){ responseitems in
                                 NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
-                                    TableCell(Video: responseitems)
+                                    //TableCell(Video: responseitems)
+                                    Text("nil")
                                 }
                             }
                             .background(Color.black)

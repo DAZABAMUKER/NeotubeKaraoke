@@ -46,6 +46,9 @@ class Models: ObservableObject {
                 DispatchQueue.main.async {
                     if response.items != nil {
                         self.responseitems = response.items!
+                        print("meNOW")
+                        print(self.responseitems[0].channelTitle)
+                        self.objectWillChange.send()
                     }
                 }
                 
