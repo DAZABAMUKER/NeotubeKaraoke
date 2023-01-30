@@ -11,8 +11,8 @@ struct searcher: View{
     
 
     
-    @State private var inputVal: String = ""
-    @State private var isEditing: Bool = false
+    @State var inputVal: String = ""
+    @State var isEditing: Bool = false
     
     @StateObject var models = Models()
     
