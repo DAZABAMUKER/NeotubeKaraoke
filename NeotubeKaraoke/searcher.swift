@@ -80,8 +80,8 @@ struct searcher: View{
                         if models.responseitems.count == 0 {
                             List(self.ResponseItems, id: \.videoID){ responseitems in
                                 NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
-                                    //TableCell(Video: responseitems)
-                                    Text("nil")
+                                    TableCell(Video: responseitems)
+                                    //Text("nil")
                                 }
                             }
                             .background(Color.black)
