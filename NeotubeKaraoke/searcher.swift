@@ -45,7 +45,7 @@ struct searcher: View{
                         HStack{
                             Image(systemName: "music.mic.circle")
                                 .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
-                                //.foregroundColor(Color.white)
+                            //.foregroundColor(Color.white)
                                 .font(.system(size: 50))
                                 .padding(.leading, 10)
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
@@ -69,12 +69,12 @@ struct searcher: View{
                                 }
                             }
                         }
-                            .background(
-                                Rectangle()
-                                    .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1)))
-                                    .frame(width: geometry.size.width, height: 120)
-                                    .edgesIgnoringSafeArea(.all)
-                                    .shadow(radius: 10)
+                        .background(
+                            Rectangle()
+                                .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1)))
+                                .frame(width: geometry.size.width, height: 120)
+                                .edgesIgnoringSafeArea(.all)
+                                .shadow(radius: 10)
                         )
                         //MARK: - 리스트
                         if models.responseitems.count == 0 {
@@ -126,13 +126,7 @@ struct searcher: View{
                     colors: [
                         Color(red: 1, green: 112 / 255.0, blue: 0),
                         Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                    ]
-                ),
-                                             startPoint: .topLeading,
-                                             endPoint: .bottomTrailing
-                ),
-                              lineWidth: isEditing ? 4 : 2
-                )
+                    ]),startPoint: .topLeading,endPoint: .bottomTrailing),lineWidth: isEditing ? 4 : 2)
                 .frame(height: 40)
                 .padding(-20)
             
