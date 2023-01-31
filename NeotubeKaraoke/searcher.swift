@@ -97,6 +97,7 @@ struct searcher: View{
                                     TableCell(Video: responseitems)
                                         .onAppear(){
                                             self.ResponseItems = models.responseitems
+                                            
                                         }
                                 }
                             }
