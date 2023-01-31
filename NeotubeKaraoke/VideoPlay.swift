@@ -28,6 +28,7 @@ struct VideoPlay: View {
             extractInfo(url: url)
         }
     }
+    @State var Urls = URL(string: "http://www.naver.com")!
     @State var error: Error?
     @State var formatsSheet: ActionSheet?
         
@@ -67,7 +68,12 @@ struct VideoPlay: View {
                         indeterminateProgressKey = nil
                         self.info = info
                         self.format?.append(contentsOf: mp4)
-                        let reqquest = mp4.last?.urlRequest
+                        let reqquestUrl = mp4.last?.urlRequest?.url
+                        guard let Url = reqquestUrl else {
+                            return
+                        }
+                        self.Urls = Url
+                        print(self.Urls)
                     }
                 }
                 catch {
@@ -130,7 +136,7 @@ struct VideoPlay: View {
             .frame(width: 400, height: 300, alignment: .center)
             .onAppear() {
                 url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
-                //player = AVPlayer(url:URL(string: info.)
+                player = AVPlayer(url: Urls)
                 //print(url)
             }
         
