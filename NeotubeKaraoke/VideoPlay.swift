@@ -73,7 +73,7 @@ struct VideoPlay: View {
                         return
                     }
                     self.Urls = Url
-                    print(self.Urls)
+                    //print(self.Urls)
                     self.que = true
                 }
             }
@@ -126,7 +126,6 @@ struct VideoPlay: View {
         }
     }
     
-    
     var body: some View {
         VStack{
             if info != nil {
@@ -138,6 +137,7 @@ struct VideoPlay: View {
                     .frame(width: 400, height: 300, alignment: .center)
                     .onAppear() {
                         player = AVPlayer(url: Urls)
+                        player.play()
                     }
             }
         }

@@ -37,8 +37,6 @@ struct searcher: View{
                   startPoint: .bottom,
                   endPoint: .top
                 ).edgesIgnoringSafeArea(.all)
-                
-                
                 NavigationView {
                     VStack{
                         //MARK: - SearchBar
