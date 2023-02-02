@@ -13,11 +13,9 @@ import PythonKit
 struct VideoPlay: View {
     
     @State var que = false
-    @State var Title = ""
     @State var player = AVPlayer()
     
     @State var indeterminateProgressKey: String?
-    @State var progress: Progress?
     @State var youtubeDL: YoutubeDL?
     @State var info: Info?
     @State var url: URL? {
@@ -30,13 +28,6 @@ struct VideoPlay: View {
         }
     }
     @State var Urls = URL(string: "https://dazabamuker.tistory.com")!
-    @State var error: Error?
-    @State var formatsSheet: ActionSheet?
-        
-    @State var isTranscodingEnabled = true
-    @State var isRemuxingEnabled = true
-    @State var showingFormats = false
-    let ydl = try? YoutubeDL()
     
     var videoId: String = ""
     init(videoId: String = "") {
@@ -80,7 +71,6 @@ struct VideoPlay: View {
             catch {
                 indeterminateProgressKey = nil
                 guard let pyError = error as? PythonError, case let .exception(exception, traceback: _) = pyError else {
-                    self.error = error
                     return
                 }
                 if (String(exception.args[0]) ?? "").contains("Unsupported URL: ") {

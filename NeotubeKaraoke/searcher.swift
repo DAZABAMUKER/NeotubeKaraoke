@@ -88,6 +88,7 @@ struct searcher: View{
                         List(models.responseitems, id: \.videoID){ responseitems in
                             NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
                                 TableCell(Video: responseitems)
+                                //Text("nil")
                                     .onAppear(){
                                         self.ResponseItems = models.responseitems
                                         
