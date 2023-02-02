@@ -77,11 +77,8 @@ struct searcher: View{
                     if models.responseitems.isEmpty {
                         List(self.ResponseItems, id: \.videoID){ responseitems in
                             NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
-                                if models.nothings {
-                                    Text("검색결과 없음")
-                                } else {
-                                    TableCell(Video: responseitems)
-                                }
+                                TableCell(Video: responseitems)
+                                //Text("nil")
                             }
                             //.background(.blue)
                         }
@@ -97,6 +94,11 @@ struct searcher: View{
                         .listStyle(.plain)
                         .environment(\.defaultMinListRowHeight, 80)
                         .preferredColorScheme(.dark)
+                        // 검색결과 없을 경우 Alert 띄음.
+                        .alert(isPresented: $models.nothings) {
+                            Alert(title: Text(models.stsCode == 0 ? "검색결과 없음." : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
+
+                        }
                     } else {
                         List(models.responseitems, id: \.videoID){ responseitems in
                             NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {

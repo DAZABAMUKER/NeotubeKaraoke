@@ -122,7 +122,7 @@ struct VideoPlay: View {
     
     var body: some View {
         GeometryReader { geometry in
-            VStack{
+            ZStack{
                 if self.que == true {
                     VideoPlayer(player: player)
                         .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.height - 60: geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
@@ -133,6 +133,12 @@ struct VideoPlay: View {
                                 self.isAppear = true
                             }
                         }
+                }
+                if !isAppear{
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .frame(width: geometry.size.width, height: geometry.size.height)
                 }
             }
             .onAppear() {
