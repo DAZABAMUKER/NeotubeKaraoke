@@ -13,7 +13,7 @@ import PythonKit
 struct VideoPlay: View {
     
     @State var que = false
-    
+    @State var Title = ""
     @State var player = AVPlayer()
     
     @State var indeterminateProgressKey: String?
@@ -129,13 +129,9 @@ struct VideoPlay: View {
     var body: some View {
         GeometryReader { geometry in
             VStack{
-                if info != nil {
-                    Text(info?.title ?? "nil")
-                    //Text(info?.formats.description ?? "nil")
-                }
                 if self.que == true {
                     VideoPlayer(player: player)
-                        .frame(width: 400, height: 300, alignment: .center)
+                        .frame(width: geometry.size.width, height: geometry.size.width/(192/108), alignment: .center)
                         .onAppear() {
                             player = AVPlayer(url: Urls)
                             player.play()
@@ -146,8 +142,24 @@ struct VideoPlay: View {
             .onAppear() {
                 url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
             }
-            .frame(width: geometry.size.width)
-            .background(.red)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if info != nil {
+                    ToolbarItem(placement: .principal){
+                        LinearGradient(colors: [
+                            Color(red: 1, green: 112 / 255.0, blue: 0),
+                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
+                        ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                    )
+                        .mask(alignment: .center) {
+                            Text(info?.title ?? "노래방")
+                                .bold()
+                        }
+                    }
+                }
+            }
         }
     }
 }

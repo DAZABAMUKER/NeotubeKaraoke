@@ -57,7 +57,7 @@ struct ContentView: View {
         Button(action: {
             print("click")
             self.tabIndex = tabIndex
-            }) {
+        }) {
             Image(systemName: img)
                 .font(.system(size: 30))
                 .scaleEffect(self.tabIndex == tabIndex ? 1.7 : 1.0)

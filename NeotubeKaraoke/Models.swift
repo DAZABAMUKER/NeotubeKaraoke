@@ -46,7 +46,6 @@ class Models: ObservableObject {
                 DispatchQueue.main.async {
                     if response.items != nil {
                         self.responseitems = response.items!
-                        self.objectWillChange.send()
                         guard let TiTle = response.items?.first?.title else { return }
                         print(TiTle)
                     }
