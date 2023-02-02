@@ -18,7 +18,11 @@ struct searcher: View{
     
     @State var ResponseItems = [Video]()
     
+    @Binding var TBisOn: Bool
     
+    init( TBisOn: Binding<Bool> = .constant(true)) {
+        _TBisOn = TBisOn
+    }
     
     var body: some View {
         
@@ -43,6 +47,11 @@ struct searcher: View{
                             .onSubmit {
                                 let _ = models.getVideos(val: inputVal)
                             }
+                            .onAppear(){
+                                if TBisOn == false {
+                                    TBisOn = true
+                                }
+                            }
 
                         Button {
                             self.inputVal = ""
@@ -54,6 +63,7 @@ struct searcher: View{
                             }
                         }
                     }
+                    //MARK: - 아이패드인지 디비이스 확인
                     .background() {
                         if UIDevice.current.model == "iPad" {
                             Color(UIColor(red: 71/255, green: 60/255, blue: 51/255, alpha: 1))
@@ -66,7 +76,7 @@ struct searcher: View{
                     //MARK: - 리스트
                     if models.responseitems.isEmpty {
                         List(self.ResponseItems, id: \.videoID){ responseitems in
-                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
+                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
                                 TableCell(Video: responseitems)
                                 //Text("nil")
                             }
@@ -86,7 +96,7 @@ struct searcher: View{
                         .preferredColorScheme(.dark)
                     } else {
                         List(models.responseitems, id: \.videoID){ responseitems in
-                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID)) {
+                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
                                 TableCell(Video: responseitems)
                                 //Text("nil")
                                     .onAppear(){

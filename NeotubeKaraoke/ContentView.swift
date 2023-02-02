@@ -15,8 +15,9 @@ struct ContentView: View {
         case Profile
     }
     
-    @State var tabIndex: TabIndex
+    @State var tabIndex: TabIndex = .Home
     @State var sheeet: Bool = false
+    @State var TBisOn = true
     
     func changeView(tabIndex: TabIndex) -> NaviView{
         switch tabIndex {
@@ -74,7 +75,7 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher()
+                    searcher(TBisOn: $TBisOn)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     Text("안녕하세요")
@@ -87,19 +88,22 @@ struct ContentView: View {
                             learn()
                         }
                 }
+                if TBisOn {
                 Circle()
                     .frame(width: 100)
                     .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
                     .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                     .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                     .shadow(radius: 10)
-
-                HStack(spacing: 0) {
-                    TabButtonSel(tabIndex: .Profile, img: "person.fill", geometry: geometry)
-                    TabButtonSel(tabIndex: .Home, img: "music.mic", geometry: geometry)
-                    TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
-                    
-                }.preferredColorScheme(.light)
+                
+                    HStack(spacing: 0) {
+                        TabButtonSel(tabIndex: .Profile, img: "person.fill", geometry: geometry)
+                        TabButtonSel(tabIndex: .Home, img: "music.mic", geometry: geometry)
+                        TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
+                        
+                    }
+                    .preferredColorScheme(.light)
+                }
             }
         }
     }
@@ -107,6 +111,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(tabIndex: .Home)
+        ContentView()
     }
 }

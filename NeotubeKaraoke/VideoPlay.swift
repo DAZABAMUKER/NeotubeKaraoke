@@ -11,7 +11,7 @@ import YoutubeDL
 import PythonKit
 
 struct VideoPlay: View {
-    
+    @State var isiPad = false
     @State var que = false
     @State var player = AVPlayer()
     
@@ -28,10 +28,13 @@ struct VideoPlay: View {
         }
     }
     @State var Urls = URL(string: "https://dazabamuker.tistory.com")!
+    @Binding var TBisOn: Bool
     
     var videoId: String = ""
-    init(videoId: String = "") {
+    
+    init(videoId: String = "", TBisOn: Binding<Bool> = .constant(false)) {
         self.videoId = videoId
+        _TBisOn = TBisOn
     }
     
     func open(url: URL) {
@@ -121,7 +124,7 @@ struct VideoPlay: View {
             VStack{
                 if self.que == true {
                     VideoPlayer(player: player)
-                        .frame(width: geometry.size.width, height: geometry.size.width/(192/108), alignment: .center)
+                        .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.height - 50 : geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
                         .onAppear() {
                             player = AVPlayer(url: Urls)
                             player.play()
@@ -131,6 +134,12 @@ struct VideoPlay: View {
             }
             .onAppear() {
                 url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+                if UIDevice.current.model == "iPad" {
+                    self.isiPad = true
+                }
+                if TBisOn && !isiPad {
+                   TBisOn = false
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
