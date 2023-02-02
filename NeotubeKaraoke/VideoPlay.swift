@@ -127,22 +127,27 @@ struct VideoPlay: View {
     }
     
     var body: some View {
-        VStack{
-            if info != nil {
-                Text(info?.title ?? "nil")
-                //Text(info?.formats.description ?? "nil")
+        GeometryReader { geometry in
+            VStack{
+                if info != nil {
+                    Text(info?.title ?? "nil")
+                    //Text(info?.formats.description ?? "nil")
+                }
+                if self.que == true {
+                    VideoPlayer(player: player)
+                        .frame(width: 400, height: 300, alignment: .center)
+                        .onAppear() {
+                            player = AVPlayer(url: Urls)
+                            player.play()
+                        }
+                        
+                }
             }
-            if self.que == true {
-                VideoPlayer(player: player)
-                    .frame(width: 400, height: 300, alignment: .center)
-                    .onAppear() {
-                        player = AVPlayer(url: Urls)
-                        player.play()
-                    }
+            .onAppear() {
+                url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
             }
-        }
-        .onAppear() {
-            url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+            .frame(width: geometry.size.width)
+            .background(.red)
         }
     }
 }
