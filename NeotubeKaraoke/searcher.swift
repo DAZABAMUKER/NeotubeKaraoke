@@ -77,8 +77,11 @@ struct searcher: View{
                     if models.responseitems.isEmpty {
                         List(self.ResponseItems, id: \.videoID){ responseitems in
                             NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
-                                TableCell(Video: responseitems)
-                                //Text("nil")
+                                if models.nothings {
+                                    Text("검색결과 없음")
+                                } else {
+                                    TableCell(Video: responseitems)
+                                }
                             }
                             //.background(.blue)
                         }

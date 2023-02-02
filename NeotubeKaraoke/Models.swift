@@ -8,8 +8,9 @@
 import UIKit
 
 class Models: ObservableObject {
-    @Published var responseitems = [Video]()
     
+    @Published var responseitems = [Video]()
+    @Published var nothings = false
     func getVideos(val: String = "노래방") {
         print(val)
         var urls = "https://www.googleapis.com/youtube/v3/search?part=\(Constant.API_PART)&q=\(val)&order=viewCount&type=video&maxResults=20&key=\(Constant.API_KEY)"
@@ -45,13 +46,14 @@ class Models: ObservableObject {
                 let response = try decoder.decode(Response.self, from: data!)
                 DispatchQueue.main.async {
                     if response.items != nil {
+                        self.nothings = false
                         self.responseitems = response.items!
                         guard let TiTle = response.items?.first?.title else { return }
                         print(TiTle)
+                    } else {
+                        self.nothings = true
                     }
                 }
-                
-                
                 //dump(response)
             }
             catch {

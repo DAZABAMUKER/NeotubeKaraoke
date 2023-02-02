@@ -11,6 +11,7 @@ import YoutubeDL
 import PythonKit
 
 struct VideoPlay: View {
+    @State var isAppear = false
     @State var isiPad = false
     @State var que = false
     @State var player = AVPlayer()
@@ -124,21 +125,25 @@ struct VideoPlay: View {
             VStack{
                 if self.que == true {
                     VideoPlayer(player: player)
-                        .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.height - 50 : geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
+                        .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.height - 60: geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
                         .onAppear() {
-                            player = AVPlayer(url: Urls)
-                            player.play()
+                            if !isAppear {
+                                player = AVPlayer(url: Urls)
+                                player.play()
+                                self.isAppear = true
+                            }
                         }
-                        
                 }
             }
             .onAppear() {
-                url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
-                if UIDevice.current.model == "iPad" {
-                    self.isiPad = true
-                }
-                if TBisOn && !isiPad {
-                   TBisOn = false
+                if !isAppear {
+                    url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+                    if UIDevice.current.model == "iPad" {
+                        self.isiPad = true
+                    }
+                    if TBisOn && !isiPad {
+                        TBisOn = false
+                    }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -149,9 +154,9 @@ struct VideoPlay: View {
                             Color(red: 1, green: 112 / 255.0, blue: 0),
                             Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
                         ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                    )
+                                       startPoint: .topLeading,
+                                       endPoint: .bottomTrailing
+                        )
                         .mask(alignment: .center) {
                             Text(info?.title ?? "노래방")
                                 .bold()
