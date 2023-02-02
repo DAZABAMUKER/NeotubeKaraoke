@@ -4,7 +4,8 @@
  - YoutubeDL
  - yt-dl ios package
  - YouTube API(쿠오타 무료라 제한 결려있음.)
-### 앱 이미지
+### 앱 아이콘과 이미지
+AppIcon
 <img
   src="https://github.com/DAZABAMUKER/NeotubeKaraoke/blob/main/NeotubeKaraoke/Assets.xcassets/AppIcon.appiconset/제목_없는_아트워크.png?raw=true"
   width="500"
