@@ -88,3 +88,11 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+
+
+#My ignore
+
+*.DS_Store
+NeotubeKaraoke.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+NeotubeKaraoke/.DS_Store
