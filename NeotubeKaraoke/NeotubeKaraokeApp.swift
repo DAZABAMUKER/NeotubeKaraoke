@@ -7,7 +7,7 @@
 
 import SwiftUI
 import PythonSupport
-import YoutubeDL
+//import YoutubeDL
 
 @main
 struct NeotubeKaraokeApp: App {

@@ -70,6 +70,7 @@ struct VideoPlay: View {
                     self.Urls = Url
                     //print(self.Urls)
                     self.que = true
+                    loadAVAssets(url: Urls)
                 }
             }
             catch {
@@ -118,6 +119,21 @@ struct VideoPlay: View {
                 loadPythonModule()
             }
         }
+    }
+    
+    func loadAVAssets(url: URL) {
+        DispatchQueue.global(qos: .background).async {
+            Task{
+                do {
+                    let assets = AVURLAsset(url: url)
+                    let audio_track = try await assets.loadTracks(withMediaType: .audio)
+                    let things = audio_track.first?.description
+                    print(things ?? "nil")
+                } catch {
+                }
+            }
+        }
+        
     }
     
     var body: some View {
