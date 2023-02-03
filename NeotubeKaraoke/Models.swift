@@ -25,15 +25,16 @@ class Models: ObservableObject {
         
         //Get URL Session Object
         let session = URLSession.shared
-        /*
-        let js = Bundle.main.url(forResource: "ex", withExtension: "json")
-        let data = try? Data(contentsOf: js!)
+        //let js =
+        guard let js = NSDataAsset(name: "ex") else { return }
+        print(js)
+        //let data = try? Data(contentsOf: js!)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        let response = try? decoder.decode(Response.self, from: data!)
+        let response = try? decoder.decode(Response.self, from: js.data)
         self.responseitems = response!.items!
         
-        */
+        /*
         
         //Get dataTask form URL Session Object
         let dataTask = session.dataTask(with: url!) { data, response, error in
@@ -78,6 +79,6 @@ class Models: ObservableObject {
             }
         }
         // kick off the task
-        dataTask.resume()
+        dataTask.resume()*/
     }
 }

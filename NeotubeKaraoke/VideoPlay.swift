@@ -125,7 +125,8 @@ struct VideoPlay: View {
             ZStack{
                 if self.que == true {
                     VideoPlayer(player: player)
-                        .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.height - 60: geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
+                        .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
+                        .padding(.top, -15)
                         .onAppear() {
                             if !isAppear {
                                 player = AVPlayer(url: Urls)
