@@ -10,7 +10,9 @@
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
-		036DCB30297C9C3200326F62 /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 036DCB2F297C9C3200326F62 /* YoutubeDL */; };
+		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
+		034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 034744382999E16F00F2EBEE /* YoutubeDL */; };
+		0347443D2999F4A100F2EBEE /* wild Flower.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0347443C2999F4A100F2EBEE /* wild Flower.mp3 */; };
 		036EF0092955559E00789D57 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036EF0082955559E00789D57 /* Response.swift */; };
 		03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */; };
 		03962DD6291F781500A376F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD5291F781500A376F3 /* Assets.xcassets */; };
@@ -32,6 +34,8 @@
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
+		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		0347443C2999F4A100F2EBEE /* wild Flower.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "wild Flower.mp3"; sourceTree = "<group>"; };
 		036EF0082955559E00789D57 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		03962DCE291F781400A376F3 /* NeotubeKaraoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeotubeKaraoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeotubeKaraokeApp.swift; sourceTree = "<group>"; };
@@ -56,13 +60,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				036DCB30297C9C3200326F62 /* YoutubeDL in Frameworks */,
+				034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		034744372999E16F00F2EBEE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		037C4D9A298B42FE007B6DF3 /* lean */ = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +90,7 @@
 			children = (
 				03962DD0291F781400A376F3 /* NeotubeKaraoke */,
 				03962DCF291F781400A376F3 /* Products */,
+				034744372999E16F00F2EBEE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -93,6 +105,7 @@
 		03962DD0291F781400A376F3 /* NeotubeKaraoke */ = {
 			isa = PBXGroup;
 			children = (
+				0347443C2999F4A100F2EBEE /* wild Flower.mp3 */,
 				03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */,
 				03962DD5291F781500A376F3 /* Assets.xcassets */,
 				03962DDA291F781500A376F3 /* Persistence.swift */,
@@ -109,6 +122,7 @@
 				0316559D295BAC5C00B18342 /* TableCell.swift */,
 				03F36CC02963DE61001AEB7A /* Models.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
+				034744352999DFF800F2EBEE /* AudioManager.swift */,
 			);
 			path = NeotubeKaraoke;
 			sourceTree = "<group>";
@@ -138,7 +152,7 @@
 			);
 			name = NeotubeKaraoke;
 			packageProductDependencies = (
-				036DCB2F297C9C3200326F62 /* YoutubeDL */,
+				034744382999E16F00F2EBEE /* YoutubeDL */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -185,6 +199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0347443D2999F4A100F2EBEE /* wild Flower.mp3 in Resources */,
 				03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */,
 				03962DD6291F781500A376F3 /* Assets.xcassets in Resources */,
 			);
@@ -200,6 +215,7 @@
 				0316559E295BAC5C00B18342 /* TableCell.swift in Sources */,
 				03F36CC12963DE61001AEB7A /* Models.swift in Sources */,
 				03962DE8291FDFF000A376F3 /* MYVStackView.swift in Sources */,
+				034744362999DFF800F2EBEE /* AudioManager.swift in Sources */,
 				0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */,
 				03962DE6291FDD2700A376F3 /* learn.swift in Sources */,
 				03962DEE2921C80500A376F3 /* ContentView.swift in Sources */,
@@ -435,7 +451,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		036DCB2F297C9C3200326F62 /* YoutubeDL */ = {
+		034744382999E16F00F2EBEE /* YoutubeDL */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */;
 			productName = YoutubeDL;

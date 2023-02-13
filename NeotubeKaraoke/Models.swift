@@ -12,6 +12,7 @@ class Models: ObservableObject {
     @Published var responseitems = [Video]()
     @Published var nothings = false
     @Published var stsCode = 0
+    @Published var isResponseitems = false
     
     func getVideos(val: String = "노래방") {
         print(val)
@@ -33,6 +34,7 @@ class Models: ObservableObject {
         decoder.dateDecodingStrategy = .iso8601
         let response = try? decoder.decode(Response.self, from: js.data)
         self.responseitems = response!.items!
+        self.isResponseitems = true
         
         /*
         

@@ -28,6 +28,12 @@ struct searcher: View{
         
         NavigationView {
             GeometryReader { geometry in
+                if models.isResponseitems {
+                    VStack{}.onAppear(){
+                        self.ResponseItems = models.responseitems
+                        models.isResponseitems = false
+                    }
+                }
                 VStack{
                     //MARK: - SearchBar
                     HStack{
@@ -74,55 +80,28 @@ struct searcher: View{
                         }
                     }
                     //MARK: - 리스트
-                    if models.responseitems.isEmpty {
-                        List(self.ResponseItems, id: \.videoID){ responseitems in
-                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
-                                TableCell(Video: responseitems)
-                                //Text("nil")
-                            }
-                            //.background(.blue)
+                    List(self.ResponseItems, id: \.videoID){ responseitems in
+                        NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
+                            TableCell(Video: responseitems)
+                            //Text("nil")
                         }
-                        .frame(width:geometry.size.width,height: geometry.size.height - 60)
-                        .background(){
-                            Image("clear")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: geometry.size.width)
-                                .opacity(0.3)
-                        }
-                        .padding(.top, -8)
-                        .listStyle(.plain)
-                        .environment(\.defaultMinListRowHeight, 80)
-                        .preferredColorScheme(.dark)
-                        // 검색결과 없을 경우 Alert 띄음.
-                        .alert(isPresented: $models.nothings) {
-                            Alert(title: Text(models.stsCode == 0 ? "검색결과 없음." : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
-
-                        }
-                    } else {
-                        List(models.responseitems, id: \.videoID){ responseitems in
-                            NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
-                                TableCell(Video: responseitems)
-                                //Text("nil")
-                                    .onAppear(){
-                                        self.ResponseItems = models.responseitems
-                                        
-                                    }
-                            }
-                            //.background(Color.blue)
-                        }
-                        .frame(width:geometry.size.width,height: geometry.size.height - 60)
-                        .background(){
-                            Image("clear")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: geometry.size.width)
-                                .opacity(0.3)
-                        }
-                        .padding(.top, -8)
-                        .listStyle(.plain)
-                        .environment(\.defaultMinListRowHeight, 80)
-                        .preferredColorScheme(.dark)
+                        //.background(.blue)
+                    }
+                    .frame(width:geometry.size.width,height: geometry.size.height - 60)
+                    .background(){
+                        Image("clear")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: geometry.size.width)
+                            .opacity(0.3)
+                    }
+                    .padding(.top, -8)
+                    .listStyle(.plain)
+                    .environment(\.defaultMinListRowHeight, 80)
+                    .preferredColorScheme(.dark)
+                    // 검색결과 없을 경우 Alert 띄음.
+                    .alert(isPresented: $models.nothings) {
+                        Alert(title: Text(models.stsCode == 0 ? "검색결과 없음." : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
                     }
                 }
             }

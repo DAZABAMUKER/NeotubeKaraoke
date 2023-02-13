@@ -139,7 +139,9 @@ struct VideoPlay: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack{
+                
                 if self.que == true {
+                 /*
                     VideoPlayer(player: player)
                         .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
                         .padding(.top, -15)
@@ -149,14 +151,17 @@ struct VideoPlay: View {
                                 player.play()
                                 self.isAppear = true
                             }
-                        }
+                        }*/
+                    let audioManager = AudioManager(file: Urls, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0) 
                 }
+                
                 if !isAppear{
                     ProgressView()
                         .scaleEffect(1.5)
                         .progressViewStyle(CircularProgressViewStyle(tint: .blue))
                         .frame(width: geometry.size.width, height: geometry.size.height)
                 }
+                 
             }
             .onAppear() {
                 if !isAppear {
