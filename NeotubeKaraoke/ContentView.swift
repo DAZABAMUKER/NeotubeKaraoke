@@ -19,19 +19,8 @@ struct ContentView: View {
     @State var sheeet: Bool = false
     @State var TBisOn = true
     
-    func changeView(tabIndex: TabIndex) -> NaviView{
-        switch tabIndex {
-        case .Home:
-            return NaviView(title: "홈")
-            //return MyWebView(UrlTOLoad: "https://www.youtube.com")
-        case .Profile:
-            return NaviView(title: "프로필")
-            //return MyWebView(UrlTOLoad: "https://www.google.com")
-        case .Setting:
-            return NaviView(title: "설정")
-            //return MyWebView(UrlTOLoad: "https://www.daum.net")
-        }
-    }
+    //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
+    
     func changeColor(tabIndex: TabIndex) -> Color{
         switch tabIndex {
         case .Home:
@@ -78,7 +67,9 @@ struct ContentView: View {
                     searcher(TBisOn: $TBisOn)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    Text("안녕하세요")
+                    Button("PLAY"){
+                       // audioManager.play()
+                    }
                         .tag(TabIndex.Profile)
                     Text("반가워요")
                         .tag(TabIndex.Setting)

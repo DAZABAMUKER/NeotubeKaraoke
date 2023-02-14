@@ -8,64 +8,77 @@
 import Foundation
 import AVFoundation
 
-class AudioManager {
-    let player = AVAudioPlayerNode()
+class AudioManager: ObservableObject {
+    
+    let playerNode = AVAudioPlayerNode()
     let audioEngine = AVAudioEngine()
     var pitchNode: AVAudioUnitTimePitch!
     var EQNode: AVAudioUnitEQ!
     var audioFileBuffer: AVAudioPCMBuffer!
+    var audioFile: AVAudioFile!
     
     init(file: URL, frequency: [Int], tone: Float){
         setEngine(file: file, frequency: frequency, tone: tone)
     }
+    
+    init(){
+        
+    }
+    
+    func play(){
+        playerNode.play()
+    }
+    
+    func pitchChange(tone: Float){
+        pitchNode.pitch = tone * 100
+    }
+    
     func setEngine(file: URL, frequency: [Int], tone: Float) {
         do {
             print("실행중")
-            guard let musicUrl = Bundle.main.url(forResource: "wild Flower", withExtension: "mp3") else {
+            /*guard let musicUrl = Bundle.main.url(forResource: "sample", withExtension: "mp3") else {
                 print(" 파일 안나오잖아")
                 return
-                
-            }
-            let audioFile = try AVAudioFile(forReading: musicUrl)
-            audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-            try audioFile.read(into: audioFileBuffer)
-            print("준비 완료")
+            }*/
+            audioFile = try AVAudioFile(forReading: file)
+            //audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+            //try audioFile.read(into: audioFileBuffer)
         }
         catch{
+            print("오류남")
             print(error)
             return
         }
-        
-        print("이제 한다 ")
         pitchNode = AVAudioUnitTimePitch()
         pitchNode.overlap = 3.0
         pitchNode.pitch = tone * 100
+        //pitchNode.rate = 1.0
         
         EQNode = AVAudioUnitEQ(numberOfBands: frequency.count)
+        EQNode.globalGain = 1
         for i in 0...(EQNode.bands.count-1) {
-                    EQNode.bands[i].frequency  = Float(frequency[i])
-                    EQNode.bands[i].bypass     = false
-                }
+            EQNode.bands[i].frequency  = Float(frequency[i])
+            EQNode.bands[i].gain       = 0
+            EQNode.bands[i].bypass     = false
+            EQNode.bands[i].filterType = .parametric
+        }
         
         
         audioEngine.attach(EQNode)
-        audioEngine.attach(player)
+        audioEngine.attach(playerNode)
         audioEngine.attach(pitchNode)
         
         let mixer = audioEngine.mainMixerNode
-        audioEngine.connect(player, to: pitchNode, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
-        
+        playerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
         audioEngine.prepare()
-                do {
-                    print("플레이 준비")
-                    try audioEngine.start()
-                    player.play()
-                    player.scheduleBuffer(audioFileBuffer, at: nil, options: .loops, completionHandler: nil)
-                    print("플레이")
-                } catch {
-                    assertionFailure("failed to audioEngine start. Error: \(error)")
-                }
+        do {
+            try audioEngine.start()
+        } catch {
+            assertionFailure("failed to audioEngine start. Error: \(error)")
+        }
+        print("제발 되라")
     }
 }

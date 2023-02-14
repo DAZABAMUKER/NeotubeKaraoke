@@ -31,6 +31,10 @@ struct VideoPlay: View {
     @State var Urls = URL(string: "https://dazabamuker.tistory.com")!
     @Binding var TBisOn: Bool
     
+    @StateObject var audioManager = AudioManager()
+    @State var tone: Float = 0.0
+    @State var itemUrl: URL!
+    
     var videoId: String = ""
     
     init(videoId: String = "", TBisOn: Binding<Bool> = .constant(false)) {
@@ -62,8 +66,11 @@ struct VideoPlay: View {
                     guard let formats = info?.formats else {
                         return
                     }
-                    let best = formats.filter { !$0.isRemuxingNeeded && !$0.isTranscodingNeeded }.last
-                    let reqquestUrl = best?.urlRequest?.url
+                    //print(formats)
+                    let best = formats.filter {!$0.isTranscodingNeeded && !$0.isTranscodingNeeded}.last
+                    let bestAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
+                    //print(best)
+                    let reqquestUrl = bestAudio?.urlRequest?.url
                     guard let Url = reqquestUrl else {
                         return
                     }
@@ -126,9 +133,28 @@ struct VideoPlay: View {
             Task{
                 do {
                     let assets = AVURLAsset(url: url)
-                    let audio_track = try await assets.loadTracks(withMediaType: .audio)
-                    let things = audio_track.first?.description
-                    print(things ?? "nil")
+                    let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                    let fileURL = "\(outputURL)+/videoplay.mp4"
+                    // These settings will encode using H.264.
+                    let preset = AVAssetExportPresetHighestQuality
+                    let outFileType = AVFileType.mp4
+                    AVAssetExportSession.determineCompatibility(ofExportPreset: preset, with: assets, outputFileType: outFileType) { isCompatible in
+                        guard isCompatible else { return }
+                        // Compatibility check succeeded, continue with export.
+                    }
+                    guard let exportSession = AVAssetExportSession(asset: assets, presetName: preset) else { return }
+                    exportSession.outputFileType = outFileType
+                    exportSession.outputURL = outputURL
+                    exportSession.exportAsynchronously {
+                        // Handle export results.
+                    }
+                    //urlData?.write(toFile: filePath, atomically: true)
+                    
+                    self.que = true
+                    audioManager.setEngine(file: URL(string: fileURL)!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                    //let audio_track = try await assets.loadTracks(withMediaType: .audio)
+                    //let things = audio_track.first?.description
+                    //print(things ?? "nil")
                 } catch {
                 }
             }
@@ -141,6 +167,19 @@ struct VideoPlay: View {
             ZStack{
                 
                 if self.que == true {
+                    HStack{
+                        Button("-pitch") {
+                            self.tone += 1
+                            audioManager.pitchChange(tone: self.tone)
+                        }
+                        Button("PLAY"){
+                            audioManager.play()
+                        }
+                        Button("-pitch") {
+                            self.tone -= 1
+                            audioManager.pitchChange(tone: self.tone)
+                        }
+                    }
                  /*
                     VideoPlayer(player: player)
                         .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
@@ -152,7 +191,12 @@ struct VideoPlay: View {
                                 self.isAppear = true
                             }
                         }*/
-                    let audioManager = AudioManager(file: Urls, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0) 
+                    
+                    VStack{}.onAppear(){
+                        //audioManager.setEngine(file: Urls, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                        self.isAppear = true
+                        
+                    }
                 }
                 
                 if !isAppear{
