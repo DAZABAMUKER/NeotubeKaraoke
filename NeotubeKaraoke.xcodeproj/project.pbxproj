@@ -13,6 +13,7 @@
 		03036240299A98E5002F569C /* 60bps.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0303623F299A98E5002F569C /* 60bps.wav */; };
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
+		0330C4E329A1B94000B3E6D3 /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330C4E229A1B94000B3E6D3 /* VideoPlayer.swift */; };
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
 		034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 034744382999E16F00F2EBEE /* YoutubeDL */; };
@@ -41,6 +42,7 @@
 		0303623F299A98E5002F569C /* 60bps.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 60bps.wav; sourceTree = "<group>"; };
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
+		0330C4E229A1B94000B3E6D3 /* VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
 		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		0347443C2999F4A100F2EBEE /* wild Flower.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "wild Flower.mp3"; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				03036239299A7A8D002F569C /* sample.mp3 */,
 				0303623F299A98E5002F569C /* 60bps.wav */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
+				0330C4E229A1B94000B3E6D3 /* VideoPlayer.swift */,
 				034744352999DFF800F2EBEE /* AudioManager.swift */,
 			);
 			path = NeotubeKaraoke;
@@ -236,6 +239,7 @@
 				03962DE6291FDD2700A376F3 /* learn.swift in Sources */,
 				03962DEE2921C80500A376F3 /* ContentView.swift in Sources */,
 				03962DDB291F781500A376F3 /* Persistence.swift in Sources */,
+				0330C4E329A1B94000B3E6D3 /* VideoPlayer.swift in Sources */,
 				0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */,
 				03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */,
 				036EF0092955559E00789D57 /* Response.swift in Sources */,

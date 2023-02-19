@@ -69,7 +69,7 @@ struct VideoPlay: View {
                     //print(formats)
                     let best = formats.filter {!$0.isTranscodingNeeded && !$0.isTranscodingNeeded}.last
                     let bestAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
-                    //print(best)
+                    print(bestAudio)
                     let reqquestUrl = bestAudio?.urlRequest?.url
                     guard let Url = reqquestUrl else {
                         return
@@ -129,36 +129,65 @@ struct VideoPlay: View {
     }
     
     func loadAVAssets(url: URL) {
-        DispatchQueue.global(qos: .background).async {
+        /*DispatchQueue.global(qos: .background).async {
             Task{
                 do {
+                    
                     let assets = AVURLAsset(url: url)
+                    let mAssets = AVAsset(url: Bundle.main.url(forResource: "sample", withExtension: "mp3")!)
+                    await print(try mAssets.loadMetadata(for: .isoUserData))
                     let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                    let fileURL = "\(outputURL)+/videoplay.mp4"
+                    //try! FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
+                    
+                    let fileURL = outputURL.appendingPathComponent("videoplayback.m4a")
                     // These settings will encode using H.264.
-                    let preset = AVAssetExportPresetHighestQuality
-                    let outFileType = AVFileType.mp4
+                    let preset = AVAssetExportPresetAppleM4A
+                    let outFileType = AVFileType.m4a
                     AVAssetExportSession.determineCompatibility(ofExportPreset: preset, with: assets, outputFileType: outFileType) { isCompatible in
                         guard isCompatible else { return }
                         // Compatibility check succeeded, continue with export.
+                        print("success")
                     }
-                    guard let exportSession = AVAssetExportSession(asset: assets, presetName: preset) else { return }
+                    guard let exportSession = AVAssetExportSession(asset: mAssets, presetName: preset) else { return }
                     exportSession.outputFileType = outFileType
                     exportSession.outputURL = outputURL
-                    exportSession.exportAsynchronously {
-                        // Handle export results.
-                    }
+                    exportSession.exportAsynchronously(completionHandler: {
+                        switch exportSession.status {
+                        case AVAssetExportSession.Status.completed:
+                                        print("export complete")
+                        case  AVAssetExportSession.Status.failed:
+                                        print("export failed \(exportSession.error)")
+                        case AVAssetExportSession.Status.cancelled:
+                                        print("export cancelled \(exportSession.error)")
+                                    default:
+                                        print("export complete")
+                                    }
+                    })
                     //urlData?.write(toFile: filePath, atomically: true)
                     
                     self.que = true
-                    audioManager.setEngine(file: URL(string: fileURL)!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                    
                     //let audio_track = try await assets.loadTracks(withMediaType: .audio)
                     //let things = audio_track.first?.description
                     //print(things ?? "nil")
                 } catch {
                 }
             }
-        }
+        }*/
+        let task = URLSession.shared.downloadTask(with: url) { tempUrl, urlResponse, error in
+            do {
+                let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                let fileUrl = doc.appendingPathComponent("audio.m4a")
+                if FileManager.default.fileExists(atPath: fileUrl.path()) {
+                                try FileManager.default.removeItem(at: fileUrl)
+                            }
+                try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
+                audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+            }
+            catch {
+                
+            }
+        }.resume()
         
     }
     
@@ -255,4 +284,5 @@ extension Format {
             : self.ext != "m4a"
     }
 }
+
 

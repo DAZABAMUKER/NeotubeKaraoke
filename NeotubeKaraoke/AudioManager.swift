@@ -16,6 +16,9 @@ class AudioManager: ObservableObject {
     var EQNode: AVAudioUnitEQ!
     var audioFileBuffer: AVAudioPCMBuffer!
     var audioFile: AVAudioFile!
+    var audioFileLength: AVAudioFramePosition = 0
+    var currentFrame: AVAudioFramePosition = 0
+    var jumpFrame: AVAudioFramePosition = 0
     
     init(file: URL, frequency: [Int], tone: Float){
         setEngine(file: file, frequency: frequency, tone: tone)
@@ -49,6 +52,9 @@ class AudioManager: ObservableObject {
             print(error)
             return
         }
+        
+        audioFileLength = audioFile.length / 2
+        
         pitchNode = AVAudioUnitTimePitch()
         pitchNode.overlap = 3.0
         pitchNode.pitch = tone * 100
@@ -81,4 +87,22 @@ class AudioManager: ObservableObject {
         }
         print("제발 되라")
     }
+    
+    func controlFrame(jump: Double) {
+        guard let audioFile = audioFile else { return }
+        let frameLocaition = AVAudioFramePosition(jump * audioFile.processingFormat.sampleRate)
+        
+        jumpFrame = currentFrame + frameLocaition
+        jumpFrame = max(jumpFrame, 0)
+        jumpFrame = min(jumpFrame, audioFileLength)
+        currentFrame = jumpFrame
+        
+        playerNode.stop()
+        
+        let numberFrames = AVAudioFrameCount(audioFileLength - jumpFrame)
+        playerNode.scheduleSegment(audioFile, startingFrame: jumpFrame, frameCount: numberFrames, at: nil)
+        
+        playerNode.play()
+    }
 }
+
