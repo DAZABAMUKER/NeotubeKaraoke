@@ -27,6 +27,7 @@ class Models: ObservableObject {
         //Get URL Session Object
         let session = URLSession.shared
         //let js =
+        /*
         guard let js = NSDataAsset(name: "ex") else { return }
         print(js)
         //let data = try? Data(contentsOf: js!)
@@ -35,8 +36,8 @@ class Models: ObservableObject {
         let response = try? decoder.decode(Response.self, from: js.data)
         self.responseitems = response!.items!
         self.isResponseitems = true
+        */
         
-        /*
         
         //Get dataTask form URL Session Object
         let dataTask = session.dataTask(with: url!) { data, response, error in
@@ -65,6 +66,7 @@ class Models: ObservableObject {
                     if response.items != nil {
                         self.nothings = false
                         self.responseitems = response.items ?? []
+                        self.isResponseitems = true
                         guard let TiTle = response.items?.first?.title else {
                             print("result is noting!")
                             self.nothings = true
@@ -81,6 +83,6 @@ class Models: ObservableObject {
             }
         }
         // kick off the task
-        dataTask.resume()*/
+        dataTask.resume()
     }
 }

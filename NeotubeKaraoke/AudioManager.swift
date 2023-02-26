@@ -17,7 +17,18 @@ class AudioManager: ObservableObject {
     var audioFileBuffer: AVAudioPCMBuffer!
     var audioFile: AVAudioFile!
     var audioFileLength: AVAudioFramePosition = 0
-    var currentFrame: AVAudioFramePosition = 0
+    var offsetFrame: Double = 0
+    var currentFrame: AVAudioFramePosition {
+        guard
+            let lastRenderTime = playerNode.lastRenderTime,
+            let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime)
+        else {
+            return 0
+        }
+        print("매니저",Double(playerTime.sampleTime)/44100.0)
+        
+        return playerTime.sampleTime
+    }
     var jumpFrame: AVAudioFramePosition = 0
     
     init(file: URL, frequency: [Int], tone: Float){
@@ -28,8 +39,16 @@ class AudioManager: ObservableObject {
         
     }
     
+    
     func play(){
-        playerNode.play()
+        if playerNode.isPlaying {
+            playerNode.pause()
+        } else {
+            playerNode.play()
+        }
+    }
+    func pause() {
+        playerNode.pause()
     }
     
     func pitchChange(tone: Float){
@@ -43,7 +62,8 @@ class AudioManager: ObservableObject {
                 print(" 파일 안나오잖아")
                 return
             }*/
-            audioFile = try AVAudioFile(forReading: file)
+            self.audioFile = try AVAudioFile(forReading: file)
+            offsetFrame = 0
             //audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             //try audioFile.read(into: audioFileBuffer)
         }
@@ -53,8 +73,8 @@ class AudioManager: ObservableObject {
             return
         }
         
-        audioFileLength = audioFile.length / 2
-        
+        audioFileLength = audioFile.length 
+        print("오디오 파일 길이",audioFileLength/44100)
         pitchNode = AVAudioUnitTimePitch()
         pitchNode.overlap = 3.0
         pitchNode.pitch = tone * 100
@@ -88,15 +108,15 @@ class AudioManager: ObservableObject {
         print("제발 되라")
     }
     
-    func controlFrame(jump: Double) {
-        guard let audioFile = audioFile else { return }
+    public func controlFrame(jump: Double) {
+        print(jump)
+        guard let audioFile = audioFile else { print("오디오 파일 에러"); return }
         let frameLocaition = AVAudioFramePosition(jump * audioFile.processingFormat.sampleRate)
-        
-        jumpFrame = currentFrame + frameLocaition
+        //jumpFrame = currentFrame + frameLocaition
+        jumpFrame = frameLocaition
         jumpFrame = max(jumpFrame, 0)
         jumpFrame = min(jumpFrame, audioFileLength)
-        currentFrame = jumpFrame
-        
+        offsetFrame = jump
         playerNode.stop()
         
         let numberFrames = AVAudioFrameCount(audioFileLength - jumpFrame)
@@ -104,5 +124,21 @@ class AudioManager: ObservableObject {
         
         playerNode.play()
     }
+    
+    public func checkVidTime(vidTime: Double) {
+        let audiTime = offsetFrame + Double(currentFrame)/44100.0
+        var interval = audiTime - vidTime
+        if interval < 0 {
+            interval *= -1
+        }
+        if Double(audioFileLength / 44100) - audiTime < 1 {
+            playerNode.stop()
+            //audioEngine.stop()
+        }
+        print("체크",vidTime, audiTime, interval)
+        if interval > 0.1 {
+            playerNode.pause()
+            controlFrame(jump: vidTime)
+        }
+    }
 }
-

@@ -9,8 +9,9 @@ import SwiftUI
 
 struct searcher: View{
     
-
     
+
+    @State var showplayer = false
     @State var inputVal: String = ""
     @State var isEditing: Bool = false
     
@@ -19,13 +20,13 @@ struct searcher: View{
     @State var ResponseItems = [Video]()
     
     @Binding var TBisOn: Bool
+    @Binding var videoPlay: VideoPlay
+    @Binding var reloads: Bool
+    @Binding var tabIndex: TabIndex
     
-    init( TBisOn: Binding<Bool> = .constant(true)) {
-        _TBisOn = TBisOn
-    }
+    
     
     var body: some View {
-        
         NavigationView {
             GeometryReader { geometry in
                 if models.isResponseitems {
@@ -34,7 +35,7 @@ struct searcher: View{
                         models.isResponseitems = false
                     }
                 }
-                VStack{
+                VStack(spacing: 0){
                     //MARK: - SearchBar
                     HStack{
                         Image(systemName: "music.mic.circle")
@@ -81,13 +82,23 @@ struct searcher: View{
                     }
                     //MARK: - 리스트
                     List(self.ResponseItems, id: \.videoID){ responseitems in
-                        NavigationLink(destination: VideoPlay(videoId: responseitems.videoID, TBisOn : $TBisOn)) {
+                        /*
+                        NavigationLink(destination: videoPlay) {
                             TableCell(Video: responseitems)
                             //Text("nil")
                         }
+                         */
+                        Button {
+                            videoPlay = VideoPlay(videoId: responseitems.videoID)
+                            reloads = true
+                            tabIndex = .Profile
+                        } label: {
+                            TableCell(Video: responseitems)
+                        }
+
                         //.background(.blue)
                     }
-                    .frame(width:geometry.size.width,height: geometry.size.height - 60)
+                    //.frame(width:geometry.size.width,height: geometry.size.height - 60)
                     .background(){
                         Image("clear")
                             .resizable()
@@ -103,6 +114,7 @@ struct searcher: View{
                     .alert(isPresented: $models.nothings) {
                         Alert(title: Text(models.stsCode == 0 ? "검색결과 없음." : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
                     }
+                    VStack{}.frame(height: 60).background(.red)
                 }
             }
         }
@@ -124,10 +136,5 @@ struct searcher: View{
                 .padding(-20)
             
         }
-    }
-}
-struct searcher_Previews: PreviewProvider {
-    static var previews: some View {
-        searcher()
     }
 }

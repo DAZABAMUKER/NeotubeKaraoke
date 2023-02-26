@@ -7,16 +7,16 @@
 
 import SwiftUI
 import AVKit
-import YoutubeDL
 import PythonKit
 
 struct VideoPlay: View {
+    
     @State var isAppear = false
     @State var isiPad = false
     @State var que = false
-    @State var player = AVPlayer()
+    @StateObject var player = VideoPlayers()
     
-    @State var indeterminateProgressKey: String?
+    //@State var indeterminateProgressKey: String?
     @State var youtubeDL: YoutubeDL?
     @State var info: Info?
     @State var url: URL? {
@@ -24,30 +24,38 @@ struct VideoPlay: View {
             guard let url = url else {
                 return
             }
-            
             extractInfo(url: url)
         }
     }
-    @State var Urls = URL(string: "https://dazabamuker.tistory.com")!
+    //@State var audioUrl = URL(string: "https://dazabamuker.tistory.com")!
+    //@State var videoUrl = URL(string: "https://dazabamuker.tistory.com")!
     @Binding var TBisOn: Bool
-    
     @StateObject var audioManager = AudioManager()
-    @State var tone: Float = 0.0
-    @State var itemUrl: URL!
-    
+    @State var tone: Float = 0.0 {
+        didSet {
+            if tone > 24.0 {
+                tone = oldValue
+            } else if tone < -24.0 {
+                tone = oldValue
+            }
+        }
+    }
+    //@State var itemUrl: URL!
     var videoId: String = ""
+    @State var tap = true
+    @State var isPlaying = false
     
     init(videoId: String = "", TBisOn: Binding<Bool> = .constant(false)) {
         self.videoId = videoId
         _TBisOn = TBisOn
     }
     
-    func open(url: URL) {
-        UIApplication.shared.open(url, options: [:]) {
-            if !$0 {
-                //alert(message: "Failed to open \(url)")
-            }
-        }
+    func change(vidId: String) {
+        print(vidId)
+        let geturl = URL(string: "https://www.youtube.com/watch?v=\(vidId)")
+        url = geturl
+        print(geturl)
+        extractInfo(url: geturl!)
     }
     
     func extractInfo(url: URL) {
@@ -56,32 +64,32 @@ struct VideoPlay: View {
             return
         }
         
-        indeterminateProgressKey = "Extracting info..."
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                let (_, info) = try youtubeDL.extractInfo(url: url)
+                let info = try youtubeDL.extractInfo(url: url)
                 DispatchQueue.main.async {
-                    indeterminateProgressKey = nil
                     self.info = info
                     guard let formats = info?.formats else {
                         return
                     }
-                    //print(formats)
-                    let best = formats.filter {!$0.isTranscodingNeeded && !$0.isTranscodingNeeded}.last
+                    //print(info?.format?.url)
+                    //let best = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
+                    let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
+                    //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded }.last
                     let bestAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
-                    print(bestAudio)
-                    let reqquestUrl = bestAudio?.urlRequest?.url
-                    guard let Url = reqquestUrl else {
-                        return
-                    }
-                    self.Urls = Url
-                    //print(self.Urls)
-                    self.que = true
-                    loadAVAssets(url: Urls)
+                    print(bestAudio!, bestVideo!)
+                    //print(self.info!)
+                    guard let aUrl = bestAudio?.url else { return }
+                    guard let vUrl = bestVideo?.url else { return }
+                    print(vUrl)
+                    //self.audioUrl = aUrl
+                    //self.videoUrl = vUrl
+                    //print(self.audioUrl)
+                    loadAVAssets(url: aUrl, size: bestAudio?.filesize ?? 0)
+                    player.prepareToPlay(url: vUrl, audioManager: audioManager)
                 }
             }
             catch {
-                indeterminateProgressKey = nil
                 guard let pyError = error as? PythonError, case let .exception(exception, traceback: _) = pyError else {
                     return
                 }
@@ -96,13 +104,10 @@ struct VideoPlay: View {
             downloadPythonModule()
             return
         }
-        indeterminateProgressKey = "Loading Python module..."
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 youtubeDL = try YoutubeDL()
                 DispatchQueue.main.async {
-                    indeterminateProgressKey = nil
-                    
                     url.map { extractInfo(url: $0) }
                 }
             }
@@ -115,152 +120,200 @@ struct VideoPlay: View {
     }
     
     func downloadPythonModule() {
-        indeterminateProgressKey = "Downloading Python module..."
         YoutubeDL.downloadPythonModule { error in
             DispatchQueue.main.async {
-                indeterminateProgressKey = nil
                 guard error == nil else {
                     return
                 }
-                
                 loadPythonModule()
             }
         }
     }
     
-    func loadAVAssets(url: URL) {
-        /*DispatchQueue.global(qos: .background).async {
-            Task{
-                do {
-                    
-                    let assets = AVURLAsset(url: url)
-                    let mAssets = AVAsset(url: Bundle.main.url(forResource: "sample", withExtension: "mp3")!)
-                    await print(try mAssets.loadMetadata(for: .isoUserData))
-                    let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                    //try! FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
-                    
-                    let fileURL = outputURL.appendingPathComponent("videoplayback.m4a")
-                    // These settings will encode using H.264.
-                    let preset = AVAssetExportPresetAppleM4A
-                    let outFileType = AVFileType.m4a
-                    AVAssetExportSession.determineCompatibility(ofExportPreset: preset, with: assets, outputFileType: outFileType) { isCompatible in
-                        guard isCompatible else { return }
-                        // Compatibility check succeeded, continue with export.
-                        print("success")
-                    }
-                    guard let exportSession = AVAssetExportSession(asset: mAssets, presetName: preset) else { return }
-                    exportSession.outputFileType = outFileType
-                    exportSession.outputURL = outputURL
-                    exportSession.exportAsynchronously(completionHandler: {
-                        switch exportSession.status {
-                        case AVAssetExportSession.Status.completed:
-                                        print("export complete")
-                        case  AVAssetExportSession.Status.failed:
-                                        print("export failed \(exportSession.error)")
-                        case AVAssetExportSession.Status.cancelled:
-                                        print("export cancelled \(exportSession.error)")
-                                    default:
-                                        print("export complete")
-                                    }
-                    })
-                    //urlData?.write(toFile: filePath, atomically: true)
-                    
-                    self.que = true
-                    
-                    //let audio_track = try await assets.loadTracks(withMediaType: .audio)
-                    //let things = audio_track.first?.description
-                    //print(things ?? "nil")
-                } catch {
-                }
-            }
-        }*/
-        let task = URLSession.shared.downloadTask(with: url) { tempUrl, urlResponse, error in
+    func loadAVAssets(url: URL, size: Int64) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
+        let task: URLSessionDownloadTask = URLSession(configuration: .default).downloadTask(with: request) { tempUrl, urlResponse, error in
+            
             do {
                 let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 let fileUrl = doc.appendingPathComponent("audio.m4a")
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
-                                try FileManager.default.removeItem(at: fileUrl)
-                            }
+                    try FileManager.default.removeItem(at: fileUrl)
+                }
                 try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
+                print(fileUrl)
                 audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                self.isAppear = true
             }
             catch {
                 
             }
-        }.resume()
-        
+        }
+        task.priority = URLSessionTask.highPriority
+        task.resume()
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack{
-                
-                if self.que == true {
-                    HStack{
-                        Button("-pitch") {
-                            self.tone += 1
-                            audioManager.pitchChange(tone: self.tone)
-                        }
-                        Button("PLAY"){
-                            audioManager.play()
-                        }
-                        Button("-pitch") {
-                            self.tone -= 1
-                            audioManager.pitchChange(tone: self.tone)
+        NavigationStack{
+            GeometryReader { geometry in
+                ZStack{
+                    if player.end {
+                        VStack{}.onAppear(){
+                            isPlaying = false
                         }
                     }
-                 /*
-                    VideoPlayer(player: player)
-                        .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
-                        .padding(.top, -15)
-                        .onAppear() {
-                            if !isAppear {
-                                player = AVPlayer(url: Urls)
-                                player.play()
-                                self.isAppear = true
+                    if self.isAppear {
+                        PlayerViewController(player: player.player!)
+                        //.frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
+                            .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
+                            .padding(.top, -15)
+                            .edgesIgnoringSafeArea(.bottom)
+                        if player.progress {
+                            ProgressView()
+                                .scaleEffect(4)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
+                        }
+                        HStack{
+                            VStack{}
+                                .frame(width: 120, height: geometry.size.width*9/16)
+                                .background(.black.opacity(0.01))
+                                .onTapGesture(count: 2) {
+                                    player.moveFrame(to: -10.0)
+                                }
+                            Spacer()
+                            VStack{}
+                                .frame(width: 120, height: geometry.size.width*9/16)
+                                .background(.black.opacity(0.01))
+                                .onTapGesture(count: 2) {
+                                    player.moveFrame(to: 10.0)
+                                }
+                        }
+                        if tap {
+                            ZStack{
+                                VStack{
+                                    ZStack(alignment: .leading){
+                                        Rectangle()
+                                            .frame(width: geometry.size.width, height: 10)
+                                            .foregroundColor(.gray)
+                                        Rectangle()
+                                            .frame(width: CMTimeGetSeconds((player.player?.currentItem!.duration)!).isNaN ? 0 : geometry.size.width * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)*2, height: 10)
+                                            .foregroundColor(.green)
+                                    }
+                                    HStack(spacing: 2){
+                                        LinearGradient(colors: [
+                                            Color.blue,
+                                            Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0)
+                                        ],
+                                                       startPoint: .leading,
+                                                       endPoint: .trailing
+                                        )
+                                        .frame(height: 30)
+                                        .mask(alignment: .trailing) {
+                                            if self.tone < 0 {
+                                                HStack(spacing: 3){
+                                                    ForEach(0..<Int(self.tone)*(-1), id: \.self){ _ in
+                                                        Rectangle()
+                                                            .cornerRadius(10)
+                                                            .frame(width: 5, height: 20)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        Text(String(self.tone)).padding(10)
+                                        LinearGradient(colors: [
+                                            Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
+                                            Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
+                                        ],
+                                                       startPoint: .topLeading,
+                                                       endPoint: .bottomTrailing
+                                        )
+                                        .frame(height: 30)
+                                        .mask(alignment: .leading) {
+                                            
+                                            if self.tone > 0 {
+                                                HStack(spacing: 3){
+                                                    ForEach(0..<Int(self.tone), id: \.self){ _ in
+                                                        Rectangle()
+                                                            .cornerRadius(10)
+                                                            .frame(width: 5, height: 20)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                    }.frame(width: geometry.size.width)
+                                    Spacer()
+                                }
+                                
+                                HStack{
+                                    Spacer()
+                                    Button("-pitch") {
+                                        self.tone -= 1
+                                        audioManager.pitchChange(tone: self.tone)
+                                    }
+                                    Spacer()
+                                    Button{
+                                        audioManager.play()
+                                        player.plays()
+                                        isPlaying.toggle()
+                                    } label: {
+                                        Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 50)
+                                    }
+                                    Spacer()
+                                    Button("+pitch") {
+                                        self.tone += 1
+                                        audioManager.pitchChange(tone: self.tone)
+                                    }
+                                    Spacer()
+                                }
+                                .tint(.white)
+                                .shadow(radius: 10)
                             }
-                        }*/
+                            .frame(height: geometry.size.width*9/16)
+                        }
+                    }
+                    if !isAppear{
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .onAppear() {
+                                if !isAppear {
+                                    url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+                                    if UIDevice.current.model == "iPad" {
+                                        self.isiPad = true
+                                    }
+                                    if TBisOn && !isiPad {
+                                        TBisOn = false
+                                    }
+                                }
+                            }
+                    }
                     
-                    VStack{}.onAppear(){
-                        //audioManager.setEngine(file: Urls, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
-                        self.isAppear = true
-                        
-                    }
+                }.onTapGesture {
+                    self.tap.toggle()
                 }
-                
-                if !isAppear{
-                    ProgressView()
-                        .scaleEffect(1.5)
-                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                }
-                 
-            }
-            .onAppear() {
-                if !isAppear {
-                    url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
-                    if UIDevice.current.model == "iPad" {
-                        self.isiPad = true
-                    }
-                    if TBisOn && !isiPad {
-                        TBisOn = false
-                    }
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                if info != nil {
-                    ToolbarItem(placement: .principal){
-                        LinearGradient(colors: [
-                            Color(red: 1, green: 112 / 255.0, blue: 0),
-                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                        ],
-                                       startPoint: .topLeading,
-                                       endPoint: .bottomTrailing
-                        )
-                        .mask(alignment: .center) {
-                            Text(info?.title ?? "노래방")
-                                .bold()
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    if info != nil {
+                        ToolbarItem(placement: .principal){
+                            LinearGradient(colors: [
+                                Color(red: 1, green: 112 / 255.0, blue: 0),
+                                Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
+                            ],
+                                           startPoint: .topLeading,
+                                           endPoint: .bottomTrailing
+                            )
+                            .mask(alignment: .center) {
+                                Text(info?.title ?? "노래방")
+                                    .bold()
+                            }
                         }
                     }
                 }
@@ -280,9 +333,8 @@ extension Format {
     
     var isTranscodingNeeded: Bool {
         self.ext == "mp4"
-            ? (self.vcodec ?? "").hasPrefix(av1CodecPrefix)
-            : self.ext != "m4a"
+        ? (self.vcodec ?? "").hasPrefix(av1CodecPrefix)
+        : self.ext != "m4a"
     }
 }
-
 

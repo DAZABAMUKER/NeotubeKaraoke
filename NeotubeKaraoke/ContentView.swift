@@ -7,18 +7,20 @@
 
 import SwiftUI
 
+enum TabIndex {
+    case Home
+    case Setting
+    case Profile
+}
+
 struct ContentView: View {
     
-    enum TabIndex {
-        case Home
-        case Setting
-        case Profile
-    }
     
     @State var tabIndex: TabIndex = .Home
     @State var sheeet: Bool = false
     @State var TBisOn = true
-    
+    @State var videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", TBisOn: .constant(true))
+    @State var reloads = false
     //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
     
     func changeColor(tabIndex: TabIndex) -> Color{
@@ -64,13 +66,19 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher(TBisOn: $TBisOn)
+                    searcher(TBisOn: $TBisOn, videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    Button("PLAY"){
-                       // audioManager.play()
+                    if reloads{
+                        Text("텍스트")
+                            .onAppear(){
+                                self.reloads = false
+                            }
+                            .tag(TabIndex.Profile)
+                    } else {
+                        videoPlay
+                            .tag(TabIndex.Profile)
                     }
-                        .tag(TabIndex.Profile)
                     Text("반가워요")
                         .tag(TabIndex.Setting)
                         .onTapGesture {
