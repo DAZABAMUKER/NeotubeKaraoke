@@ -81,7 +81,7 @@ struct VideoPlay: View {
                     //print(self.info!)
                     guard let aUrl = bestAudio?.url else { return }
                     guard let vUrl = bestVideo?.url else { return }
-                    print(vUrl)
+                    print(aUrl)
                     //self.audioUrl = aUrl
                     //self.videoUrl = vUrl
                     //print(self.audioUrl)
@@ -131,7 +131,6 @@ struct VideoPlay: View {
     }
     
     func loadAVAssets(url: URL, size: Int64) {
-        print(size)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
@@ -148,9 +147,11 @@ struct VideoPlay: View {
                 self.isAppear = true
             }
             catch {
+                
             }
         }
-        task.priority = URLSessionTask.highPriority
+        //task.countOfBytesClientExpectsToReceive = size
+        //task.priority = URLSessionTask.highPriority
         task.resume()
     }
     

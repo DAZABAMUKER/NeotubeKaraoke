@@ -10,6 +10,7 @@
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
 		032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032DE3E229AEDAC50097C58A /* videoClass.swift */; };
+		032DE3E729AF847A0097C58A /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032DE3E629AF847A0097C58A /* DownloadManager.swift */; };
 		0330C4E329A1B94000B3E6D3 /* VideoPlayers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */; };
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
@@ -38,6 +39,7 @@
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		032DE3E229AEDAC50097C58A /* videoClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoClass.swift; sourceTree = "<group>"; };
+		032DE3E629AF847A0097C58A /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayers.swift; sourceTree = "<group>"; };
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
 		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				03962DED2921C80500A376F3 /* ContentView.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
+				032DE3E629AF847A0097C58A /* DownloadManager.swift */,
 				03F6F2B529AE18E700A4F9DE /* videoPlayerGroup */,
 				03F6F2B629AE191F00A4F9DE /* youtubeApiData */,
 			);
@@ -258,6 +261,7 @@
 				03962DEA291FEC4000A376F3 /* NaviView.swift in Sources */,
 				036DDD9C29A9C3A000396B94 /* PlayerViewController.swift in Sources */,
 				03D77A2F2935D4E80037061E /* Video.swift in Sources */,
+				032DE3E729AF847A0097C58A /* DownloadManager.swift in Sources */,
 				03D77A2D2935D2290037061E /* Constant.swift in Sources */,
 				03962DF029230D7D00A376F3 /* searcher.swift in Sources */,
 				03962DDE291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld in Sources */,
