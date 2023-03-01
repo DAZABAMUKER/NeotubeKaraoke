@@ -10,7 +10,6 @@ import SwiftUI
 struct searcher: View{
     
     
-    @State var vidId: String = ""
     @State var showplayer = false
     @State var inputVal: String = ""
     @State var isEditing: Bool = false
@@ -90,13 +89,11 @@ struct searcher: View{
                              }
                              */
                             Button {
-                                /*
-                                videoPlay.closes = true
+                                //videoPlay.closes = true
                                 videoPlay = VideoPlay(videoId: responseitems.videoID)
                                 reloads = true
-                                tabIndex = .Profile
-                                 */
-                                self.vidId = responseitems.videoID
+                                print("리로드")
+                                //tabIndex = .Profile
                             } label: {
                                 TableCell(Video: responseitems)
                             }
@@ -121,7 +118,6 @@ struct searcher: View{
                         }
                         VStack{}.frame(height: 60).background(.red)
                     }
-                    VideoPlay(videoId: self.vidId)
                 }
             }
         }

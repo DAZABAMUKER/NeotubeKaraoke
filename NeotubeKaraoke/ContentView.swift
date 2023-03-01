@@ -15,7 +15,7 @@ enum TabIndex {
 
 struct ContentView: View {
     
-    
+    @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
     @State var sheeet: Bool = false
     @State var TBisOn = true
@@ -70,16 +70,10 @@ struct ContentView: View {
                     searcher(TBisOn: $TBisOn, videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    if reloads{
-                        Text("텍스트")
-                            .onAppear(){
-                                self.reloads = false
-                            }
-                            .tag(TabIndex.Profile)
-                    } else {
-                        videoPlay
-                            .tag(TabIndex.Profile)
-                    }
+                    
+                    Text("텍스트")
+                        .tag(TabIndex.Profile)
+                    
                     Text("반가워요")
                         .tag(TabIndex.Setting)
                         .onTapGesture {
@@ -89,13 +83,44 @@ struct ContentView: View {
                         }
                 }
                 if TBisOn {
-                Circle()
-                    .frame(width: 100)
-                    .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
-                    .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                    .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
-                    .shadow(radius: 10)
-                
+                    VStack{
+                        ZStack{
+                            if reloads {
+                                Text("Loading...")
+                                    .onAppear(){
+                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                                            self.reloads = false
+                                        }
+                                    }
+                            } else {
+                                videoPlay
+                            }
+                            VStack{
+                                Spacer()
+                                VStack{}
+                                    .frame(width: geometry.size.width, height: 60)
+                                    .background(content: {
+                                        ZStack{
+                                            Image(systemName: "chevron.compact.down").resizable().scaledToFit().opacity(self.vidFull ? 0.9 : 0.01).frame(height: 10)
+                                            Color.black.opacity(0.01).frame(width: geometry.size.width, height: 60)
+                                        }
+                                    })
+                                    .onTapGesture {
+                                        self.vidFull.toggle()
+                                    }
+                            }
+                        }
+                        .frame(height: vidFull ? 700 : 60)
+                        .animation(.easeInOut(duration: 0.5), value: vidFull)
+                        Spacer()
+                            .frame(height: 50)
+                    }
+                    Circle()
+                        .frame(width: 100)
+                        .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
+                        .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                        .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
+                        .shadow(radius: 10)
                     HStack(spacing: 0) {
                         TabButtonSel(tabIndex: .Profile, img: "music.mic", geometry: geometry)
                         TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)

@@ -131,11 +131,11 @@ struct VideoPlay: View {
     }
     
     func loadAVAssets(url: URL, size: Int64) {
+        print(size)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
         let task: URLSessionDownloadTask = URLSession(configuration: .default).downloadTask(with: request) { tempUrl, urlResponse, error in
-            
             do {
                 let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 let fileUrl = doc.appendingPathComponent("audio.m4a")
@@ -148,7 +148,6 @@ struct VideoPlay: View {
                 self.isAppear = true
             }
             catch {
-                
             }
         }
         task.priority = URLSessionTask.highPriority
@@ -173,7 +172,6 @@ struct VideoPlay: View {
                     }
                     if isAppear {
                         PlayerViewController(player: player.player!)
-                            .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
                             .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
                             .padding(.top, -15)
                             .edgesIgnoringSafeArea(.bottom)
@@ -240,7 +238,7 @@ struct VideoPlay: View {
                                                 }
                                             }
                                         }
-                                        Text(String(self.tone)).padding(10)
+                                        Text(String(self.tone)).padding(10).shadow(radius: 20)
                                         LinearGradient(colors: [
                                             Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
                                             Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
@@ -268,9 +266,14 @@ struct VideoPlay: View {
                                 
                                 HStack{
                                     Spacer()
-                                    Button("-pitch") {
+                                    Button {
                                         self.tone -= 1
                                         audioManager.pitchChange(tone: self.tone)
+                                    } label: {
+                                        Image("KeyDown")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 100)
                                     }
                                     Spacer()
                                     Button{
@@ -284,9 +287,14 @@ struct VideoPlay: View {
                                             .frame(height: 50)
                                     }
                                     Spacer()
-                                    Button("+pitch") {
+                                    Button {
                                         self.tone += 1
                                         audioManager.pitchChange(tone: self.tone)
+                                    } label: {
+                                        Image("KeyUp")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 100)
                                     }
                                     Spacer()
                                 }
@@ -316,6 +324,9 @@ struct VideoPlay: View {
                     
                 }.onTapGesture {
                     self.tap.toggle()
+                }
+                .onDisappear(){
+                    close()
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
