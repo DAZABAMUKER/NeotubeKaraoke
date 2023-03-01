@@ -21,6 +21,7 @@ struct ContentView: View {
     @State var TBisOn = true
     @State var videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", TBisOn: .constant(true))
     @State var reloads = false
+    @State var closes = false
     //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
     
     func changeColor(tabIndex: TabIndex) -> Color{
@@ -96,8 +97,8 @@ struct ContentView: View {
                     .shadow(radius: 10)
                 
                     HStack(spacing: 0) {
-                        TabButtonSel(tabIndex: .Profile, img: "person.fill", geometry: geometry)
-                        TabButtonSel(tabIndex: .Home, img: "music.mic", geometry: geometry)
+                        TabButtonSel(tabIndex: .Profile, img: "music.mic", geometry: geometry)
+                        TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                         
                     }

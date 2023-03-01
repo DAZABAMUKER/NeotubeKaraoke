@@ -11,11 +11,12 @@ import PythonKit
 
 struct VideoPlay: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
     @State var isAppear = false
     @State var isiPad = false
     @State var que = false
     @StateObject var player = VideoPlayers()
-    
     //@State var indeterminateProgressKey: String?
     @State var youtubeDL: YoutubeDL?
     @State var info: Info?
@@ -44,18 +45,17 @@ struct VideoPlay: View {
     var videoId: String = ""
     @State var tap = true
     @State var isPlaying = false
+    @State private var isLoading = false
+    @State var closes = false
     
     init(videoId: String = "", TBisOn: Binding<Bool> = .constant(false)) {
         self.videoId = videoId
         _TBisOn = TBisOn
     }
     
-    func change(vidId: String) {
-        print(vidId)
-        let geturl = URL(string: "https://www.youtube.com/watch?v=\(vidId)")
-        url = geturl
-        print(geturl)
-        extractInfo(url: geturl!)
+    func close() {
+        player.close()
+        audioManager.close()
     }
     
     func extractInfo(url: URL) {
@@ -73,8 +73,8 @@ struct VideoPlay: View {
                         return
                     }
                     //print(info?.format?.url)
-                    //let best = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
-                    let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
+                    let bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
+                    //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
                     //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded }.last
                     let bestAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
                     print(bestAudio!, bestVideo!)
@@ -86,7 +86,7 @@ struct VideoPlay: View {
                     //self.videoUrl = vUrl
                     //print(self.audioUrl)
                     loadAVAssets(url: aUrl, size: bestAudio?.filesize ?? 0)
-                    player.prepareToPlay(url: vUrl, audioManager: audioManager)
+                    player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0)
                 }
             }
             catch {
@@ -159,22 +159,40 @@ struct VideoPlay: View {
         NavigationStack{
             GeometryReader { geometry in
                 ZStack{
+                    if closes {
+                        VStack{}.onAppear(){
+                            print("종료")
+                            player.close()
+                            audioManager.close()
+                        }
+                    }
                     if player.end {
                         VStack{}.onAppear(){
                             isPlaying = false
                         }
                     }
-                    if self.isAppear {
+                    if isAppear {
                         PlayerViewController(player: player.player!)
-                        //.frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
+                            .frame(width: geometry.size.width, height: UIDevice.current.orientation == .portrait ? geometry.size.width/(192/108) : isiPad ?  geometry.size.width/(192/108): geometry.size.height+geometry.safeAreaInsets.bottom, alignment: .center)
                             .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
                             .padding(.top, -15)
                             .edgesIgnoringSafeArea(.bottom)
                         if player.progress {
+                            Circle()
+                                .trim(from: 0, to: 0.5)
+                                .stroke(Color.white, lineWidth: 5)
+                                .frame(width: 70, height: 70)
+                                .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+                                .animation(Animation.default.repeatForever(autoreverses: false).speed(0.3), value: isLoading)
+                                .onAppear() {
+                                    self.isLoading = true
+                                }
+                                /*
                             ProgressView()
                                 .scaleEffect(4)
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                 .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
+                                  */
                         }
                         HStack{
                             VStack{}
@@ -199,7 +217,7 @@ struct VideoPlay: View {
                                             .frame(width: geometry.size.width, height: 10)
                                             .foregroundColor(.gray)
                                         Rectangle()
-                                            .frame(width: CMTimeGetSeconds((player.player?.currentItem!.duration)!).isNaN ? 0 : geometry.size.width * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)*2, height: 10)
+                                            .frame(width: CMTimeGetSeconds((player.player?.currentItem!.duration)!).isNaN ? 0 : geometry.size.width * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
                                             .foregroundColor(.green)
                                     }
                                     HStack(spacing: 2){

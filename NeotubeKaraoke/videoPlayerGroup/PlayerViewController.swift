@@ -10,7 +10,7 @@ import SwiftUI
 import AVKit
 
 struct PlayerViewController: UIViewControllerRepresentable {
-    
+    @Environment(\.dismiss) private var dismiss
     var player: AVPlayer
     func makeUIViewController(context: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
@@ -20,5 +20,9 @@ struct PlayerViewController: UIViewControllerRepresentable {
     }
     func updateUIViewController(_ uiViewController: AVPlayerViewController, context: Context) {
         
+    }
+    
+    func close() {
+        dismiss()
     }
 }

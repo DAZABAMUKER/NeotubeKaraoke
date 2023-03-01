@@ -10,7 +10,7 @@ import SwiftUI
 struct searcher: View{
     
     
-
+    @State var vidId: String = ""
     @State var showplayer = false
     @State var inputVal: String = ""
     @State var isEditing: Bool = false
@@ -35,86 +35,93 @@ struct searcher: View{
                         models.isResponseitems = false
                     }
                 }
-                VStack(spacing: 0){
-                    //MARK: - SearchBar
-                    HStack{
-                        Image(systemName: "music.mic.circle")
-                            .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
-                            .font(.system(size: 50))
-                            .padding(.leading, 10)
-                            .padding(.bottom, 5)
-                        TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .background(border)
-                            .foregroundColor(.white)
-                            .padding(.trailing, 30)
-                            .padding(.leading, 20)
-                            .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
-                            .onSubmit {
-                                let _ = models.getVideos(val: inputVal)
-                            }
-                            .onAppear(){
-                                if TBisOn == false {
-                                    TBisOn = true
+                ZStack{
+                    VStack(spacing: 0){
+                        //MARK: - SearchBar
+                        HStack{
+                            Image(systemName: "music.mic.circle")
+                                .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
+                                .font(.system(size: 50))
+                                .padding(.leading, 10)
+                                .padding(.bottom, 5)
+                            TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .background(border)
+                                .foregroundColor(.white)
+                                .padding(.trailing, 30)
+                                .padding(.leading, 20)
+                                .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
+                                .onSubmit {
+                                    let _ = models.getVideos(val: inputVal)
+                                }
+                                .onAppear(){
+                                    if TBisOn == false {
+                                        TBisOn = true
+                                    }
+                                }
+                            
+                            Button {
+                                self.inputVal = ""
+                            } label: {
+                                if (self.inputVal.count > 0) {
+                                    Image(systemName: "multiply.circle.fill")
+                                        .foregroundColor(.gray)
+                                        .font(.system(size: 20))
                                 }
                             }
-
-                        Button {
-                            self.inputVal = ""
-                        } label: {
-                            if (self.inputVal.count > 0) {
-                                Image(systemName: "multiply.circle.fill")
-                                    .foregroundColor(.gray)
-                                    .font(.system(size: 20))
+                        }
+                        //MARK: - 아이패드인지 디비이스 확인
+                        .background() {
+                            if UIDevice.current.model == "iPad" {
+                                Color(UIColor(red: 71/255, green: 60/255, blue: 51/255, alpha: 1))
+                                    .padding(.top, -geometry.safeAreaInsets.top)
+                            } else {
+                                Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1))
+                                    .padding(.top, -geometry.safeAreaInsets.top)
                             }
                         }
-                    }
-                    //MARK: - 아이패드인지 디비이스 확인
-                    .background() {
-                        if UIDevice.current.model == "iPad" {
-                            Color(UIColor(red: 71/255, green: 60/255, blue: 51/255, alpha: 1))
-                                .padding(.top, -geometry.safeAreaInsets.top)
-                        } else {
-                            Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1))
-                                .padding(.top, -geometry.safeAreaInsets.top)
+                        //MARK: - 리스트
+                        List(self.ResponseItems, id: \.videoID){ responseitems in
+                            /*
+                             NavigationLink(destination: videoPlay) {
+                             TableCell(Video: responseitems)
+                             //Text("nil")
+                             }
+                             */
+                            Button {
+                                /*
+                                videoPlay.closes = true
+                                videoPlay = VideoPlay(videoId: responseitems.videoID)
+                                reloads = true
+                                tabIndex = .Profile
+                                 */
+                                self.vidId = responseitems.videoID
+                            } label: {
+                                TableCell(Video: responseitems)
+                            }
+                            
+                            //.background(.blue)
                         }
-                    }
-                    //MARK: - 리스트
-                    List(self.ResponseItems, id: \.videoID){ responseitems in
-                        /*
-                        NavigationLink(destination: videoPlay) {
-                            TableCell(Video: responseitems)
-                            //Text("nil")
+                        //.frame(width:geometry.size.width,height: geometry.size.height - 60)
+                        .background(){
+                            Image("clear")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: geometry.size.width)
+                                .opacity(0.3)
                         }
-                         */
-                        Button {
-                            videoPlay = VideoPlay(videoId: responseitems.videoID)
-                            reloads = true
-                            tabIndex = .Profile
-                        } label: {
-                            TableCell(Video: responseitems)
+                        .padding(.top, -8)
+                        .listStyle(.plain)
+                        .environment(\.defaultMinListRowHeight, 80)
+                        .preferredColorScheme(.dark)
+                        // 검색결과 없을 경우 Alert 띄음.
+                        .alert(isPresented: $models.nothings) {
+                            Alert(title: Text(models.stsCode == 0 ? "검색결과 없음." : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
                         }
-
-                        //.background(.blue)
+                        VStack{}.frame(height: 60).background(.red)
                     }
-                    //.frame(width:geometry.size.width,height: geometry.size.height - 60)
-                    .background(){
-                        Image("clear")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: geometry.size.width)
-                            .opacity(0.3)
-                    }
-                    .padding(.top, -8)
-                    .listStyle(.plain)
-                    .environment(\.defaultMinListRowHeight, 80)
-                    .preferredColorScheme(.dark)
-                    // 검색결과 없을 경우 Alert 띄음.
-                    .alert(isPresented: $models.nothings) {
-                        Alert(title: Text(models.stsCode == 0 ? "검색결과 없음." : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
-                    }
-                    VStack{}.frame(height: 60).background(.red)
+                    VideoPlay(videoId: self.vidId)
                 }
             }
         }

@@ -39,6 +39,10 @@ class AudioManager: ObservableObject {
         
     }
     
+    func close() {
+        playerNode.pause()
+        playerNode.stop()
+    }
     
     func play(){
         if playerNode.isPlaying {

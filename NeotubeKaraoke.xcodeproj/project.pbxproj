@@ -80,7 +80,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		037C4D9A298B42FE007B6DF3 /* lean */ = {
+		037C4D9A298B42FE007B6DF3 /* learn */ = {
 			isa = PBXGroup;
 			children = (
 				0356F76C29A496F40005EE2D /* downloadManager.swift */,
@@ -89,7 +89,7 @@
 				03962DE9291FEC4000A376F3 /* NaviView.swift */,
 				03962DEB2920D7B300A376F3 /* MyWebView.swift */,
 			);
-			path = lean;
+			path = learn;
 			sourceTree = "<group>";
 		};
 		03962DC5291F781400A376F3 = {
@@ -118,20 +118,12 @@
 				03962DDF291F781500A376F3 /* Info.plist */,
 				03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */,
 				03962DD7291F781500A376F3 /* Preview Content */,
-				037C4D9A298B42FE007B6DF3 /* lean */,
+				037C4D9A298B42FE007B6DF3 /* learn */,
 				03962DED2921C80500A376F3 /* ContentView.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
-				0316559D295BAC5C00B18342 /* TableCell.swift */,
-				0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */,
-				036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */,
-				034744352999DFF800F2EBEE /* AudioManager.swift */,
-				03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */,
-				03F36CC02963DE61001AEB7A /* Models.swift */,
-				03D77A2E2935D4E80037061E /* Video.swift */,
-				0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */,
-				036EF0082955559E00789D57 /* Response.swift */,
-				03D77A2C2935D2290037061E /* Constant.swift */,
+				03F6F2B529AE18E700A4F9DE /* videoPlayerGroup */,
+				03F6F2B629AE191F00A4F9DE /* youtubeApiData */,
 			);
 			path = NeotubeKaraoke;
 			sourceTree = "<group>";
@@ -142,6 +134,30 @@
 				03962DD8291F781500A376F3 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		03F6F2B529AE18E700A4F9DE /* videoPlayerGroup */ = {
+			isa = PBXGroup;
+			children = (
+				0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */,
+				036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */,
+				034744352999DFF800F2EBEE /* AudioManager.swift */,
+				03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */,
+			);
+			path = videoPlayerGroup;
+			sourceTree = "<group>";
+		};
+		03F6F2B629AE191F00A4F9DE /* youtubeApiData */ = {
+			isa = PBXGroup;
+			children = (
+				0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */,
+				03F36CC02963DE61001AEB7A /* Models.swift */,
+				03D77A2C2935D2290037061E /* Constant.swift */,
+				0316559D295BAC5C00B18342 /* TableCell.swift */,
+				03D77A2E2935D4E80037061E /* Video.swift */,
+				036EF0082955559E00789D57 /* Response.swift */,
+			);
+			path = youtubeApiData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
