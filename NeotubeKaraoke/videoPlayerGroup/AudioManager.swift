@@ -11,11 +11,13 @@ import AVFoundation
 class AudioManager: ObservableObject {
     
     let playerNode = AVAudioPlayerNode()
+    let clapNode = AVAudioPlayerNode()
     let audioEngine = AVAudioEngine()
     var pitchNode: AVAudioUnitTimePitch!
     var EQNode: AVAudioUnitEQ!
     var audioFileBuffer: AVAudioPCMBuffer!
     var audioFile: AVAudioFile!
+    var clap: AVAudioFile!
     var audioFileLength: AVAudioFramePosition = 0
     var offsetFrame: Double = 0
     var currentFrame: AVAudioFramePosition {
@@ -25,7 +27,7 @@ class AudioManager: ObservableObject {
         else {
             return 0
         }
-        print("매니저",Double(playerTime.sampleTime)/44100.0)
+        //print("매니저",Double(playerTime.sampleTime)/44100.0)
         
         return playerTime.sampleTime
     }
@@ -66,7 +68,9 @@ class AudioManager: ObservableObject {
                 print(" 파일 안나오잖아")
                 return
             }*/
+            let clapSound = Bundle.main.url(forResource: "clap", withExtension: "wav")
             self.audioFile = try AVAudioFile(forReading: file)
+            self.clap = try AVAudioFile(forReading: clapSound!)
             offsetFrame = 0
             //audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             //try audioFile.read(into: audioFileBuffer)
@@ -97,12 +101,15 @@ class AudioManager: ObservableObject {
         audioEngine.attach(EQNode)
         audioEngine.attach(playerNode)
         audioEngine.attach(pitchNode)
+        audioEngine.attach(clapNode)
         
         let mixer = audioEngine.mainMixerNode
+        audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         playerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
+        clapNode.scheduleFile(clap, at: nil, completionHandler: nil)
         audioEngine.prepare()
         do {
             try audioEngine.start()
@@ -129,6 +136,12 @@ class AudioManager: ObservableObject {
         playerNode.play()
     }
     
+    func playClap() {
+        //clapNode.stop()
+        clapNode.scheduleFile(clap, at: nil, completionHandler: nil)
+        clapNode.play()
+    }
+    
     public func checkVidTime(vidTime: Double) {
         let audiTime = offsetFrame + Double(currentFrame)/44100.0
         var interval = audiTime - vidTime
@@ -139,7 +152,7 @@ class AudioManager: ObservableObject {
             playerNode.stop()
             //audioEngine.stop()
         }
-        print("체크",vidTime, audiTime, interval)
+        //print("체크",vidTime, audiTime, interval)
         if interval > 0.1 {
             playerNode.pause()
             controlFrame(jump: vidTime)

@@ -134,25 +134,28 @@ struct VideoPlay: View {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
-        let task: URLSessionDownloadTask = URLSession(configuration: .default).downloadTask(with: request) { tempUrl, urlResponse, error in
+        let task = URLSession(configuration: .default).dataTask(with: request) { data, urlResponse, error in
+            if error != nil || data == nil {
+                return
+            }
+            let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let fileUrl = doc.appendingPathComponent("audio.m4a")
             do {
-                let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let fileUrl = doc.appendingPathComponent("audio.m4a")
+                
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
                     try FileManager.default.removeItem(at: fileUrl)
                 }
-                try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
+                //try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
+                try data?.write(to: fileUrl)
                 print(fileUrl)
                 audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
                 self.isAppear = true
             }
             catch {
-                
+                print(error)
+                return
             }
-        }
-        //task.countOfBytesClientExpectsToReceive = size
-        //task.priority = URLSessionTask.highPriority
-        task.resume()
+        }.resume()
     }
     
     var body: some View {
@@ -172,10 +175,19 @@ struct VideoPlay: View {
                         }
                     }
                     if isAppear {
-                        PlayerViewController(player: player.player!)
-                            .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                            .padding(.top, -15)
-                            .edgesIgnoringSafeArea(.bottom)
+                        VStack{
+                            PlayerViewController(player: player.player!)
+                                .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
+                                .padding(.top, -15)
+                                .edgesIgnoringSafeArea(.bottom)
+                            Button {
+                                audioManager.playClap()
+                            } label: {
+                                Image(systemName: "hands.clap.fill")
+                                    
+                            }
+
+                        }
                         if player.progress {
                             Circle()
                                 .trim(from: 0, to: 0.5)
@@ -216,7 +228,7 @@ struct VideoPlay: View {
                                             .frame(width: geometry.size.width, height: 10)
                                             .foregroundColor(.gray)
                                         Rectangle()
-                                            .frame(width: CMTimeGetSeconds((player.player?.currentItem!.duration)!).isNaN ? 0 : geometry.size.width * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
+                                            .frame(width: player.currents < 0.9 ? 0 : geometry.size.width * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
                                             .foregroundColor(.green)
                                     }
                                     HStack(spacing: 2){
@@ -308,7 +320,7 @@ struct VideoPlay: View {
                     if !isAppear{
                         ProgressView()
                             .scaleEffect(1.5)
-                            .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .frame(width: geometry.size.width, height: geometry.size.height)
                             .onAppear() {
                                 if !isAppear {

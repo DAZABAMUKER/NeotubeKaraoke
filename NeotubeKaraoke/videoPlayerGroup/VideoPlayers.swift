@@ -55,9 +55,6 @@ class VideoPlayers: AVPlayer, ObservableObject {
         //downloadVidonlyFile(url: url, fileSize: fileSize)
         self.player = AVPlayer(url: url)
         self.player?.isMuted = true
-        DispatchQueue.main.async {
-            self.isAppears = true
-        }
         self.player?.addObserver(self, forKeyPath: "timeControlStatus",options: [.old, .new], context: nil)
         self.player?.currentItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .global(qos: .background), using: { _ in
