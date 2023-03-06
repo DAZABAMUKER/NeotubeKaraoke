@@ -30,7 +30,6 @@ struct VideoPlay: View {
     }
     //@State var audioUrl = URL(string: "https://dazabamuker.tistory.com")!
     //@State var videoUrl = URL(string: "https://dazabamuker.tistory.com")!
-    @Binding var TBisOn: Bool
     @StateObject var audioManager = AudioManager()
     @State var tone: Float = 0.0 {
         didSet {
@@ -44,14 +43,11 @@ struct VideoPlay: View {
     //@State var itemUrl: URL!
     var videoId: String = ""
     @State var tap = true
-    @State var isPlaying = false
+    //@State var isPlaying = false
     @State private var isLoading = false
     @State var closes = false
+    @Binding var vidFull: Bool
     
-    init(videoId: String = "", TBisOn: Binding<Bool> = .constant(false)) {
-        self.videoId = videoId
-        _TBisOn = TBisOn
-    }
     
     func close() {
         player.close()
@@ -135,13 +131,9 @@ struct VideoPlay: View {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
         let task = URLSession(configuration: .default).dataTask(with: request) { data, urlResponse, error in
-            if error != nil || data == nil {
-                return
-            }
             let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let fileUrl = doc.appendingPathComponent("audio.m4a")
             do {
-                
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
                     try FileManager.default.removeItem(at: fileUrl)
                 }
@@ -155,7 +147,10 @@ struct VideoPlay: View {
                 print(error)
                 return
             }
-        }.resume()
+        }
+        //task.countOfBytesClientExpectsToReceive = size
+        //task.priority = URLSessionTask.highPriority
+        task.resume()
     }
     
     var body: some View {
@@ -169,17 +164,178 @@ struct VideoPlay: View {
                             audioManager.close()
                         }
                     }
-                    if player.end {
-                        VStack{}.onAppear(){
-                            isPlaying = false
-                        }
-                    }
+//                    if player.end {
+//                        VStack{}.onAppear(){
+//                            isPlaying = false
+//                        }
+//                    }
                     if isAppear {
-                        VStack{
-                            PlayerViewController(player: player.player!)
-                                .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                                .padding(.top, -15)
-                                .edgesIgnoringSafeArea(.bottom)
+                        VStack(spacing: 0){
+                            LinearGradient(colors: [
+                                Color(red: 1, green: 112 / 255.0, blue: 0),
+                                Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
+                            ],
+                                           startPoint: .topLeading,
+                                           endPoint: .bottomTrailing
+                            )
+                            .frame(width: geometry.size.width, height: 45)
+                            .mask(alignment: .center) {
+                                Text(info?.title ?? "노래방")
+                                    .bold()
+                            }
+                            .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+                            .onTapGesture {
+                                self.vidFull.toggle()
+                                print("vidFull")
+                            }
+                            .DragVid(vidFull: $vidFull)
+                            ZStack{
+                                PlayerViewController(player: player.player!)
+                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16)
+                                //.padding(.top, 8)
+                                //.edgesIgnoringSafeArea(.bottom)
+                                    
+                                HStack{
+                                    VStack{}
+                                        .frame(width: 120, height: geometry.size.width*9/16)
+                                        .background(.black.opacity(0.01))
+                                        .onTapGesture(count: 2) {
+                                            player.moveFrame(to: -10.0)
+                                        }
+                                    Spacer()
+                                    VStack{}
+                                        .frame(width: 120, height: geometry.size.width*9/16)
+                                        .background(.black.opacity(0.01))
+                                        .onTapGesture(count: 2) {
+                                            player.moveFrame(to: 10.0)
+                                        }
+                                }
+                                if tap {
+                                    VStack{
+                                        ZStack(alignment: .leading){
+                                            Rectangle()
+                                                .frame(width: geometry.size.width, height: 10)
+                                                .foregroundColor(.secondary)
+                                            Rectangle()
+                                                .frame(width: player.currents < 0.9 ? 0 : (geometry.size.width - 15) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
+                                                .foregroundColor(.green)
+                                            Image(systemName: "rectangle.portrait.fill")
+                                                .scaleEffect(1.5)
+                                                .frame(width: player.currents < 0.9 ? 10 : (geometry.size.width) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!), alignment: .trailing)
+                                                .vidSlider(duartion: CMTimeGetSeconds( (player.player?.currentItem!.duration)!), width: geometry.size.width, player: player)
+                                        }
+                                        .padding(.top, 4)
+                                        HStack(spacing: 2){
+                                            LinearGradient(colors: [
+                                                Color.blue,
+                                                Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0)
+                                            ],
+                                                           startPoint: .leading,
+                                                           endPoint: .trailing
+                                            )
+                                            .frame(height: 30)
+                                            .mask(alignment: .trailing) {
+                                                if self.tone < 0 {
+                                                    HStack(spacing: 3){
+                                                        ForEach(0..<Int(self.tone)*(-1), id: \.self){ _ in
+                                                            Rectangle()
+                                                                .cornerRadius(10)
+                                                                .frame(width: 5, height: 20)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            Text(String(self.tone)).padding(10).shadow(radius: 20)
+                                            LinearGradient(colors: [
+                                                Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
+                                                Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
+                                            ],
+                                                           startPoint: .topLeading,
+                                                           endPoint: .bottomTrailing
+                                            )
+                                            .frame(height: 30)
+                                            .mask(alignment: .leading) {
+                                                
+                                                if self.tone > 0 {
+                                                    HStack(spacing: 3){
+                                                        ForEach(0..<Int(self.tone), id: \.self){ _ in
+                                                            Rectangle()
+                                                                .cornerRadius(10)
+                                                                .frame(width: 5, height: 20)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            
+                                        }.frame(width: geometry.size.width)
+                                        Spacer()
+                                    }
+                                    .frame(height: geometry.size.width*9/16)
+                                    .onAppear(){
+                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+                                            self.tap = false
+                                        }
+                                    }
+                                    //.border(.red, width: 3.0)
+                                    HStack{
+                                        Spacer()
+                                        Button {
+                                            self.tone -= 1
+                                            audioManager.pitchChange(tone: self.tone)
+                                        } label: {
+                                            Image("KeyDown")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 100)
+                                        }
+                                        Spacer()
+                                        Button{
+                                            audioManager.play()
+                                            player.plays()
+                                        } label: {
+                                            Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 50)
+                                        }
+                                        Spacer()
+                                        Button {
+                                            self.tone += 1
+                                            audioManager.pitchChange(tone: self.tone)
+                                        } label: {
+                                            Image("KeyUp")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 100)
+                                        }
+                                        Spacer()
+                                    }
+                                    .tint(.white)
+                                    .shadow(radius: 10)
+                                    .frame(height: geometry.size.width*9/16)
+                                    //.border(.green)
+                                    if player.progress {
+                                        Circle()
+                                            .trim(from: 0, to: 0.5)
+                                            .stroke(Color.white, lineWidth: 5)
+                                            .frame(width: 70, height: 70)
+                                            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+                                            .animation(Animation.default.repeatForever(autoreverses: false).speed(0.3), value: isLoading)
+                                            .onAppear() {
+                                                self.isLoading = true
+                                            }
+                                            /*
+                                        ProgressView()
+                                            .scaleEffect(4)
+                                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                            .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
+                                              */
+                                    }
+                                }
+                            }
+                            .onTapGesture {
+                                self.tap.toggle()
+                            }
                             Button {
                                 audioManager.playClap()
                             } label: {
@@ -188,134 +344,8 @@ struct VideoPlay: View {
                             }
 
                         }
-                        if player.progress {
-                            Circle()
-                                .trim(from: 0, to: 0.5)
-                                .stroke(Color.white, lineWidth: 5)
-                                .frame(width: 70, height: 70)
-                                .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-                                .animation(Animation.default.repeatForever(autoreverses: false).speed(0.3), value: isLoading)
-                                .onAppear() {
-                                    self.isLoading = true
-                                }
-                                /*
-                            ProgressView()
-                                .scaleEffect(4)
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                                  */
-                        }
-                        HStack{
-                            VStack{}
-                                .frame(width: 120, height: geometry.size.width*9/16)
-                                .background(.black.opacity(0.01))
-                                .onTapGesture(count: 2) {
-                                    player.moveFrame(to: -10.0)
-                                }
-                            Spacer()
-                            VStack{}
-                                .frame(width: 120, height: geometry.size.width*9/16)
-                                .background(.black.opacity(0.01))
-                                .onTapGesture(count: 2) {
-                                    player.moveFrame(to: 10.0)
-                                }
-                        }
-                        if tap {
-                            ZStack{
-                                VStack{
-                                    ZStack(alignment: .leading){
-                                        Rectangle()
-                                            .frame(width: geometry.size.width, height: 10)
-                                            .foregroundColor(.gray)
-                                        Rectangle()
-                                            .frame(width: player.currents < 0.9 ? 0 : geometry.size.width * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
-                                            .foregroundColor(.green)
-                                    }
-                                    HStack(spacing: 2){
-                                        LinearGradient(colors: [
-                                            Color.blue,
-                                            Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0)
-                                        ],
-                                                       startPoint: .leading,
-                                                       endPoint: .trailing
-                                        )
-                                        .frame(height: 30)
-                                        .mask(alignment: .trailing) {
-                                            if self.tone < 0 {
-                                                HStack(spacing: 3){
-                                                    ForEach(0..<Int(self.tone)*(-1), id: \.self){ _ in
-                                                        Rectangle()
-                                                            .cornerRadius(10)
-                                                            .frame(width: 5, height: 20)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        Text(String(self.tone)).padding(10).shadow(radius: 20)
-                                        LinearGradient(colors: [
-                                            Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
-                                            Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
-                                        ],
-                                                       startPoint: .topLeading,
-                                                       endPoint: .bottomTrailing
-                                        )
-                                        .frame(height: 30)
-                                        .mask(alignment: .leading) {
-                                            
-                                            if self.tone > 0 {
-                                                HStack(spacing: 3){
-                                                    ForEach(0..<Int(self.tone), id: \.self){ _ in
-                                                        Rectangle()
-                                                            .cornerRadius(10)
-                                                            .frame(width: 5, height: 20)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                    }.frame(width: geometry.size.width)
-                                    Spacer()
-                                }
-                                
-                                HStack{
-                                    Spacer()
-                                    Button {
-                                        self.tone -= 1
-                                        audioManager.pitchChange(tone: self.tone)
-                                    } label: {
-                                        Image("KeyDown")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 100)
-                                    }
-                                    Spacer()
-                                    Button{
-                                        audioManager.play()
-                                        player.plays()
-                                        isPlaying.toggle()
-                                    } label: {
-                                        Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 50)
-                                    }
-                                    Spacer()
-                                    Button {
-                                        self.tone += 1
-                                        audioManager.pitchChange(tone: self.tone)
-                                    } label: {
-                                        Image("KeyUp")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 100)
-                                    }
-                                    Spacer()
-                                }
-                                .tint(.white)
-                                .shadow(radius: 10)
-                            }
-                            .frame(height: geometry.size.width*9/16)
-                        }
+                        
+                        
                     }
                     if !isAppear{
                         ProgressView()
@@ -328,36 +358,13 @@ struct VideoPlay: View {
                                     if UIDevice.current.model == "iPad" {
                                         self.isiPad = true
                                     }
-                                    if TBisOn && !isiPad {
-                                        TBisOn = false
-                                    }
                                 }
                             }
                     }
                     
-                }.onTapGesture {
-                    self.tap.toggle()
                 }
                 .onDisappear(){
                     close()
-                }
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    if info != nil {
-                        ToolbarItem(placement: .principal){
-                            LinearGradient(colors: [
-                                Color(red: 1, green: 112 / 255.0, blue: 0),
-                                Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                            ],
-                                           startPoint: .topLeading,
-                                           endPoint: .bottomTrailing
-                            )
-                            .mask(alignment: .center) {
-                                Text(info?.title ?? "노래방")
-                                    .bold()
-                            }
-                        }
-                    }
                 }
             }
         }

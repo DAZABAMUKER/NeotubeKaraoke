@@ -18,8 +18,7 @@ struct ContentView: View {
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
     @State var sheeet: Bool = false
-    @State var TBisOn = true
-    @State var videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", TBisOn: .constant(true))
+    @State var videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", vidFull: .constant(false))
     @State var reloads = false
     @State var closes = false
     //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
@@ -67,7 +66,7 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher(TBisOn: $TBisOn, videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     
@@ -82,53 +81,54 @@ struct ContentView: View {
                             learn()
                         }
                 }
-                if TBisOn {
-                    VStack{
-                        ZStack{
-                            if reloads {
-                                Text("Loading...")
-                                    .onAppear(){
-                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-                                            self.reloads = false
-                                        }
+                VStack{
+                    ZStack{
+                        if reloads {
+                            Text("Loading...")
+                                .onAppear(){
+                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                                        self.reloads = false
                                     }
-                            } else {
-                                videoPlay
-                            }
-                            VStack{
-                                Spacer()
-                                VStack{}
-                                    .frame(width: geometry.size.width, height: 60)
-                                    .background(content: {
-                                        ZStack{
-                                            Image(systemName: "chevron.compact.down").resizable().scaledToFit().opacity(self.vidFull ? 0.9 : 0.01).frame(height: 10)
-                                            Color.black.opacity(0.01).frame(width: geometry.size.width, height: 60)
-                                        }
-                                    })
-                                    .onTapGesture {
-                                        self.vidFull.toggle()
-                                    }
-                            }
+                                }
+                        } else {
+                            videoPlay
                         }
-                        .frame(height: vidFull ? 700 : 60)
-                        .animation(.easeInOut(duration: 0.5), value: vidFull)
-                        Spacer()
-                            .frame(height: 50)
+                        VStack{
+                            Spacer()
+                            VStack{}
+                                .frame(width: geometry.size.width, height: 60)
+                                .background(content: {
+                                    ZStack{
+                                        Image(systemName: "chevron.compact.down").resizable().scaledToFit().opacity(self.vidFull ? 0.9 : 0.01).frame(height: 10)
+                                        Color.black.opacity(0.01).frame(width: geometry.size.width, height: 60)
+                                    }
+                                })
+                                .onTapGesture {
+                                    self.vidFull.toggle()
+                                }
+                        }
                     }
-                    Circle()
-                        .frame(width: 100)
-                        .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
-                        .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                        .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
-                        .shadow(radius: 10)
-                    HStack(spacing: 0) {
-                        TabButtonSel(tabIndex: .Profile, img: "music.mic", geometry: geometry)
-                        TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
-                        TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
-                        
+                    .onAppear(){
+                        videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", vidFull: $vidFull)
                     }
-                    .preferredColorScheme(.light)
+                    .frame(height: vidFull ? 700 : 60)
+                    .animation(.easeInOut(duration: 0.5), value: vidFull)
+                    Spacer()
+                        .frame(height: 50)
                 }
+                Circle()
+                    .frame(width: 100)
+                    .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
+                    .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                    .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
+                    .shadow(radius: 10)
+                HStack(spacing: 0) {
+                    TabButtonSel(tabIndex: .Profile, img: "music.mic", geometry: geometry)
+                    TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
+                    TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
+                    
+                }
+                .preferredColorScheme(.light)
             }
         }
     }

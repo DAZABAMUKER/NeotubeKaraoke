@@ -109,7 +109,6 @@ class AudioManager: ObservableObject {
         audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         playerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
-        clapNode.scheduleFile(clap, at: nil, completionHandler: nil)
         audioEngine.prepare()
         do {
             try audioEngine.start()

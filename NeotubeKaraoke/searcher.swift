@@ -18,12 +18,10 @@ struct searcher: View{
     
     @State var ResponseItems = [Video]()
     
-    @Binding var TBisOn: Bool
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
     @Binding var tabIndex: TabIndex
-    
-    
+    @Binding var vidFull: Bool
     
     var body: some View {
         NavigationView {
@@ -53,11 +51,6 @@ struct searcher: View{
                                 .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
                                 .onSubmit {
                                     let _ = models.getVideos(val: inputVal)
-                                }
-                                .onAppear(){
-                                    if TBisOn == false {
-                                        TBisOn = true
-                                    }
                                 }
                             
                             Button {
@@ -90,7 +83,7 @@ struct searcher: View{
                              */
                             Button {
                                 //videoPlay.closes = true
-                                videoPlay = VideoPlay(videoId: responseitems.videoID)
+                                videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull)
                                 reloads = true
                                 print("리로드")
                                 //tabIndex = .Profile

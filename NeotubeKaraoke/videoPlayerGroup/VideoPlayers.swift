@@ -16,7 +16,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
     @Published var progress: Bool = true 
     @Published var end = false
     @Published var isAppears = false
-    
+    @Published var isplaying = false
     
     var currrnts: Double {
         let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
@@ -38,6 +38,12 @@ class VideoPlayers: AVPlayer, ObservableObject {
     
     func moveFrame(to: Double) {
         player?.seek(to: CMTime(seconds: to, preferredTimescale: 1) + (player?.currentTime())!)
+        player?.play()
+    }
+    
+    func progressSlider(to: Double) {
+        player?.seek(to: CMTime(seconds: to, preferredTimescale: 1))
+        player?.play()
     }
     
     func prepareToPlay(url: URL,  audioManager: AudioManager, fileSize: Int64) {
@@ -69,9 +75,9 @@ class VideoPlayers: AVPlayer, ObservableObject {
                         self.end = true
                     }
                 } else {
-                    DispatchQueue.main.async {
-                        self.end = false
-                    }
+//                    DispatchQueue.main.async {
+//                        self.end = false
+//                    }
                 }
                 self.audiomanager?.checkVidTime(vidTime: jump)
             }
@@ -107,14 +113,17 @@ class VideoPlayers: AVPlayer, ObservableObject {
     */
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "timeControlStatus", let change = change, let newValue = change[NSKeyValueChangeKey.newKey] as? Int, let oldValue = change[NSKeyValueChangeKey.oldKey] as? Int {
+            
             let oldStatus = AVPlayer.TimeControlStatus(rawValue: oldValue)
             let newStatus = AVPlayer.TimeControlStatus(rawValue: newValue)
+            
             if newStatus == .waitingToPlayAtSpecifiedRate {
                 audiomanager?.pause()
                 
                 DispatchQueue.main.async {
                     print("플레이 기다리는 중")
                     self.progress = true
+                    self.isplaying = false
                 }
                 
             } else if newStatus == .playing {
@@ -123,6 +132,11 @@ class VideoPlayers: AVPlayer, ObservableObject {
                 audiomanager?.controlFrame(jump: jump)
                 DispatchQueue.main.async {
                     self.progress = false
+                    self.isplaying = true
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.isplaying = false
                 }
             }
         }
