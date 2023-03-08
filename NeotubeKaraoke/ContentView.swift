@@ -10,14 +10,13 @@ import SwiftUI
 enum TabIndex {
     case Home
     case Setting
-    case Profile
+    case PlayList
 }
 
 struct ContentView: View {
     
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
-    @State var sheeet: Bool = false
     @State var videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", vidFull: .constant(false))
     @State var reloads = false
     @State var closes = false
@@ -29,14 +28,14 @@ struct ContentView: View {
             return Color.red
         case .Setting:
             return Color.white
-        case .Profile:
+        case .PlayList:
             return Color.green
         }
     }
     
     func CircleOffset(tabIndex: TabIndex, geometry: GeometryProxy) -> CGFloat {
         switch tabIndex {
-        case .Profile:
+        case .PlayList:
             return -geometry.size.width / 3
         case .Home:
             return 0
@@ -70,16 +69,12 @@ struct ContentView: View {
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     
-                    Text("텍스트")
-                        .tag(TabIndex.Profile)
+                    PlayListView()
+                        .tag(TabIndex.PlayList)
                     
-                    Text("반가워요")
+                    SettingView()
                         .tag(TabIndex.Setting)
-                        .onTapGesture {
-                            self.sheeet = true
-                        }.sheet(isPresented: $sheeet) {
-                            learn()
-                        }
+                        
                 }
                 VStack{
                     ZStack{
@@ -123,7 +118,7 @@ struct ContentView: View {
                     .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                     .shadow(radius: 10)
                 HStack(spacing: 0) {
-                    TabButtonSel(tabIndex: .Profile, img: "music.mic", geometry: geometry)
+                    TabButtonSel(tabIndex: .PlayList, img: "music.mic", geometry: geometry)
                     TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
                     TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     

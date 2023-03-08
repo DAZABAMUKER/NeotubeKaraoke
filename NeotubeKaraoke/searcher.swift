@@ -23,6 +23,10 @@ struct searcher: View{
     @Binding var tabIndex: TabIndex
     @Binding var vidFull: Bool
     
+    func getLike(video: Video) {
+        let likeVideo = LikeVideo(videoId: video.videoID, title: video.title, thumnail: video.thumbnail, channelTitle: video.channelTitle)
+    }
+    
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
@@ -86,6 +90,7 @@ struct searcher: View{
                                 videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull)
                                 reloads = true
                                 print("리로드")
+                                getLike(video: responseitems)
                                 //tabIndex = .Profile
                             } label: {
                                 TableCell(Video: responseitems)
