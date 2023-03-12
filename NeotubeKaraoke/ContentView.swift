@@ -17,9 +17,10 @@ struct ContentView: View {
     
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
-    @State var videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", vidFull: .constant(false))
+    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false))
     @State var reloads = false
     @State var closes = false
+    @State var anime = true
     //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
     
     func changeColor(tabIndex: TabIndex) -> Color{
@@ -85,6 +86,18 @@ struct ContentView: View {
                                         self.reloads = false
                                     }
                                 }
+                                .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+                        } else if videoPlay.videoId == "nil" {
+                            Text("부르실  노래를  선곡해주세요 *^^*")
+                                //.bold()
+                                .font(.title2)
+                                .frame(width: geometry.size.width, height: 60)
+                                .offset(x: anime ? -Double(geometry.size.width) : Double(geometry.size.width))
+                                .animation(.easeInOut(duration: 4).repeatForever(), value: anime)
+                                .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+                                .onAppear(){
+                                    self.anime = false
+                                }
                         } else {
                             videoPlay
                         }
@@ -104,7 +117,7 @@ struct ContentView: View {
                         }
                     }
                     .onAppear(){
-                        videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", vidFull: $vidFull)
+                        //videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", vidFull: $vidFull)
                     }
                     .frame(height: vidFull ? 700 : 60)
                     .animation(.easeInOut(duration: 0.5), value: vidFull)

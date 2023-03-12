@@ -8,83 +8,190 @@
 import SwiftUI
 
 struct PlayListView: View {
-    var body: some View {
-        VStack(alignment: .leading){
-            HStack{
-                LinearGradient(colors: [
-                    Color(red: 1, green: 112 / 255.0, blue: 0),
-                    Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                ],
-                               startPoint: .topLeading,
-                               endPoint: .bottomTrailing
-                )
-                .frame(height: 60)
-                .mask(alignment: .leading) {
-                    Text("Playlist")
-                        .italic()
-                        .bold()
-                        .font(.largeTitle)
-                        .padding(.horizontal, 20)
-                }
-                Spacer()
-                Button {
-                    
-                } label: {
-                    Image(systemName: "plus.app")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 30)
-                        .padding(.horizontal ,20)
-                        .foregroundColor(.orange)
-                }
-
-            }
-            .background(.indigo.opacity(0.3))
-            Text("Recent")
-                .bold()
-                .font(.title)
-            VStack{
-                ZStack{
-                    Image(systemName: "music.note.list")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 80)
-                        .padding(20)
-                        .background(.green)
-                        //.opacity(0.3)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .rotationEffect(.degrees(-15))
-                    Image(systemName: "music.note.list")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 80)
-                        .padding(20)
-                        .background(.orange)
-                        //.opacity(0.5)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .rotationEffect(.degrees(-5))
-                        //.padding(20)
-                    Image(systemName: "music.note.list")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 80)
-                        .padding(20)
-                        .background(.linearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .rotationEffect(.degrees(10))
-                        .padding(20)
-                }
-                Text("재생목록1")
-            }
-            List{
-                ForEach(0..<10) { video in
-                    //TableCell(Video: video)
-                    Text("기본 재생목록")
-                }
-            }
-            .listStyle(.plain)
+    
+    @State var plusPlayList: Bool = false
+    @State var pTitle: String = ""
+    @State var playlist = [String]()
+    
+    func decodePList() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            guard let js = NSData(contentsOf: fileurl) else { return }
+            let decoder = JSONDecoder()
+            let myData = try? decoder.decode([String].self, from: js as Data)
+            self.playlist = myData!
         }
-        .preferredColorScheme(.dark)
+    }
+    
+    func savePlayList(title: String) {
+        self.playlist.append(title)
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
+        let data = try! JSONEncoder().encode(self.playlist)
+        do {
+            if FileManager.default.fileExists(atPath: fileurl.path()) {
+                try FileManager.default.removeItem(at: fileurl)
+            }
+            FileManager.default.createFile(atPath: fileurl.path(), contents: data)
+        } catch {
+            print("playlist encode:", error)
+        }
+        decodePList()
+    }
+    
+    var body: some View {
+        GeometryReader{ geometry in
+            ZStack{
+                VStack(alignment: .leading){
+                    //MARK: 네비게이션 바
+                    HStack{
+                        LinearGradient(colors: [
+                            Color(red: 1, green: 112 / 255.0, blue: 0),
+                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
+                        ],
+                                       startPoint: .topLeading,
+                                       endPoint: .bottomTrailing
+                        )
+                        .frame(height: 60)
+                        .mask(alignment: .leading) {
+                            Text("Playlist")
+                                .italic()
+                                .bold()
+                                .font(.largeTitle)
+                                .padding(.horizontal, 20)
+                        }
+                        Spacer()
+                            .onAppear(){
+                                decodePList()
+                            }
+                        Button {
+                            self.plusPlayList = true
+                        } label: {
+                            Image(systemName: "plus.app")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 30)
+                                .padding(.horizontal ,20)
+                                .foregroundColor(.orange)
+                        }
+                    }
+                    .background(.indigo.opacity(0.3))
+                    
+                    //MARK: 최근 재생목록
+                    Text("Recent")
+                        .bold()
+                        .font(.title)
+                        .padding(5)
+                    ScrollView(.horizontal){
+                        VStack{
+                            ZStack{
+                                Image(systemName: "music.note.list")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 80)
+                                    .padding(20)
+                                    .background(.green)
+                                //.opacity(0.3)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .rotationEffect(.degrees(-15))
+                                Image(systemName: "music.note.list")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 80)
+                                    .padding(20)
+                                    .background(.orange)
+                                //.opacity(0.5)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .rotationEffect(.degrees(-5))
+                                //.padding(20)
+                                Image(systemName: "music.note.list")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 80)
+                                    .padding(20)
+                                    .background(.linearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .rotationEffect(.degrees(10))
+                                    .padding(20)
+                            }
+                            Text("현재 재생목록")
+                        }
+                    }
+                    //MARK: 재생목록 리스트
+                    LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
+                        .frame(width: geometry.size.width, height: 1)
+                    Text("생성된 재생목록")
+                        .font(.title3)
+                        .bold()
+                        .padding( 5)
+                    LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
+                        .frame(width: geometry.size.width, height: 1)
+                    NavigationView{
+                        List{
+                            ForEach(self.playlist, id: \.self) { item in
+                                //TableCell(Video: video)
+                                NavigationLink {
+                                    showList(listName: item)
+                                } label: {
+                                    Text(item)
+                                }
+                            }
+                        }
+                        .listStyle(.plain)
+                    }
+                }
+                .preferredColorScheme(.dark)
+                //MARK: 재생목록 추가 뷰
+                if self.plusPlayList {
+                    VStack(spacing: 0){
+                        Text("재생목록 추가")
+                            .font(.title2)
+                            .padding()
+                        //Divider()
+                        TextField("타이틀을 입력하세요", text: $pTitle)
+                            .background(content: {
+                                Spacer()
+                                    .frame(width: 300,height: 50)
+                                    .background(.black.opacity(0.3))
+                            })
+                            .padding()
+                            .onSubmit {
+                                if !self.pTitle.isEmpty {
+                                    savePlayList(title: self.pTitle)
+                                    self.plusPlayList = false
+                                    self.pTitle = ""
+                                }
+                            }
+                        Divider()
+                        HStack{
+                            Button {
+                                if !self.pTitle.isEmpty {
+                                    savePlayList(title: self.pTitle)
+                                    self.plusPlayList = false
+                                    self.pTitle = ""
+                                }
+                            } label: {
+                                Text("확인")
+                            }
+                            .padding()
+                            Divider()
+                                .frame(width: 60,height: 50)
+                            Button {
+                                self.plusPlayList = false
+                                self.pTitle = ""
+                            } label: {
+                                Text("취소")
+                            }
+                            .padding()
+                        }
+                    }
+                    .frame(width: 300)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 15))
+                }
+            }
+            .edgesIgnoringSafeArea(.bottom)
+        }
     }
 }
 
@@ -94,9 +201,58 @@ struct PlayListView_Previews: PreviewProvider {
     }
 }
 
-struct LikeVideo {
+struct LikeVideo: Codable {
     let videoId: String
     let title: String
     let thumnail: String
     let channelTitle: String
+}
+
+struct showList: View {
+    
+    var listName: String
+    @State var playlist = [LikeVideo]()
+    
+    func getLists() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent(listName, conformingTo: .json)
+        do {
+            if FileManager.default.fileExists(atPath: fileurl.path()) {
+                guard let js = NSData(contentsOf: fileurl) else { return }
+                let decoder = JSONDecoder()
+                var myData = try? decoder.decode([LikeVideo].self, from: js as Data)
+                self.playlist = myData!
+            } else {
+            }
+        }
+        catch {
+            print(error)
+        }
+    }
+    
+    var body: some View {
+        VStack{}.onAppear(){
+            getLists()
+        }
+        List{
+            ForEach(playlist, id: \.videoId) { playlist in
+                ListView(Video: playlist)
+                    
+            }
+            VStack{}.frame(height: 70)
+        }
+        .listStyle(.plain)
+        .environment(\.defaultMinListRowHeight, 80)
+        .navigationTitle(Text(listName))
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "shuffle")
+                }
+
+            }
+        }
+    }
 }
