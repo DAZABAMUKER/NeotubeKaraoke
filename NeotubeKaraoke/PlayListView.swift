@@ -18,6 +18,7 @@ struct PlayListView: View {
     @Binding var reloads: Bool
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
+    @Binding var videoOrder: Int
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -260,15 +261,17 @@ struct showList: View {
         .navigationTitle(Text(listName))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    self.nowPlayList = playlist
-                } label: {
-                    Image(systemName: "shuffle")
-                }
-                Button {
-                    self.nowPlayList = playlist
-                } label: {
-                    Image(systemName: "play.fill")
+                HStack{
+                    Button {
+                        self.nowPlayList = playlist
+                    } label: {
+                        Image(systemName: "shuffle")
+                    }
+                    Button {
+                        self.nowPlayList = playlist
+                    } label: {
+                        Image(systemName: "play.fill")
+                    }
                 }
             }
         }

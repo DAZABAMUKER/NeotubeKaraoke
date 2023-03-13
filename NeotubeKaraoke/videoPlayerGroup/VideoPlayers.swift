@@ -72,11 +72,11 @@ class VideoPlayers: AVPlayer, ObservableObject {
                 if CMTimeGetSeconds( (self.player?.currentItem!.duration)!)/*/2*/ - jump < 1 {
                     self.player?.pause()
                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
-                        
+                        DispatchQueue.main.async {
+                            self.end = true
+                        }
                     }
-                    DispatchQueue.main.async {
-                        self.end = true
-                    }
+                    
                 } else {
 //                    DispatchQueue.main.async {
 //                        self.end = false

@@ -25,6 +25,7 @@ struct searcher: View{
     @Binding var vidFull: Bool
     @Binding var nowPlayList: [LikeVideo]
     @Binding var vidEnd: Bool
+    @Binding var videoOrder: Int
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -81,7 +82,11 @@ struct searcher: View{
                 ZStack{
                     if self.vidEnd {
                         VStack{}.onAppear(){
-                            //videoPlay = VideoPlay(videoId: <#T##String#>, vidFull: <#T##Binding<Bool>#>, vidEnd: <#T##Binding<Bool>#>,vidFull: <#T##Binding<Bool>#>, vidEnd: <#T##Binding<Bool>#>)
+                            if nowPlayList.count > videoOrder {
+                                videoPlay = VideoPlay(videoId: nowPlayList[videoOrder + 1].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                                reloads = true
+                                print("리로드")
+                            }
                         }
                     }
                     VStack(spacing: 9){
