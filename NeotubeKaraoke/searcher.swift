@@ -9,6 +9,7 @@ import SwiftUI
 
 struct searcher: View{
     
+   
     @State var showplayer = false
     @State var inputVal: String = ""
     @State var isEditing: Bool = false
@@ -17,10 +18,13 @@ struct searcher: View{
     @State var playlist = [playlists]()
     @State var ResponseItems = [Video]()
     @State var addVideo: LikeVideo!
+    
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
     @Binding var tabIndex: TabIndex
     @Binding var vidFull: Bool
+    @Binding var nowPlayList: [LikeVideo]
+    @Binding var vidEnd: Bool
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -75,6 +79,11 @@ struct searcher: View{
                     }
                 }
                 ZStack{
+                    if self.vidEnd {
+                        VStack{}.onAppear(){
+                            //videoPlay = VideoPlay(videoId: <#T##String#>, vidFull: <#T##Binding<Bool>#>, vidEnd: <#T##Binding<Bool>#>,vidFull: <#T##Binding<Bool>#>, vidEnd: <#T##Binding<Bool>#>)
+                        }
+                    }
                     VStack(spacing: 9){
                         //MARK: - SearchBar
                         HStack{
@@ -129,7 +138,7 @@ struct searcher: View{
                              */
                             Button {
                                 //videoPlay.closes = true
-                                videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull)
+                                videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd)
                                 reloads = true
                                 print("리로드")
                                 

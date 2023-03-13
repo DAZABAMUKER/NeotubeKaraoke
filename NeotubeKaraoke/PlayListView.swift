@@ -13,6 +13,12 @@ struct PlayListView: View {
     @State var pTitle: String = ""
     @State var playlist = [String]()
     
+    @Binding var nowPlayList: [LikeVideo]
+    @Binding var videoPlay: VideoPlay
+    @Binding var reloads: Bool
+    @Binding var vidFull: Bool
+    @Binding var vidEnd: Bool
+    
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
@@ -84,38 +90,54 @@ struct PlayListView: View {
                         .font(.title)
                         .padding(5)
                     ScrollView(.horizontal){
-                        VStack{
-                            ZStack{
-                                Image(systemName: "music.note.list")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 80)
-                                    .padding(20)
-                                    .background(.green)
-                                //.opacity(0.3)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                                    .rotationEffect(.degrees(-15))
-                                Image(systemName: "music.note.list")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 80)
-                                    .padding(20)
-                                    .background(.orange)
-                                //.opacity(0.5)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                                    .rotationEffect(.degrees(-5))
-                                //.padding(20)
-                                Image(systemName: "music.note.list")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 80)
-                                    .padding(20)
-                                    .background(.linearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                                    .rotationEffect(.degrees(10))
-                                    .padding(20)
+                        HStack{
+                            VStack{
+                                ZStack{
+                                    Image(systemName: "music.note.list")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 80)
+                                        .padding(20)
+                                        .background(.green)
+                                    //.opacity(0.3)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .rotationEffect(.degrees(-15))
+                                    Image(systemName: "music.note.list")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 80)
+                                        .padding(20)
+                                        .background(.orange)
+                                    //.opacity(0.5)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .rotationEffect(.degrees(-5))
+                                    //.padding(20)
+                                    Image(systemName: "music.note.list")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 80)
+                                        .padding(20)
+                                        .background(.linearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .rotationEffect(.degrees(10))
+                                        .padding(20)
+                                }
+                                Text("현재 재생목록")
                             }
-                            Text("현재 재생목록")
+                            Button {
+                                if !self.nowPlayList.isEmpty {
+                                    videoPlay = VideoPlay(videoId: nowPlayList[0].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                                } else {
+                                    print("재생할 음악 없음.")
+                                }
+                            } label: {
+                                Image(systemName: "play.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 80)
+                                    .tint(.white)
+                                    .padding()
+                            }
                         }
                     }
                     //MARK: 재생목록 리스트
@@ -132,7 +154,7 @@ struct PlayListView: View {
                             ForEach(self.playlist, id: \.self) { item in
                                 //TableCell(Video: video)
                                 NavigationLink {
-                                    showList(listName: item)
+                                    showList(listName: item, nowPlayList: $nowPlayList)
                                 } label: {
                                     Text(item)
                                 }
@@ -195,12 +217,6 @@ struct PlayListView: View {
     }
 }
 
-struct PlayListView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlayListView()
-    }
-}
-
 struct LikeVideo: Codable {
     let videoId: String
     let title: String
@@ -212,6 +228,8 @@ struct showList: View {
     
     var listName: String
     @State var playlist = [LikeVideo]()
+    @Binding var nowPlayList: [LikeVideo]
+    
     
     func getLists() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -220,13 +238,10 @@ struct showList: View {
             if FileManager.default.fileExists(atPath: fileurl.path()) {
                 guard let js = NSData(contentsOf: fileurl) else { return }
                 let decoder = JSONDecoder()
-                var myData = try? decoder.decode([LikeVideo].self, from: js as Data)
+                let myData = try? decoder.decode([LikeVideo].self, from: js as Data)
                 self.playlist = myData!
             } else {
             }
-        }
-        catch {
-            print(error)
         }
     }
     
@@ -237,7 +252,6 @@ struct showList: View {
         List{
             ForEach(playlist, id: \.videoId) { playlist in
                 ListView(Video: playlist)
-                    
             }
             VStack{}.frame(height: 70)
         }
@@ -247,11 +261,15 @@ struct showList: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    
+                    self.nowPlayList = playlist
                 } label: {
                     Image(systemName: "shuffle")
                 }
-
+                Button {
+                    self.nowPlayList = playlist
+                } label: {
+                    Image(systemName: "play.fill")
+                }
             }
         }
     }

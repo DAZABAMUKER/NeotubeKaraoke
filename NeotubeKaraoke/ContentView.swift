@@ -17,10 +17,12 @@ struct ContentView: View {
     
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
-    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false))
+    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false))
     @State var reloads = false
     @State var closes = false
     @State var anime = true
+    @State var nowPlayList = [LikeVideo]()
+    @State var vidEnd = false
     //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
     
     func changeColor(tabIndex: TabIndex) -> Color{
@@ -66,11 +68,10 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    
-                    PlayListView()
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd)
                         .tag(TabIndex.PlayList)
                     
                     SettingView()

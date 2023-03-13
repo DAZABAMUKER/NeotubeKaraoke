@@ -47,7 +47,7 @@ struct VideoPlay: View {
     @State private var isLoading = false
     @State var closes = false
     @Binding var vidFull: Bool
-    
+    @Binding var vidEnd: Bool
     
     func close() {
         player.close()
@@ -164,11 +164,11 @@ struct VideoPlay: View {
                             audioManager.close()
                         }
                     }
-//                    if player.end {
-//                        VStack{}.onAppear(){
-//                            isPlaying = false
-//                        }
-//                    }
+                    if player.end {
+                        VStack{}.onAppear(){
+                            self.vidEnd = true
+                        }
+                    }
                     if isAppear {
                         VStack(spacing: 0){
                             LinearGradient(colors: [
@@ -371,11 +371,6 @@ struct VideoPlay: View {
     }
 }
 
-struct Previews_VideoPlay_Previews: PreviewProvider {
-    static var previews: some View {
-        Text("HELLO")
-    }
-}
 let av1CodecPrefix = "av01."
 extension Format {
     var isRemuxingNeeded: Bool { isVideoOnly || isAudioOnly }
