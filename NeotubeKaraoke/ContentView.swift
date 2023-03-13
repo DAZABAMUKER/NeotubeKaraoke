@@ -24,7 +24,6 @@ struct ContentView: View {
     @State var nowPlayList = [LikeVideo]()
     @State var vidEnd = false
     @State var videoOrder: Int = 0
-    
     //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
     
     func changeColor(tabIndex: TabIndex) -> Color{

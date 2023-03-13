@@ -47,10 +47,14 @@ struct searcher: View{
     func addVideoToPlist(item: LikeVideo, listName: String) {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("\(listName)", conformingTo: .json)
+        //print(fileUrl)
+        //let urlEncode = fileUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        //let fileurl = URL(string: fileUrl)!
         print(fileurl)
         do {
-            if FileManager.default.fileExists(atPath: fileurl.path()) {
-                guard let js = NSData(contentsOf: fileurl) else { return }
+            if FileManager.default.fileExists(atPath: fileurl.path(percentEncoded: false)) {
+                print(fileurl)
+                let js = try Data(contentsOf: fileurl)
                 let decoder = JSONDecoder()
                 var myData = try? decoder.decode([LikeVideo].self, from: js as Data)
                 print(myData?.count ?? 0)
@@ -58,11 +62,12 @@ struct searcher: View{
                 print(myData?.count ?? 0)
                 try FileManager.default.removeItem(at: fileurl)
                 let data = try JSONEncoder().encode(myData)
-                FileManager.default.createFile(atPath: fileurl.path(), contents: data)
+                FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: data)
             } else {
                 let myData = [item]
                 let data = try JSONEncoder().encode(myData)
-                FileManager.default.createFile(atPath: fileurl.path(), contents: data)
+                FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: data)
+                
             }
         }
         catch {

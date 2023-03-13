@@ -234,9 +234,13 @@ struct showList: View {
     
     func getLists() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileurl = doc.appendingPathComponent(listName, conformingTo: .json)
+        
+        var fileurl = doc.appendingPathComponent(listName, conformingTo: .json)
+        //var fileUrl = doc.absoluteString + "\(listName).json"
+        //print(fileUrl)
+        print(fileurl)
         do {
-            if FileManager.default.fileExists(atPath: fileurl.path()) {
+            if FileManager.default.fileExists(atPath: fileurl.path(percentEncoded: false)) {
                 guard let js = NSData(contentsOf: fileurl) else { return }
                 let decoder = JSONDecoder()
                 let myData = try? decoder.decode([LikeVideo].self, from: js as Data)
