@@ -13,7 +13,7 @@ struct VideoPlay: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    @State var isAppear = false
+    
     @State var isiPad = false
     @State var que = false
     @StateObject var player = VideoPlayers()
@@ -48,6 +48,7 @@ struct VideoPlay: View {
     @State var closes = false
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
+    @State var isAppear: Bool = false
     
     func close() {
         player.close()
@@ -59,7 +60,6 @@ struct VideoPlay: View {
             loadPythonModule()
             return
         }
-        
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let info = try youtubeDL.extractInfo(url: url)
@@ -81,8 +81,9 @@ struct VideoPlay: View {
                     //self.audioUrl = aUrl
                     //self.videoUrl = vUrl
                     //print(self.audioUrl)
-                    loadAVAssets(url: aUrl, size: bestAudio?.filesize ?? 0)
+                    
                     player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0)
+                    loadAVAssets(url: aUrl, size: bestAudio?.filesize ?? 0)
                 }
             }
             catch {
@@ -189,9 +190,11 @@ struct VideoPlay: View {
                                 print("vidFull")
                             }
                             .DragVid(vidFull: $vidFull)
+                            .opacity(UIDevice.current.orientation == .landscapeLeft && vidFull ? 0.01 : 1)
                             ZStack{
                                 PlayerViewController(player: player.player!)
-                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16)
+                                    .frame(width:UIDevice.current.orientation == .landscapeLeft ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height: UIDevice.current.orientation == .landscapeLeft ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
+                                    //.edgesIgnoringSafeArea(.all)
                                 //.padding(.top, 8)
                                 //.edgesIgnoringSafeArea(.bottom)
                                     
@@ -270,7 +273,7 @@ struct VideoPlay: View {
                                         }.frame(width: geometry.size.width)
                                         Spacer()
                                     }
-                                    .frame(height: geometry.size.width*9/16)
+                                    .frame(height: UIDevice.current.orientation == .landscapeLeft ? geometry.size.height : geometry.size.width*9/16)
                                     .onAppear(){
                                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
                                             self.tap = false
@@ -312,8 +315,27 @@ struct VideoPlay: View {
                                     }
                                     .tint(.white)
                                     .shadow(radius: 10)
-                                    .frame(height: geometry.size.width*9/16)
-                                    //.border(.green)
+                                    .frame(height: UIDevice.current.orientation == .landscapeLeft ? geometry.size.height : geometry.size.width*9/16)
+                                    VStack{
+                                        Spacer()
+                                            .frame(height:UIDevice.current.orientation == .landscapeLeft ? geometry.size.height * 4/5 : geometry.size.width*9/20)
+                                        Button {
+                                            audioManager.playClap()
+                                        } label: {
+                                            Image(systemName: "hands.clap.fill")
+                                                .opacity(0.8)
+                                                .font(.title2)
+                                                .background {
+                                                    VStack{}
+                                                        .frame(width: 60, height: 60)
+                                                        .background(.thinMaterial.opacity(0.7))
+                                                        .cornerRadius(10)
+                                                }
+                                        }
+                                        Spacer()
+                                    }
+                                    .tint(.white)
+                                    .frame(height: UIDevice.current.orientation == .landscapeLeft ? geometry.size.height : geometry.size.width*9/16)
                                     if player.progress {
                                         Circle()
                                             .trim(from: 0, to: 0.5)
@@ -333,15 +355,11 @@ struct VideoPlay: View {
                                     }
                                 }
                             }
+                            .offset(y: UIDevice.current.orientation == .landscapeLeft && vidFull ? -65 : 0)
                             .onTapGesture {
                                 self.tap.toggle()
                             }
-                            Button {
-                                audioManager.playClap()
-                            } label: {
-                                Image(systemName: "hands.clap.fill")
-                                    
-                            }
+                            
 
                         }
                         
@@ -352,6 +370,7 @@ struct VideoPlay: View {
                             .scaleEffect(1.5)
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .frame(width: geometry.size.width, height: geometry.size.height)
+                            .background(Color(red: 44/255, green: 54/255, blue: 51/255))
                             .onAppear() {
                                 if !isAppear {
                                     url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")

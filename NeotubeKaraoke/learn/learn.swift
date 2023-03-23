@@ -38,36 +38,36 @@ struct learn: View {
                 .background(Color.yellow)
                 .foregroundColor(Color.white)
                 .cornerRadius(30)
-                HStack{
-                    NavigationLink(destination: MyWebView(UrlTOLoad: "https://www.naver.com").edgesIgnoringSafeArea(.all)) {
-                        Text("네이버")
-                            .background(Color.green)
-                            //.padding(.top,10)
-                            .cornerRadius(20)
-                            .fontWeight(.bold)
-                            .font(.system(size: 30))
-                            .foregroundColor(Color.white)
-                    }
-                    NavigationLink(destination: MyWebView(UrlTOLoad: "https://www.google.com")) {
-                        Text("구글")
-                            .background(Color.blue)
-                            //.padding(.all,0)
-                            .cornerRadius(20)
-                            .fontWeight(.bold)
-                            .font(.system(size: 30))
-                            .foregroundColor(Color.white)
-                    }
-                    NavigationLink(destination: MyWebView(UrlTOLoad: "https://www.youtube.com")) {
-                        Text("유튜브")
-                            .background(Color.red)
-                            //.padding(.all,0)
-                            .cornerRadius(20)
-                            .fontWeight(.bold)
-                            .font(.system(size: 30))
-                            .foregroundColor(Color.white)
-                    }
-                    
-                }
+//                HStack{
+//                    NavigationLink(destination: MyWebView(UrlTOLoad: "https://www.naver.com"){
+//                        Text("네이버")
+//                            .background(Color.green)
+//                            //.padding(.top,10)
+//                            .cornerRadius(20)
+//                            .fontWeight(.bold)
+//                            .font(.system(size: 30))
+//                            .foregroundColor(Color.white)
+//                    }
+//                    NavigationLink(destination: MyWebView(UrlTOLoad: "https://www.google.com")) {
+//                        Text("구글")
+//                            .background(Color.blue)
+//                            //.padding(.all,0)
+//                            .cornerRadius(20)
+//                            .fontWeight(.bold)
+//                            .font(.system(size: 30))
+//                            .foregroundColor(Color.white)
+//                    }
+//                    NavigationLink(destination: MyWebView(UrlTOLoad: "https://www.youtube.com")) {
+//                        Text("유튜브")
+//                            .background(Color.red)
+//                            //.padding(.all,0)
+//                            .cornerRadius(20)
+//                            .fontWeight(.bold)
+//                            .font(.system(size: 30))
+//                            .foregroundColor(Color.white)
+//                    }
+//                    
+//                }
             }
         }
         

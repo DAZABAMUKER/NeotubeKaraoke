@@ -24,7 +24,7 @@ struct MyWebView: UIViewRepresentable {
     struct MyWebView_Preview: PreviewProvider {
         static var previews: some View {
             MyWebView(UrlTOLoad: "https://dazabamuker.tistory.com")
-                .edgesIgnoringSafeArea(.all)
+                //.edgesIgnoringSafeArea(.all)
         }
     }
     

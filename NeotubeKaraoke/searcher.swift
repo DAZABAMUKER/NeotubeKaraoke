@@ -38,12 +38,6 @@ struct searcher: View{
         }
     }
     
-    func getLike() {
-        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
-        
-    }
-    
     func addVideoToPlist(item: LikeVideo, listName: String) {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("\(listName)", conformingTo: .json)
@@ -85,15 +79,7 @@ struct searcher: View{
                     }
                 }
                 ZStack{
-                    if self.vidEnd {
-                        VStack{}.onAppear(){
-                            if nowPlayList.count > videoOrder {
-                                videoPlay = VideoPlay(videoId: nowPlayList[videoOrder + 1].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
-                                reloads = true
-                                print("리로드")
-                            }
-                        }
-                    }
+                    
                     VStack(spacing: 9){
                         //MARK: - SearchBar
                         HStack{
@@ -148,10 +134,9 @@ struct searcher: View{
                              */
                             Button {
                                 //videoPlay.closes = true
-                                videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd)
-                                reloads = true
-                                print("리로드")
-                                
+                                    videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd)
+                                    reloads = true
+                                    print("리로드")
                             } label: {
                                 ZStack{
                                     TableCell(Video: responseitems)
@@ -207,7 +192,7 @@ struct searcher: View{
                                     .listRowBackground(Color.black.opacity(0.5))
                                 Text("현재 노래 다음에 추가")
                                     .listRowBackground(Color.black.opacity(0.5))
-                                ForEach(0..<self.playlist.count) { i in
+                                ForEach(0..<self.playlist.count, id: \.self) { i in
                                     Button {
                                         self.playlist[i].isSelected.toggle()
                                     } label: {

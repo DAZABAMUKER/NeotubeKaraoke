@@ -76,7 +76,7 @@ open class YoutubeDL: NSObject {
         }
     }
     
-    public static let latestDownloadURL = URL(string: "https://github.com/yt-dlp/yt-dlp/releases/download/2023.02.17/yt-dlp")!
+    public static let latestDownloadURL = URL(string: "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp")!
     
     public static var pythonModuleURL: URL = {
         guard let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?

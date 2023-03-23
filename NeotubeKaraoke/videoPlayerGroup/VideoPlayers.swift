@@ -48,8 +48,8 @@ class VideoPlayers: AVPlayer, ObservableObject {
     
     func prepareToPlay(url: URL,  audioManager: AudioManager, fileSize: Int64) {
         self.audiomanager = audioManager
-        self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
-        self.player?.removeObserver(self, forKeyPath: "status")
+        //self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
+        //self.player?.removeObserver(self, forKeyPath: "status")
         let controller = AVPlayerViewController()
         controller.player = player
         controller.showsPlaybackControls = false
@@ -115,9 +115,9 @@ class VideoPlayers: AVPlayer, ObservableObject {
     }
     */
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "timeControlStatus", let change = change, let newValue = change[NSKeyValueChangeKey.newKey] as? Int, let oldValue = change[NSKeyValueChangeKey.oldKey] as? Int {
+        if keyPath == "timeControlStatus", let change = change, let newValue = change[NSKeyValueChangeKey.newKey] as? Int /*, let oldValue = change[NSKeyValueChangeKey.oldKey] as? Int*/ {
             
-            let oldStatus = AVPlayer.TimeControlStatus(rawValue: oldValue)
+            //let oldStatus = AVPlayer.TimeControlStatus(rawValue: oldValue)
             let newStatus = AVPlayer.TimeControlStatus(rawValue: newValue)
             
             if newStatus == .waitingToPlayAtSpecifiedRate {

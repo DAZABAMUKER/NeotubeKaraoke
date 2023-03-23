@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PlayListView: View {
     
+    //MARK: - PlayListView 변수
     @State var plusPlayList: Bool = false
     @State var pTitle: String = ""
     @State var playlist = [String]()
@@ -20,6 +21,8 @@ struct PlayListView: View {
     @Binding var vidEnd: Bool
     @Binding var videoOrder: Int
     
+    //MARK: - PlayListView 함수
+    //playlist.json에서 플레이리스트들 가져옴.
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
@@ -30,9 +33,11 @@ struct PlayListView: View {
             self.playlist = myData!
         }
     }
-    
+    // 플레이리스트 생성 함수
     func savePlayList(title: String) {
-        self.playlist.append(title)
+        if !title.isEmpty {
+            self.playlist.append(title)
+        }
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
         let data = try! JSONEncoder().encode(self.playlist)
@@ -47,10 +52,13 @@ struct PlayListView: View {
         decodePList()
     }
     
+    
+    //MARK: - 바디
     var body: some View {
         GeometryReader{ geometry in
             ZStack{
                 VStack(alignment: .leading){
+                    
                     //MARK: 네비게이션 바
                     HStack{
                         LinearGradient(colors: [
@@ -70,10 +78,10 @@ struct PlayListView: View {
                         }
                         Spacer()
                             .onAppear(){
-                                decodePList()
+                                decodePList() // 네비게이션 그려지면 플레이리스트 가져오기
                             }
                         Button {
-                            self.plusPlayList = true
+                            self.plusPlayList = true // 플레이리스트 추가위한 Alert 트리거
                         } label: {
                             Image(systemName: "plus.app")
                                 .resizable()
@@ -141,6 +149,7 @@ struct PlayListView: View {
                             }
                         }
                     }
+                    
                     //MARK: 재생목록 리스트
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
                         .frame(width: geometry.size.width, height: 1)
@@ -155,9 +164,31 @@ struct PlayListView: View {
                             ForEach(self.playlist, id: \.self) { item in
                                 //TableCell(Video: video)
                                 NavigationLink {
-                                    showList(listName: item, nowPlayList: $nowPlayList)
+                                    showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder) // 해당 재생목록 영상 리스트 뷰로 이동
                                 } label: {
                                     Text(item)
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button {
+                                        //재생목록 제거
+                                        print("제거")
+                                        let listIndex = self.playlist.firstIndex(of: item)
+                                        self.playlist.remove(at: listIndex!)
+                                        savePlayList(title: "")
+                                        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                                        let existPlaylist = doc.appendingPathComponent(item, conformingTo: .json)
+                                        do {
+                                            if FileManager.default.fileExists(atPath: existPlaylist.path(percentEncoded: false)) {
+                                                try FileManager.default.removeItem(atPath: existPlaylist.path(percentEncoded: false))
+                                            }
+                                        } catch {
+                                            print("removePList Error:",error)
+                                        }
+                                    } label: {
+                                        Image(systemName: "trash")
+                                    }
+                                    .tint(.red)
+
                                 }
                             }
                         }
@@ -165,6 +196,8 @@ struct PlayListView: View {
                     }
                 }
                 .preferredColorScheme(.dark)
+                
+                
                 //MARK: 재생목록 추가 뷰
                 if self.plusPlayList {
                     VStack(spacing: 0){
@@ -218,24 +251,33 @@ struct PlayListView: View {
     }
 }
 
-struct LikeVideo: Codable {
+
+//MARK: - LikeVideo 라이크 뷰 영상 구조체
+struct LikeVideo: Codable, Hashable {
     let videoId: String
     let title: String
     let thumnail: String
     let channelTitle: String
 }
 
+//MARK: - 해당 재생목록 영상 리스트 뷰
+
 struct showList: View {
     
     var listName: String
     @State var playlist = [LikeVideo]()
     @Binding var nowPlayList: [LikeVideo]
+    @Binding var videoPlay: VideoPlay
+    @Binding var reloads: Bool
+    @Binding var vidFull: Bool
+    @Binding var vidEnd: Bool
+    @Binding var videoOrder: Int
     
     
+    //MARK: 해당 재생목록 파일 읽어오기
     func getLists() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        
-        var fileurl = doc.appendingPathComponent(listName, conformingTo: .json)
+        let fileurl = doc.appendingPathComponent(listName, conformingTo: .json)
         //var fileUrl = doc.absoluteString + "\(listName).json"
         //print(fileUrl)
         print(fileurl)
@@ -250,13 +292,30 @@ struct showList: View {
         }
     }
     
+    //MARK: showList 바디
     var body: some View {
         VStack{}.onAppear(){
-            getLists()
+            getLists() // 재생목록 영상(LikeVideo) 가져오기
         }
         List{
-            ForEach(playlist, id: \.videoId) { playlist in
-                ListView(Video: playlist)
+            ForEach(playlist, id: \.self) { playlist in
+                Button {
+                        self.nowPlayList = self.playlist // 재생할 영상이 속한 재생목록으로 재생목록 변경
+                        videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                        reloads = true
+                        self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
+                } label: {
+                    ListView(Video: playlist)
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button {
+                        print("제거")
+                    } label: {
+                        Image(systemName: "trash")
+                    }
+                    .tint(.red)
+
+                }
             }
             VStack{}.frame(height: 70)
         }

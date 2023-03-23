@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-
+//커스텀 텝바를 위한 enum
 enum TabIndex {
     case Home
     case Setting
     case PlayList
 }
-
+// 메인 뷰
 struct ContentView: View {
     
     @State var vidFull = false
@@ -20,12 +20,11 @@ struct ContentView: View {
     @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false))
     @State var reloads = false
     @State var closes = false
-    @State var anime = true
     @State var nowPlayList = [LikeVideo]()
     @State var vidEnd = false
     @State var videoOrder: Int = 0
-    //@StateObject var audioManager = AudioManager(file: URL(string: "https://www.naver.com")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 1.0)
     
+    // 텝이 변할 때 마다 텝바 아이템의 색을 변경하는 함수
     func changeColor(tabIndex: TabIndex) -> Color{
         switch tabIndex {
         case .Home:
@@ -37,6 +36,7 @@ struct ContentView: View {
         }
     }
     
+    // 원이 이동하면서 해당 탭이 선택되었음을 알림
     func CircleOffset(tabIndex: TabIndex, geometry: GeometryProxy) -> CGFloat {
         switch tabIndex {
         case .PlayList:
@@ -48,6 +48,7 @@ struct ContentView: View {
         }
     }
     
+    // 선택된 탭바 아이템을 총괄하여 적용시켜주는 함수
     func TabButtonSel(tabIndex: TabIndex, img: String, geometry: GeometryProxy) -> some View {
         Button(action: {
             print("click")
@@ -64,7 +65,7 @@ struct ContentView: View {
         .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
     }
     
-    
+    //MARK: - 뷰
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
@@ -77,68 +78,65 @@ struct ContentView: View {
                     
                     SettingView()
                         .tag(TabIndex.Setting)
-                        
+                    
                 }
+                //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
                     ZStack{
+                        // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
+                        if self.vidEnd {
+                            VStack{}.onAppear(){
+                                if nowPlayList.count > videoOrder {
+                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder + 1].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                                    videoOrder += 1
+                                    reloads = true
+                                    print("리로드")
+                                }
+                            }
+                        }
+                        // 플레이어를 새로 그리기 위해 시간 텀이 필요
                         if reloads {
-                            Text("Loading...")
+                            Text("Loading...\n")
+                                .frame(width: geometry.size.width, height: 60)
                                 .onAppear(){
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
                                         self.reloads = false
                                     }
                                 }
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))
-                        } else if videoPlay.videoId == "nil" {
-                            Text("부르실  노래를  선곡해주세요 *^^*")
-                                //.bold()
-                                .font(.title2)
+                            
+                            // 플레이어 뷰 첫 화면
+                        } else if videoPlay.videoId == "nil" && !reloads {
+                            Text("부르실  노래를  선곡해주세요 *^^*\n")
+                            //.bold()
                                 .frame(width: geometry.size.width, height: 60)
-                                .offset(x: anime ? -Double(geometry.size.width) : Double(geometry.size.width))
-                                .animation(.easeInOut(duration: 4).repeatForever(), value: anime)
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))
-                                .onAppear(){
-                                    self.anime = false
-                                }
                         } else {
+                            //찐 플레이어 뷰
                             videoPlay
                         }
-                        VStack{
-                            Spacer()
-                            VStack{}
-                                .frame(width: geometry.size.width, height: 60)
-                                .background(content: {
-                                    ZStack{
-                                        Image(systemName: "chevron.compact.down").resizable().scaledToFit().opacity(self.vidFull ? 0.9 : 0.01).frame(height: 10)
-                                        Color.black.opacity(0.01).frame(width: geometry.size.width, height: 60)
-                                    }
-                                })
-                                .onTapGesture {
-                                    self.vidFull.toggle()
-                                }
-                        }
                     }
-                    .onAppear(){
-                        //videoPlay = VideoPlay(videoId: "Qj1Gt5z4zxo", vidFull: $vidFull)
-                    }
-                    .frame(height: vidFull ? 700 : 60)
+                    .frame(height: vidFull ? geometry.size.height : 60)
                     .animation(.easeInOut(duration: 0.5), value: vidFull)
+                    //.edgesIgnoringSafeArea(.top)
                     Spacer()
-                        .frame(height: 50)
+                        .frame(height: self.vidFull ? 0 : 50)
                 }
-                Circle()
-                    .frame(width: 100)
-                    .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
-                    .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                    .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
-                    .shadow(radius: 10)
-                HStack(spacing: 0) {
-                    TabButtonSel(tabIndex: .PlayList, img: "music.mic", geometry: geometry)
-                    TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
-                    TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
-                    
+                if !vidFull {
+                    Circle()
+                        .frame(width: 100)
+                        .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
+                        .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                        .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
+                        .shadow(radius: 10)
+                    HStack(spacing: 0) {
+                        TabButtonSel(tabIndex: .PlayList, img: "music.mic", geometry: geometry)
+                        TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
+                        TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
+                        
+                    }
+                    .preferredColorScheme(.light)
                 }
-                .preferredColorScheme(.light)
             }
         }
     }
