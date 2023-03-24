@@ -300,10 +300,11 @@ struct showList: View {
         List{
             ForEach(playlist, id: \.self) { playlist in
                 Button {
-                        self.nowPlayList = self.playlist // 재생할 영상이 속한 재생목록으로 재생목록 변경
-                        videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd)
-                        reloads = true
-                        self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
+                    self.nowPlayList = self.playlist // 재생할 영상이 속한 재생목록으로 재생목록 변경
+                    videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                    reloads = true
+                    self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
+                    print("video order: ",videoOrder)
                 } label: {
                     ListView(Video: playlist)
                 }

@@ -86,7 +86,7 @@ struct ContentView: View {
                         // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
                         if self.vidEnd {
                             VStack{}.onAppear(){
-                                if nowPlayList.count > videoOrder {
+                                if nowPlayList.count - 1 > videoOrder {
                                     videoPlay = VideoPlay(videoId: nowPlayList[videoOrder + 1].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
                                     videoOrder += 1
                                     reloads = true
