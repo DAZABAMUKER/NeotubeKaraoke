@@ -222,7 +222,7 @@ struct VideoPlay: View {
                                             player.moveFrame(to: 10.0)
                                         }
                                 }
-                                .border(.green)
+                                //.border(.green)
                                 
                                     if tap {
                                         VStack{
@@ -289,6 +289,7 @@ struct VideoPlay: View {
                                             Spacer()
                                         }
                                         .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
                                         //                                    .onAppear(){
                                         //                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
                                         //                                            self.tap = false
@@ -336,6 +337,7 @@ struct VideoPlay: View {
                                             .tint(.white)
                                             .shadow(radius: 10)
                                             .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                            .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
                                         }
                                         VStack{
                                             if !UIDevice.current.orientation.isLandscape {
@@ -344,7 +346,20 @@ struct VideoPlay: View {
                                             }
                                             Spacer()
                                                 .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
-                                            HStack(spacing: 40){
+                                            HStack(spacing: 25){
+                                                Button {
+                                                    audioManager.playClap()
+                                                } label: {
+                                                    Image(systemName: "hands.clap.fill")
+                                                        .opacity(0.8)
+                                                        .font(.title2)
+                                                        .background {
+                                                            VStack{}
+                                                                .frame(width: 60, height: 60)
+                                                                .background(.thinMaterial.opacity(0.7))
+                                                                .cornerRadius(10)
+                                                        }
+                                                }
                                                 Button {
                                                     self.tempo -= 0.02
                                                     player.tempo(spd: tempo)
@@ -363,19 +378,17 @@ struct VideoPlay: View {
                                                             .cornerRadius(10)
                                                     }
                                                 }
-                                                Button {
-                                                    audioManager.playClap()
-                                                } label: {
-                                                    Image(systemName: "hands.clap.fill")
-                                                        .opacity(0.8)
-                                                        .font(.title2)
-                                                        .background {
-                                                            VStack{}
-                                                                .frame(width: 60, height: 60)
-                                                                .background(.thinMaterial.opacity(0.7))
-                                                                .cornerRadius(10)
-                                                        }
+                                                HStack(spacing: 0){
+                                                    Text("Tempo: x")
+                                                        .font(.caption)
+                                                    Text(String(self.tempo))
                                                 }
+                                                    .background {
+                                                        VStack{}
+                                                            .frame(width: 100, height: 60)
+                                                            .background(.thinMaterial.opacity(0.7))
+                                                            .cornerRadius(10)
+                                                    }
                                                 Button {
                                                     self.tempo += 0.02
                                                     player.tempo(spd: tempo)
