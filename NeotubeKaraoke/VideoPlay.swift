@@ -40,6 +40,15 @@ struct VideoPlay: View {
             }
         }
     }
+    @State var tempo: Float = 1.0 {
+        didSet {
+            if tempo > 24.0 {
+                tone = oldValue
+            } else if tempo < -24.0 {
+                tempo = oldValue
+            }
+        }
+    }
     //@State var itemUrl: URL!
     var videoId: String = ""
     @State var tap = true
@@ -190,14 +199,14 @@ struct VideoPlay: View {
                                 print("vidFull")
                             }
                             .DragVid(vidFull: $vidFull)
-                            .opacity(UIDevice.current.orientation == .landscapeLeft && vidFull ? 0.01 : 1)
-                            ZStack{
+                            .opacity(UIDevice.current.orientation.isLandscape && vidFull ? 0.01 : 1)
+                            ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
-                                    .frame(width:UIDevice.current.orientation == .landscapeLeft ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height: UIDevice.current.orientation == .landscapeLeft ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
+                                    .frame(width: UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height: UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
+                                    //.border(.red, width: 1)
                                     //.edgesIgnoringSafeArea(.all)
-                                //.padding(.top, 8)
+                                    .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
                                 //.edgesIgnoringSafeArea(.bottom)
-                                    
                                 HStack{
                                     VStack{}
                                         .frame(width: 120, height: geometry.size.width*9/16)
@@ -213,149 +222,205 @@ struct VideoPlay: View {
                                             player.moveFrame(to: 10.0)
                                         }
                                 }
-                                if tap {
-                                    VStack{
-                                        ZStack(alignment: .leading){
-                                            Rectangle()
-                                                .frame(width: geometry.size.width, height: 10)
-                                                .foregroundColor(.secondary)
-                                            Rectangle()
-                                                .frame(width: player.currents < 0.9 ? 0 : (geometry.size.width - 15) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
-                                                .foregroundColor(.green)
-                                            Image(systemName: "rectangle.portrait.fill")
-                                                .scaleEffect(1.5)
-                                                .frame(width: player.currents < 0.9 ? 10 : (geometry.size.width) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!), alignment: .trailing)
-                                                .vidSlider(duartion: CMTimeGetSeconds( (player.player?.currentItem!.duration)!), width: geometry.size.width, player: player)
-                                        }
-                                        .padding(.top, 4)
-                                        HStack(spacing: 2){
-                                            LinearGradient(colors: [
-                                                Color.blue,
-                                                Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0)
-                                            ],
-                                                           startPoint: .leading,
-                                                           endPoint: .trailing
-                                            )
-                                            .frame(height: 30)
-                                            .mask(alignment: .trailing) {
-                                                if self.tone < 0 {
-                                                    HStack(spacing: 3){
-                                                        ForEach(0..<Int(self.tone)*(-1), id: \.self){ _ in
-                                                            Rectangle()
-                                                                .cornerRadius(10)
-                                                                .frame(width: 5, height: 20)
+                                .border(.green)
+                                
+                                    if tap {
+                                        VStack{
+                                            if !UIDevice.current.orientation.isLandscape {
+                                                Spacer()
+                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 85)
+                                            }
+                                            ZStack(alignment: .leading){
+                                                Rectangle()
+                                                    .frame(width: geometry.size.width, height: 10)
+                                                    .foregroundColor(.secondary)
+                                                Rectangle()
+                                                    .frame(width: player.currents < 0.9 ? 0 : (geometry.size.width - 15) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
+                                                    .foregroundColor(.green)
+                                                Image(systemName: "rectangle.portrait.fill")
+                                                    .scaleEffect(1.5)
+                                                    .frame(width: player.currents < 0.9 ? 10 : (geometry.size.width) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!), alignment: .trailing)
+                                                    .vidSlider(duartion: CMTimeGetSeconds( (player.player?.currentItem!.duration)!), width: geometry.size.width, player: player)
+                                            }
+                                            .padding(.top, 4)
+                                            HStack(spacing: 2){
+                                                LinearGradient(colors: [
+                                                    Color.blue,
+                                                    Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0)
+                                                ],
+                                                               startPoint: .leading,
+                                                               endPoint: .trailing
+                                                )
+                                                .frame(height: 30)
+                                                .mask(alignment: .trailing) {
+                                                    if self.tone < 0 {
+                                                        HStack(spacing: 3){
+                                                            ForEach(0..<Int(self.tone)*(-1), id: \.self){ _ in
+                                                                Rectangle()
+                                                                    .cornerRadius(10)
+                                                                    .frame(width: 5, height: 20)
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            }
-                                            Text(String(self.tone)).padding(10).shadow(radius: 20)
-                                            LinearGradient(colors: [
-                                                Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
-                                                Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
-                                            ],
-                                                           startPoint: .topLeading,
-                                                           endPoint: .bottomTrailing
-                                            )
-                                            .frame(height: 30)
-                                            .mask(alignment: .leading) {
+                                                Text(String(self.tone)).padding(10).shadow(radius: 20)
+                                                LinearGradient(colors: [
+                                                    Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
+                                                    Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
+                                                ],
+                                                               startPoint: .topLeading,
+                                                               endPoint: .bottomTrailing
+                                                )
+                                                .frame(height: 30)
+                                                .mask(alignment: .leading) {
+                                                    
+                                                    if self.tone > 0 {
+                                                        HStack(spacing: 3){
+                                                            ForEach(0..<Int(self.tone), id: \.self){ _ in
+                                                                Rectangle()
+                                                                    .cornerRadius(10)
+                                                                    .frame(width: 5, height: 20)
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                                 
-                                                if self.tone > 0 {
-                                                    HStack(spacing: 3){
-                                                        ForEach(0..<Int(self.tone), id: \.self){ _ in
-                                                            Rectangle()
+                                            }.frame(width: geometry.size.width)
+                                            Spacer()
+                                        }
+                                        .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        //                                    .onAppear(){
+                                        //                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+                                        //                                            self.tap = false
+                                        //                                        }
+                                        //                                    }
+                                        //.border(.red, width: 3.0)
+                                        VStack{
+                                            if !UIDevice.current.orientation.isLandscape {
+                                                Spacer()
+                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 85)
+                                            }
+                                            HStack{
+                                                Spacer()
+                                                Button {
+                                                    self.tone -= 1
+                                                    audioManager.pitchChange(tone: self.tone)
+                                                } label: {
+                                                    Image("KeyDown")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(height: 100)
+                                                }
+                                                Spacer()
+                                                Button{
+                                                    audioManager.play()
+                                                    player.plays()
+                                                } label: {
+                                                    Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(height: 50)
+                                                }
+                                                Spacer()
+                                                Button {
+                                                    self.tone += 1
+                                                    audioManager.pitchChange(tone: self.tone)
+                                                } label: {
+                                                    Image("KeyUp")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(height: 100)
+                                                }
+                                                Spacer()
+                                            }
+                                            .tint(.white)
+                                            .shadow(radius: 10)
+                                            .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        }
+                                        VStack{
+                                            if !UIDevice.current.orientation.isLandscape {
+                                                Spacer()
+                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 65)
+                                            }
+                                            Spacer()
+                                                .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
+                                            HStack(spacing: 40){
+                                                Button {
+                                                    self.tempo -= 0.02
+                                                    player.tempo(spd: tempo)
+                                                    audioManager.tempo(spd: tempo)
+                                                } label: {
+                                                    HStack{
+                                                        Text("Tempo")
+                                                        Image(systemName: "arrowtriangle.down.fill")
+                                                            .opacity(0.8)
+                                                            .font(.title2)
+                                                    }
+                                                    .background {
+                                                        VStack{}
+                                                            .frame(width: 90, height: 60)
+                                                            .background(.thinMaterial.opacity(0.7))
+                                                            .cornerRadius(10)
+                                                    }
+                                                }
+                                                Button {
+                                                    audioManager.playClap()
+                                                } label: {
+                                                    Image(systemName: "hands.clap.fill")
+                                                        .opacity(0.8)
+                                                        .font(.title2)
+                                                        .background {
+                                                            VStack{}
+                                                                .frame(width: 60, height: 60)
+                                                                .background(.thinMaterial.opacity(0.7))
                                                                 .cornerRadius(10)
-                                                                .frame(width: 5, height: 20)
                                                         }
+                                                }
+                                                Button {
+                                                    self.tempo += 0.02
+                                                    player.tempo(spd: tempo)
+                                                    audioManager.tempo(spd: tempo)
+                                                } label: {
+                                                    HStack{
+                                                        Text("Tempo")
+                                                        Image(systemName: "arrowtriangle.up.fill")
+                                                            .opacity(0.8)
+                                                            .font(.title2)
+                                                    }
+                                                    .background {
+                                                        VStack{}
+                                                            .frame(width: 90, height: 60)
+                                                            .background(.thinMaterial.opacity(0.7))
+                                                            .cornerRadius(10)
                                                     }
                                                 }
                                             }
-                                            
-                                        }.frame(width: geometry.size.width)
-                                        Spacer()
-                                    }
-                                    .frame(height: UIDevice.current.orientation == .landscapeLeft ? geometry.size.height : geometry.size.width*9/16)
-                                    .onAppear(){
-                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
-                                            self.tap = false
+                                            Spacer()
                                         }
-                                    }
-                                    //.border(.red, width: 3.0)
-                                    HStack{
-                                        Spacer()
-                                        Button {
-                                            self.tone -= 1
-                                            audioManager.pitchChange(tone: self.tone)
-                                        } label: {
-                                            Image("KeyDown")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(height: 100)
-                                        }
-                                        Spacer()
-                                        Button{
-                                            audioManager.play()
-                                            player.plays()
-                                        } label: {
-                                            Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(height: 50)
-                                        }
-                                        Spacer()
-                                        Button {
-                                            self.tone += 1
-                                            audioManager.pitchChange(tone: self.tone)
-                                        } label: {
-                                            Image("KeyUp")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(height: 100)
-                                        }
-                                        Spacer()
-                                    }
-                                    .tint(.white)
-                                    .shadow(radius: 10)
-                                    .frame(height: UIDevice.current.orientation == .landscapeLeft ? geometry.size.height : geometry.size.width*9/16)
-                                    VStack{
-                                        Spacer()
-                                            .frame(height:UIDevice.current.orientation == .landscapeLeft ? geometry.size.height * 4/5 : geometry.size.width*9/20)
-                                        Button {
-                                            audioManager.playClap()
-                                        } label: {
-                                            Image(systemName: "hands.clap.fill")
-                                                .opacity(0.8)
-                                                .font(.title2)
-                                                .background {
-                                                    VStack{}
-                                                        .frame(width: 60, height: 60)
-                                                        .background(.thinMaterial.opacity(0.7))
-                                                        .cornerRadius(10)
+                                        .tint(.white)
+                                        .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        if player.progress {
+                                            Circle()
+                                                .trim(from: 0, to: 0.5)
+                                                .stroke(Color.white, lineWidth: 5)
+                                                .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
+                                                .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+                                                .animation(Animation.default.repeatForever(autoreverses: false).speed(0.3), value: isLoading)
+                                                .onAppear() {
+                                                    self.isLoading = true
                                                 }
-                                        }
-                                        Spacer()
-                                    }
-                                    .tint(.white)
-                                    .frame(height: UIDevice.current.orientation == .landscapeLeft ? geometry.size.height : geometry.size.width*9/16)
-                                    if player.progress {
-                                        Circle()
-                                            .trim(from: 0, to: 0.5)
-                                            .stroke(Color.white, lineWidth: 5)
-                                            .frame(width: 70, height: 70)
-                                            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-                                            .animation(Animation.default.repeatForever(autoreverses: false).speed(0.3), value: isLoading)
-                                            .onAppear() {
-                                                self.isLoading = true
-                                            }
                                             /*
-                                        ProgressView()
-                                            .scaleEffect(4)
-                                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                            .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                                              */
+                                             ProgressView()
+                                             .scaleEffect(4)
+                                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                             .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
+                                             */
+                                        }
                                     }
-                                }
+                                    
                             }
-                            .offset(y: UIDevice.current.orientation == .landscapeLeft && vidFull ? -65 : 0)
+                            //.frame(width: geometry.size.width, height: geometry.size.height - 65)
+                            .offset(y: UIDevice.current.orientation.isLandscape && vidFull ? -65 : 0)
                             .onTapGesture {
                                 self.tap.toggle()
                             }

@@ -87,8 +87,8 @@ struct ContentView: View {
                         if self.vidEnd {
                             VStack{}.onAppear(){
                                 if nowPlayList.count - 1 > videoOrder {
-                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder + 1].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
                                     videoOrder += 1
+                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
                                     reloads = true
                                     print("리로드")
                                 }
@@ -133,7 +133,6 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .PlayList, img: "music.mic", geometry: geometry)
                         TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
-                        
                     }
                     .preferredColorScheme(.light)
                 }

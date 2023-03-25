@@ -46,6 +46,10 @@ class VideoPlayers: AVPlayer, ObservableObject {
         player?.play()
     }
     
+    func tempo(spd: Float) {
+        player?.rate = spd
+    }
+    
     func prepareToPlay(url: URL,  audioManager: AudioManager, fileSize: Int64) {
         self.audiomanager = audioManager
         //self.player?.removeObserver(self, forKeyPath: "timeControlStatus")

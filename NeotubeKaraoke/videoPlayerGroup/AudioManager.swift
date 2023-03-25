@@ -61,6 +61,10 @@ class AudioManager: ObservableObject {
         pitchNode.pitch = tone * 100
     }
     
+    func tempo(spd: Float) {
+        pitchNode.rate = spd
+    }
+    
     func setEngine(file: URL, frequency: [Int], tone: Float) {
         do {
             print("실행중")
