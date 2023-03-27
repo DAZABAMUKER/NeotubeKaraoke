@@ -41,6 +41,10 @@ class AudioManager: ObservableObject {
         
     }
     
+    deinit{
+        print("deinit")
+    }
+    
     func close() {
         playerNode.pause()
         playerNode.stop()

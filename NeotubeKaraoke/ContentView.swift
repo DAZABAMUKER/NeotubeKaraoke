@@ -17,12 +17,13 @@ struct ContentView: View {
     
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
-    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false))
+    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true))
     @State var reloads = false
     @State var closes = false
     @State var nowPlayList = [LikeVideo]()
     @State var vidEnd = false
     @State var videoOrder: Int = 0
+    @State var isReady: Bool = true
     
     // 텝이 변할 때 마다 텝바 아이템의 색을 변경하는 함수
     func changeColor(tabIndex: TabIndex) -> Color{
@@ -70,10 +71,10 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady)
                         .tag(TabIndex.PlayList)
                     
                     SettingView()
@@ -88,7 +89,8 @@ struct ContentView: View {
                             VStack{}.onAppear(){
                                 if nowPlayList.count - 1 > videoOrder {
                                     videoOrder += 1
-                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                                    self.isReady = false
+                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
                                     reloads = true
                                     print("리로드")
                                 }

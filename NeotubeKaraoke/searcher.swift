@@ -26,6 +26,7 @@ struct searcher: View{
     @Binding var nowPlayList: [LikeVideo]
     @Binding var vidEnd: Bool
     @Binding var videoOrder: Int
+    @Binding var isReady: Bool
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -134,9 +135,12 @@ struct searcher: View{
                              */
                             Button {
                                 //videoPlay.closes = true
-                                    videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd)
+                                if self.isReady {
+                                    self.isReady = false
+                                    videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
                                     reloads = true
                                     print("리로드")
+                                }
                             } label: {
                                 ZStack{
                                     TableCell(Video: responseitems)
@@ -155,6 +159,7 @@ struct searcher: View{
                                     }
                                 }
                             }
+                            .disabled(!isReady)
 //                            .onLongPressGesture {
 //                                print("long")
 //                                self.likeModal = true

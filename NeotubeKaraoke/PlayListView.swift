@@ -20,6 +20,7 @@ struct PlayListView: View {
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
     @Binding var videoOrder: Int
+    @Binding var isReady: Bool
     
     //MARK: - PlayListView 함수
     //playlist.json에서 플레이리스트들 가져옴.
@@ -135,7 +136,8 @@ struct PlayListView: View {
                             }
                             Button {
                                 if !self.nowPlayList.isEmpty {
-                                    videoPlay = VideoPlay(videoId: nowPlayList[0].videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                                    self.isReady = false
+                                    videoPlay = VideoPlay(videoId: nowPlayList[0].videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
                                 } else {
                                     print("재생할 음악 없음.")
                                 }
@@ -164,7 +166,7 @@ struct PlayListView: View {
                             ForEach(self.playlist, id: \.self) { item in
                                 //TableCell(Video: video)
                                 NavigationLink {
-                                    showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder) // 해당 재생목록 영상 리스트 뷰로 이동
+                                    showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady) // 해당 재생목록 영상 리스트 뷰로 이동
                                 } label: {
                                     Text(item)
                                 }
@@ -272,7 +274,7 @@ struct showList: View {
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
     @Binding var videoOrder: Int
-    
+    @Binding var isReady: Bool
     
     //MARK: 해당 재생목록 파일 읽어오기
     func getLists() {
@@ -301,7 +303,8 @@ struct showList: View {
             ForEach(playlist, id: \.self) { playlist in
                 Button {
                     self.nowPlayList = self.playlist // 재생할 영상이 속한 재생목록으로 재생목록 변경
-                    videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd)
+                    self.isReady = false
+                    videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
                     reloads = true
                     self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
                     print("video order: ",videoOrder)
@@ -317,6 +320,7 @@ struct showList: View {
                     .tint(.red)
 
                 }
+                .disabled(!isReady)
             }
             VStack{}.frame(height: 70)
         }

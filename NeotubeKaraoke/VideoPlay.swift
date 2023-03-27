@@ -13,7 +13,6 @@ struct VideoPlay: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    
     @State var isiPad = false
     @State var que = false
     @StateObject var player = VideoPlayers()
@@ -58,6 +57,7 @@ struct VideoPlay: View {
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
     @State var isAppear: Bool = false
+    @Binding var isReady: Bool
     
     func close() {
         player.close()
@@ -74,6 +74,9 @@ struct VideoPlay: View {
                 let info = try youtubeDL.extractInfo(url: url)
                 DispatchQueue.main.async {
                     self.info = info
+                    self.isAppear = false
+                    //self.isReady = false
+                    //print(isReady)
                     guard let formats = info?.formats else {
                         return
                     }
@@ -152,6 +155,7 @@ struct VideoPlay: View {
                 print(fileUrl)
                 audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
                 self.isAppear = true
+                self.isReady = true
             }
             catch {
                 print(error)
@@ -450,6 +454,7 @@ struct VideoPlay: View {
                             .frame(width: geometry.size.width, height: geometry.size.height)
                             .background(Color(red: 44/255, green: 54/255, blue: 51/255))
                             .onAppear() {
+                                //self.isReady = false
                                 if !isAppear {
                                     url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
                                     if UIDevice.current.model == "iPad" {
