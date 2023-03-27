@@ -12,12 +12,14 @@ class AudioManager: ObservableObject {
     
     let playerNode = AVAudioPlayerNode()
     let clapNode = AVAudioPlayerNode()
+    let crowdNode = AVAudioPlayerNode()
     let audioEngine = AVAudioEngine()
     var pitchNode: AVAudioUnitTimePitch!
     var EQNode: AVAudioUnitEQ!
     var audioFileBuffer: AVAudioPCMBuffer!
     var audioFile: AVAudioFile!
     var clap: AVAudioFile!
+    var crowd: AVAudioFile!
     var audioFileLength: AVAudioFramePosition = 0
     var offsetFrame: Double = 0
     var currentFrame: AVAudioFramePosition {
@@ -76,6 +78,7 @@ class AudioManager: ObservableObject {
         self.audioEngine.pause()
         self.audioEngine.stop()
         let mixer = audioEngine.mainMixerNode
+        audioEngine.connect(crowdNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
@@ -87,7 +90,7 @@ class AudioManager: ObservableObject {
             assertionFailure("failed to audioEngine start. Error: \(error)")
         }
         controlFrame(jump: vidTime)
-        playerNode.pause()
+        //playerNode.pause()
     }
         
     
@@ -99,8 +102,10 @@ class AudioManager: ObservableObject {
                 return
             }*/
             let clapSound = Bundle.main.url(forResource: "clap", withExtension: "wav")
+            let crowdSound = Bundle.main.url(forResource: "crowd", withExtension: "wav")
             self.audioFile = try AVAudioFile(forReading: file)
             self.clap = try AVAudioFile(forReading: clapSound!)
+            self.crowd = try AVAudioFile(forReading: crowdSound!)
             offsetFrame = 0
             //audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             //try audioFile.read(into: audioFileBuffer)
@@ -132,8 +137,10 @@ class AudioManager: ObservableObject {
         audioEngine.attach(playerNode)
         audioEngine.attach(pitchNode)
         audioEngine.attach(clapNode)
+        audioEngine.attach(crowdNode)
         
         let mixer = audioEngine.mainMixerNode
+        audioEngine.connect(crowdNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
@@ -169,6 +176,12 @@ class AudioManager: ObservableObject {
         //clapNode.stop()
         clapNode.scheduleFile(clap, at: nil, completionHandler: nil)
         clapNode.play()
+    }
+    
+    func playCrowd() {
+        //clapNode.stop()
+        crowdNode.scheduleFile(crowd, at: nil, completionHandler: nil)
+        crowdNode.play()
     }
     
     public func checkVidTime(vidTime: Double) {

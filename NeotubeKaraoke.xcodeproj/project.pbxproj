@@ -16,6 +16,7 @@
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
 		034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 034744382999E16F00F2EBEE /* YoutubeDL */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
+		0369980129D1CCBE00656D28 /* crowd.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0369980029D1CCBE00656D28 /* crowd.wav */; };
 		036DDD9C29A9C3A000396B94 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */; };
 		036EF0092955559E00789D57 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036EF0082955559E00789D57 /* Response.swift */; };
 		037D081829B4780B0069ED88 /* clap.wav in Resources */ = {isa = PBXBuildFile; fileRef = 037D081729B4780B0069ED88 /* clap.wav */; };
@@ -51,6 +52,7 @@
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
 		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		0356F76C29A496F40005EE2D /* downloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = downloadManager.swift; sourceTree = "<group>"; };
+		0369980029D1CCBE00656D28 /* crowd.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = crowd.wav; sourceTree = "<group>"; };
 		036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		036EF0082955559E00789D57 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		037D081729B4780B0069ED88 /* clap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = clap.wav; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				037D081729B4780B0069ED88 /* clap.wav */,
+				0369980029D1CCBE00656D28 /* crowd.wav */,
 				037D081F29B719BC0069ED88 /* me.PNG */,
 				0356F76C29A496F40005EE2D /* downloadManager.swift */,
 				03962DE7291FDFF000A376F3 /* MYVStackView.swift */,
@@ -252,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				037D082029B719BC0069ED88 /* me.PNG in Resources */,
+				0369980129D1CCBE00656D28 /* crowd.wav in Resources */,
 				037D081829B4780B0069ED88 /* clap.wav in Resources */,
 				03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */,
 				03962DD6291F781500A376F3 /* Assets.xcassets in Resources */,

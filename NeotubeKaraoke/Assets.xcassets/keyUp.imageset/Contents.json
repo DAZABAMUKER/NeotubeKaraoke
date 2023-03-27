@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "keyUp.png",
+      "filename" : "KeyUp.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "KeyUp@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "KeyUp@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -206,7 +206,7 @@ struct VideoPlay: View {
                             .opacity(UIDevice.current.orientation.isLandscape && vidFull ? 0.01 : 1)
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
-                                    .frame(width: UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height: UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
+                                    .frame(width: isiPad ? geometry.size.width : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !UIDevice.current.orientation.isLandscape ? geometry.size.width*9/16 : geometry.size.height : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
                                     //.border(.red, width: 1)
                                     //.edgesIgnoringSafeArea(.all)
                                     .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
@@ -303,18 +303,30 @@ struct VideoPlay: View {
                                         VStack{
                                             if !UIDevice.current.orientation.isLandscape {
                                                 Spacer()
-                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 85)
+                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 160)
                                             }
                                             HStack{
                                                 Spacer()
                                                 Button {
-                                                    self.tone -= 1
-                                                    audioManager.pitchChange(tone: self.tone)
+                                                    if UIDevice.current.orientation.isLandscape {
+                                                        self.tone -= 1
+                                                        audioManager.pitchChange(tone: self.tone)
+                                                    } else {
+                                                        player.moveFrame(to: -20)
+                                                    }
                                                 } label: {
-                                                    Image("KeyDown")
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(height: 100)
+                                                    if UIDevice.current.orientation.isLandscape {
+                                                        Image("KeyDown")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(height: 100)
+                                                    } else {
+                                                        Image(systemName: "backward.fill")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(height: 30)
+                                                            .opacity(0.8)
+                                                    }
                                                 }
                                                 Spacer()
                                                 Button{
@@ -328,42 +340,41 @@ struct VideoPlay: View {
                                                 }
                                                 Spacer()
                                                 Button {
-                                                    self.tone += 1
-                                                    audioManager.pitchChange(tone: self.tone)
+                                                    if UIDevice.current.orientation.isLandscape {
+                                                        self.tone += 1
+                                                        audioManager.pitchChange(tone: self.tone)
+                                                    } else {
+                                                        player.moveFrame(to: 20)
+                                                    }
                                                 } label: {
-                                                    Image("KeyUp")
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(height: 100)
+                                                    if UIDevice.current.orientation.isLandscape {
+                                                        Image("KeyUp")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(height: 100)
+                                                    } else {
+                                                        Image(systemName: "forward.fill")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(height: 30)
+                                                            .opacity(0.8)
+                                                    }
                                                 }
                                                 Spacer()
                                             }
                                             .tint(.white)
-                                            .shadow(radius: 10)
+                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .pink : .black, radius: 10)
                                             .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
                                             .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
                                         }
                                         VStack{
                                             if !UIDevice.current.orientation.isLandscape {
                                                 Spacer()
-                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 65)
+                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 120)
                                             }
                                             Spacer()
                                                 .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
-                                            HStack(spacing: 25){
-                                                Button {
-                                                    audioManager.playClap()
-                                                } label: {
-                                                    Image(systemName: "hands.clap.fill")
-                                                        .opacity(0.8)
-                                                        .font(.title2)
-                                                        .background {
-                                                            VStack{}
-                                                                .frame(width: 60, height: 60)
-                                                                .background(.thinMaterial.opacity(0.7))
-                                                                .cornerRadius(10)
-                                                        }
-                                                }
+                                            HStack(spacing: 30){
                                                 Button {
                                                     self.tempo -= 0.02
                                                     player.tempo(spd: tempo)
@@ -380,6 +391,7 @@ struct VideoPlay: View {
                                                             .frame(width: 90, height: 60)
                                                             .background(.thinMaterial.opacity(0.7))
                                                             .cornerRadius(10)
+                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
                                                     }
                                                 }
                                                 HStack(spacing: 0){
@@ -392,6 +404,7 @@ struct VideoPlay: View {
                                                             .frame(width: 100, height: 60)
                                                             .background(.thinMaterial.opacity(0.7))
                                                             .cornerRadius(10)
+                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
                                                     }
                                                 Button {
                                                     self.tempo += 0.02
@@ -409,9 +422,71 @@ struct VideoPlay: View {
                                                             .frame(width: 90, height: 60)
                                                             .background(.thinMaterial.opacity(0.7))
                                                             .cornerRadius(10)
+                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
                                                     }
                                                 }
                                             }
+                                            HStack(spacing: 40){
+                                                Button {
+                                                    self.tone -= 1
+                                                    audioManager.pitchChange(tone: self.tone)
+                                                } label: {
+                                                    Text("KeyDown")
+                                                        .opacity(0.8)
+                                                        .font(.title3)
+                                                        .background {
+                                                            VStack{}
+                                                                .frame(width: 100, height: 60)
+                                                                .background(.thinMaterial.opacity(0.7))
+                                                                .cornerRadius(10)
+                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .green : .clear, radius: 5)
+                                                        }
+                                                }
+                                                Button {
+                                                    audioManager.playClap()
+                                                } label: {
+                                                    Image(systemName: "hands.clap.fill")
+                                                        .opacity(0.8)
+                                                        .font(.title2)
+                                                        .background {
+                                                            VStack{}
+                                                                .frame(width: 60, height: 60)
+                                                                .background(.thinMaterial.opacity(0.7))
+                                                                .cornerRadius(10)
+                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                        }
+                                                }
+                                                Button {
+                                                    audioManager.playCrowd()
+                                                } label: {
+                                                    Image(systemName: "shareplay")
+                                                        .opacity(0.8)
+                                                        .font(.title2)
+                                                        .background {
+                                                            VStack{}
+                                                                .frame(width: 60, height: 60)
+                                                                .background(.thinMaterial.opacity(0.7))
+                                                                .cornerRadius(10)
+                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                        }
+                                                }
+                                                Button {
+                                                    self.tone += 1
+                                                    audioManager.pitchChange(tone: self.tone)
+                                                } label: {
+                                                    Text("KeyUp")
+                                                        .opacity(0.8)
+                                                        .font(.title3)
+                                                        .background {
+                                                            VStack{}
+                                                                .frame(width: 80, height: 60)
+                                                                .background(.thinMaterial.opacity(0.7))
+                                                                .cornerRadius(10)
+                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .orange : .clear, radius: 5)
+                                                        }
+                                                }
+                                            }
+                                            .padding(.top, 40)
                                             Spacer()
                                         }
                                         .tint(.white)
