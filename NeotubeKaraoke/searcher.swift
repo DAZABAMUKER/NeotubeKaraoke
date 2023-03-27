@@ -18,6 +18,9 @@ struct searcher: View{
     @State var playlist = [playlists]()
     @State var ResponseItems = [Video]()
     @State var addVideo: LikeVideo!
+    @State var lastNowPL = false
+    @State var rightAfterNowPL = false
+    
     
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -140,6 +143,8 @@ struct searcher: View{
                                     videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
                                     reloads = true
                                     print("리로드")
+                                    self.nowPlayList.append(LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
+                                    self.videoOrder = nowPlayList.count - 1
                                 }
                             } label: {
                                 ZStack{
@@ -193,10 +198,27 @@ struct searcher: View{
                                 .padding(10)
                                 .font(.title2)
                             List {
-                                Text("현재 재생목록 마지막에 추가")
-                                    .listRowBackground(Color.black.opacity(0.5))
-                                Text("현재 노래 다음에 추가")
-                                    .listRowBackground(Color.black.opacity(0.5))
+                                Button {
+                                    self.lastNowPL.toggle()
+                                } label: {
+                                    HStack{
+                                        Text("현재 재생목록 마지막에 추가")
+                                            .listRowBackground(Color.black.opacity(0.5))
+                                        Spacer()
+                                        Image(systemName: self.lastNowPL ? "checkmark.circle.fill" : "circle")
+                                    }
+                                }
+                                .listRowBackground(Color.black.opacity(0.5))
+                                Button {
+                                    self.rightAfterNowPL.toggle()
+                                } label: {
+                                    HStack{
+                                        Text("현재 노래 다음에 추가")
+                                        Spacer()
+                                        Image(systemName: self.rightAfterNowPL ? "checkmark.circle.fill" : "circle")
+                                    }
+                                }
+                                .listRowBackground(Color.black.opacity(0.5))
                                 ForEach(0..<self.playlist.count, id: \.self) { i in
                                     Button {
                                         self.playlist[i].isSelected.toggle()
@@ -218,6 +240,18 @@ struct searcher: View{
                                     self.likeModal = false
                                     tempList.forEach{ addVideoToPlist(item: self.addVideo, listName: $0.name)}
                                     decodePList()
+                                    if self.lastNowPL {
+                                        nowPlayList.append(self.addVideo)
+                                    }
+                                    if self.rightAfterNowPL {
+                                        if nowPlayList.isEmpty {
+                                            nowPlayList.append(self.addVideo)
+                                        } else {
+                                            nowPlayList.insert(self.addVideo, at: videoOrder + 1)
+                                        }
+                                    }
+                                    self.lastNowPL = false
+                                    self.rightAfterNowPL = false
                                 } label: {
                                     Text("추가")
                                         .padding(10)

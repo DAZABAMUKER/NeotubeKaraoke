@@ -443,7 +443,11 @@ struct VideoPlay: View {
                             //.frame(width: geometry.size.width, height: geometry.size.height - 65)
                             .offset(y: UIDevice.current.orientation.isLandscape && vidFull ? -65 : 0)
                             .onTapGesture {
-                                self.tap.toggle()
+                                if UIDevice.current.orientation.isLandscape {
+                                    self.tap.toggle()
+                                } else {
+                                    self.tap = true
+                                }
                             }
                             
 
@@ -461,6 +465,7 @@ struct VideoPlay: View {
                                 //self.isReady = false
                                 if !isAppear {
                                     url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+                                    self.vidEnd = false
                                     if UIDevice.current.model == "iPad" {
                                         self.isiPad = true
                                     }

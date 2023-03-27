@@ -65,6 +65,11 @@ class VideoPlayers: AVPlayer, ObservableObject {
         //downloadVidonlyFile(url: url, fileSize: fileSize)
         self.player = AVPlayer(url: url)
         self.player?.isMuted = true
+        NotificationCenter.default.addObserver(forName: Notification.Name.AVAudioEngineConfigurationChange, object: nil, queue: nil) { notification in
+            audioManager.reconnect(vidTime: self.currents)
+            print("reconnect")
+            self.player?.pause()
+        }
         self.player?.addObserver(self, forKeyPath: "timeControlStatus",options: [.old, .new], context: nil)
         self.player?.currentItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .global(qos: .background), using: { _ in
@@ -75,9 +80,12 @@ class VideoPlayers: AVPlayer, ObservableObject {
                 }
                 if CMTimeGetSeconds( (self.player?.currentItem!.duration)!)/*/2*/ - jump < 1 {
                     self.player?.pause()
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()/* + 5*/) {
                         DispatchQueue.main.async {
                             self.end = true
+                            self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
+                            self.player?.removeObserver(self, forKeyPath: "status")
+                            return
                         }
                     }
                     

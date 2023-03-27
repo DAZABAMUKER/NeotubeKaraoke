@@ -13,7 +13,7 @@ struct PlayListView: View {
     @State var plusPlayList: Bool = false
     @State var pTitle: String = ""
     @State var playlist = [String]()
-    
+    @State var showNowPL = false // 현재 재생 목록 보여줄지 말자 결정하는 변수
     @Binding var nowPlayList: [LikeVideo]
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -34,6 +34,7 @@ struct PlayListView: View {
             self.playlist = myData!
         }
     }
+    
     // 플레이리스트 생성 함수
     func savePlayList(title: String) {
         if !title.isEmpty {
@@ -95,45 +96,24 @@ struct PlayListView: View {
                     .background(.indigo.opacity(0.3))
                     
                     //MARK: 최근 재생목록
-                    Text("Recent")
+                    Text("현재 재생목록 보기")
                         .bold()
                         .font(.title)
                         .padding(5)
                     ScrollView(.horizontal){
                         HStack{
-                            VStack{
-                                ZStack{
-                                    Image(systemName: "music.note.list")
+                            
+                            Button {
+                                self.showNowPL.toggle()
+                            } label: {
+                                VStack{
+                                    Image("playlist")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 80)
-                                        .padding(20)
-                                        .background(.green)
-                                    //.opacity(0.3)
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                                        .rotationEffect(.degrees(-15))
-                                    Image(systemName: "music.note.list")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 80)
-                                        .padding(20)
-                                        .background(.orange)
-                                    //.opacity(0.5)
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                                        .rotationEffect(.degrees(-5))
-                                    //.padding(20)
-                                    Image(systemName: "music.note.list")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 80)
-                                        .padding(20)
-                                        .background(.linearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                                        .rotationEffect(.degrees(10))
-                                        .padding(20)
+                                        .frame(height: 100)
                                 }
-                                Text("현재 재생목록")
                             }
+/*
                             Button {
                                 if !self.nowPlayList.isEmpty {
                                     self.isReady = false
@@ -149,52 +129,93 @@ struct PlayListView: View {
                                     .tint(.white)
                                     .padding()
                             }
+ */
                         }
                     }
                     
                     //MARK: 재생목록 리스트
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
                         .frame(width: geometry.size.width, height: 1)
-                    Text("생성된 재생목록")
-                        .font(.title3)
-                        .bold()
-                        .padding( 5)
+                    HStack{
+                        Text(showNowPL ? "현재 재생목록" : "생성된 재생목록")
+                            .font(.title3)
+                            .bold()
+                            .padding(5)
+                        Spacer()
+                        if showNowPL {
+                            Button {
+                                self.showNowPL = false
+                            } label: {
+                                Text("Back")
+                                    .tint(.secondary)
+                                    .padding(.horizontal)
+                            }
+                        }
+                    }
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
                         .frame(width: geometry.size.width, height: 1)
                     NavigationView{
-                        List{
-                            ForEach(self.playlist, id: \.self) { item in
-                                //TableCell(Video: video)
-                                NavigationLink {
-                                    showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady) // 해당 재생목록 영상 리스트 뷰로 이동
-                                } label: {
-                                    Text(item)
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        if showNowPL {
+                            List {
+                                ForEach(nowPlayList, id: \.self) { list in
                                     Button {
-                                        //재생목록 제거
-                                        print("제거")
-                                        let listIndex = self.playlist.firstIndex(of: item)
-                                        self.playlist.remove(at: listIndex!)
-                                        savePlayList(title: "")
-                                        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                                        let existPlaylist = doc.appendingPathComponent(item, conformingTo: .json)
-                                        do {
-                                            if FileManager.default.fileExists(atPath: existPlaylist.path(percentEncoded: false)) {
-                                                try FileManager.default.removeItem(atPath: existPlaylist.path(percentEncoded: false))
-                                            }
-                                        } catch {
-                                            print("removePList Error:",error)
-                                        }
+                                        self.isReady = false
+                                        videoPlay = VideoPlay(videoId: list.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
+                                        reloads = true
+                                        self.videoOrder = self.nowPlayList.firstIndex(of: list) ?? -1
+                                        print("video order: ",videoOrder)
                                     } label: {
-                                        Image(systemName: "trash")
+                                        ListView(Video: list)
                                     }
-                                    .tint(.red)
-
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button {
+                                            print("제거")
+                                        } label: {
+                                            Image(systemName: "trash")
+                                        }
+                                        .tint(.red)
+                                    }
+                                    .disabled(!isReady)
+                                }
+                                VStack{}.frame(height: 70)
+                            }
+                            .listStyle(.plain)
+                            .environment(\.defaultMinListRowHeight, 80)
+                        } else {
+                            List{
+                                ForEach(self.playlist, id: \.self) { item in
+                                    //TableCell(Video: video)
+                                    NavigationLink {
+                                        showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady) // 해당 재생목록 영상 리스트 뷰로 이동
+                                    } label: {
+                                        Text(item)
+                                    }
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button {
+                                            //재생목록 제거
+                                            print("제거")
+                                            let listIndex = self.playlist.firstIndex(of: item)
+                                            self.playlist.remove(at: listIndex!)
+                                            savePlayList(title: "")
+                                            let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                                            let existPlaylist = doc.appendingPathComponent(item, conformingTo: .json)
+                                            do {
+                                                if FileManager.default.fileExists(atPath: existPlaylist.path(percentEncoded: false)) {
+                                                    try FileManager.default.removeItem(atPath: existPlaylist.path(percentEncoded: false))
+                                                }
+                                            } catch {
+                                                print("removePList Error:",error)
+                                            }
+                                        } label: {
+                                            Image(systemName: "trash")
+                                        }
+                                        .tint(.red)
+                                        
+                                    }
                                 }
                             }
+                            .listStyle(.plain)
                         }
-                        .listStyle(.plain)
                     }
                 }
                 .preferredColorScheme(.dark)
@@ -331,15 +352,19 @@ struct showList: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
                     Button {
-                        self.nowPlayList = playlist
+                        self.nowPlayList.append(contentsOf: playlist)
                     } label: {
-                        Image(systemName: "shuffle")
+                        Image(systemName: "text.insert")
                     }
+                    .disabled(playlist.isEmpty)
                     Button {
                         self.nowPlayList = playlist
+                        videoPlay = VideoPlay(videoId: nowPlayList.first!.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
+                        reloads = true
                     } label: {
                         Image(systemName: "play.fill")
                     }
+                    .disabled(playlist.isEmpty)
                 }
             }
         }

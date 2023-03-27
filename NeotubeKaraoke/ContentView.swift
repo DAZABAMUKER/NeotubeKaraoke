@@ -88,9 +88,10 @@ struct ContentView: View {
                         if self.vidEnd {
                             VStack{}.onAppear(){
                                 if nowPlayList.count - 1 > videoOrder {
+                                    vidFull = false
                                     videoOrder += 1
                                     self.isReady = false
-                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
+                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady)
                                     reloads = true
                                     print("리로드")
                                 }
@@ -101,7 +102,7 @@ struct ContentView: View {
                             Text("Loading...\n")
                                 .frame(width: geometry.size.width, height: 60)
                                 .onAppear(){
-                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                                         self.reloads = false
                                     }
                                 }

@@ -69,6 +69,28 @@ class AudioManager: ObservableObject {
         pitchNode.rate = spd
     }
     
+    func reconnect(vidTime: Double) {
+        print("reconnected")
+        self.playerNode.pause()
+        self.playerNode.stop()
+        self.audioEngine.pause()
+        self.audioEngine.stop()
+        let mixer = audioEngine.mainMixerNode
+        audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch {
+            assertionFailure("failed to audioEngine start. Error: \(error)")
+        }
+        controlFrame(jump: vidTime)
+        playerNode.pause()
+    }
+        
+    
     func setEngine(file: URL, frequency: [Int], tone: Float) {
         do {
             print("실행중")
