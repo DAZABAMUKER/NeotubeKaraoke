@@ -416,16 +416,20 @@ struct VideoPlay: View {
                                         }
                                         .tint(.white)
                                         .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        
                                         if player.progress {
-                                            Circle()
-                                                .trim(from: 0, to: 0.5)
-                                                .stroke(Color.white, lineWidth: 5)
-                                                .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                                                .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-                                                .animation(Animation.default.repeatForever(autoreverses: false).speed(0.3), value: isLoading)
-                                                .onAppear() {
-                                                    self.isLoading = true
-                                                }
+                                            VStack(alignment: .center){
+                                                Circle()
+                                                    .trim(from: 0, to: 0.5)
+                                                    .stroke(Color.white, lineWidth: 5)
+                                                    .frame(width: 70)
+                                                    .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+                                                    .animation(Animation.default.repeatForever(autoreverses: false).speed(0.3), value: isLoading)
+                                                    .onAppear() {
+                                                        self.isLoading = true
+                                                    }
+                                            }
+                                            .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
                                             /*
                                              ProgressView()
                                              .scaleEffect(4)
