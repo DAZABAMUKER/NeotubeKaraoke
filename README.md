@@ -11,7 +11,7 @@
   height="500"
 />
 <img
-  src="https://github.com/DAZABAMUKER/NeotubeKaraoke/blob/main/NeotubeKaraoke/Assets.xcassets/clear.imageset/제목_없는_아트워크%203.png?raw=true"
+  src="https://github.com/DAZABAMUKER/NeotubeKaraoke/blob/main/NeotubeKaraoke/Assets.xcassets/clear.imageset/clear.png?raw=true"
   width="500"
   height="500"
 />
