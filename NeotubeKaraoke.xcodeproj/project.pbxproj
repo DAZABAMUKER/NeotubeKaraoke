@@ -14,6 +14,8 @@
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
 		033C57F029D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EB29D2DAC600340988 /* Localizable.strings */; };
 		033C57F129D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EE29D2DAC600340988 /* Localizable.strings */; };
+		033C57F429D31B2600340988 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 033C57F329D31B2600340988 /* GoogleMobileAds */; };
+		033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C57F529D31DC400340988 /* GADInterstitialAd.swift */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
 		034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 034744382999E16F00F2EBEE /* YoutubeDL */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
@@ -52,6 +54,7 @@
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
 		033C57EC29D2DAC600340988 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Localizable.strings; sourceTree = "<group>"; };
 		033C57EF29D2DAC600340988 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		033C57F529D31DC400340988 /* GADInterstitialAd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GADInterstitialAd.swift; sourceTree = "<group>"; };
 		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		0356F76C29A496F40005EE2D /* downloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = downloadManager.swift; sourceTree = "<group>"; };
 		0369980029D1CCBE00656D28 /* crowd.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = crowd.wav; sourceTree = "<group>"; };
@@ -88,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				033C57F429D31B2600340988 /* GoogleMobileAds in Frameworks */,
 				034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +170,7 @@
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
 				037D082129B724E50069ED88 /* PlayListView.swift */,
 				03CA4C8A29BDD13800507E26 /* ListView.swift */,
+				033C57F529D31DC400340988 /* GADInterstitialAd.swift */,
 				033C57ED29D2DAC600340988 /* en.lproj */,
 				033C57EA29D2DAC600340988 /* ko.lproj */,
 				03F6F2B529AE18E700A4F9DE /* videoPlayerGroup */,
@@ -227,6 +232,7 @@
 			name = NeotubeKaraoke;
 			packageProductDependencies = (
 				034744382999E16F00F2EBEE /* YoutubeDL */,
+				033C57F329D31B2600340988 /* GoogleMobileAds */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -259,6 +265,7 @@
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
 				036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */,
+				033C57F229D31B2600340988 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -307,6 +314,7 @@
 				0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */,
 				03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */,
 				036EF0092955559E00789D57 /* Response.swift in Sources */,
+				033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */,
 				032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */,
 				037D081A29B580290069ED88 /* DragVideo.swift in Sources */,
 				03962DEC2920D7B300A376F3 /* MyWebView.swift in Sources */,
@@ -548,6 +556,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		033C57F229D31B2600340988 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kewlbear/YoutubeDL-ios.git";
@@ -559,6 +575,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		033C57F329D31B2600340988 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 033C57F229D31B2600340988 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
 		034744382999E16F00F2EBEE /* YoutubeDL */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */;

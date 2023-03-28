@@ -7,6 +7,9 @@
 
 import SwiftUI
 import PythonSupport
+import GoogleMobileAds
+import AppTrackingTransparency
+import AdSupport
 
 @main
 struct NeotubeKaraokeApp: App {
@@ -17,10 +20,14 @@ struct NeotubeKaraokeApp: App {
         WindowGroup {
             ContentView(tabIndex: .Home)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-
+            
         }
     }
     init() {
-            PythonSupport.initialize()
+        PythonSupport.initialize()
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
         }
+    }
 }

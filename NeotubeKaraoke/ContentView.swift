@@ -4,7 +4,7 @@
 //
 //  Created by 안병욱 on 2022/11/14.
 //
-
+import GoogleMobileAds
 import SwiftUI
 //커스텀 텝바를 위한 enum
 enum TabIndex {
@@ -14,6 +14,9 @@ enum TabIndex {
 }
 // 메인 뷰
 struct ContentView: View {
+    
+    private let adViewControllerRepresentable = AdViewControllerRepresentable()
+    private let adCoordinator = AdCoordinator()
     
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
@@ -80,7 +83,7 @@ struct ContentView: View {
                     PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady)
                         .tag(TabIndex.PlayList)
                     
-                    SettingView()
+                    GADInterstitialAds()
                         .tag(TabIndex.Setting)
                     
                 }
