@@ -10,9 +10,10 @@
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
 		032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032DE3E229AEDAC50097C58A /* videoClass.swift */; };
-		032DE3E729AF847A0097C58A /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032DE3E629AF847A0097C58A /* DownloadManager.swift */; };
 		0330C4E329A1B94000B3E6D3 /* VideoPlayers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */; };
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
+		033C57F029D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EB29D2DAC600340988 /* Localizable.strings */; };
+		033C57F129D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EE29D2DAC600340988 /* Localizable.strings */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
 		034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 034744382999E16F00F2EBEE /* YoutubeDL */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
@@ -47,9 +48,10 @@
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		032DE3E229AEDAC50097C58A /* videoClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoClass.swift; sourceTree = "<group>"; };
-		032DE3E629AF847A0097C58A /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayers.swift; sourceTree = "<group>"; };
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
+		033C57EC29D2DAC600340988 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Localizable.strings; sourceTree = "<group>"; };
+		033C57EF29D2DAC600340988 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		0356F76C29A496F40005EE2D /* downloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = downloadManager.swift; sourceTree = "<group>"; };
 		0369980029D1CCBE00656D28 /* crowd.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = crowd.wav; sourceTree = "<group>"; };
@@ -93,6 +95,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		033C57EA29D2DAC600340988 /* ko.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				033C57EB29D2DAC600340988 /* Localizable.strings */,
+			);
+			path = ko.lproj;
+			sourceTree = "<group>";
+		};
+		033C57ED29D2DAC600340988 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				033C57EE29D2DAC600340988 /* Localizable.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
 		034744372999E16F00F2EBEE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,10 +163,11 @@
 				03962DED2921C80500A376F3 /* ContentView.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
-				032DE3E629AF847A0097C58A /* DownloadManager.swift */,
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
 				037D082129B724E50069ED88 /* PlayListView.swift */,
 				03CA4C8A29BDD13800507E26 /* ListView.swift */,
+				033C57ED29D2DAC600340988 /* en.lproj */,
+				033C57EA29D2DAC600340988 /* ko.lproj */,
 				03F6F2B529AE18E700A4F9DE /* videoPlayerGroup */,
 				03F6F2B629AE191F00A4F9DE /* youtubeApiData */,
 			);
@@ -235,6 +254,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
@@ -255,7 +275,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				037D082029B719BC0069ED88 /* me.PNG in Resources */,
+				033C57F029D2DAC600340988 /* Localizable.strings in Resources */,
 				0369980129D1CCBE00656D28 /* crowd.wav in Resources */,
+				033C57F129D2DAC600340988 /* Localizable.strings in Resources */,
 				037D081829B4780B0069ED88 /* clap.wav in Resources */,
 				03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */,
 				03962DD6291F781500A376F3 /* Assets.xcassets in Resources */,
@@ -293,7 +315,6 @@
 				036DDD9C29A9C3A000396B94 /* PlayerViewController.swift in Sources */,
 				03D77A2F2935D4E80037061E /* Video.swift in Sources */,
 				037D081E29B5D18A0069ED88 /* SettingView.swift in Sources */,
-				032DE3E729AF847A0097C58A /* DownloadManager.swift in Sources */,
 				03D77A2D2935D2290037061E /* Constant.swift in Sources */,
 				03962DF029230D7D00A376F3 /* searcher.swift in Sources */,
 				03962DDE291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld in Sources */,
@@ -301,6 +322,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		033C57EB29D2DAC600340988 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033C57EC29D2DAC600340988 /* ko */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		033C57EE29D2DAC600340988 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033C57EF29D2DAC600340988 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		03962DE0291F781500A376F3 /* Debug */ = {

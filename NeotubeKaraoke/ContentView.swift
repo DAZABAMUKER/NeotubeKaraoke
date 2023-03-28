@@ -25,6 +25,9 @@ struct ContentView: View {
     @State var videoOrder: Int = 0
     @State var isReady: Bool = true
     
+    private let loading: LocalizedStringKey = "Loading...\n"
+    private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
+    
     // 텝이 변할 때 마다 텝바 아이템의 색을 변경하는 함수
     func changeColor(tabIndex: TabIndex) -> Color{
         switch tabIndex {
@@ -99,7 +102,7 @@ struct ContentView: View {
                         }
                         // 플레이어를 새로 그리기 위해 시간 텀이 필요
                         if reloads {
-                            Text("Loading...\n")
+                            Text(loading)
                                 .frame(width: geometry.size.width, height: 60)
                                 .onAppear(){
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
@@ -110,7 +113,7 @@ struct ContentView: View {
                             
                             // 플레이어 뷰 첫 화면
                         } else if videoPlay.videoId == "nil" && !reloads {
-                            Text("부르실  노래를  선곡해주세요 *^^*\n")
+                            Text(self.selSong)
                             //.bold()
                                 .frame(width: geometry.size.width, height: 60)
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))

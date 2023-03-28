@@ -10,6 +10,7 @@ import SwiftUI
 struct PlayListView: View {
     
     //MARK: - PlayListView 변수
+    @State var PLAppear: Bool = false
     @State var plusPlayList: Bool = false
     @State var pTitle: String = ""
     @State var playlist = [String]()
@@ -21,6 +22,14 @@ struct PlayListView: View {
     @Binding var vidEnd: Bool
     @Binding var videoOrder: Int
     @Binding var isReady: Bool
+    
+    private let showNowPlaying: LocalizedStringKey = "Show now playing list"
+    private let nowPlaying: LocalizedStringKey = "Now Playing List"
+    private let createdList: LocalizedStringKey = "Created Playlist"
+    private let addList: LocalizedStringKey = "Add Playlist"
+    private let inputTilte: LocalizedStringKey = "Input your playlist title"
+    private let OK: LocalizedStringKey = "OK"
+    private let cancel: LocalizedStringKey = "Cancel"
     
     //MARK: - PlayListView 함수
     //playlist.json에서 플레이리스트들 가져옴.
@@ -96,7 +105,7 @@ struct PlayListView: View {
                     .background(.indigo.opacity(0.3))
                     
                     //MARK: 최근 재생목록
-                    Text("현재 재생목록 보기")
+                    Text(self.showNowPlaying)
                         .bold()
                         .font(.title)
                         .padding(5)
@@ -113,6 +122,7 @@ struct PlayListView: View {
                                         .frame(height: 100)
                                 }
                             }
+                            .disabled(PLAppear)
 /*
                             Button {
                                 if !self.nowPlayList.isEmpty {
@@ -137,7 +147,7 @@ struct PlayListView: View {
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
                         .frame(width: geometry.size.width, height: 1)
                     HStack{
-                        Text(showNowPL ? "현재 재생목록" : "생성된 재생목록")
+                        Text(showNowPL ? self.nowPlaying : self.createdList)
                             .font(.title3)
                             .bold()
                             .padding(5)
@@ -150,11 +160,13 @@ struct PlayListView: View {
                                     .tint(.secondary)
                                     .padding(.horizontal)
                             }
+                            
                         }
                     }
+                    .frame(height: 30)
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
                         .frame(width: geometry.size.width, height: 1)
-                    NavigationView{
+                    NavigationStack{
                         if showNowPL {
                             List {
                                 ForEach(nowPlayList, id: \.self) { list in
@@ -187,6 +199,12 @@ struct PlayListView: View {
                                     //TableCell(Video: video)
                                     NavigationLink {
                                         showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady) // 해당 재생목록 영상 리스트 뷰로 이동
+                                            .onAppear(){
+                                                self.PLAppear = true
+                                            }
+                                            .onDisappear(){
+                                                self.PLAppear = false
+                                            }
                                     } label: {
                                         Text(item)
                                     }
@@ -224,11 +242,11 @@ struct PlayListView: View {
                 //MARK: 재생목록 추가 뷰
                 if self.plusPlayList {
                     VStack(spacing: 0){
-                        Text("재생목록 추가")
+                        Text(self.addList)
                             .font(.title2)
                             .padding()
                         //Divider()
-                        TextField("타이틀을 입력하세요", text: $pTitle)
+                        TextField(self.inputTilte, text: $pTitle)
                             .background(content: {
                                 Spacer()
                                     .frame(width: 300,height: 50)
@@ -251,7 +269,7 @@ struct PlayListView: View {
                                     self.pTitle = ""
                                 }
                             } label: {
-                                Text("확인")
+                                Text(self.OK)
                             }
                             .padding()
                             Divider()
@@ -260,7 +278,7 @@ struct PlayListView: View {
                                 self.plusPlayList = false
                                 self.pTitle = ""
                             } label: {
-                                Text("취소")
+                                Text(self.cancel)
                             }
                             .padding()
                         }

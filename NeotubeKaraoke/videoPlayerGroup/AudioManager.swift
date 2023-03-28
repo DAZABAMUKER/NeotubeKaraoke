@@ -22,6 +22,7 @@ class AudioManager: ObservableObject {
     var crowd: AVAudioFile!
     var audioFileLength: AVAudioFramePosition = 0
     var offsetFrame: Double = 0
+    var intervalLimit: Double = 0.1
     var currentFrame: AVAudioFramePosition {
         guard
             let lastRenderTime = playerNode.lastRenderTime,
@@ -72,30 +73,33 @@ class AudioManager: ObservableObject {
     }
     
     func reconnect(vidTime: Double) {
+        audioEngine.reset()
         print("reconnected")
+        self.intervalLimit = 0.2
         self.playerNode.pause()
         self.playerNode.stop()
         self.audioEngine.pause()
         self.audioEngine.stop()
         let mixer = audioEngine.mainMixerNode
-        audioEngine.connect(crowdNode, to: mixer, format: mixer.outputFormat(forBus: 0))
-        audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
-        audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
-        audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
-        audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+//        audioEngine.connect(crowdNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+//        audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+//        audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
+//        audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
+//        audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(mixer, to: audioEngine.outputNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.prepare()
         do {
             try audioEngine.start()
         } catch {
             assertionFailure("failed to audioEngine start. Error: \(error)")
         }
-        controlFrame(jump: vidTime)
-        //playerNode.pause()
+        //controlFrame(jump: vidTime)
     }
         
     
     func setEngine(file: URL, frequency: [Int], tone: Float) {
         do {
+            audioEngine.reset()
             print("실행중")
             /*guard let musicUrl = Bundle.main.url(forResource: "sample", withExtension: "mp3") else {
                 print(" 파일 안나오잖아")
@@ -187,6 +191,7 @@ class AudioManager: ObservableObject {
     public func checkVidTime(vidTime: Double) {
         let audiTime = offsetFrame + Double(currentFrame)/44100.0
         var interval = audiTime - vidTime
+        print(interval)
         if interval < 0 {
             interval *= -1
         }
@@ -195,7 +200,7 @@ class AudioManager: ObservableObject {
             //audioEngine.stop()
         }
         //print("체크",vidTime, audiTime, interval)
-        if interval > 0.1 {
+        if interval > self.intervalLimit {
             playerNode.pause()
             controlFrame(jump: vidTime)
         }

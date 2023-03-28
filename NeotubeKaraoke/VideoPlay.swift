@@ -58,6 +58,9 @@ struct VideoPlay: View {
     @Binding var vidEnd: Bool
     @State var isAppear: Bool = false
     @Binding var isReady: Bool
+    @State var isBle: Bool = false
+    
+    private let tempoString: LocalizedStringKey = "Tempo"
     
     func close() {
         player.close()
@@ -305,6 +308,7 @@ struct VideoPlay: View {
                                                 Spacer()
                                                     .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 160)
                                             }
+                                            
                                             HStack{
                                                 Spacer()
                                                 Button {
@@ -366,128 +370,136 @@ struct VideoPlay: View {
                                             .shadow(color: !UIDevice.current.orientation.isLandscape ? .pink : .black, radius: 10)
                                             .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
                                             .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
+                                            
                                         }
                                         VStack{
-                                            if !UIDevice.current.orientation.isLandscape {
+                                            if vidFull {
+                                                if !UIDevice.current.orientation.isLandscape {
+                                                    Spacer()
+                                                        .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 120)
+                                                }
                                                 Spacer()
-                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 120)
-                                            }
-                                            Spacer()
-                                                .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
-                                            HStack(spacing: 30){
-                                                Button {
-                                                    self.tempo -= 0.02
-                                                    player.tempo(spd: tempo)
-                                                    audioManager.tempo(spd: tempo)
-                                                } label: {
-                                                    HStack{
-                                                        Text("Tempo")
-                                                        Image(systemName: "arrowtriangle.down.fill")
-                                                            .opacity(0.8)
-                                                            .font(.title2)
-                                                    }
-                                                    .background {
-                                                        VStack{}
-                                                            .frame(width: 90, height: 60)
-                                                            .background(.thinMaterial.opacity(0.7))
-                                                            .cornerRadius(10)
-                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
-                                                    }
-                                                }
-                                                HStack(spacing: 0){
-                                                    Text("Tempo: x")
-                                                        .font(.caption)
-                                                    Text(String(self.tempo))
-                                                }
-                                                    .background {
-                                                        VStack{}
-                                                            .frame(width: 100, height: 60)
-                                                            .background(.thinMaterial.opacity(0.7))
-                                                            .cornerRadius(10)
-                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
-                                                    }
-                                                Button {
-                                                    self.tempo += 0.02
-                                                    player.tempo(spd: tempo)
-                                                    audioManager.tempo(spd: tempo)
-                                                } label: {
-                                                    HStack{
-                                                        Text("Tempo")
-                                                        Image(systemName: "arrowtriangle.up.fill")
-                                                            .opacity(0.8)
-                                                            .font(.title2)
-                                                    }
-                                                    .background {
-                                                        VStack{}
-                                                            .frame(width: 90, height: 60)
-                                                            .background(.thinMaterial.opacity(0.7))
-                                                            .cornerRadius(10)
-                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
-                                                    }
-                                                }
-                                            }
-                                            HStack(spacing: 40){
-                                                Button {
-                                                    self.tone -= 1
-                                                    audioManager.pitchChange(tone: self.tone)
-                                                } label: {
-                                                    Text("KeyDown")
-                                                        .opacity(0.8)
-                                                        .font(.title3)
-                                                        .background {
-                                                            VStack{}
-                                                                .frame(width: 100, height: 60)
-                                                                .background(.thinMaterial.opacity(0.7))
-                                                                .cornerRadius(10)
-                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .green : .clear, radius: 5)
+                                                    .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
+                                                HStack(spacing: 50){
+                                                    Button {
+                                                        self.tempo -= 0.02
+                                                        player.tempo(spd: tempo)
+                                                        audioManager.tempo(spd: tempo)
+                                                    } label: {
+                                                        HStack{
+                                                            Text(self.tempoString)
+                                                            Image(systemName: "arrowtriangle.down.fill")
+                                                                .opacity(0.8)
+                                                                .font(.title2)
                                                         }
-                                                }
-                                                Button {
-                                                    audioManager.playClap()
-                                                } label: {
-                                                    Image(systemName: "hands.clap.fill")
-                                                        .opacity(0.8)
-                                                        .font(.title2)
                                                         .background {
                                                             VStack{}
-                                                                .frame(width: 60, height: 60)
+                                                                .frame(width: 90, height: 60)
                                                                 .background(.thinMaterial.opacity(0.7))
                                                                 .cornerRadius(10)
                                                                 .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
                                                         }
-                                                }
-                                                Button {
-                                                    audioManager.playCrowd()
-                                                } label: {
-                                                    Image(systemName: "shareplay")
-                                                        .opacity(0.8)
-                                                        .font(.title2)
+                                                    }
+                                                    HStack(spacing: 0){
+                                                        Text(self.tempoString)
+                                                        Text(": x")
+                                                            .font(.caption)
+                                                        Text(String(self.tempo))
+                                                    }
+                                                    .background {
+                                                        VStack{}
+                                                            .frame(width: 110, height: 60)
+                                                            .background(.thinMaterial.opacity(0.7))
+                                                            .cornerRadius(10)
+                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                    }
+                                                    Button {
+                                                        self.tempo += 0.02
+                                                        player.tempo(spd: tempo)
+                                                        audioManager.tempo(spd: tempo)
+                                                    } label: {
+                                                        HStack{
+                                                            Text(self.tempoString)
+                                                            Image(systemName: "arrowtriangle.up.fill")
+                                                                .opacity(0.8)
+                                                                .font(.title2)
+                                                        }
                                                         .background {
                                                             VStack{}
-                                                                .frame(width: 60, height: 60)
+                                                                .frame(width: 90, height: 60)
                                                                 .background(.thinMaterial.opacity(0.7))
                                                                 .cornerRadius(10)
                                                                 .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
                                                         }
+                                                    }
                                                 }
-                                                Button {
-                                                    self.tone += 1
-                                                    audioManager.pitchChange(tone: self.tone)
-                                                } label: {
-                                                    Text("KeyUp")
-                                                        .opacity(0.8)
-                                                        .font(.title3)
-                                                        .background {
-                                                            VStack{}
-                                                                .frame(width: 80, height: 60)
-                                                                .background(.thinMaterial.opacity(0.7))
-                                                                .cornerRadius(10)
-                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .orange : .clear, radius: 5)
+                                                HStack(spacing: 40){
+                                                    if !UIDevice.current.orientation.isLandscape {
+                                                        Button {
+                                                            self.tone -= 1
+                                                            audioManager.pitchChange(tone: self.tone)
+                                                        } label: {
+                                                            Text("KeyDown")
+                                                                .opacity(0.8)
+                                                                .font(.title3)
+                                                                .background {
+                                                                    VStack{}
+                                                                        .frame(width: 100, height: 60)
+                                                                        .background(.thinMaterial.opacity(0.7))
+                                                                        .cornerRadius(10)
+                                                                        .shadow(color: !UIDevice.current.orientation.isLandscape ? .green : .clear, radius: 5)
+                                                                }
                                                         }
+                                                    }
+                                                    Button {
+                                                        audioManager.playClap()
+                                                    } label: {
+                                                        Image(systemName: "hands.clap.fill")
+                                                            .opacity(0.8)
+                                                            .font(.title2)
+                                                            .background {
+                                                                VStack{}
+                                                                    .frame(width: 60, height: 60)
+                                                                    .background(.thinMaterial.opacity(0.7))
+                                                                    .cornerRadius(10)
+                                                                    .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                            }
+                                                    }
+                                                    Button {
+                                                        audioManager.playCrowd()
+                                                    } label: {
+                                                        Image(systemName: "shareplay")
+                                                            .opacity(0.8)
+                                                            .font(.title2)
+                                                            .background {
+                                                                VStack{}
+                                                                    .frame(width: 60, height: 60)
+                                                                    .background(.thinMaterial.opacity(0.7))
+                                                                    .cornerRadius(10)
+                                                                    .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                            }
+                                                    }
+                                                    if !UIDevice.current.orientation.isLandscape {
+                                                        Button {
+                                                            self.tone += 1
+                                                            audioManager.pitchChange(tone: self.tone)
+                                                        } label: {
+                                                            Text("KeyUp")
+                                                                .opacity(0.8)
+                                                                .font(.title3)
+                                                                .background {
+                                                                    VStack{}
+                                                                        .frame(width: 80, height: 60)
+                                                                        .background(.thinMaterial.opacity(0.7))
+                                                                        .cornerRadius(10)
+                                                                        .shadow(color: !UIDevice.current.orientation.isLandscape ? .orange : .clear, radius: 5)
+                                                                }
+                                                        }
+                                                    }
                                                 }
+                                                .padding(.top, 40)
+                                                Spacer()
                                             }
-                                            .padding(.top, 40)
-                                            Spacer()
                                         }
                                         .tint(.white)
                                         .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)

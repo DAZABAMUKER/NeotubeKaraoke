@@ -12,6 +12,14 @@ struct SettingView: View {
     @State var profile = false
     
     private let pasteboard = UIPasteboard.general
+    
+    private let devProfile: LocalizedStringKey = "Developer Profile"
+    private let devBlog: LocalizedStringKey = "Developer's Blog"
+    private let contact: LocalizedStringKey = "If you have any questions or requests from the developer, please contact us via email or blog on my profile"
+    private let someone: LocalizedStringKey = "A paper-making university student developer"
+    private let email: LocalizedStringKey = "Email: "
+    private let kakaotalk: LocalizedStringKey = "KakaoTalk ID: "
+    
     var body: some View {
         NavigationStack{
             List{
@@ -19,7 +27,7 @@ struct SettingView: View {
                     Button{
                         self.profile = true
                     } label: {
-                        Text("Developer Profile")
+                        Text(self.devProfile)
                     }
                     .sheet(isPresented: $profile) {
                         profileView
@@ -29,7 +37,7 @@ struct SettingView: View {
                     Button {
                         self.sheet = true
                     } label: {
-                        Text("Developer's Blog")
+                        Text(self.devBlog)
                     }
                     .sheet(isPresented: $sheet) {
                         MyWebView(UrlTOLoad: "https://dazabamuker.tistory.com")
@@ -42,7 +50,7 @@ struct SettingView: View {
                         .font(.title)
                         .foregroundColor(.white)
                 } footer: {
-                    Text("개발자에게 질문이 있거나 요청이 있으시면 프로필의 이메일을 통하거나 블로그를 통해 연락하십시오.")
+                    Text(self.contact)
                 }
             }
         }.preferredColorScheme(.dark)
@@ -59,14 +67,14 @@ struct SettingView: View {
                 })
                 .clipShape(RoundedRectangle(cornerRadius: 20))
             
-            Text("종이만드는 비전공 대학생 개발자")
+            Text(self.someone)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 10)
             Button {
                 pasteboard.string = "wookis112@gmail.com"
             } label: {
                 HStack{
-                    Text("이메일: ")
+                    Text(self.email)
                         .bold()
                     Text("wookis112@gmail.com")
                     Image(systemName: "rectangle.on.rectangle")
@@ -76,7 +84,7 @@ struct SettingView: View {
                 pasteboard.string = "Dazabamuker"
             } label: {
                 HStack{
-                    Text("카카오톡 아이디: ")
+                    Text(self.kakaotalk)
                         .bold()
                     Text("Dazabamuker")
                     Image(systemName: "rectangle.on.rectangle")
