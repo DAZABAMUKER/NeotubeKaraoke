@@ -206,7 +206,7 @@ struct VideoPlay: View {
                                 print("vidFull")
                             }
                             .DragVid(vidFull: $vidFull)
-                            .opacity(UIDevice.current.orientation.isLandscape && vidFull ? 0.01 : 1)
+                            .opacity(UIDevice.current.orientation.isLandscape || UIDevice.current.orientation == .portraitUpsideDown && vidFull ? 0.01 : 1)
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
                                     .frame(width: isiPad ? geometry.size.width : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !UIDevice.current.orientation.isLandscape ? geometry.size.width*9/16 : geometry.size.height : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
@@ -293,6 +293,24 @@ struct VideoPlay: View {
                                                 }
                                                 
                                             }.frame(width: geometry.size.width)
+                                            if UIDevice.current.orientation.isLandscape {
+                                                HStack{
+                                                    Spacer()
+                                                    Button {
+                                                        self.vidFull = false
+                                                    } label: {
+                                                        Image(systemName: "window.shade.closed")
+                                                            .padding()
+                                                            .tint(.white)
+                                                            .background {
+                                                                Circle()
+                                                                    .frame(width: 30, height: 30)
+                                                                    .foregroundColor(.secondary)
+                                                            }
+                                                    }
+                                                    
+                                                }
+                                            }
                                             Spacer()
                                         }
                                         .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
