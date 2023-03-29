@@ -30,6 +30,7 @@ struct searcher: View{
     @Binding var vidEnd: Bool
     @Binding var videoOrder: Int
     @Binding var isReady: Bool
+    @Binding var resolution: Resolution
     
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
@@ -147,7 +148,7 @@ struct searcher: View{
                                     //videoPlay.closes = true
                                     if self.isReady {
                                         self.isReady = false
-                                        videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady)
+                                        videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
                                         reloads = true
                                         print("리로드")
                                         self.nowPlayList.append(LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))

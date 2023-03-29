@@ -59,6 +59,7 @@ struct VideoPlay: View {
     @State var isAppear: Bool = false
     @Binding var isReady: Bool
     @State var isBle: Bool = false
+    @Binding var resolution: Resolution
     
     private let tempoString: LocalizedStringKey = "Tempo"
     
@@ -83,21 +84,44 @@ struct VideoPlay: View {
                     guard let formats = info?.formats else {
                         return
                     }
+                    var bestVideo: Format?
+                    var isOk = false
                     //print(info?.format?.url)
-                    let bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
+                    if resolution == .ultra {
+                        isOk = true
+                        let vids = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded}
+                        if !vids.isEmpty {
+                            bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded}.last
+                            isOk = true
+                        } else {
+                            bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
+                        }
+                    } else if resolution == .high {
+                        let vids = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded}
+                        if !vids.isEmpty && (vids.last?.height)! >= 1080 {
+                            bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
+                            isOk = true
+                        } else {
+                            bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
+                        }
+                    } else {
+                        bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
+                    }
+                    let bestAudio = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.first
                     //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
                     //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded }.last
-                    let bestAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
+                    //let bestAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
                     print(bestAudio!, bestVideo!)
                     //print(self.info!)
                     guard let aUrl = bestAudio?.url else { return }
                     guard let vUrl = bestVideo?.url else { return }
-                    print(aUrl)
+                    print(vUrl)
                     //self.audioUrl = aUrl
                     //self.videoUrl = vUrl
                     //print(self.audioUrl)
-                    
-                    player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0)
+                    print(bestVideo?.filesize ?? 0)
+                    print(bestAudio?.filesize ?? 0)
+                    player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0, isOk: isOk)
                     loadAVAssets(url: aUrl, size: bestAudio?.filesize ?? 0)
                 }
             }
@@ -145,20 +169,21 @@ struct VideoPlay: View {
     func loadAVAssets(url: URL, size: Int64) {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
+        //request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
         let task = URLSession(configuration: .default).dataTask(with: request) { data, urlResponse, error in
             let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileUrl = doc.appendingPathComponent("audio.m4a")
+            let fileUrl = doc.appendingPathComponent("audio.mp4")
             do {
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
                     try FileManager.default.removeItem(at: fileUrl)
                 }
                 //try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
                 try data?.write(to: fileUrl)
-                print(fileUrl)
-                audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
-                self.isAppear = true
-                self.isReady = true
+                //print(fileUrl)
+                extractAudio(docUrl: doc)
+                //audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+//                self.isAppear = true
+//                self.isReady = true
             }
             catch {
                 print(error)
@@ -169,6 +194,76 @@ struct VideoPlay: View {
         //task.priority = URLSessionTask.highPriority
         task.resume()
     }
+    
+    func extractAudio(docUrl: URL) {
+        let composition = AVMutableComposition()
+        let fileUrl = docUrl.appendingPathComponent("audio.mp4")
+        let outputUrl = docUrl.appendingPathComponent("audio.m4a")
+        if FileManager.default.fileExists(atPath: outputUrl.path) {
+            try? FileManager.default.removeItem(atPath: outputUrl.path)
+        }
+        Task{
+            do {
+                let asset = AVURLAsset(url: fileUrl)
+                //guard let audioAssetTrack = asset.tracks(withMediaType: AVMediaType.audio).first else { return }
+                
+                let audiotrack = try await asset.loadTracks(withMediaType: AVMediaType.audio)
+                guard let audioCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
+                try await audioCompositionTrack.insertTimeRange( audiotrack.first!.load(.timeRange), of: audiotrack.first!, at: .zero)
+                await export(video: composition, withPreset: AVAssetExportPresetAppleM4A, toFileType: .m4a , atURL: outputUrl)
+                audioManager.setEngine(file: outputUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                self.isAppear = true
+                self.isReady = true
+            } catch {
+                print(error)
+            }
+        }
+        
+        /*
+        let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough)!
+        exportSession.outputFileType = AVFileType.m4a
+        exportSession.outputURL = outputUrl
+        exportSession.exportAsynchronously {
+            guard case exportSession.status = AVAssetExportSession.Status.completed else {
+                print("failed")
+                return
+                
+            }
+            
+            DispatchQueue.main.async {
+                audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                self.isAppear = true
+                self.isReady = true
+            }
+        }*/
+    }
+    
+    func export(video: AVAsset,
+                withPreset preset: String = AVAssetExportPresetHighestQuality,
+                toFileType outputFileType: AVFileType = .mov,
+                atURL outputURL: URL) async {
+        
+        // Check the compatibility of the preset to export the video to the output file type.
+        guard await AVAssetExportSession.compatibility(ofExportPreset: preset,
+                                                       with: video,
+                                                       outputFileType: outputFileType) else {
+            print("The preset can't export the video to the output file type.")
+            return
+        }
+        
+        // Create and configure the export session.
+        guard let exportSession = AVAssetExportSession(asset: video,
+                                                       presetName: preset) else {
+            print("Failed to create export session.")
+            return
+        }
+        exportSession.outputFileType = outputFileType
+        exportSession.outputURL = outputURL
+        
+        // Convert the video to the output file type and export it to the output URL.
+        await exportSession.export()
+    }
+
     
     var body: some View {
         NavigationStack{
@@ -184,6 +279,7 @@ struct VideoPlay: View {
                     if player.end {
                         VStack{}.onAppear(){
                             self.vidEnd = true
+                            self.vidFull = false
                         }
                     }
                     if isAppear {
@@ -242,12 +338,12 @@ struct VideoPlay: View {
                                                     .frame(width: geometry.size.width, height: 10)
                                                     .foregroundColor(.secondary)
                                                 Rectangle()
-                                                    .frame(width: player.currents < 0.9 ? 0 : (geometry.size.width - 15) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!)/**2*/, height: 10)
+                                                    .frame(width: player.currents < 0.9 ? 0 : (geometry.size.width - 15) * player.currents/player.intervals, height: 10)
                                                     .foregroundColor(.green)
                                                 Image(systemName: "rectangle.portrait.fill")
                                                     .scaleEffect(1.5)
-                                                    .frame(width: player.currents < 0.9 ? 10 : (geometry.size.width) * player.currents/CMTimeGetSeconds((player.player?.currentItem!.duration)!), alignment: .trailing)
-                                                    .vidSlider(duartion: CMTimeGetSeconds( (player.player?.currentItem!.duration)!), width: geometry.size.width, player: player)
+                                                    .frame(width: player.currents < 0.9 ? 10 : (geometry.size.width) * player.currents/player.intervals, alignment: .trailing)
+                                                    .vidSlider(duartion: player.intervals, width: geometry.size.width, player: player)
                                             }
                                             .padding(.top, 4)
                                             HStack(spacing: 2){

@@ -7,9 +7,16 @@
 
 import SwiftUI
 
+enum Resolution {
+    case basic
+    case high
+    case ultra
+}
+
 struct SettingView: View {
     @State var sheet = false
     @State var profile = false
+    @Binding var resolution: Resolution
     
     private let pasteboard = UIPasteboard.general
     
@@ -22,38 +29,72 @@ struct SettingView: View {
     
     var body: some View {
         NavigationStack{
-            List{
-                Section{
-                    Button{
-                        self.profile = true
-                    } label: {
-                        Text(self.devProfile)
+            VStack{
+                List{
+                    Section{
+                        Button{
+                            self.profile = true
+                        } label: {
+                            Text(self.devProfile)
+                        }
+                        .sheet(isPresented: $profile) {
+                            profileView
+                                .presentationDetents([.medium])
+                                .presentationDragIndicator(.visible)
+                        }
+                        Button {
+                            self.sheet = true
+                        } label: {
+                            Text(self.devBlog)
+                        }
+                        .sheet(isPresented: $sheet) {
+                            MyWebView(UrlTOLoad: "https://dazabamuker.tistory.com")
+                                .presentationDetents([.large])
+                                .presentationDragIndicator(.visible)
+                        }
+                    } header: {
+                        Text("Contact")
+                            .bold()
+                            .font(.title)
+                            .foregroundColor(.white)
+                    } footer: {
+                        Text(self.contact)
                     }
-                    .sheet(isPresented: $profile) {
-                        profileView
-                            .presentationDetents([.medium])
-                            .presentationDragIndicator(.visible)
+                    VStack {
+                        Text("선호 화질 선택")
+                            .bold()
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .padding(0)
+                        Picker("해상도 선택", selection: $resolution) {
+                            Text("Basic").tag(Resolution.basic)
+                            Text("1080").tag(Resolution.high)
+                            Text("1080 +").tag(Resolution.ultra)
+                        }
+                        .pickerStyle(.segmented)
+                        Text("Basic이 아닌 1080 이상의 해상도를 선택할 경우 로딩 시간이 늘어날 수 있습니다.")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
                     }
-                    Button {
-                        self.sheet = true
-                    } label: {
-                        Text(self.devBlog)
-                    }
-                    .sheet(isPresented: $sheet) {
-                        MyWebView(UrlTOLoad: "https://dazabamuker.tistory.com")
-                            .presentationDetents([.large])
-                            .presentationDragIndicator(.visible)
-                    }
-                } header: {
-                    Text("Contact")
-                        .bold()
-                        .font(.title)
-                        .foregroundColor(.white)
-                } footer: {
-                    Text(self.contact)
+                    
+                    
                 }
-            }
-        }.preferredColorScheme(.dark)
+                Button {
+                    
+                } label: {
+                    HStack{
+                        Text("광고 제거")
+                            .foregroundColor(.white)
+                            .background {
+                                RoundedRectangle(cornerRadius: 30)
+                                    .frame(width: 300, height: 50)
+                            }
+                    }
+                }
+                Spacer()
+                    .frame(height: 100)
+            }.preferredColorScheme(.dark)
+        }
     }
     
     var profileView: some View {
@@ -93,11 +134,5 @@ struct SettingView: View {
             
         }
         .preferredColorScheme(.dark)
-    }
-}
-
-struct SettingView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingView()
     }
 }

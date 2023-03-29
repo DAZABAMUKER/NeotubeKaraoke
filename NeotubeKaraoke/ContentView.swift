@@ -20,13 +20,14 @@ struct ContentView: View {
     
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
-    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true))
+    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic))
     @State var reloads = false
     @State var closes = false
     @State var nowPlayList = [LikeVideo]()
     @State var vidEnd = false
     @State var videoOrder: Int = 0
     @State var isReady: Bool = true
+    @State var resolution: Resolution = .basic
     
     private let loading: LocalizedStringKey = "Loading...\n"
     private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
@@ -77,13 +78,14 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady)
+                    
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution)
                         .tag(TabIndex.PlayList)
                     
-                    GADInterstitialAds()
+                    SettingView(resolution: $resolution)
                         .tag(TabIndex.Setting)
                     
                 }
@@ -97,9 +99,12 @@ struct ContentView: View {
                                     vidFull = false
                                     videoOrder += 1
                                     self.isReady = false
-                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady)
+                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution)
                                     reloads = true
                                     print("리로드")
+                                } else {
+                                    videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic))
+                                    reloads = true
                                 }
                             }
                         }
@@ -150,8 +155,3 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}

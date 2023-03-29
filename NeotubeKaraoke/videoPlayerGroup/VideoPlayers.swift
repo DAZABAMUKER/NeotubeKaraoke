@@ -17,6 +17,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
     @Published var end = false
     @Published var isAppears = false
     @Published var isplaying = false
+    @Published var intervals = 0.0
     
     var currrnts: Double {
         let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
@@ -50,7 +51,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
         player?.rate = spd
     }
     
-    func prepareToPlay(url: URL,  audioManager: AudioManager, fileSize: Int64) {
+    func prepareToPlay(url: URL,  audioManager: AudioManager, fileSize: Int64, isOk: Bool) {
         self.audiomanager = audioManager
         //self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
         //self.player?.removeObserver(self, forKeyPath: "status")
@@ -77,24 +78,28 @@ class VideoPlayers: AVPlayer, ObservableObject {
                 let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
                 DispatchQueue.main.async {
                     self.currents = jump
-                }
-                if CMTimeGetSeconds( (self.player?.currentItem!.duration)!)/*/2*/ - jump < 1 {
-                    self.player?.pause()
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()/* + 5*/) {
-                        DispatchQueue.main.async {
-                            self.end = true
-                            self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
-                            //self.player?.removeObserver(self, forKeyPath: "status")
-                            return
-                        }
+                    self.intervals = CMTimeGetSeconds( (self.player?.currentItem!.duration)!)
+                    if isOk {
+                        self.intervals = self.intervals/2
                     }
-                    
-                } else {
-//                    DispatchQueue.main.async {
-//                        self.end = false
-//                    }
+                    if self.intervals - jump < 1 {
+                        self.player?.pause()
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()/* + 5*/) {
+                            DispatchQueue.main.async {
+                                self.end = true
+                                self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
+                                //self.player?.removeObserver(self, forKeyPath: "status")
+                                return
+                            }
+                        }
+                        
+                    } else {
+                        //                    DispatchQueue.main.async {
+                        //                        self.end = false
+                        //                    }
+                    }
+                    self.audiomanager?.checkVidTime(vidTime: jump)
                 }
-                self.audiomanager?.checkVidTime(vidTime: jump)
             }
         })
         
