@@ -286,6 +286,7 @@ struct PlayListView: View {
                     }
                     .frame(width: 300)
                     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 15))
+                    .offset(y: -100)
                 }
             }
             .edgesIgnoringSafeArea(.bottom)

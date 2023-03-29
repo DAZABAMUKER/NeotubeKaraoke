@@ -26,6 +26,9 @@ struct SettingView: View {
     private let someone: LocalizedStringKey = "A paper-making university student developer"
     private let email: LocalizedStringKey = "Email: "
     private let kakaotalk: LocalizedStringKey = "KakaoTalk ID: "
+    private let titleOfResolution: LocalizedStringKey = "Select prefer resolution"
+    private let ifHigher: LocalizedStringKey = "If you select a resolution higher than 1080 rather than Basic, the loading time may increase."
+    private let rmAds: LocalizedStringKey = "Remove Ads"
     
     var body: some View {
         NavigationStack{
@@ -61,7 +64,7 @@ struct SettingView: View {
                         Text(self.contact)
                     }
                     VStack {
-                        Text("선호 화질 선택")
+                        Text(self.titleOfResolution)
                             .bold()
                             .font(.title)
                             .foregroundColor(.white)
@@ -69,10 +72,10 @@ struct SettingView: View {
                         Picker("해상도 선택", selection: $resolution) {
                             Text("Basic").tag(Resolution.basic)
                             Text("1080").tag(Resolution.high)
-                            Text("1080 +").tag(Resolution.ultra)
+                            Text("1080+").tag(Resolution.ultra)
                         }
                         .pickerStyle(.segmented)
-                        Text("Basic이 아닌 1080 이상의 해상도를 선택할 경우 로딩 시간이 늘어날 수 있습니다.")
+                        Text(self.ifHigher)
                             .font(.footnote)
                             .foregroundColor(.secondary)
                     }
@@ -83,7 +86,7 @@ struct SettingView: View {
                     
                 } label: {
                     HStack{
-                        Text("광고 제거")
+                        Text(self.rmAds)
                             .foregroundColor(.white)
                             .background {
                                 RoundedRectangle(cornerRadius: 30)

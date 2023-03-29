@@ -291,6 +291,7 @@ struct searcher: View{
                     }
                 }
             }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
     

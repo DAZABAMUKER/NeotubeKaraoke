@@ -107,10 +107,12 @@ struct ContentView: View {
                         .tag(TabIndex.Setting)
                     
                 }
+                .onTapGesture {
+                    hideKeyboard()
+                }
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
                     ZStack{
-                        
                         // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
                         if self.vidEnd {
                             VStack{}.onAppear(){
@@ -177,6 +179,7 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     }
                     .preferredColorScheme(.light)
+                    
                 }
             }
             .background {
@@ -184,8 +187,14 @@ struct ContentView: View {
                 // doesn't influence the placement of other views in the view hierarchy.
                 adViewControllerRepresentable
                     .frame(width: .zero, height: .zero)
-            }
+            }.ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 }
 
+extension View {
+    func hideKeyboard() {
+        let resign = #selector(UIResponder.resignFirstResponder)
+        UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+    }
+}
