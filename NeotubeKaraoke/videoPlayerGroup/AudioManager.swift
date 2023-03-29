@@ -170,7 +170,10 @@ class AudioManager: ObservableObject {
         offsetFrame = jump
         playerNode.stop()
         
-        let numberFrames = AVAudioFrameCount(audioFileLength - jumpFrame)
+        var numberFrames = AVAudioFrameCount(audioFileLength - jumpFrame)
+        if !(numberFrames > 0) {
+            numberFrames =  1
+        }
         playerNode.scheduleSegment(audioFile, startingFrame: jumpFrame, frameCount: numberFrames, at: nil)
         
         playerNode.play()
@@ -191,7 +194,7 @@ class AudioManager: ObservableObject {
     public func checkVidTime(vidTime: Double) {
         let audiTime = offsetFrame + Double(currentFrame)/44100.0
         var interval = audiTime - vidTime
-        print(interval)
+        //print(interval)
         if interval < 0 {
             interval *= -1
         }

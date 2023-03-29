@@ -212,6 +212,9 @@ struct VideoPlay: View {
                 try await audioCompositionTrack.insertTimeRange( audiotrack.first!.load(.timeRange), of: audiotrack.first!, at: .zero)
                 await export(video: composition, withPreset: AVAssetExportPresetAppleM4A, toFileType: .m4a , atURL: outputUrl)
                 audioManager.setEngine(file: outputUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                if FileManager.default.fileExists(atPath: outputUrl.path) {
+                    try? FileManager.default.removeItem(atPath: outputUrl.path)
+                }
                 self.isAppear = true
                 self.isReady = true
             } catch {
@@ -219,23 +222,6 @@ struct VideoPlay: View {
             }
         }
         
-        /*
-        let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough)!
-        exportSession.outputFileType = AVFileType.m4a
-        exportSession.outputURL = outputUrl
-        exportSession.exportAsynchronously {
-            guard case exportSession.status = AVAssetExportSession.Status.completed else {
-                print("failed")
-                return
-                
-            }
-            
-            DispatchQueue.main.async {
-                audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
-                self.isAppear = true
-                self.isReady = true
-            }
-        }*/
     }
     
     func export(video: AVAsset,

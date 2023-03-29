@@ -150,7 +150,7 @@ struct searcher: View{
                                         self.isReady = false
                                         videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
                                         reloads = true
-                                        print("리로드")
+                                        //print("리로드")
                                         self.nowPlayList.append(LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
                                         self.videoOrder = nowPlayList.count - 1
                                     }

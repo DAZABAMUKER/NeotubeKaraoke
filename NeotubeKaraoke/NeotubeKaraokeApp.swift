@@ -26,8 +26,8 @@ struct NeotubeKaraokeApp: App {
     init() {
         PythonSupport.initialize()
         GADMobileAds.sharedInstance().start(completionHandler: nil)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
+//        }
     }
 }

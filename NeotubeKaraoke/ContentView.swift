@@ -28,6 +28,24 @@ struct ContentView: View {
     @State var videoOrder: Int = 0
     @State var isReady: Bool = true
     @State var resolution: Resolution = .basic
+    @State var once = false
+    @State var adCount: Int = 0 {
+        didSet{
+            DispatchQueue.global(qos: .background).sync {
+                if self.adCount % 2 == 0 {
+                    print("광고중")
+                    print(self.adCount)
+                    adCoordinator.loadAd()
+                    adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
+                } else {
+                    if !once {
+                        adCoordinator.loadAd()
+                        self.once = true
+                    }
+                }
+            }
+        }
+    }
     
     private let loading: LocalizedStringKey = "Loading...\n"
     private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
@@ -92,19 +110,25 @@ struct ContentView: View {
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
                     ZStack{
+                        
                         // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
                         if self.vidEnd {
                             VStack{}.onAppear(){
-                                if nowPlayList.count - 1 > videoOrder {
-                                    vidFull = false
-                                    videoOrder += 1
-                                    self.isReady = false
-                                    videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution)
-                                    reloads = true
-                                    print("리로드")
-                                } else {
-                                    videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic))
-                                    reloads = true
+                                
+                                print(vidEnd)
+                                if isReady {
+                                    self.adCount += 1
+                                    if nowPlayList.count - 1 > videoOrder {
+                                        vidFull = false
+                                        videoOrder += 1
+                                        self.isReady = false
+                                        videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution)
+                                        reloads = true
+                                        print("리로드")
+                                    } else {
+                                        videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic))
+                                        reloads = true
+                                    }
                                 }
                             }
                         }
@@ -125,9 +149,13 @@ struct ContentView: View {
                             //.bold()
                                 .frame(width: geometry.size.width, height: 60)
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+//                                .onAppear(){
+//                                    adCoordinator.loadAd()
+//                                }
                         } else {
                             //찐 플레이어 뷰
                             videoPlay
+                            
                         }
                     }
                     .frame(height: vidFull ? geometry.size.height : 60)
@@ -150,6 +178,12 @@ struct ContentView: View {
                     }
                     .preferredColorScheme(.light)
                 }
+            }
+            .background {
+                // Add the adViewControllerRepresentable to the background so it
+                // doesn't influence the placement of other views in the view hierarchy.
+                adViewControllerRepresentable
+                    .frame(width: .zero, height: .zero)
             }
         }
     }

@@ -14,7 +14,6 @@
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
 		033C57F029D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EB29D2DAC600340988 /* Localizable.strings */; };
 		033C57F129D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EE29D2DAC600340988 /* Localizable.strings */; };
-		033C57F429D31B2600340988 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 033C57F329D31B2600340988 /* GoogleMobileAds */; };
 		033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C57F529D31DC400340988 /* GADInterstitialAd.swift */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
 		034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 034744382999E16F00F2EBEE /* YoutubeDL */; };
@@ -44,6 +43,7 @@
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
 		03D77A2F2935D4E80037061E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2E2935D4E80037061E /* Video.swift */; };
 		03F36CC12963DE61001AEB7A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F36CC02963DE61001AEB7A /* Models.swift */; };
+		17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +84,9 @@
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		03D77A2E2935D4E80037061E /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		03F36CC02963DE61001AEB7A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		33DD4112FD9FB9295E643CD6 /* Pods-NeotubeKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.release.xcconfig"; sourceTree = "<group>"; };
+		51DAB10F11134AAEEB85A799 /* Pods-NeotubeKaraoke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.debug.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.debug.xcconfig"; sourceTree = "<group>"; };
+		7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NeotubeKaraoke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,8 +94,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				033C57F429D31B2600340988 /* GoogleMobileAds in Frameworks */,
 				034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */,
+				17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +121,7 @@
 		034744372999E16F00F2EBEE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -143,6 +147,7 @@
 				03962DD0291F781400A376F3 /* NeotubeKaraoke */,
 				03962DCF291F781400A376F3 /* Products */,
 				034744372999E16F00F2EBEE /* Frameworks */,
+				DD1F4795FDC3D60A2CEE69B8 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -214,6 +219,16 @@
 			path = youtubeApiData;
 			sourceTree = "<group>";
 		};
+		DD1F4795FDC3D60A2CEE69B8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				51DAB10F11134AAEEB85A799 /* Pods-NeotubeKaraoke.debug.xcconfig */,
+				33DD4112FD9FB9295E643CD6 /* Pods-NeotubeKaraoke.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -221,9 +236,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 03962DE2291F781500A376F3 /* Build configuration list for PBXNativeTarget "NeotubeKaraoke" */;
 			buildPhases = (
+				A1F646EB915FDC48A5DC3035 /* [CP] Check Pods Manifest.lock */,
 				03962DCA291F781400A376F3 /* Sources */,
 				03962DCB291F781400A376F3 /* Frameworks */,
 				03962DCC291F781400A376F3 /* Resources */,
+				9EF188EF012C82BDC07782F5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -232,7 +249,6 @@
 			name = NeotubeKaraoke;
 			packageProductDependencies = (
 				034744382999E16F00F2EBEE /* YoutubeDL */,
-				033C57F329D31B2600340988 /* GoogleMobileAds */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -264,8 +280,7 @@
 			);
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
-				036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */,
-				033C57F229D31B2600340988 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios.git" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -292,6 +307,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9EF188EF012C82BDC07782F5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A1F646EB915FDC48A5DC3035 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NeotubeKaraoke-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		03962DCA291F781400A376F3 /* Sources */ = {
@@ -467,6 +524,7 @@
 		};
 		03962DE3291F781500A376F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 51DAB10F11134AAEEB85A799 /* Pods-NeotubeKaraoke.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -501,6 +559,7 @@
 		};
 		03962DE4291F781500A376F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33DD4112FD9FB9295E643CD6 /* Pods-NeotubeKaraoke.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -556,15 +615,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		033C57F229D31B2600340988 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
-			};
-		};
-		036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */ = {
+		036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kewlbear/YoutubeDL-ios.git";
 			requirement = {
@@ -575,14 +626,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		033C57F329D31B2600340988 /* GoogleMobileAds */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 033C57F229D31B2600340988 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
-			productName = GoogleMobileAds;
-		};
 		034744382999E16F00F2EBEE /* YoutubeDL */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */;
+			package = 036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios.git" */;
 			productName = YoutubeDL;
 		};
 /* End XCSwiftPackageProductDependency section */
