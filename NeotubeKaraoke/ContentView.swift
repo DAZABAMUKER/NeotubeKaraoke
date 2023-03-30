@@ -108,7 +108,7 @@ struct ContentView: View {
                     
                 }
                 .onTapGesture {
-                    hideKeyboard()
+                    //hideKeyboard()
                 }
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
@@ -187,14 +187,15 @@ struct ContentView: View {
                 // doesn't influence the placement of other views in the view hierarchy.
                 adViewControllerRepresentable
                     .frame(width: .zero, height: .zero)
-            }.ignoresSafeArea(.keyboard, edges: .bottom)
+            }//.ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 }
-
+/*
 extension View {
     func hideKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
         UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
     }
 }
+*/
