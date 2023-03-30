@@ -70,7 +70,6 @@ struct PlayListView: View {
         GeometryReader{ geometry in
             ZStack{
                 VStack(alignment: .leading){
-                    
                     //MARK: 네비게이션 바
                     HStack{
                         LinearGradient(colors: [
@@ -242,6 +241,14 @@ struct PlayListView: View {
                 
                 //MARK: 재생목록 추가 뷰
                 if self.plusPlayList {
+                    VStack{}
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .background {
+                            Color.black.opacity(0.1)
+                        }
+                        .onTapGesture {
+                            hideKeyboard()
+                        }
                     VStack(spacing: 0){
                         Text(self.addList)
                             .font(.title2)

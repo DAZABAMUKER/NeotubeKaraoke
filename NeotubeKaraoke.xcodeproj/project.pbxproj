@@ -32,12 +32,9 @@
 		03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD8291F781500A376F3 /* Preview Assets.xcassets */; };
 		03962DDB291F781500A376F3 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DDA291F781500A376F3 /* Persistence.swift */; };
 		03962DDE291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */; };
-		03962DE6291FDD2700A376F3 /* learn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DE5291FDD2700A376F3 /* learn.swift */; };
-		03962DE8291FDFF000A376F3 /* MYVStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DE7291FDFF000A376F3 /* MYVStackView.swift */; };
-		03962DEA291FEC4000A376F3 /* NaviView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DE9291FEC4000A376F3 /* NaviView.swift */; };
-		03962DEC2920D7B300A376F3 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEB2920D7B300A376F3 /* MyWebView.swift */; };
 		03962DEE2921C80500A376F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DED2921C80500A376F3 /* ContentView.swift */; };
 		03962DF029230D7D00A376F3 /* searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEF29230D7C00A376F3 /* searcher.swift */; };
+		03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEE50129D5163C001B66E3 /* MyWebView.swift */; };
 		03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CA4C8A29BDD13800507E26 /* ListView.swift */; };
 		03D22C6929A1E53C001D8B24 /* YoutubeDL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */; };
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
@@ -73,12 +70,9 @@
 		03962DDA291F781500A376F3 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		03962DDD291F781500A376F3 /* NeotubeKaraoke.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NeotubeKaraoke.xcdatamodel; sourceTree = "<group>"; };
 		03962DDF291F781500A376F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		03962DE5291FDD2700A376F3 /* learn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = learn.swift; sourceTree = "<group>"; };
-		03962DE7291FDFF000A376F3 /* MYVStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MYVStackView.swift; sourceTree = "<group>"; };
-		03962DE9291FEC4000A376F3 /* NaviView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviView.swift; sourceTree = "<group>"; };
-		03962DEB2920D7B300A376F3 /* MyWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
 		03962DED2921C80500A376F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		03962DEF29230D7C00A376F3 /* searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searcher.swift; sourceTree = "<group>"; };
+		03AEE50129D5163C001B66E3 /* MyWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
 		03CA4C8A29BDD13800507E26 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeDL.swift; sourceTree = "<group>"; };
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
@@ -129,14 +123,11 @@
 		037C4D9A298B42FE007B6DF3 /* learn */ = {
 			isa = PBXGroup;
 			children = (
+				03AEE50129D5163C001B66E3 /* MyWebView.swift */,
 				037D081729B4780B0069ED88 /* clap.wav */,
 				0369980029D1CCBE00656D28 /* crowd.wav */,
 				037D081F29B719BC0069ED88 /* me.PNG */,
 				0356F76C29A496F40005EE2D /* downloadManager.swift */,
-				03962DE7291FDFF000A376F3 /* MYVStackView.swift */,
-				03962DE5291FDD2700A376F3 /* learn.swift */,
-				03962DE9291FEC4000A376F3 /* NaviView.swift */,
-				03962DEB2920D7B300A376F3 /* MyWebView.swift */,
 			);
 			path = learn;
 			sourceTree = "<group>";
@@ -225,7 +216,6 @@
 				51DAB10F11134AAEEB85A799 /* Pods-NeotubeKaraoke.debug.xcconfig */,
 				33DD4112FD9FB9295E643CD6 /* Pods-NeotubeKaraoke.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -280,7 +270,7 @@
 			);
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
-				036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios.git" */,
+				036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -357,13 +347,11 @@
 			files = (
 				0316559E295BAC5C00B18342 /* TableCell.swift in Sources */,
 				03F36CC12963DE61001AEB7A /* Models.swift in Sources */,
-				03962DE8291FDFF000A376F3 /* MYVStackView.swift in Sources */,
 				037D082229B724E60069ED88 /* PlayListView.swift in Sources */,
 				03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */,
 				0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */,
 				034744362999DFF800F2EBEE /* AudioManager.swift in Sources */,
 				0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */,
-				03962DE6291FDD2700A376F3 /* learn.swift in Sources */,
 				03962DEE2921C80500A376F3 /* ContentView.swift in Sources */,
 				03962DDB291F781500A376F3 /* Persistence.swift in Sources */,
 				0330C4E329A1B94000B3E6D3 /* VideoPlayers.swift in Sources */,
@@ -374,9 +362,8 @@
 				033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */,
 				032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */,
 				037D081A29B580290069ED88 /* DragVideo.swift in Sources */,
-				03962DEC2920D7B300A376F3 /* MyWebView.swift in Sources */,
+				03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */,
 				037D081C29B5861B0069ED88 /* DragVidProgress.swift in Sources */,
-				03962DEA291FEC4000A376F3 /* NaviView.swift in Sources */,
 				036DDD9C29A9C3A000396B94 /* PlayerViewController.swift in Sources */,
 				03D77A2F2935D4E80037061E /* Video.swift in Sources */,
 				037D081E29B5D18A0069ED88 /* SettingView.swift in Sources */,
@@ -615,7 +602,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios.git" */ = {
+		036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kewlbear/YoutubeDL-ios.git";
 			requirement = {
@@ -628,7 +615,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		034744382999E16F00F2EBEE /* YoutubeDL */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios.git" */;
+			package = 036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */;
 			productName = YoutubeDL;
 		};
 /* End XCSwiftPackageProductDependency section */

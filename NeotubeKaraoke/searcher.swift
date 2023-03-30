@@ -205,11 +205,26 @@ struct searcher: View{
                                     .padding(.top, -200)
                                     .opacity(0.3)
                             }
-                                .frame(width: geometry.size.width, height: geometry.size.height)
-                                .preferredColorScheme(.dark)
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .preferredColorScheme(.dark)
                         }
                     }
                     .edgesIgnoringSafeArea(.bottom)
+                    
+                    if self.isEditing {
+                        VStack{
+                            Spacer()
+                                .frame(height: 60)
+                            VStack{}
+                                .frame(width: geometry.size.width, height: geometry.size.height-60)
+                                .background {
+                                    Color.black.opacity(0.1)
+                                }
+                                .onTapGesture {
+                                    hideKeyboard()
+                                }
+                        }
+                    }
                     
                     //MARK: 재생목록 추가 뷰
                     if self.likeModal {
