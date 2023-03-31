@@ -53,7 +53,7 @@ class AdCoordinator: NSObject {
 
   func loadAd() {
     GADInterstitialAd.load(
-      withAdUnitID: "ca-app-pub-7240659336832390/6681476690", request: GADRequest()
+      withAdUnitID: "ca-app-pub-3940256099942544/4411468910", request: GADRequest()
     ) { ad, error in
       if let error = error {
         return print("Failed to load ad with error: \(error.localizedDescription)")
@@ -83,7 +83,7 @@ struct BannerAd: UIViewRepresentable {
         let adView = GADBannerView(adSize: GADAdSizeBanner)
         adView.adUnitID = unitID
         adView.rootViewController = UIApplication.shared.getRootViewController()
-        
+        adView.delegate = context.coordinator
         adView.load(GADRequest())
         return adView
     }

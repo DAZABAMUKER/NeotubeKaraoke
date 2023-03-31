@@ -93,6 +93,9 @@ struct searcher: View{
                 ZStack{
                     VStack(spacing: 9){
                         //MARK: - SearchBar
+                        Spacer()
+                            .frame(height: 60)
+                        /*
                         HStack{
                             Image(systemName: "music.mic.circle")
                                 .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
@@ -135,11 +138,13 @@ struct searcher: View{
                                     .padding(.top, -geometry.safeAreaInsets.top)
                             }
                         }
+                         */
                         if !self.ResponseItems.isEmpty {
+                            
                             //MARK: - 리스트
                             
                             List{
-                                BannerAd(unitID: "ca-app-pub-7240659336832390/5106742394")
+                                BannerAd(unitID: "ca-app-pub-3940256099942544/2934735716")
                                 ForEach(self.ResponseItems, id: \.videoID){ responseitems in
                                     /*
                                      NavigationLink(destination: videoPlay) {
@@ -182,6 +187,7 @@ struct searcher: View{
                                     //                            }
                                     //.background(.blue)
                                 }
+                                BannerAd(unitID: "ca-app-pub-3940256099942544/2934735716")
                             }
                             //.frame(width:geometry.size.width,height: geometry.size.height - 60)
                             .background(){
@@ -214,7 +220,46 @@ struct searcher: View{
                         }
                     }
                     .edgesIgnoringSafeArea(.bottom)
-                    
+                    VStack{
+                        HStack{
+                            Image(systemName: "music.mic.circle")
+                                .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
+                                .font(.system(size: 50))
+                                .padding(.leading, 10)
+                                .padding(.bottom, 5)
+                            TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .background(border)
+                                .foregroundColor(.white)
+                                .padding(.trailing, 30)
+                                .padding(.leading, 20)
+                                .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: self.search))
+                                .onSubmit {
+                                    let _ = models.getVideos(val: inputVal)
+                                }
+                            
+                            Button {
+                                self.inputVal = ""
+                            } label: {
+                                if (self.inputVal.count > 0) {
+                                    Image(systemName: "multiply.circle.fill")
+                                        .foregroundColor(.gray)
+                                        .font(.system(size: 20))
+                                }
+                            }
+                        }
+                        .onAppear(){
+                            decodePList()
+                        }
+                        .background() {
+                            Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1))
+                                .edgesIgnoringSafeArea(.horizontal)
+                                .frame(width: geometry.size.width)
+                                .padding(.top, -geometry.safeAreaInsets.top)
+                        }
+                        Spacer()
+                    }
                     if self.isEditing {
                         VStack{
                             Spacer()
