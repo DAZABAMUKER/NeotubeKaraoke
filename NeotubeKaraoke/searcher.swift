@@ -137,47 +137,51 @@ struct searcher: View{
                         }
                         if !self.ResponseItems.isEmpty {
                             //MARK: - 리스트
-                            List(self.ResponseItems, id: \.videoID){ responseitems in
-                                /*
-                                 NavigationLink(destination: videoPlay) {
-                                 TableCell(Video: responseitems)
-                                 //Text("nil")
-                                 }
-                                 */
-                                Button {
-                                    //videoPlay.closes = true
-                                    if self.isReady {
-                                        self.isReady = false
-                                        videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
-                                        reloads = true
-                                        //print("리로드")
-                                        self.nowPlayList.append(LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
-                                        self.videoOrder = nowPlayList.count - 1
-                                    }
-                                } label: {
-                                    ZStack{
-                                        TableCell(Video: responseitems)
-                                        HStack(spacing: 0){
-                                            Spacer()
-                                            Image(systemName: "ellipsis")
-                                                .rotationEffect(Angle(degrees: 90))
-                                                .tint(.secondary)
-                                                .frame(width: 50, height: 70)
-                                                .background(.black.opacity(0.01))
-                                                .onTapGesture {
-                                                    self.likeModal = true
-                                                    self.addVideo = LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
-                                                    print("long")
-                                                }
+                            
+                            List{
+                                BannerAd(unitID: "ca-app-pub-7240659336832390/5106742394")
+                                ForEach(self.ResponseItems, id: \.videoID){ responseitems in
+                                    /*
+                                     NavigationLink(destination: videoPlay) {
+                                     TableCell(Video: responseitems)
+                                     //Text("nil")
+                                     }
+                                     */
+                                    Button {
+                                        //videoPlay.closes = true
+                                        if self.isReady {
+                                            self.isReady = false
+                                            videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
+                                            reloads = true
+                                            //print("리로드")
+                                            self.nowPlayList.append(LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
+                                            self.videoOrder = nowPlayList.count - 1
+                                        }
+                                    } label: {
+                                        ZStack{
+                                            TableCell(Video: responseitems)
+                                            HStack(spacing: 0){
+                                                Spacer()
+                                                Image(systemName: "ellipsis")
+                                                    .rotationEffect(Angle(degrees: 90))
+                                                    .tint(.secondary)
+                                                    .frame(width: 50, height: 70)
+                                                    .background(.black.opacity(0.01))
+                                                    .onTapGesture {
+                                                        self.likeModal = true
+                                                        self.addVideo = LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
+                                                        print("long")
+                                                    }
+                                            }
                                         }
                                     }
+                                    .disabled(!isReady)
+                                    //                            .onLongPressGesture {
+                                    //                                print("long")
+                                    //                                self.likeModal = true
+                                    //                            }
+                                    //.background(.blue)
                                 }
-                                .disabled(!isReady)
-                                //                            .onLongPressGesture {
-                                //                                print("long")
-                                //                                self.likeModal = true
-                                //                            }
-                                //.background(.blue)
                             }
                             //.frame(width:geometry.size.width,height: geometry.size.height - 60)
                             .background(){

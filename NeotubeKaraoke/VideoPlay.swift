@@ -295,6 +295,7 @@ struct VideoPlay: View {
                                     //.border(.red, width: 1)
                                     //.edgesIgnoringSafeArea(.all)
                                     .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
+                                    .navigationBarTitleDisplayMode(.inline)
                                 //.edgesIgnoringSafeArea(.bottom)
                                 HStack{
                                     VStack{}

@@ -23,7 +23,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
         let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
         return jump
     }
-    weak var audiomanager: AudioManager?
+    var audiomanager: AudioManager?
     
     func plays(){
         if self.player?.timeControlStatus == .playing {
