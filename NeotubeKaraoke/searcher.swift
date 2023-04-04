@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PythonKit
 
 struct searcher: View{
     
@@ -20,7 +21,8 @@ struct searcher: View{
     @State var addVideo: LikeVideo!
     @State var lastNowPL = false
     @State var rightAfterNowPL = false
-    
+    @State var youtubeDL: YoutubeDL?
+    @State var ytsr: YtSearch?
     
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -38,6 +40,71 @@ struct searcher: View{
     private let rANowPlaying: LocalizedStringKey = "Add right after to now playing"
     private let add: LocalizedStringKey = "Add"
     private let cancel: LocalizedStringKey = "Cancel"
+    
+    func loadytsr() {
+        do{
+            ytsr = try YtSearch()
+        }
+        catch {
+            print(#function, error)
+        }
+    }
+    
+    func getSome() {
+        var urls = URL(string: "http://mynf.codershigh.com:8080")
+
+            
+        let dataTask = URLSession.shared.dataTask(with: urls!) { data, response, error in
+            // if there were any error
+            if error != nil || data == nil {
+                print(error)
+                return
+            }
+            do {
+                print("!")
+                print(data)
+                print(response)
+            }
+        }
+    }
+    
+    func loadPythonModule() {
+        guard FileManager.default.fileExists(atPath: YoutubeDL.pythonModuleURL.path) else {
+            downloadPythonModule()
+            return
+        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                youtubeDL = try YoutubeDL()
+                getResults(val: "work")
+            }
+            catch {
+                print(#function, error)
+                DispatchQueue.main.async {
+                }
+            }
+        }
+    }
+    
+    
+    func downloadPythonModule() {
+        YoutubeDL.downloadPythonModule { error in
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    return
+                }
+                loadPythonModule()
+            }
+        }
+    }
+    
+    func getResults(val: String) {
+        guard let youtubeDL = youtubeDL else {
+            loadPythonModule()
+            return
+        }
+        youtubeDL.getSearchResults(val: val)
+    }
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -236,7 +303,11 @@ struct searcher: View{
                                 .padding(.leading, 20)
                                 .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: self.search))
                                 .onSubmit {
-                                    let _ = models.getVideos(val: inputVal)
+                                    //let _ = models.getVideos(val: inputVal)
+                                    //getResults(val: inputVal)
+                                    //loadytsr()
+                                    //getSome()
+                                    HTMLParser().search(value: self.inputVal)
                                 }
                             
                             Button {
