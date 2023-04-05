@@ -282,7 +282,6 @@
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
 				036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */,
-				0397115B29D9D2FA005ADE0E /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -621,14 +620,6 @@
 			requirement = {
 				branch = main;
 				kind = branch;
-			};
-		};
-		0397115B29D9D2FA005ADE0E /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
