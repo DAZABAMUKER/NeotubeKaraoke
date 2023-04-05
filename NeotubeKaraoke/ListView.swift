@@ -17,30 +17,45 @@ struct ListView: View {
     var body: some View {
         GeometryReader{ geometry in
             HStack() {
-                AsyncImage(url: URL(string: Video.thumbnail)){ image in
-                    image.resizable()
-                } placeholder: {
-                    ZStack{
-                        Rectangle()
-                            .fill(LinearGradient(colors: [
-                                Color.pink,
-                                Color(red: 253 / 255, green: 138 / 255, blue: 138 / 255)
-                            ], startPoint: .top, endPoint: .bottom))
-                            .aspectRatio(16/9, contentMode: .fill)
-                            .scaledToFit()
-                            .cornerRadius(8)
-                            .frame(height: 60)
-                        Image(systemName: "music.note.tv")
-                            .resizable()
-                            .frame(height: 30)
-                            .aspectRatio(0.92, contentMode: .fit)
-                            .foregroundColor(Color.white)
-                    }.padding(.leading,7)
+                ZStack{
+                    AsyncImage(url: URL(string: Video.thumbnail)){ image in
+                        image.resizable()
+                    } placeholder: {
+                        ZStack{
+                            Rectangle()
+                                .fill(LinearGradient(colors: [
+                                    Color.pink,
+                                    Color(red: 253 / 255, green: 138 / 255, blue: 138 / 255)
+                                ], startPoint: .top, endPoint: .bottom))
+                                .aspectRatio(16/9, contentMode: .fill)
+                                .scaledToFit()
+                                .cornerRadius(8)
+                                .frame(height: 60)
+                            Image(systemName: "music.note.tv")
+                                .resizable()
+                                .frame(height: 30)
+                                .aspectRatio(0.92, contentMode: .fit)
+                                .foregroundColor(Color.white)
+                        }.padding(.leading,7)
+                    }
+                    .aspectRatio(16/12, contentMode: .fit)
+                    .frame(height: 90)
+                    .padding(.leading, -13)
+                    .padding(.bottom, 10)
+                    HStack{
+                        Spacer()
+                        VStack(spacing: 0){
+                            Spacer()
+                            Text(Video.runTime)
+                                .foregroundColor(.white)
+                                .font(.subheadline)
+                                .lineLimit(1)
+                                .background(.black)
+                        }
+                    }
+                    .frame(width: 120, height: 50)
+                        .padding(.leading, -13)
                 }
-                .aspectRatio(16/12, contentMode: .fit)
-                .frame(height: 90)
-                .padding(.leading, -13)
-                .padding(.bottom, 10)
                 VStack(alignment: .leading) {
                     LinearGradient(colors: [
                         Color(red: 1, green: 112 / 255.0, blue: 0),
@@ -77,6 +92,6 @@ struct ListView: View {
 
 struct previewPList : PreviewProvider {
     static var previews: some View {
-        ListView(Video: LikeVideo(videoId: "rdpBZ5_b48g", title: "Wake Me UP", thumbnail: "", channelTitle: "Green Day"))
+        ListView(Video: LikeVideo(videoId: "rdpBZ5_b48g", title: "Wake Me UP", thumbnail: "https://i.ytimg.com/vi/rdpBZ5_b48g/hqdefault.jpg", channelTitle: "Green Day", runTime: "3:50"))
     }
 }

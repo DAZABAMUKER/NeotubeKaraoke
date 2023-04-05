@@ -29,7 +29,7 @@ struct ContentView: View {
     @State var isReady: Bool = true
     @State var resolution: Resolution = .basic
     @State var once = false
-    @State var adCount: Int = 0 {
+    @State var adCount: Int = 1 {
         didSet{
             DispatchQueue.global(qos: .background).sync {
                 if self.adCount % 2 == 0 {
@@ -115,7 +115,6 @@ struct ContentView: View {
                                 
                                 print(vidEnd)
                                 if isReady {
-                                    self.adCount += 1
                                     if nowPlayList.count - 1 > videoOrder {
                                         vidFull = false
                                         videoOrder += 1
@@ -137,6 +136,7 @@ struct ContentView: View {
                                 .onAppear(){
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                                         self.reloads = false
+                                        self.adCount += 1
                                     }
                                 }
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))

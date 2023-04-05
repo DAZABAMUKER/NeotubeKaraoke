@@ -152,7 +152,7 @@ struct searcher: View{
                             //MARK: - 리스트
                             
                             List{
-                                BannerAd(unitID: "ca-app-pub-3940256099942544/2934735716")
+                                BannerAd()
                                 ForEach(self.ytVideos, id: \.videoId){ responseitems in
                                     /*
                                      NavigationLink(destination: videoPlay) {
@@ -182,7 +182,7 @@ struct searcher: View{
                                                     .background(.black.opacity(0.01))
                                                     .onTapGesture {
                                                         self.likeModal = true
-                                                        self.addVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
+                                                        self.addVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle, runTime: responseitems.runTime)
                                                         print("long")
                                                     }
                                             }
@@ -195,7 +195,7 @@ struct searcher: View{
                                     //                            }
                                     //.background(.blue)
                                 }
-                                BannerAd(unitID: "ca-app-pub-3940256099942544/2934735716")
+                                BannerAd()
                             }
                             //.frame(width:geometry.size.width,height: geometry.size.height - 60)
                             .background(){

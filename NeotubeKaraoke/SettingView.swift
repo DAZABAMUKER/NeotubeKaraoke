@@ -28,7 +28,7 @@ struct SettingView: View {
     private let kakaotalk: LocalizedStringKey = "KakaoTalk ID: "
     private let titleOfResolution: LocalizedStringKey = "Select prefer resolution"
     private let ifHigher: LocalizedStringKey = "If you select a resolution higher than 1080 rather than Basic, the loading time may increase."
-    private let rmAds: LocalizedStringKey = "Remove Ads"
+    private let rmAds: LocalizedStringKey = "Remove Ads(To be updated...)"
     
     var body: some View {
         NavigationStack{
@@ -93,7 +93,9 @@ struct SettingView: View {
                                     .frame(width: 300, height: 50)
                             }
                     }
+                    .frame(width: 300, height: 50)
                 }
+                
                 Spacer()
                     .frame(height: 100)
             }.preferredColorScheme(.dark)

@@ -15,7 +15,7 @@ struct VideoPlay: View {
     
     @State var isiPad = false
     @State var que = false
-    @StateObject var player = VideoPlayers()
+    @ObservedObject var player = VideoPlayers()
     //@State var indeterminateProgressKey: String?
     @State var youtubeDL: YoutubeDL?
     @State var info: Info?
@@ -29,7 +29,7 @@ struct VideoPlay: View {
     }
     //@State var audioUrl = URL(string: "https://dazabamuker.tistory.com")!
     //@State var videoUrl = URL(string: "https://dazabamuker.tistory.com")!
-    @StateObject var audioManager = AudioManager()
+    @ObservedObject var audioManager = AudioManager()
     @State var tone: Float = 0.0 {
         didSet {
             if tone > 24.0 {
@@ -293,7 +293,7 @@ struct VideoPlay: View {
                                 print("vidFull")
                             }
                             .DragVid(vidFull: $vidFull)
-                            .opacity(UIDevice.current.orientation.isLandscape || UIDevice.current.orientation == .portraitUpsideDown && vidFull ? 0.01 : 1)
+                            .opacity((UIDevice.current.orientation.isLandscape || UIDevice.current.orientation == .portraitUpsideDown) && vidFull ? 0.01 : 1)
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
                                     .frame(width: isiPad ? geometry.size.width : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !UIDevice.current.orientation.isLandscape ? geometry.size.width*9/16 : geometry.size.height : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
