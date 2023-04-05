@@ -35,7 +35,6 @@
 		03962DEE2921C80500A376F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DED2921C80500A376F3 /* ContentView.swift */; };
 		03962DF029230D7D00A376F3 /* searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEF29230D7C00A376F3 /* searcher.swift */; };
 		0397115829D85744005ADE0E /* ytSR.py in Resources */ = {isa = PBXBuildFile; fileRef = 0397115729D85744005ADE0E /* ytSR.py */; };
-		0397115A29D8576F005ADE0E /* YtSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0397115929D8576F005ADE0E /* YtSearch.swift */; };
 		0397115D29D9D2FA005ADE0E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 0397115C29D9D2FA005ADE0E /* SwiftSoup */; };
 		0397116029D9D38E005ADE0E /* HTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0397115F29D9D38E005ADE0E /* HTMLParser.swift */; };
 		03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEE50129D5163C001B66E3 /* MyWebView.swift */; };
@@ -77,7 +76,6 @@
 		03962DED2921C80500A376F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		03962DEF29230D7C00A376F3 /* searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searcher.swift; sourceTree = "<group>"; };
 		0397115729D85744005ADE0E /* ytSR.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = ytSR.py; path = "../../../../Downloads/youtube-search-2.1.2/youtube_search/ytSR.py"; sourceTree = "<group>"; };
-		0397115929D8576F005ADE0E /* YtSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YtSearch.swift; sourceTree = "<group>"; };
 		0397115F29D9D38E005ADE0E /* HTMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLParser.swift; sourceTree = "<group>"; };
 		03AEE50129D5163C001B66E3 /* MyWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
 		03CA4C8A29BDD13800507E26 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
@@ -196,7 +194,6 @@
 		0397115E29D9D374005ADE0E /* YTSearch */ = {
 			isa = PBXGroup;
 			children = (
-				0397115929D8576F005ADE0E /* YtSearch.swift */,
 				0397115F29D9D38E005ADE0E /* HTMLParser.swift */,
 			);
 			path = YTSearch;
@@ -371,7 +368,6 @@
 				03F36CC12963DE61001AEB7A /* Models.swift in Sources */,
 				037D082229B724E60069ED88 /* PlayListView.swift in Sources */,
 				03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */,
-				0397115A29D8576F005ADE0E /* YtSearch.swift in Sources */,
 				0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */,
 				034744362999DFF800F2EBEE /* AudioManager.swift in Sources */,
 				0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */,

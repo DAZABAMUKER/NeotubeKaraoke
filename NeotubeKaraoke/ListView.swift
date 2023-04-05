@@ -17,7 +17,7 @@ struct ListView: View {
     var body: some View {
         GeometryReader{ geometry in
             HStack() {
-                AsyncImage(url: URL(string: Video.thumnail)){ image in
+                AsyncImage(url: URL(string: Video.thumbnail)){ image in
                     image.resizable()
                 } placeholder: {
                     ZStack{
@@ -77,6 +77,6 @@ struct ListView: View {
 
 struct previewPList : PreviewProvider {
     static var previews: some View {
-        ListView(Video: LikeVideo(videoId: "rdpBZ5_b48g", title: "Wake Me UP", thumnail: "", channelTitle: "Green Day"))
+        ListView(Video: LikeVideo(videoId: "rdpBZ5_b48g", title: "Wake Me UP", thumbnail: "", channelTitle: "Green Day"))
     }
 }

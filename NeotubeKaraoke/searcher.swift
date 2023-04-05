@@ -16,13 +16,13 @@ struct searcher: View{
     @State var isEditing: Bool = false
     @State var likeModal: Bool = false
     @StateObject var models = Models()
+    @StateObject var ytSearch = HTMLParser()
     @State var playlist = [playlists]()
     @State var ResponseItems = [Video]()
+    @State var ytVideos = [LikeVideo]()
     @State var addVideo: LikeVideo!
     @State var lastNowPL = false
     @State var rightAfterNowPL = false
-    @State var youtubeDL: YoutubeDL?
-    @State var ytsr: YtSearch?
     
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -40,71 +40,6 @@ struct searcher: View{
     private let rANowPlaying: LocalizedStringKey = "Add right after to now playing"
     private let add: LocalizedStringKey = "Add"
     private let cancel: LocalizedStringKey = "Cancel"
-    
-    func loadytsr() {
-        do{
-            ytsr = try YtSearch()
-        }
-        catch {
-            print(#function, error)
-        }
-    }
-    
-    func getSome() {
-        var urls = URL(string: "http://mynf.codershigh.com:8080")
-
-            
-        let dataTask = URLSession.shared.dataTask(with: urls!) { data, response, error in
-            // if there were any error
-            if error != nil || data == nil {
-                print(error)
-                return
-            }
-            do {
-                print("!")
-                print(data)
-                print(response)
-            }
-        }
-    }
-    
-    func loadPythonModule() {
-        guard FileManager.default.fileExists(atPath: YoutubeDL.pythonModuleURL.path) else {
-            downloadPythonModule()
-            return
-        }
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                youtubeDL = try YoutubeDL()
-                getResults(val: "work")
-            }
-            catch {
-                print(#function, error)
-                DispatchQueue.main.async {
-                }
-            }
-        }
-    }
-    
-    
-    func downloadPythonModule() {
-        YoutubeDL.downloadPythonModule { error in
-            DispatchQueue.main.async {
-                guard error == nil else {
-                    return
-                }
-                loadPythonModule()
-            }
-        }
-    }
-    
-    func getResults(val: String) {
-        guard let youtubeDL = youtubeDL else {
-            loadPythonModule()
-            return
-        }
-        youtubeDL.getSearchResults(val: val)
-    }
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -157,6 +92,12 @@ struct searcher: View{
                         models.isResponseitems = false
                     }
                 }
+                if ytSearch.isResults {
+                    VStack{}.onAppear(){
+                        self.ytVideos = ytSearch.results
+                        ytSearch.isResults = false
+                    }
+                }
                 ZStack{
                     VStack(spacing: 9){
                         //MARK: - SearchBar
@@ -206,13 +147,13 @@ struct searcher: View{
                             }
                         }
                          */
-                        if !self.ResponseItems.isEmpty {
+                        if !self.ytVideos.isEmpty {
                             
                             //MARK: - 리스트
                             
                             List{
                                 BannerAd(unitID: "ca-app-pub-3940256099942544/2934735716")
-                                ForEach(self.ResponseItems, id: \.videoID){ responseitems in
+                                ForEach(self.ytVideos, id: \.videoId){ responseitems in
                                     /*
                                      NavigationLink(destination: videoPlay) {
                                      TableCell(Video: responseitems)
@@ -223,15 +164,15 @@ struct searcher: View{
                                         //videoPlay.closes = true
                                         if self.isReady {
                                             self.isReady = false
-                                            videoPlay = VideoPlay(videoId: responseitems.videoID, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
+                                            videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
                                             reloads = true
                                             //print("리로드")
-                                            self.nowPlayList.append(LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
+                                            self.nowPlayList.append(LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
                                             self.videoOrder = nowPlayList.count - 1
                                         }
                                     } label: {
                                         ZStack{
-                                            TableCell(Video: responseitems)
+                                            ListView(Video: responseitems)
                                             HStack(spacing: 0){
                                                 Spacer()
                                                 Image(systemName: "ellipsis")
@@ -241,7 +182,7 @@ struct searcher: View{
                                                     .background(.black.opacity(0.01))
                                                     .onTapGesture {
                                                         self.likeModal = true
-                                                        self.addVideo = LikeVideo(videoId: responseitems.videoID, title: responseitems.title, thumnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
+                                                        self.addVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
                                                         print("long")
                                                     }
                                             }
@@ -307,7 +248,7 @@ struct searcher: View{
                                     //getResults(val: inputVal)
                                     //loadytsr()
                                     //getSome()
-                                    HTMLParser().search(value: self.inputVal)
+                                    self.ytSearch.search(value: self.inputVal)
                                 }
                             
                             Button {

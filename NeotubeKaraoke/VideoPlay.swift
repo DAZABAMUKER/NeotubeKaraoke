@@ -255,6 +255,11 @@ struct VideoPlay: View {
         NavigationStack{
             GeometryReader { geometry in
                 ZStack{
+                    if !UIDevice.current.orientation.isLandscape {
+                        VStack{}.onAppear(){
+                            self.tap = true
+                        }
+                    }
                     if closes {
                         VStack{}.onAppear(){
                             print("종료")

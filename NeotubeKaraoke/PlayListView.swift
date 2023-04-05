@@ -306,8 +306,9 @@ struct PlayListView: View {
 struct LikeVideo: Codable, Hashable {
     let videoId: String
     let title: String
-    let thumnail: String
+    let thumbnail: String
     let channelTitle: String
+    var runTime: String = ""
 }
 
 //MARK: - 해당 재생목록 영상 리스트 뷰
