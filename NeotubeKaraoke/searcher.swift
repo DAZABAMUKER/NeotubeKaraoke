@@ -15,7 +15,7 @@ struct searcher: View{
     @State var inputVal: String = ""
     @State var isEditing: Bool = false
     @State var likeModal: Bool = false
-    @StateObject var models = Models()
+    //@StateObject var models = Models()
     @StateObject var ytSearch = HTMLParser()
     @State var playlist = [playlists]()
     @State var ResponseItems = [Video]()
@@ -86,12 +86,14 @@ struct searcher: View{
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
+                /*
                 if models.isResponseitems {
                     VStack{}.onAppear(){
                         self.ResponseItems = models.responseitems
                         models.isResponseitems = false
                     }
                 }
+                 */
                 if ytSearch.isResults {
                     VStack{}.onAppear(){
                         self.ytVideos = ytSearch.results
@@ -210,9 +212,11 @@ struct searcher: View{
                             .environment(\.defaultMinListRowHeight, 80)
                             .preferredColorScheme(.dark)
                             // 검색결과 없을 경우 Alert 띄음.
+                            /*
                             .alert(isPresented: $models.nothings) {
                                 Alert(title: Text(models.stsCode == 0 ? "No search results" : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
                             }
+                             */
                             VStack{}.frame(height: 135).background(.red)
                         } else {
                             ZStack{
