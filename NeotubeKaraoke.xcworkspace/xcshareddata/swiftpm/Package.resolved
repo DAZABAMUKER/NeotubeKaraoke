@@ -1,21 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "ffmpeg-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kewlbear/FFmpeg-iOS.git",
-      "state" : {
-        "revision" : "59c01fbba5a85005d4b624f77f6ad32d43a4d922",
-        "version" : "0.0.5"
-      }
-    },
-    {
       "identity" : "python-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kewlbear/Python-iOS.git",
       "state" : {
-        "revision" : "784b391aa25c765761998cacb2d1fd5c86014164",
-        "version" : "0.1.1-b20230312-012746"
+        "revision" : "ace19caa26a9fc7a1a666757852fd4f8050ac4df",
+        "version" : "0.0.20211030092316"
       }
     },
     {
@@ -34,15 +25,6 @@
       "state" : {
         "revision" : "6b2aa2748a7881eebb9f84fb10c01293e15b52ca",
         "version" : "0.5.0"
-      }
-    },
-    {
-      "identity" : "youtubedl-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kewlbear/YoutubeDL-ios.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "a5aed78e0cae01bdfa82fc0cee3f77e28aff9813"
       }
     }
   ],

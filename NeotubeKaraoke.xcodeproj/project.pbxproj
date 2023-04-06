@@ -16,8 +16,10 @@
 		033C57F129D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EE29D2DAC600340988 /* Localizable.strings */; };
 		033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C57F529D31DC400340988 /* GADInterstitialAd.swift */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
-		034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */ = {isa = PBXBuildFile; productRef = 034744382999E16F00F2EBEE /* YoutubeDL */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
+		035BF63429DDBD600010398B /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63329DDBD600010398B /* PythonKit */; };
+		035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63629DDBD9C0010398B /* Python-iOS */; };
+		035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63929DDBDD00010398B /* ArgumentParser */; };
 		0369980129D1CCBE00656D28 /* crowd.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0369980029D1CCBE00656D28 /* crowd.wav */; };
 		036DDD9C29A9C3A000396B94 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */; };
 		036EF0092955559E00789D57 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036EF0082955559E00789D57 /* Response.swift */; };
@@ -90,8 +92,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				034744392999E16F00F2EBEE /* YoutubeDL in Frameworks */,
+				035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */,
 				17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */,
+				035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */,
+				035BF63429DDBD600010398B /* PythonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,7 +253,9 @@
 			);
 			name = NeotubeKaraoke;
 			packageProductDependencies = (
-				034744382999E16F00F2EBEE /* YoutubeDL */,
+				035BF63329DDBD600010398B /* PythonKit */,
+				035BF63629DDBD9C0010398B /* Python-iOS */,
+				035BF63929DDBDD00010398B /* ArgumentParser */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -281,7 +287,9 @@
 			);
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
-				036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */,
+				035BF63229DDBD600010398B /* XCRemoteSwiftPackageReference "PythonKit" */,
+				035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */,
+				035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -614,21 +622,47 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */ = {
+		035BF63229DDBD600010398B /* XCRemoteSwiftPackageReference "PythonKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kewlbear/YoutubeDL-ios.git";
+			repositoryURL = "https://github.com/pvieito/PythonKit.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = exactVersion;
+				version = 0.3.1;
+			};
+		};
+		035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kewlbear/Python-iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.62514;
+			};
+		};
+		035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		034744382999E16F00F2EBEE /* YoutubeDL */ = {
+		035BF63329DDBD600010398B /* PythonKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 036DCB2E297C9C3200326F62 /* XCRemoteSwiftPackageReference "YoutubeDL-ios" */;
-			productName = YoutubeDL;
+			package = 035BF63229DDBD600010398B /* XCRemoteSwiftPackageReference "PythonKit" */;
+			productName = PythonKit;
+		};
+		035BF63629DDBD9C0010398B /* Python-iOS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */;
+			productName = "Python-iOS";
+		};
+		035BF63929DDBDD00010398B /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
 		};
 /* End XCSwiftPackageProductDependency section */
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class HTMLParser: ObservableObject {
     
@@ -13,8 +14,12 @@ class HTMLParser: ObservableObject {
     @Published var isResults = false
     
     public func search(value: String){
-        
-        let baseUrl = "https://m.youtube.com/results?search_query=" + value
+        var values = value
+        if values.isEmpty {
+            values = "노래방"
+        }
+        print(values)
+        let baseUrl = "https://m.youtube.com/results?search_query=" + values
         //let baseUrl = "http://mynf.codershigh.com"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: urlEncoded)
@@ -43,14 +48,18 @@ class HTMLParser: ObservableObject {
                 let ytJson = ytData.data(using: .utf8)
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
-                let temp = try decoder.decode(VidSearch.self, from: ytJson!)
-                let response = temp.next.filter{$0.results != nil}.first?.results?.filter{$0.videoId != "nil"} ?? []
+                let temp = try decoder.decode(VidSearch.self, from: ytJson!).next.filter{$0.results != nil}.map{$0.results!}
+                //print(temp)
+                let response = temp.filter{!$0.isEmpty}.first ?? []
+                print(response)
+                //let response = temp1.filter{$0}/*.first?.results?.filter{$0.videoId != "nil"} ?? []*/
+                //print(response)
                 DispatchQueue.main.async {
                     self.results = response.map{LikeVideo(videoId: $0.videoId, title: $0.title, thumbnail: "https://i.ytimg.com/vi/\($0.videoId)/hqdefault.jpg", channelTitle: $0.channelTitle, runTime: $0.vidLength)}
                     self.isResults = true
                 }
             }
-            print("\n\n")
+            print("\n\n", self.results.count)
         }
         catch {
             print(error)
@@ -154,7 +163,7 @@ struct SectionList: Decodable {
             return
         }
         let itemSectionContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .itemSectionRenderer)
-        self.results = try itemSectionContainer.decode([VideoWithContextRenderer].self, forKey: .contents)
+        self.results = try itemSectionContainer.decode([VideoWithContextRenderer].self, forKey: .contents).filter{$0.videoId != "nil"}
     }
 }
 
