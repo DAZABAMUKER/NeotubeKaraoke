@@ -15,7 +15,7 @@ struct searcher: View{
     @State var inputVal: String = ""
     @State var isEditing: Bool = false
     @State var likeModal: Bool = false
-    //@StateObject var models = Models()
+    @StateObject var models = Models()
     @StateObject var ytSearch = HTMLParser()
     @State var playlist = [playlists]()
     @State var ResponseItems = [Video]()
@@ -94,10 +94,22 @@ struct searcher: View{
                     }
                 }
                  */
+                if models.stsCode != 200 && models.stsCode != 0 {
+                    VStack{}.onAppear(){
+                        self.ytSearch.search(value: self.inputVal)
+                    }
+                }
                 if ytSearch.isResults {
                     VStack{}.onAppear(){
                         self.ytVideos = ytSearch.results
                         ytSearch.isResults = false
+                    }
+                }
+                if models.isResponseitems {
+                    VStack{}.onAppear(){
+                        self.ytVideos = models.responseitems.map{LikeVideo(videoId: $0.videoID, title: $0.title, thumbnail: $0.thumbnail, channelTitle: $0.channelTitle)}
+                        models.isResponseitems = false
+                        print("change")
                     }
                 }
                 ZStack{
@@ -248,11 +260,11 @@ struct searcher: View{
                                 .padding(.leading, 20)
                                 .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: self.search))
                                 .onSubmit {
-                                    //let _ = models.getVideos(val: inputVal)
+                                    let _ = models.getVideos(val: inputVal)
                                     //getResults(val: inputVal)
                                     //loadytsr()
                                     //getSome()
-                                    self.ytSearch.search(value: self.inputVal)
+                                    //self.ytSearch.search(value: self.inputVal)
                                 }
                             
                             Button {
