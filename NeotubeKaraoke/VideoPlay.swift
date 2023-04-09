@@ -140,12 +140,13 @@ struct VideoPlay: View {
             downloadPythonModule()
             return
         }
-        DispatchQueue.global(qos: .userInitiated).async {
+        DispatchQueue.global(qos: .default).async {
             do {
                 youtubeDL = try YoutubeDL()
                 DispatchQueue.main.async {
                     url.map { extractInfo(url: $0) }
                 }
+                print("loads")
             }
             catch {
                 print(#function, error)

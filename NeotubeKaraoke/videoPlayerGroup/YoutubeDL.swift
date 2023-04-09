@@ -52,7 +52,7 @@ public struct Format: CustomStringConvertible {
 }
 
 public let defaultOptions: PythonObject = [
-    "format": "bestvideo,bestaudio[ext=m4a]",
+    "format": "bestvideo, bestaudio[ext=m4a]",
     "nocheckcertificate": true,
 ]
 
@@ -133,17 +133,6 @@ open class YoutubeDL: NSObject {
         
         return (Info(info: info))
     }
-    
-    open func getSearchResults(val: String) {
-        do {
-            let reslults = try pythonObject.extract_info.throwing.dynamicallyCall(withKeywordArguments: ["": "ytsearch:\(val)", "download": false, "process": true])
-            print(Info(info: reslults).vidID)
-        }
-        catch{
-            print(error)
-        }
-    }
-    
     public static func downloadPythonModule(from url: URL = latestDownloadURL, completionHandler: @escaping (Swift.Error?) -> Void) {
         let task = URLSession.shared.downloadTask(with: url) { (location, response, error) in
             guard let location = location else {

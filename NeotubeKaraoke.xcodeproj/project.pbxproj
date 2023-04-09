@@ -17,7 +17,6 @@
 		033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C57F529D31DC400340988 /* GADInterstitialAd.swift */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
-		035BF63429DDBD600010398B /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63329DDBD600010398B /* PythonKit */; };
 		035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63629DDBD9C0010398B /* Python-iOS */; };
 		035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63929DDBDD00010398B /* ArgumentParser */; };
 		0369980129D1CCBE00656D28 /* crowd.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0369980029D1CCBE00656D28 /* crowd.wav */; };
@@ -25,6 +24,7 @@
 		036EF0092955559E00789D57 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036EF0082955559E00789D57 /* Response.swift */; };
 		0379B1AC29E04DCB0044F997 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 0379B1AB29E04DCB0044F997 /* YouTubeiOSPlayerHelper */; };
 		0379B1AE29E04E480044F997 /* YTWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0379B1AD29E04E480044F997 /* YTWrapper.swift */; };
+		0379B1B129E174090044F997 /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0379B1B029E174090044F997 /* PythonKit */; };
 		037D081829B4780B0069ED88 /* clap.wav in Resources */ = {isa = PBXBuildFile; fileRef = 037D081729B4780B0069ED88 /* clap.wav */; };
 		037D081A29B580290069ED88 /* DragVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037D081929B580290069ED88 /* DragVideo.swift */; };
 		037D081C29B5861B0069ED88 /* DragVidProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037D081B29B5861B0069ED88 /* DragVidProgress.swift */; };
@@ -98,8 +98,8 @@
 				035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */,
 				17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */,
 				035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */,
-				035BF63429DDBD600010398B /* PythonKit in Frameworks */,
 				0379B1AC29E04DCB0044F997 /* YouTubeiOSPlayerHelper in Frameworks */,
+				0379B1B129E174090044F997 /* PythonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,10 +258,10 @@
 			);
 			name = NeotubeKaraoke;
 			packageProductDependencies = (
-				035BF63329DDBD600010398B /* PythonKit */,
 				035BF63629DDBD9C0010398B /* Python-iOS */,
 				035BF63929DDBDD00010398B /* ArgumentParser */,
 				0379B1AB29E04DCB0044F997 /* YouTubeiOSPlayerHelper */,
+				0379B1B029E174090044F997 /* PythonKit */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -293,10 +293,10 @@
 			);
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
-				035BF63229DDBD600010398B /* XCRemoteSwiftPackageReference "PythonKit" */,
 				035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */,
 				035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				0379B1AA29E04DCB0044F997 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
+				0379B1AF29E174090044F997 /* XCRemoteSwiftPackageReference "PythonKit" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -566,6 +566,9 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -600,7 +603,11 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -630,14 +637,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		035BF63229DDBD600010398B /* XCRemoteSwiftPackageReference "PythonKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pvieito/PythonKit.git";
-			requirement = {
-				kind = exactVersion;
-				version = 0.3.1;
-			};
-		};
 		035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kewlbear/Python-iOS.git";
@@ -662,14 +661,17 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		0379B1AF29E174090044F997 /* XCRemoteSwiftPackageReference "PythonKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pvieito/PythonKit.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		035BF63329DDBD600010398B /* PythonKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 035BF63229DDBD600010398B /* XCRemoteSwiftPackageReference "PythonKit" */;
-			productName = PythonKit;
-		};
 		035BF63629DDBD9C0010398B /* Python-iOS */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */;
@@ -684,6 +686,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0379B1AA29E04DCB0044F997 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
 			productName = YouTubeiOSPlayerHelper;
+		};
+		0379B1B029E174090044F997 /* PythonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0379B1AF29E174090044F997 /* XCRemoteSwiftPackageReference "PythonKit" */;
+			productName = PythonKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 
