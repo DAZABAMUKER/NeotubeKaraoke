@@ -331,6 +331,7 @@ struct VideoPlay: View {
                                 //.border(.green)
                                 
                                     if tap {
+                                        
                                         VStack{
                                             if !UIDevice.current.orientation.isLandscape {
                                                 Spacer()
@@ -414,12 +415,6 @@ struct VideoPlay: View {
                                         }
                                         .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
                                         .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
-                                        //                                    .onAppear(){
-                                        //                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
-                                        //                                            self.tap = false
-                                        //                                        }
-                                        //                                    }
-                                        //.border(.red, width: 3.0)
                                         VStack{
                                             if !UIDevice.current.orientation.isLandscape {
                                                 Spacer()

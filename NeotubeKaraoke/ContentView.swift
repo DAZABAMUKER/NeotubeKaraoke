@@ -17,7 +17,8 @@ struct ContentView: View {
     
     private let adViewControllerRepresentable = AdViewControllerRepresentable()
     private let adCoordinator = AdCoordinator()
-    
+    @State var searching: Bool = false
+    @State var inputVal: String = ""
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
     @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic))
@@ -49,6 +50,17 @@ struct ContentView: View {
     
     private let loading: LocalizedStringKey = "Loading...\n"
     private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
+    
+    func rotateLandscape() {
+        let value = UIInterfaceOrientation.landscapeLeft.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
+        
+    }
+    
+    func rotatePortrait() {
+        let value = UIInterfaceOrientation.portrait.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
+    }
     
     // 텝이 변할 때 마다 텝바 아이템의 색을 변경하는 함수
     func changeColor(tabIndex: TabIndex) -> Color{
@@ -96,11 +108,11 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching)
                         .tag(TabIndex.PlayList)
                     SettingView(resolution: $resolution)
                         .tag(TabIndex.Setting)
@@ -110,6 +122,11 @@ struct ContentView: View {
                 VStack{
                     ZStack{
                         // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
+                        if searching {
+                            VStack{}.onAppear(){
+                                self.tabIndex = .Home
+                            }
+                        }
                         if self.vidEnd {
                             VStack{}.onAppear(){
                                 
@@ -175,7 +192,12 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     }
                     .preferredColorScheme(.light)
-                    
+                    Button {
+                        rotateLandscape()
+                    } label: {
+                        Text("Rotate")
+                    }
+
                 }
             }
             .background {

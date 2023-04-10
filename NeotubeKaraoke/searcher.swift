@@ -12,7 +12,6 @@ struct searcher: View{
     
    
     @State var showplayer = false
-    @State var inputVal: String = ""
     @State var isEditing: Bool = false
     @State var likeModal: Bool = false
     @StateObject var models = Models()
@@ -33,6 +32,8 @@ struct searcher: View{
     @Binding var videoOrder: Int
     @Binding var isReady: Bool
     @Binding var resolution: Resolution
+    @Binding var searching: Bool
+    @Binding var inputVal: String
     
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
@@ -94,6 +95,12 @@ struct searcher: View{
                     }
                 }
                  */
+                if self.searching {
+                    VStack{}.onAppear(){
+                        let _ = models.getVideos(val: inputVal)
+                        self.searching = false
+                    }
+                }
                 if models.stsCode != 200 && models.stsCode != 0 {
                     VStack{}.onAppear(){
                         self.ytSearch.search(value: self.inputVal)
@@ -117,99 +124,50 @@ struct searcher: View{
                         //MARK: - SearchBar
                         Spacer()
                             .frame(height: 60)
-                        /*
-                        HStack{
-                            Image(systemName: "music.mic.circle")
-                                .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
-                                .font(.system(size: 50))
-                                .padding(.leading, 10)
-                                .padding(.bottom, 5)
-                            TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
-                                .autocapitalization(.none)
-                                .disableAutocorrection(true)
-                                .background(border)
-                                .foregroundColor(.white)
-                                .padding(.trailing, 30)
-                                .padding(.leading, 20)
-                                .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: self.search))
-                                .onSubmit {
-                                    let _ = models.getVideos(val: inputVal)
-                                }
-                            
-                            Button {
-                                self.inputVal = ""
-                            } label: {
-                                if (self.inputVal.count > 0) {
-                                    Image(systemName: "multiply.circle.fill")
-                                        .foregroundColor(.gray)
-                                        .font(.system(size: 20))
-                                }
-                            }
-                        }
-                        .onAppear(){
-                            decodePList()
-                        }
-                        
-                        //MARK: - 아이패드인지 디비이스 확인
-                        .background() {
-                            if UIDevice.current.model == "iPad" {
-                                Color(UIColor(red: 71/255, green: 60/255, blue: 51/255, alpha: 1))
-                                    .padding(.top, -geometry.safeAreaInsets.top)
-                            } else {
-                                Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1))
-                                    .padding(.top, -geometry.safeAreaInsets.top)
-                            }
-                        }
-                         */
                         if !self.ytVideos.isEmpty {
                             
                             //MARK: - 리스트
                             
-                            List{
-                                BannerAd()
-                                ForEach(self.ytVideos, id: \.videoId){ responseitems in
-                                    /*
-                                     NavigationLink(destination: videoPlay) {
-                                     TableCell(Video: responseitems)
-                                     //Text("nil")
-                                     }
-                                     */
-                                    Button {
-                                        //videoPlay.closes = true
-                                        if self.isReady {
-                                            self.isReady = false
-                                            videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
-                                            reloads = true
-                                            //print("리로드")
-                                            self.nowPlayList.append(LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
-                                            self.videoOrder = nowPlayList.count - 1
-                                        }
-                                    } label: {
-                                        ZStack{
-                                            ListView(Video: responseitems)
-                                            HStack(spacing: 0){
-                                                Spacer()
-                                                Image(systemName: "ellipsis")
-                                                    .rotationEffect(Angle(degrees: 90))
-                                                    .tint(.secondary)
-                                                    .frame(width: 50, height: 70)
-                                                    .background(.black.opacity(0.01))
-                                                    .onTapGesture {
-                                                        self.likeModal = true
-                                                        self.addVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle, runTime: responseitems.runTime)
-                                                        print("long")
-                                                    }
+                            ScrollView{
+                                VStack{
+                                    BannerAd()
+                                        .frame(width: geometry.size.width, height: 70)
+                                    ForEach(self.ytVideos, id: \.videoId){ responseitems in
+                                        Button {
+                                            //videoPlay.closes = true
+                                            if self.isReady {
+                                                self.isReady = false
+                                                videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
+                                                reloads = true
+                                                //print("리로드")
+                                                self.nowPlayList.append(LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
+                                                self.videoOrder = nowPlayList.count - 1
+                                            }
+                                        } label: {
+                                            ZStack{
+                                                ListView(Video: responseitems)
+                                                    .padding(.leading, 15)
+                                                HStack(spacing: 0){
+                                                    Spacer()
+                                                    Image(systemName: "ellipsis")
+                                                        .rotationEffect(Angle(degrees: 90))
+                                                        .tint(.secondary)
+                                                        .frame(width: 50, height: 70)
+                                                        .background(.black.opacity(0.01))
+                                                        .onTapGesture {
+                                                            self.likeModal = true
+                                                            self.addVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle, runTime: responseitems.runTime)
+                                                            print("long")
+                                                        }
+                                                }
                                             }
                                         }
+                                        .disabled(!isReady)
                                     }
-                                    .disabled(!isReady)
-                                    //                            .onLongPressGesture {
-                                    //                                print("long")
-                                    //                                self.likeModal = true
-                                    //                            }
-                                    //.background(.blue)
+                                    BannerAd()
+                                        .frame(width: geometry.size.width, height: 70)
                                 }
-                                BannerAd()
+                                .background(Color.black.opacity(0.6))
                             }
                             //.frame(width:geometry.size.width,height: geometry.size.height - 60)
                             .background(){
@@ -223,12 +181,6 @@ struct searcher: View{
                             .listStyle(.plain)
                             .environment(\.defaultMinListRowHeight, 80)
                             .preferredColorScheme(.dark)
-                            // 검색결과 없을 경우 Alert 띄음.
-                            /*
-                            .alert(isPresented: $models.nothings) {
-                                Alert(title: Text(models.stsCode == 0 ? "No search results" : models.stsCode == 403 ? "Quota Exceeded Error" : String(models.stsCode)+" Error"))
-                            }
-                             */
                             VStack{}.frame(height: 135).background(.red)
                         } else {
                             ZStack{
