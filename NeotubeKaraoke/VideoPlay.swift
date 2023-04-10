@@ -10,7 +10,7 @@ import AVKit
 import PythonKit
 
 struct VideoPlay: View {
-    
+    @Environment(\.scenePhase) var scenePhase
     @Environment(\.dismiss) private var dismiss
     
     @State var isiPad = false
@@ -294,12 +294,22 @@ struct VideoPlay: View {
                                 print("vidFull")
                             }
                             .DragVid(vidFull: $vidFull)
-                            .opacity((UIDevice.current.orientation.isLandscape || UIDevice.current.orientation == .portraitUpsideDown) && vidFull ? 0.01 : 1)
+                            .opacity((UIDevice.current.orientation.isLandscape || UIDevice.current.orientation == .portraitUpsideDown) && vidFull ? 0 : 1)
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
                                     .frame(width: isiPad ? geometry.size.width : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !UIDevice.current.orientation.isLandscape ? geometry.size.width*9/16 : geometry.size.height : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
-                                    //.border(.red, width: 1)
-                                    //.edgesIgnoringSafeArea(.all)
+                                    .onChange(of: scenePhase, perform: { newPhase in
+                                        if newPhase == .background {
+                                            print("pause \n\n\n")
+                                            audioManager.pause()
+                                        } else if newPhase == .active {
+                                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                                                print("play \n\n\n")
+                                                audioManager.play()
+                                                player.plays()
+                                            }
+                                        }
+                                    })
                                     .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
                                     .navigationBarTitleDisplayMode(.inline)
                                 //.edgesIgnoringSafeArea(.bottom)
