@@ -31,18 +31,21 @@ struct ContentView: View {
     @State var isReady: Bool = true
     @State var resolution: Resolution = .basic
     @State var once = false
-    @State var adCount: Int = 1 {
+    @State var adCount: Int = 0 {
         didSet{
-            DispatchQueue.global(qos: .background).sync {
-                if self.adCount % 2 == 0 {
-                    print("광고중")
-                    print(self.adCount)
-                    adCoordinator.loadAd()
-                    adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
-                } else {
-                    if !once {
+            if adCount > oldValue {
+                DispatchQueue.global(qos: .background).sync {
+                    if self.adCount % 2 == 0 {
+                        print("광고중")
+                        print(self.adCount)
                         adCoordinator.loadAd()
-                        self.once = true
+                        adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
+                    } else {
+                        print("홀수")
+                        if !once {
+                            adCoordinator.loadAd()
+                            self.once = true
+                        }
                     }
                 }
             }
@@ -134,6 +137,12 @@ struct ContentView: View {
                 VStack{
                     ZStack{
                         // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
+                        if adCoordinator.isAdTwice {
+                            VStack{}.onAppear(){
+                                self.adCount -= 1
+                                adCoordinator.isAdTwice = false
+                            }
+                        }
                         if UIDevice.current.orientation.isLandscape {
                             VStack{}.onAppear(){
                                 isLandscape = true
@@ -150,9 +159,9 @@ struct ContentView: View {
                         }
                         if self.vidEnd {
                             VStack{}.onAppear(){
-                                
                                 print(vidEnd)
                                 if isReady {
+                                    self.adCount += 1
                                     if nowPlayList.count - 1 > videoOrder {
                                         vidFull = false
                                         videoOrder += 1
@@ -174,7 +183,6 @@ struct ContentView: View {
                                 .onAppear(){
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                                         self.reloads = false
-                                        self.adCount += 1
                                     }
                                 }
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))
@@ -185,13 +193,9 @@ struct ContentView: View {
                             //.bold()
                                 .frame(width: geometry.size.width, height: 60)
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))
-//                                .onAppear(){
-//                                    adCoordinator.loadAd()
-//                                }
                         } else {
                             //찐 플레이어 뷰
                             videoPlay
-                            
                         }
                     }
                     .frame(height: vidFull ? geometry.size.height : 60)

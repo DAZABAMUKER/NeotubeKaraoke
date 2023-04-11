@@ -137,6 +137,7 @@ struct searcher: View{
                                         Button {
                                             //videoPlay.closes = true
                                             if self.isReady {
+                                                self.vidEnd = true
                                                 self.isReady = false
                                                 videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape)
                                                 reloads = true

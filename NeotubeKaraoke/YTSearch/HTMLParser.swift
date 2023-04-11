@@ -51,7 +51,7 @@ class HTMLParser: ObservableObject {
                 let temp = try decoder.decode(VidSearch.self, from: ytJson!).next.filter{$0.results != nil}.map{$0.results!}
                 //print(temp)
                 let response = temp.filter{!$0.isEmpty}.first ?? []
-                print(response)
+                //print(response)
                 //let response = temp1.filter{$0}/*.first?.results?.filter{$0.videoId != "nil"} ?? []*/
                 //print(response)
                 DispatchQueue.main.async {
@@ -59,7 +59,7 @@ class HTMLParser: ObservableObject {
                     self.isResults = true
                 }
             }
-            print("\n\n", self.results.count)
+            //print("\n\n", self.results.count)
         }
         catch {
             print(error)
@@ -113,7 +113,7 @@ struct VideoWithContextRenderer: Decodable {
         var headlineRunsContainer = try headlineContainer.nestedUnkeyedContainer(forKey: .runs)
         let headlineRunsContainers = try headlineRunsContainer.nestedContainer(keyedBy: YtBaseCodingKeys.self)
         self.title = try headlineRunsContainers.decode(String.self, forKey: .values)
-        print(title)
+        //print(title)
     }
     
 }
