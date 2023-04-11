@@ -17,11 +17,12 @@ struct ContentView: View {
     
     private let adViewControllerRepresentable = AdViewControllerRepresentable()
     private let adCoordinator = AdCoordinator()
+    @State var isLandscape = false
     @State var searching: Bool = false
     @State var inputVal: String = ""
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
-    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic))
+    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: .constant(false))
     @State var reloads = false
     @State var closes = false
     @State var nowPlayList = [LikeVideo]()
@@ -52,14 +53,25 @@ struct ContentView: View {
     private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
     
     func rotateLandscape() {
-        let value = UIInterfaceOrientation.landscapeLeft.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
-        
-    }
-    
-    func rotatePortrait() {
-        let value = UIInterfaceOrientation.portrait.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
+        if !isLandscape {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+                self.isLandscape = true
+            } else {
+                let value = UIInterfaceOrientation.landscapeLeft.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+            }
+        } else {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+                self.isLandscape = false
+            } else {
+                let value = UIInterfaceOrientation.portrait.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+            }
+        }
     }
     
     // 텝이 변할 때 마다 텝바 아이템의 색을 변경하는 함수
@@ -108,11 +120,11 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape)
                         .tag(TabIndex.PlayList)
                     SettingView(resolution: $resolution)
                         .tag(TabIndex.Setting)
@@ -122,6 +134,15 @@ struct ContentView: View {
                 VStack{
                     ZStack{
                         // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
+                        if UIDevice.current.orientation.isLandscape {
+                            VStack{}.onAppear(){
+                                isLandscape = true
+                            }
+                        } else {
+                            VStack{}.onAppear(){
+                                isLandscape = false
+                            }
+                        }
                         if searching {
                             VStack{}.onAppear(){
                                 self.tabIndex = .Home
@@ -136,11 +157,11 @@ struct ContentView: View {
                                         vidFull = false
                                         videoOrder += 1
                                         self.isReady = false
-                                        videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution)
+                                        videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape)
                                         reloads = true
                                         print("리로드")
                                     } else {
-                                        videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic))
+                                        videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: $isLandscape)
                                         reloads = true
                                     }
                                 }
@@ -192,12 +213,30 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     }
                     .preferredColorScheme(.light)
-                    Button {
-                        rotateLandscape()
-                    } label: {
-                        Text("Rotate")
+                }
+                VStack{
+                    HStack{
+                        Button {
+                            rotateLandscape()
+                        } label: {
+                            Image(systemName: isLandscape ? "rotate.right" : "rotate.left")
+                                .padding()
+                                .tint(.white)
+                                .background {
+                                    Circle()
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(.secondary)
+                                }
+                            //.padding(.bottom, 55)
+                                .padding(.leading, 15)
+                                .opacity(vidFull ? isLandscape ? 0.01 : 0.5 : 0.01)
+                        }
+                        .animation(.easeInOut, value: vidFull)
+                        Spacer()
                     }
-
+                    if !vidFull {
+                        Spacer()
+                    }
                 }
             }
             .background {

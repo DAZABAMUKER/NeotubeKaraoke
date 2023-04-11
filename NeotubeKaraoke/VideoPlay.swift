@@ -10,7 +10,7 @@ import AVKit
 import PythonKit
 
 struct VideoPlay: View {
-    @Environment(\.scenePhase) var scenePhase
+    //@Environment(\.scenePhase) var scenePhase
     @Environment(\.dismiss) private var dismiss
     
     @State var isiPad = false
@@ -60,8 +60,31 @@ struct VideoPlay: View {
     @Binding var isReady: Bool
     @State var isBle: Bool = false
     @Binding var resolution: Resolution
+    @Binding var isLandscape: Bool
     
     private let tempoString: LocalizedStringKey = "Tempo"
+    
+    func rotateLandscape() {
+        if !isLandscape {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+                self.isLandscape = true
+            } else {
+                let value = UIInterfaceOrientation.landscapeLeft.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+            }
+        } else {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+                self.isLandscape = false
+            } else {
+                let value = UIInterfaceOrientation.portrait.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+            }
+        }
+    }
     
     func close() {
         player.close()
@@ -170,7 +193,6 @@ struct VideoPlay: View {
     func loadAVAssets(url: URL, size: Int64) {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        //request.allHTTPHeaderFields?["Range"] = "bytes=0-\(size)"
         let task = URLSession(configuration: .default).dataTask(with: request) { data, urlResponse, error in
             let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let fileUrl = doc.appendingPathComponent("audio.mp4")
@@ -182,17 +204,12 @@ struct VideoPlay: View {
                 try data?.write(to: fileUrl)
                 //print(fileUrl)
                 extractAudio(docUrl: doc)
-                //audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
-//                self.isAppear = true
-//                self.isReady = true
             }
             catch {
                 print(error)
                 return
             }
         }
-        //task.countOfBytesClientExpectsToReceive = size
-        //task.priority = URLSessionTask.highPriority
         task.resume()
     }
     
@@ -256,7 +273,7 @@ struct VideoPlay: View {
         NavigationStack{
             GeometryReader { geometry in
                 ZStack{
-                    if !UIDevice.current.orientation.isLandscape {
+                    if !isLandscape {
                         VStack{}.onAppear(){
                             self.tap = true
                         }
@@ -294,23 +311,23 @@ struct VideoPlay: View {
                                 print("vidFull")
                             }
                             .DragVid(vidFull: $vidFull)
-                            .opacity((UIDevice.current.orientation.isLandscape || UIDevice.current.orientation == .portraitUpsideDown) && vidFull ? 0 : 1)
+                            .opacity(isLandscape && vidFull ? 0 : 1)
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
-                                    .frame(width: isiPad ? geometry.size.width : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !UIDevice.current.orientation.isLandscape ? geometry.size.width*9/16 : geometry.size.height : UIDevice.current.orientation.isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
-                                    .onChange(of: scenePhase, perform: { newPhase in
-                                        if newPhase == .background {
-                                            print("pause \n\n\n")
-                                            audioManager.pause()
-                                        } else if newPhase == .active {
-                                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-                                                print("play \n\n\n")
-                                                audioManager.play()
-                                                player.plays()
-                                            }
-                                        }
-                                    })
-                                    .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
+                                    .frame(width: isiPad ? geometry.size.width : isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !isLandscape ? geometry.size.width*9/16 : geometry.size.height : isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
+//                                    .onChange(of: scenePhase, perform: { newPhase in
+//                                        if newPhase == .background {
+//                                            print("pause \n\n\n")
+//                                            audioManager.pause()
+//                                        } else if newPhase == .active {
+//                                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+//                                                print("play \n\n\n")
+//                                                audioManager.play()
+//                                                player.plays()
+//                                            }
+//                                        }
+//                                    })
+                                    .padding(.top, isLandscape ? 20 : 0)
                                     .navigationBarTitleDisplayMode(.inline)
                                 //.edgesIgnoringSafeArea(.bottom)
                                 HStack{
@@ -333,7 +350,7 @@ struct VideoPlay: View {
                                     if tap {
                                         
                                         VStack{
-                                            if !UIDevice.current.orientation.isLandscape {
+                                            if !isLandscape{
                                                 Spacer()
                                                     .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 85)
                                             }
@@ -393,30 +410,46 @@ struct VideoPlay: View {
                                                 }
                                                 
                                             }.frame(width: geometry.size.width)
-                                            if UIDevice.current.orientation.isLandscape {
+                                            if isLandscape {
                                                 HStack{
                                                     Spacer()
-                                                    Button {
-                                                        self.vidFull = false
-                                                    } label: {
-                                                        Image(systemName: "window.shade.closed")
-                                                            .padding()
-                                                            .tint(.white)
-                                                            .background {
-                                                                Circle()
-                                                                    .frame(width: 30, height: 30)
-                                                                    .foregroundColor(.secondary)
-                                                            }
+                                                    VStack{
+                                                        Button {
+                                                            self.vidFull = false
+                                                        } label: {
+                                                            Image(systemName: "window.shade.closed")
+                                                                .padding()
+                                                                .tint(.white)
+                                                                .background {
+                                                                    Circle()
+                                                                        .frame(width: 50, height: 50)
+                                                                        .foregroundColor(.secondary)
+                                                                }
+                                                                .opacity(0.5)
+                                                        }
+                                                        
+                                                        Button {
+                                                            rotateLandscape()
+                                                        } label: {
+                                                            Image(systemName: "rotate.right")
+                                                                .padding()
+                                                                .tint(.white)
+                                                                .background {
+                                                                    Circle()
+                                                                        .frame(width: 50, height: 50)
+                                                                        .foregroundColor(.secondary)
+                                                                }
+                                                                .opacity(0.5)
+                                                        }
                                                     }
-                                                    
                                                 }
                                             }
                                             Spacer()
                                         }
-                                        .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
-                                        .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
+                                        .frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        .padding(.top, isLandscape ? 20 : 0)
                                         VStack{
-                                            if !UIDevice.current.orientation.isLandscape {
+                                            if !isLandscape {
                                                 Spacer()
                                                     .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 160)
                                             }
@@ -424,14 +457,14 @@ struct VideoPlay: View {
                                             HStack{
                                                 Spacer()
                                                 Button {
-                                                    if UIDevice.current.orientation.isLandscape {
+                                                    if isLandscape {
                                                         self.tone -= 1
                                                         audioManager.pitchChange(tone: self.tone)
                                                     } else {
                                                         player.moveFrame(to: -20)
                                                     }
                                                 } label: {
-                                                    if UIDevice.current.orientation.isLandscape {
+                                                    if isLandscape {
                                                         Image("KeyDown")
                                                             .resizable()
                                                             .scaledToFit()
@@ -456,14 +489,14 @@ struct VideoPlay: View {
                                                 }
                                                 Spacer()
                                                 Button {
-                                                    if UIDevice.current.orientation.isLandscape {
+                                                    if isLandscape {
                                                         self.tone += 1
                                                         audioManager.pitchChange(tone: self.tone)
                                                     } else {
                                                         player.moveFrame(to: 20)
                                                     }
                                                 } label: {
-                                                    if UIDevice.current.orientation.isLandscape {
+                                                    if isLandscape {
                                                         Image("KeyUp")
                                                             .resizable()
                                                             .scaledToFit()
@@ -479,19 +512,19 @@ struct VideoPlay: View {
                                                 Spacer()
                                             }
                                             .tint(.white)
-                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .pink : .black, radius: 10)
-                                            .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
-                                            .padding(.top, UIDevice.current.orientation.isLandscape ? 20 : 0)
+                                            .shadow(color: !isLandscape ? .pink : .black, radius: 10)
+                                            .frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                            .padding(.top, isLandscape ? 20 : 0)
                                             
                                         }
                                         VStack{
                                             if vidFull {
-                                                if !UIDevice.current.orientation.isLandscape {
+                                                if !isLandscape {
                                                     Spacer()
                                                         .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 120)
                                                 }
                                                 Spacer()
-                                                    .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
+                                                    .frame(height: isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
                                                 HStack(spacing: 50){
                                                     Button {
                                                         self.tempo -= 0.02
@@ -509,7 +542,7 @@ struct VideoPlay: View {
                                                                 .frame(width: 90, height: 60)
                                                                 .background(.thinMaterial.opacity(0.7))
                                                                 .cornerRadius(10)
-                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                                .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                         }
                                                     }
                                                     HStack(spacing: 0){
@@ -523,7 +556,7 @@ struct VideoPlay: View {
                                                             .frame(width: 110, height: 60)
                                                             .background(.thinMaterial.opacity(0.7))
                                                             .cornerRadius(10)
-                                                            .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                            .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                     }
                                                     Button {
                                                         self.tempo += 0.02
@@ -541,12 +574,12 @@ struct VideoPlay: View {
                                                                 .frame(width: 90, height: 60)
                                                                 .background(.thinMaterial.opacity(0.7))
                                                                 .cornerRadius(10)
-                                                                .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                                .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                         }
                                                     }
                                                 }
                                                 HStack(spacing: 40){
-                                                    if !UIDevice.current.orientation.isLandscape {
+                                                    if !isLandscape {
                                                         Button {
                                                             self.tone -= 1
                                                             audioManager.pitchChange(tone: self.tone)
@@ -559,7 +592,7 @@ struct VideoPlay: View {
                                                                         .frame(width: 100, height: 60)
                                                                         .background(.thinMaterial.opacity(0.7))
                                                                         .cornerRadius(10)
-                                                                        .shadow(color: !UIDevice.current.orientation.isLandscape ? .green : .clear, radius: 5)
+                                                                        .shadow(color: !isLandscape ? .green : .clear, radius: 5)
                                                                 }
                                                         }
                                                     }
@@ -574,7 +607,7 @@ struct VideoPlay: View {
                                                                     .frame(width: 60, height: 60)
                                                                     .background(.thinMaterial.opacity(0.7))
                                                                     .cornerRadius(10)
-                                                                    .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                                    .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                             }
                                                     }
                                                     Button {
@@ -588,10 +621,10 @@ struct VideoPlay: View {
                                                                     .frame(width: 60, height: 60)
                                                                     .background(.thinMaterial.opacity(0.7))
                                                                     .cornerRadius(10)
-                                                                    .shadow(color: !UIDevice.current.orientation.isLandscape ? .white : .clear, radius: 5)
+                                                                    .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                             }
                                                     }
-                                                    if !UIDevice.current.orientation.isLandscape {
+                                                    if !isLandscape {
                                                         Button {
                                                             self.tone += 1
                                                             audioManager.pitchChange(tone: self.tone)
@@ -604,7 +637,7 @@ struct VideoPlay: View {
                                                                         .frame(width: 80, height: 60)
                                                                         .background(.thinMaterial.opacity(0.7))
                                                                         .cornerRadius(10)
-                                                                        .shadow(color: !UIDevice.current.orientation.isLandscape ? .orange : .clear, radius: 5)
+                                                                        .shadow(color: !isLandscape ? .orange : .clear, radius: 5)
                                                                 }
                                                         }
                                                     }
@@ -614,7 +647,7 @@ struct VideoPlay: View {
                                             }
                                         }
                                         .tint(.white)
-                                        .frame(height: UIDevice.current.orientation.isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        .frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
                                         
                                         if player.progress {
                                             VStack(alignment: .center){
@@ -640,9 +673,9 @@ struct VideoPlay: View {
                                     
                             }
                             //.frame(width: geometry.size.width, height: geometry.size.height - 65)
-                            .offset(y: UIDevice.current.orientation.isLandscape && vidFull ? -65 : 0)
+                            .offset(y: isLandscape && vidFull ? -65 : 0)
                             .onTapGesture {
-                                if UIDevice.current.orientation.isLandscape {
+                                if isLandscape {
                                     self.tap.toggle()
                                 } else {
                                     self.tap = true

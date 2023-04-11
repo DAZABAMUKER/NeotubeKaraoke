@@ -34,6 +34,7 @@ struct searcher: View{
     @Binding var resolution: Resolution
     @Binding var searching: Bool
     @Binding var inputVal: String
+    @Binding var isLandscape: Bool
     
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
@@ -137,7 +138,7 @@ struct searcher: View{
                                             //videoPlay.closes = true
                                             if self.isReady {
                                                 self.isReady = false
-                                                videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution)
+                                                videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape)
                                                 reloads = true
                                                 //print("리로드")
                                                 self.nowPlayList.append(LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
@@ -198,11 +199,21 @@ struct searcher: View{
                     .edgesIgnoringSafeArea(.bottom)
                     VStack{
                         HStack{
-                            Image(systemName: "music.mic.circle")
-                                .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
-                                .font(.system(size: 50))
-                                .padding(.leading, 10)
-                                .padding(.bottom, 5)
+                            ZStack{
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
+                                    .font(.system(size: 50))
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 5)
+                                    .offset(x: 0, y: vidFull ? 100 : 0)
+                                    .opacity(vidFull ? 0.01 : 1)
+                                    .animation(.easeInOut, value: vidFull)
+                                Image(systemName: "music.mic")
+                                    .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
+                                    .font(.system(size: 25))
+                                    .padding(.leading, 10)
+                                    .padding(.bottom, 5)
+                            }
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)

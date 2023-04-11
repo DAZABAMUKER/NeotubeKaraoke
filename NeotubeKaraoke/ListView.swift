@@ -68,6 +68,7 @@ struct ListView: View {
                         Text(Video.title)
                             .bold()
                             .lineLimit(2)
+                            .multilineTextAlignment(.leading)
                             .frame(height: 45)
                         //.background(Color.green)
                             //.foregroundColor(.orange)

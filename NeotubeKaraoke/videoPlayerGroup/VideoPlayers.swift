@@ -28,13 +28,17 @@ class VideoPlayers: AVPlayer, ObservableObject {
     func plays(){
         if self.player?.timeControlStatus == .playing {
             self.player?.pause()
+            self.isplaying = false
         } else {
             self.player?.play()
+            self.isplaying = true
         }
     }
     
     func close() {
         self.player?.pause()
+        self.audiomanager?.pause()
+        self.isplaying = false
     }
     
     func moveFrame(to: Double) {
@@ -74,6 +78,10 @@ class VideoPlayers: AVPlayer, ObservableObject {
         self.player?.addObserver(self, forKeyPath: "timeControlStatus",options: [.old, .new], context: nil)
         self.player?.currentItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .global(qos: .background), using: { _ in
+            if !self.isplaying {
+                self.audiomanager?.pause()
+                return
+            }
             if self.player?.timeControlStatus == .playing {
                 let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
                 DispatchQueue.main.async {
@@ -157,6 +165,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
             } else {
                 DispatchQueue.main.async {
                     self.isplaying = false
+                    self.audiomanager?.pause()
                 }
             }
         }
