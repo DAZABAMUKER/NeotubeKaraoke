@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import AVKit
 enum Resolution {
     case basic
     case high
@@ -14,6 +14,9 @@ enum Resolution {
 }
 
 struct SettingView: View {
+    
+    @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    @State var showAlert = false
     @State var sheet = false
     @State var profile = false
     @Binding var resolution: Resolution
@@ -29,10 +32,25 @@ struct SettingView: View {
     private let titleOfResolution: LocalizedStringKey = "Select prefer resolution"
     private let ifHigher: LocalizedStringKey = "If you select a resolution higher than 1080 rather than Basic, the loading time may increase."
     private let rmAds: LocalizedStringKey = "Remove Ads(To be updated...)"
+    private let alertMic: LocalizedStringKey = "Please allow Microphone Usage."
+    private let cancel: LocalizedStringKey = "Cancel"
+    private let OK: LocalizedStringKey = "OK"
     
     var body: some View {
         NavigationStack{
             VStack{
+                if self.micPermission {
+                    VStack{}.onAppear(){
+                        AVAudioSession.sharedInstance().requestRecordPermission { (status) in
+                            if !status {
+                                self.micPermission = false
+                                self.showAlert = true
+                            } else {
+                                self.micPermission = true
+                            }
+                        }
+                    }
+                }
                 List{
                     Section{
                         Button{
@@ -79,7 +97,27 @@ struct SettingView: View {
                             .font(.footnote)
                             .foregroundColor(.secondary)
                     }
-                    
+                    Toggle(isOn: $micPermission) {
+                        Text("Show music score")
+                    }
+                    .alert(Text(self.alertMic), isPresented: $showAlert) {
+                        Button {
+                            self.showAlert = false
+                            self.micPermission = false
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        } label: {
+                            Text(self.OK)
+                        }
+
+                        Button {
+                            self.showAlert = false
+                            self.micPermission = false
+                        } label: {
+                            Text(self.cancel)
+                        }
+                    }
                     
                 }
                 Button {

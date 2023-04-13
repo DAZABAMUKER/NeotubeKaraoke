@@ -9,9 +9,11 @@ import SwiftUI
 import AVKit
 import PythonKit
 
+
 struct VideoPlay: View {
     //@Environment(\.scenePhase) var scenePhase
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     
     @State var isiPad = false
     @State var que = false
@@ -61,6 +63,13 @@ struct VideoPlay: View {
     @State var isBle: Bool = false
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
+    
+    @State var session: AVAudioSession!
+    @State var recorder: AVAudioRecorder!
+    @State var record: Bool = false
+    @State var sample = [Float]()
+    @State var isMicOn = false
+    @Binding var score: Int
     
     private let tempoString: LocalizedStringKey = "Tempo"
     
@@ -224,15 +233,18 @@ struct VideoPlay: View {
             do {
                 let asset = AVURLAsset(url: fileUrl)
                 //guard let audioAssetTrack = asset.tracks(withMediaType: AVMediaType.audio).first else { return }
-                
+                if FileManager.default.fileExists(atPath: outputUrl.path) {
+                    try? FileManager.default.removeItem(atPath: outputUrl.path)
+                }
                 let audiotrack = try await asset.loadTracks(withMediaType: AVMediaType.audio)
                 guard let audioCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
                 try await audioCompositionTrack.insertTimeRange( audiotrack.first!.load(.timeRange), of: audiotrack.first!, at: .zero)
                 await export(video: composition, withPreset: AVAssetExportPresetAppleM4A, toFileType: .m4a , atURL: outputUrl)
-                audioManager.setEngine(file: outputUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
-                if FileManager.default.fileExists(atPath: outputUrl.path) {
-                    try? FileManager.default.removeItem(atPath: outputUrl.path)
+                let _: () = Service.shared.buffer(url: outputUrl, samplesCount: 300) { results in
+                    self.sample = results
                 }
+                audioManager.setEngine(file: outputUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                
                 self.isAppear = true
                 self.isReady = true
             } catch {
@@ -289,6 +301,45 @@ struct VideoPlay: View {
                         VStack{}.onAppear(){
                             self.vidEnd = true
                             self.vidFull = false
+                            if isMicOn {
+                                self.recorder.stop()
+                                let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                                let recordFile = url.appendingPathComponent("recoredForScore.m4a")
+                                let _: () = Service.shared.buffer(url: recordFile, samplesCount: 300) { results in
+                                    var scoreArray = [Float]()
+                                    var results = results
+                                    self.score = 0
+                                    let sampleNonInf = self.sample.filter{ !$0.isInfinite }
+                                    let sampleAve = sampleNonInf.reduce(0) { Int(Float($0) + $1) } / 300
+                                    self.sample = self.sample.map{$0.isInfinite ? Float(sampleAve) : $0}
+                                    let resultsNonInf = results.filter{ !$0.isInfinite }
+                                    let resultsAve = resultsNonInf.reduce(0) { Int(Float($0) + $1) } / 300
+                                    results = results.map{$0.isInfinite ? Float(resultsAve) : $0}
+                                    //print("sample: ", sampleDiff, self.sample.max() ?? 0, self.sample.min() ?? 0)
+                                    //print("results: ", resultsDiff, results.max()!, results.min()!)
+                                    let result = results.map{ $0 * (sample.max() ?? 0) / (results.max() ?? 0) }
+                                    
+                                    for index in 0..<result.count {
+                                        var diff = self.sample[index] - result[index]
+                                        if diff < 0 {
+                                            diff *= -1
+                                        }
+                                        scoreArray.append(diff)
+                                    }
+                                    self.score = 110 - (scoreArray.reduce(0) { Int(Float($0) + $1) } / scoreArray.count) * 100 / Int(self.sample.max()!)
+                                    print("score: ",score)
+                                    if score > 100 {
+                                        score = 100
+                                    } else if score < 50 {
+                                        score = 50
+                                    }
+                                    //print(score)
+                                    //print(self.sample)
+                                    //print(result)
+                                    //print(scoreArray)
+                                    //print(scoreArray.reduce(0) { Int(Float($0) + $1) } / scoreArray.count)
+                                }
+                            }
                         }
                     }
                     if isAppear {
@@ -315,18 +366,6 @@ struct VideoPlay: View {
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
                                     .frame(width: isiPad ? geometry.size.width : isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !isLandscape ? geometry.size.width*9/16 : geometry.size.height : isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
-//                                    .onChange(of: scenePhase, perform: { newPhase in
-//                                        if newPhase == .background {
-//                                            print("pause \n\n\n")
-//                                            audioManager.pause()
-//                                        } else if newPhase == .active {
-//                                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-//                                                print("play \n\n\n")
-//                                                audioManager.play()
-//                                                player.plays()
-//                                            }
-//                                        }
-//                                    })
                                     .padding(.top, isLandscape ? 20 : 0)
                                     .navigationBarTitleDisplayMode(.inline)
                                 //.edgesIgnoringSafeArea(.bottom)
@@ -481,6 +520,24 @@ struct VideoPlay: View {
                                                 Button{
                                                     audioManager.play()
                                                     player.plays()
+                                                    if !self.record  {
+                                                        if isMicOn {
+                                                            do {
+                                                                let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                                                                let recordFile = url.appendingPathComponent("recoredForScore.m4a")
+                                                                if FileManager.default.fileExists(atPath: recordFile.path) {
+                                                                    try? FileManager.default.removeItem(atPath: recordFile.path)
+                                                                }
+                                                                let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC), AVSampleRateKey: 12000, AVNumberOfChannelsKey: 1, AVEncoderAudioQualityKey: AVAudioQuality.medium.rawValue]
+                                                                self.recorder = try AVAudioRecorder(url: recordFile, settings: settings)
+                                                                self.recorder.record()
+                                                                self.record = true
+                                                            }
+                                                            catch {
+                                                                print("setting recorder: ", error)
+                                                            }
+                                                        }
+                                                    }
                                                 } label: {
                                                     Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
                                                         .resizable()
@@ -662,12 +719,6 @@ struct VideoPlay: View {
                                                     }
                                             }
                                             .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                                            /*
-                                             ProgressView()
-                                             .scaleEffect(4)
-                                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                             .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                                             */
                                         }
                                     }
                                     
@@ -700,6 +751,23 @@ struct VideoPlay: View {
                                     self.vidEnd = false
                                     if UIDevice.current.model == "iPad" {
                                         self.isiPad = true
+                                    }
+                                    if self.micPermission {
+                                        do {
+                                            self.session = AVAudioSession.sharedInstance()
+                                            try self.session.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: [.defaultToSpeaker, .allowBluetoothA2DP])
+                                            self.session.requestRecordPermission { (status) in
+                                                if !status {
+                                                    self.isMicOn = false
+                                                    print("Need permisson for use microphone")
+                                                } else {
+                                                    self.isMicOn = true
+                                                }
+                                            }
+                                        }
+                                        catch {
+                                            print("Microphone Permission: ", error)
+                                        }
                                     }
                                 }
                             }

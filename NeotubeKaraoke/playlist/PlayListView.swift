@@ -28,6 +28,7 @@ struct PlayListView: View {
     @Binding var inputVal: String
     @Binding var searching: Bool
     @Binding var isLandscape: Bool
+    @Binding var score: Int
     @StateObject private var getPopularChart = GetPopularChart()
     
     private let showNowPlaying: LocalizedStringKey = "Show now playing list"
@@ -198,7 +199,7 @@ struct PlayListView: View {
                                 ForEach(nowPlayList, id: \.self) { list in
                                     Button {
                                         self.isReady = false
-                                        videoPlay = VideoPlay(videoId: list.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape)
+                                        videoPlay = VideoPlay(videoId: list.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                         reloads = true
                                         self.videoOrder = self.nowPlayList.firstIndex(of: list) ?? -1
                                         print("video order: ",videoOrder)
@@ -282,7 +283,7 @@ struct PlayListView: View {
                                 ForEach(self.playlist, id: \.self) { item in
                                     //TableCell(Video: video)
                                     NavigationLink {
-                                        showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape) // 해당 재생목록 영상 리스트 뷰로 이동
+                                        showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score) // 해당 재생목록 영상 리스트 뷰로 이동
                                             .onAppear(){
                                                 self.PLAppear = true
                                             }
@@ -410,6 +411,7 @@ struct showList: View {
     @Binding var isReady: Bool
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
+    @Binding var score: Int
     
     //MARK: 해당 재생목록 파일 읽어오기
     func getLists() {
@@ -441,7 +443,7 @@ struct showList: View {
                 Button {
                     self.nowPlayList = self.playlist // 재생할 영상이 속한 재생목록으로 재생목록 변경
                     self.isReady = false
-                    videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape)
+                    videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                     reloads = true
                     self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
                     print("video order: ",videoOrder)
@@ -475,7 +477,7 @@ struct showList: View {
                     .disabled(playlist.isEmpty)
                     Button {
                         self.nowPlayList = playlist
-                        videoPlay = VideoPlay(videoId: nowPlayList.first!.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape)
+                        videoPlay = VideoPlay(videoId: nowPlayList.first!.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                         reloads = true
                     } label: {
                         Image(systemName: "play.fill")

@@ -51,6 +51,7 @@ struct AdViewControllerRepresentable: UIViewControllerRepresentable {
 class AdCoordinator: NSObject, GADFullScreenContentDelegate, ObservableObject {
     private var ad: GADInterstitialAd?
     @Published var isAdTwice: Bool = false
+    @Published var showScore = false
     func loadAd() {
         GADInterstitialAd.load(
             withAdUnitID: "ca-app-pub-7240659336832390/6681476690", request: GADRequest()
@@ -75,6 +76,7 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate, ObservableObject {
     func adDidRecordImpression(_ ad: GADFullScreenPresentingAd) {
         print("\(#function) called")
         self.isAdTwice = true
+        self.showScore = true
     }
     
     func adDidRecordClick(_ ad: GADFullScreenPresentingAd) {

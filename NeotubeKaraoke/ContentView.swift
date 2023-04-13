@@ -15,6 +15,8 @@ enum TabIndex {
 // 메인 뷰
 struct ContentView: View {
     
+    @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    
     private let adViewControllerRepresentable = AdViewControllerRepresentable()
     private let adCoordinator = AdCoordinator()
     @State var isLandscape = false
@@ -22,7 +24,7 @@ struct ContentView: View {
     @State var inputVal: String = ""
     @State var vidFull = false
     @State var tabIndex: TabIndex = .Home
-    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: .constant(false))
+    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: .constant(false), score: .constant(0))
     @State var reloads = false
     @State var closes = false
     @State var nowPlayList = [LikeVideo]()
@@ -31,6 +33,8 @@ struct ContentView: View {
     @State var isReady: Bool = true
     @State var resolution: Resolution = .basic
     @State var once = false
+    @State var score: Int = 0
+    @State var showScore = false
     @State var adCount: Int = 0 {
         didSet{
             if adCount > oldValue {
@@ -123,11 +127,11 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score)
                         .tag(TabIndex.PlayList)
                     SettingView(resolution: $resolution)
                         .tag(TabIndex.Setting)
@@ -136,7 +140,6 @@ struct ContentView: View {
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
                     ZStack{
-                        // 제생중이던 비디오가 종료되면 다음 동영상으로 넘어가도록해줌
                         if adCoordinator.isAdTwice {
                             VStack{}.onAppear(){
                                 self.adCount -= 1
@@ -160,17 +163,18 @@ struct ContentView: View {
                         if self.vidEnd {
                             VStack{}.onAppear(){
                                 print(vidEnd)
+                                self.showScore = true
                                 if isReady {
                                     self.adCount += 1
                                     if nowPlayList.count - 1 > videoOrder {
                                         vidFull = false
                                         videoOrder += 1
                                         self.isReady = false
-                                        videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape)
+                                        videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                         reloads = true
                                         print("리로드")
                                     } else {
-                                        videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: $isLandscape)
+                                        videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: $isLandscape, score: $score)
                                         reloads = true
                                     }
                                 }
@@ -242,6 +246,27 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
+                if self.showScore && self.micPermission {
+                    if score != 0{
+                        VStack{
+                            Spacer()
+                            HStack{
+                                StrokeText(text: "Score:", width: 2, color: .white)
+                                StrokeText(text: "\(self.score) ~", width: 2, color: .white)
+                            }
+                            Spacer()
+                            Spacer()
+                        }
+                        .frame(width: geometry.size.width)
+                        .background(Color.black.opacity(0.5))
+                        .animation(.easeInOut, value: self.score == 0)
+                        .onAppear(){
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5 ) {
+                                self.showScore = false
+                            }
+                        }
+                    }
+                }
             }
             .background {
                 // Add the adViewControllerRepresentable to the background so it
@@ -260,3 +285,30 @@ extension View {
     }
 }
 
+struct StrokeText: View {
+    let text: String
+    let width: CGFloat
+    let color: Color
+
+    var body: some View {
+        ZStack{
+            ZStack{
+                Text(text).offset(x:  width, y:  width)
+                Text(text).offset(x: -width, y: -width)
+                Text(text).offset(x: -width, y:  width)
+                Text(text).offset(x:  width, y: -width)
+                Text(text).offset(x:  width, y: 0)
+                Text(text).offset(x: -width, y: 0)
+                Text(text).offset(x: 0, y:  width)
+                Text(text).offset(x: 0, y: -width)
+            }
+            .foregroundColor(color)
+            .font(.largeTitle)
+            .bold()
+            Text(text)
+                .font(.largeTitle)
+                .foregroundColor(.blue)
+                .bold()
+        }
+    }
+}
