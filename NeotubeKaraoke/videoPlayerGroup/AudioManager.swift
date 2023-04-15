@@ -100,6 +100,7 @@ class AudioManager: ObservableObject {
     func setEngine(file: URL, frequency: [Int], tone: Float) {
         do {
             audioEngine.reset()
+            try AVAudioSession.sharedInstance().setCategory(.playback)
             print("실행중")
             /*guard let musicUrl = Bundle.main.url(forResource: "sample", withExtension: "mp3") else {
                 print(" 파일 안나오잖아")

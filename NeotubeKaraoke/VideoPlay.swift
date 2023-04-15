@@ -52,7 +52,7 @@ struct VideoPlay: View {
     }
     //@State var itemUrl: URL!
     var videoId: String = ""
-    @State var tap = true
+    @State var tap = false
     //@State var isPlaying = false
     @State private var isLoading = false
     @State var closes = false
@@ -285,6 +285,11 @@ struct VideoPlay: View {
         NavigationStack{
             GeometryReader { geometry in
                 ZStack{
+                    if !self.player.isMuted {
+                        VStack{}.onAppear(){
+                            self.player.isMuted = true
+                        }
+                    }
                     if !isLandscape {
                         VStack{}.onAppear(){
                             self.tap = true
@@ -333,11 +338,6 @@ struct VideoPlay: View {
                                     } else if score < 50 {
                                         score = 50
                                     }
-                                    //print(score)
-                                    //print(self.sample)
-                                    //print(result)
-                                    //print(scoreArray)
-                                    //print(scoreArray.reduce(0) { Int(Float($0) + $1) } / scoreArray.count)
                                 }
                             }
                         }
@@ -359,7 +359,8 @@ struct VideoPlay: View {
                             .background(Color(red: 44/255, green: 54/255, blue: 51/255))
                             .onTapGesture {
                                 self.vidFull.toggle()
-                                print("vidFull")
+                                print("vidFull: ", vidFull)
+                                print("landscape: ", isLandscape)
                             }
                             .DragVid(vidFull: $vidFull)
                             .opacity(isLandscape && vidFull ? 0 : 1)
@@ -386,7 +387,7 @@ struct VideoPlay: View {
                                 }
                                 //.border(.green)
                                 
-                                    if tap {
+                                    if tap && vidFull{
                                         
                                         VStack{
                                             if !isLandscape{

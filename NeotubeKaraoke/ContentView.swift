@@ -146,13 +146,19 @@ struct ContentView: View {
                                 adCoordinator.isAdTwice = false
                             }
                         }
-                        if UIDevice.current.orientation.isLandscape {
-                            VStack{}.onAppear(){
-                                isLandscape = true
+                        if UIDevice.current.model != "iPad" {
+                            if UIDevice.current.orientation.isLandscape {
+                                VStack{}.onAppear(){
+                                    isLandscape = true
+                                }
+                            } else {
+                                VStack{}.onAppear(){
+                                    isLandscape = false
+                                }
                             }
                         } else {
                             VStack{}.onAppear(){
-                                isLandscape = false
+                                isLandscape = true
                             }
                         }
                         if searching {

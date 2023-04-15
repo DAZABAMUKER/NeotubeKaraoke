@@ -68,8 +68,11 @@ class VideoPlayers: AVPlayer, ObservableObject {
         //let vidAssetItem = AVPlayerItem(asset: vidAsset)
         
         //downloadVidonlyFile(url: url, fileSize: fileSize)
-        self.player = AVPlayer(url: url)
+        let asset = AVAsset(url: url)
+        let item = AVPlayerItem(asset: asset)
+        self.player = AVPlayer(playerItem: item)
         self.player?.isMuted = true
+        self.player?.usesExternalPlaybackWhileExternalScreenIsActive = true
         NotificationCenter.default.addObserver(forName: Notification.Name.AVAudioEngineConfigurationChange, object: nil, queue: nil) { notification in
             audioManager.reconnect(vidTime: self.currents)
             print("reconnect")
