@@ -136,7 +136,8 @@ struct SettingView: View {
                 
                 Spacer()
                     .frame(height: 100)
-            }.preferredColorScheme(.dark)
+            }
+            .preferredColorScheme(.dark)
         }
     }
     

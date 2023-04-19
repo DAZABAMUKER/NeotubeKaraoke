@@ -14,13 +14,13 @@ import AdSupport
 @main
 struct NeotubeKaraokeApp: App {
     let persistenceController = PersistenceController.shared
-    
+    @StateObject var envPlayer: EnvPlayer = EnvPlayer.shared
 
     var body: some Scene {
         WindowGroup {
             ContentView(tabIndex: .Home)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            
+                .environmentObject(envPlayer)
         }
     }
     init() {

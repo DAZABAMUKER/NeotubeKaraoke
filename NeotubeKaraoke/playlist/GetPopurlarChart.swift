@@ -34,6 +34,44 @@ class GetPopularChart: ObservableObject {
         }.resume()
     }
     
+    func tjKaraokePop() {
+        self.tjChartMusician = [String]()
+        self.tjChartTitle = [String]()
+        let baseUrl = "https://www.tjmedia.com/tjsong/song_monthPopular.asp?strType=2"
+        let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let url = URL(string: urlEncoded)
+        URLSession.shared.dataTask(with: url!) { data, response, error in
+            // if there were any error
+            if error != nil || data == nil {
+                print(error as Any)
+                return
+            }
+            do {
+                let content = String(decoding: data!, as: UTF8.self)
+                self.tjParse(html: content)
+            }
+        }.resume()
+    }
+    
+    func tjKaraokeJPop() {
+        self.tjChartMusician = [String]()
+        self.tjChartTitle = [String]()
+        let baseUrl = "https://www.tjmedia.com/tjsong/song_monthPopular.asp?strType=3"
+        let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let url = URL(string: urlEncoded)
+        URLSession.shared.dataTask(with: url!) { data, response, error in
+            // if there were any error
+            if error != nil || data == nil {
+                print(error as Any)
+                return
+            }
+            do {
+                let content = String(decoding: data!, as: UTF8.self)
+                self.tjParse(html: content)
+            }
+        }.resume()
+    }
+    
     func tjParse(html: String) {
         do {
             let document = try SwiftSoup.parse(html)

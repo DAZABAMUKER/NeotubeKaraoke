@@ -8,12 +8,13 @@
 import SwiftUI
 import AVKit
 import PythonKit
-
+import UIKit
 
 struct VideoPlay: View {
     //@Environment(\.scenePhase) var scenePhase
     @Environment(\.dismiss) private var dismiss
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    @EnvironmentObject var envPlayer: EnvPlayer
     
     @State var isiPad = false
     @State var que = false
@@ -154,6 +155,8 @@ struct VideoPlay: View {
                     print(bestVideo?.filesize ?? 0)
                     print(bestAudio?.filesize ?? 0)
                     player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0, isOk: isOk)
+                    envPlayer.player = self.player
+                    envPlayer.isOn = true
                     loadAVAssets(url: aUrl, size: bestAudio?.filesize ?? 0)
                 }
             }

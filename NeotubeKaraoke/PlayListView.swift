@@ -15,8 +15,6 @@ struct PlayListView: View {
     @State var pTitle: String = ""
     @State var playlist = [String]()
     @State var showNowPL = false // 현재 재생 목록 보여줄지 말자 결정하는 변수
-    @State var showTjChart = false // tj 노래방 차트
-    @State var showKYChart = false // 금영 노래방 차트
     @Binding var nowPlayList: [LikeVideo]
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -29,17 +27,15 @@ struct PlayListView: View {
     @Binding var searching: Bool
     @Binding var isLandscape: Bool
     @Binding var score: Int
-    @StateObject private var getPopularChart = GetPopularChart()
     
     private let showNowPlaying: LocalizedStringKey = "Show now playing list"
     private let nowPlaying: LocalizedStringKey = "Now Playing List"
+    private let recent: LocalizedStringKey = "Recent"
     private let createdList: LocalizedStringKey = "Created Playlist"
     private let addList: LocalizedStringKey = "Add Playlist"
     private let inputTilte: LocalizedStringKey = "Input your playlist title"
     private let OK: LocalizedStringKey = "OK"
     private let cancel: LocalizedStringKey = "Cancel"
-    private let KY: LocalizedStringKey = "KY karaoke Top 100"
-    private let Tj: LocalizedStringKey = "Tj karaoke Top 100"
     
     //MARK: - PlayListView 함수
     //playlist.json에서 플레이리스트들 가져옴.
@@ -108,23 +104,24 @@ struct PlayListView: View {
                                 .scaledToFit()
                                 .frame(height: 30)
                                 .padding(.horizontal ,20)
-                                .foregroundColor(.orange)
+                                .foregroundColor(.white)
                         }
                     }
-                    .background(.indigo.opacity(0.3))
+                    .frame(height: 70)
+                    //.background(.thinMaterial)
                     
                     //MARK: 최근 재생목록
-                    Text(self.showNowPlaying)
-                        .bold()
-                        .font(.title)
-                        .padding(5)
                     ScrollView(.horizontal){
                         HStack{
-                            
+                            Text(self.recent)
+                                .bold()
+                                .lineLimit(2)
+                                .multilineTextAlignment(.center)
+                                .font(.headline)
+                                .padding(5)
+                                .padding(.leading, 10)
                             Button {
                                 self.showNowPL.toggle()
-                                self.showKYChart = false
-                                self.showTjChart = false
                             } label: {
                                 VStack{
                                     Image("playlist")
@@ -132,36 +129,6 @@ struct PlayListView: View {
                                         .scaledToFit()
                                         .frame(height: 100)
                                     Text(self.nowPlaying)
-                                }
-                            }
-                            .disabled(PLAppear)
-                            Button {
-                                getPopularChart.tjKaraoke()
-                                showTjChart.toggle()
-                                self.showKYChart = false
-                                self.showNowPL = false
-                            } label: {
-                                VStack{
-                                    Image("tjKaraoke")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 100)
-                                    Text(self.Tj)
-                                }
-                            }
-                            Button {
-                                getPopularChart.KYKaraoke()
-                                showKYChart.toggle()
-                                self.showTjChart = false
-                                self.showNowPL = false
-                            } label: {
-                                VStack{
-                                    Image("KYkaraoke")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                                        .frame(height: 100)
-                                    Text(self.KY)
                                 }
                             }
                         }
@@ -178,11 +145,9 @@ struct PlayListView: View {
                             .bold()
                             .padding(5)
                         Spacer()
-                        if showNowPL || showTjChart || showKYChart {
+                        if showNowPL {
                             Button {
                                 self.showNowPL = false
-                                self.showKYChart = false
-                                self.showTjChart = false
                             } label: {
                                 Text("Back")
                                     .tint(.secondary)
@@ -220,64 +185,6 @@ struct PlayListView: View {
                             }
                             .listStyle(.plain)
                             .environment(\.defaultMinListRowHeight, 80)
-                        } else if showTjChart {
-                            List{
-                                ForEach(0..<getPopularChart.tjChartTitle.count, id: \.self) { index in
-                                    Button {
-                                        self.inputVal = "\(getPopularChart.tjChartTitle[index]) \(getPopularChart.tjChartMusician[index]) tj 노래방"
-                                        self.searching = true
-                                    } label: {
-                                        LinearGradient(colors: [
-                                            Color(red: 1, green: 112 / 255.0, blue: 0),
-                                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                                        ],
-                                                       startPoint: .topLeading,
-                                                       endPoint: .bottomTrailing
-                                        )
-                                        .frame(width: geometry.size.width, height: 30)
-                                        .mask(alignment: .center) {
-                                            HStack{
-                                                Text(String(index + 1))
-                                                Text(getPopularChart.tjChartTitle[index])
-                                                Spacer()
-                                                Text(getPopularChart.tjChartMusician[index])
-                                            }
-                                            .bold()
-                                        }
-                                    }
-                                }
-                                VStack{}.frame(height: 70)
-                            }
-                            .listStyle(.plain)
-                        } else if showKYChart {
-                            List{
-                                ForEach(0..<getPopularChart.KYChartTitle.count, id: \.self) { index in
-                                    Button {
-                                        self.inputVal = "\(getPopularChart.KYChartTitle[index]) \(getPopularChart.KYChartMusician[index]) 금영"
-                                        self.searching = true
-                                    } label: {
-                                        LinearGradient(colors: [
-                                            Color(red: 1, green: 112 / 255.0, blue: 0),
-                                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                                        ],
-                                                       startPoint: .topLeading,
-                                                       endPoint: .bottomTrailing
-                                        )
-                                        .frame(width: geometry.size.width, height: 30)
-                                        .mask(alignment: .center) {
-                                            HStack{
-                                                Text(String(index + 1))
-                                                Text(getPopularChart.KYChartTitle[index])
-                                                Spacer()
-                                                Text(getPopularChart.KYChartMusician[index])
-                                            }
-                                            .bold()
-                                        }
-                                    }
-                                }
-                                VStack{}.frame(height: 70)
-                            }
-                            .listStyle(.plain)
                         } else {
                             List{
                                 ForEach(self.playlist, id: \.self) { item in
@@ -381,6 +288,10 @@ struct PlayListView: View {
                     .offset(y: -100)
                 }
             }
+            .background(content: {
+                LinearGradient(colors: [Color(red: 152/255, green: 216/255, blue: 170/255).opacity(0.5), .clear, .clear, .clear], startPoint: .top, endPoint: .bottom)
+                    .edgesIgnoringSafeArea(.top)
+            })
             .edgesIgnoringSafeArea(.bottom)
         }
     }

@@ -20,6 +20,7 @@ class Models: ObservableObject {
         if val == "" {
             vals = "노래방"
         }
+        //vals += " karaoke"
         let urls = "https://www.googleapis.com/youtube/v3/search?part=\(Constant.API_PART)&q=\(vals)&videoEmbeddable=true&order=relevance&type=video&maxResults=20&key=\(Constant.API_KEY)"
         let urlEncoded = urls.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: urlEncoded)

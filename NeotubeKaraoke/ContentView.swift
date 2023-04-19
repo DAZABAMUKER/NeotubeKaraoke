@@ -11,11 +11,13 @@ enum TabIndex {
     case Home
     case Setting
     case PlayList
+    case chart
 }
 // 메인 뷰
 struct ContentView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    @EnvironmentObject var envPlayer: EnvPlayer
     
     private let adViewControllerRepresentable = AdViewControllerRepresentable()
     private let adCoordinator = AdCoordinator()
@@ -85,11 +87,13 @@ struct ContentView: View {
     func changeColor(tabIndex: TabIndex) -> Color{
         switch tabIndex {
         case .Home:
-            return Color.red
+            return Color(red: 1, green: 109/255, blue: 96/255)
         case .Setting:
             return Color.white
         case .PlayList:
-            return Color.green
+            return Color(red: 152/255, green: 216/255, blue: 170/255)
+        case .chart:
+            return Color(red: 247/255, green: 208/255, blue: 96/255)
         }
     }
     
@@ -97,11 +101,13 @@ struct ContentView: View {
     func CircleOffset(tabIndex: TabIndex, geometry: GeometryProxy) -> CGFloat {
         switch tabIndex {
         case .PlayList:
-            return -geometry.size.width / 3
+            return -geometry.size.width * 3 / 8
         case .Home:
-            return 0
+            return geometry.size.width / 8
         case .Setting:
-            return geometry.size.width / 3
+            return geometry.size.width * 3 / 8
+        case .chart:
+            return -geometry.size.width / 8
         }
     }
     
@@ -115,11 +121,13 @@ struct ContentView: View {
                 .font(.system(size: 30))
                 .scaleEffect(self.tabIndex == tabIndex ? 1.7 : 1.0)
                 .foregroundColor(self.tabIndex == tabIndex ? changeColor(tabIndex: tabIndex) : Color.gray)
-                .frame(width: geometry.size.width / 3, height: 50)
+                .frame(width: geometry.size.width / 4, height: 50)
                 .offset(y: self.tabIndex == tabIndex ? -5 : 0)
                 .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
+                .shadow(radius: 10)
         }
-        .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+        //.background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+        .background(.clear)
     }
     
     //MARK: - 뷰
@@ -135,11 +143,17 @@ struct ContentView: View {
                         .tag(TabIndex.PlayList)
                     SettingView(resolution: $resolution)
                         .tag(TabIndex.Setting)
-                    
+                    TopChart(inputVal: $inputVal, searching: $searching)
+                        .tag(TabIndex.chart)
                 }
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
                     ZStack{
+                        if vidFull && UIDevice.current.model == "iPad" {
+                            VStack{}.onAppear(){
+                                self.isLandscape = true
+                            }
+                        }
                         if adCoordinator.isAdTwice {
                             VStack{}.onAppear(){
                                 self.adCount -= 1
@@ -193,6 +207,7 @@ struct ContentView: View {
                                 .onAppear(){
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
                                         self.reloads = false
+                                        self.envPlayer.isOn = false
                                     }
                                 }
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))
@@ -206,6 +221,7 @@ struct ContentView: View {
                         } else {
                             //찐 플레이어 뷰
                             videoPlay
+                                .environmentObject(envPlayer)
                         }
                     }
                     .frame(height: vidFull ? geometry.size.height : 60)
@@ -222,11 +238,16 @@ struct ContentView: View {
                         .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                         .shadow(radius: 10)
                     HStack(spacing: 0) {
-                        TabButtonSel(tabIndex: .PlayList, img: "music.mic", geometry: geometry)
+                        TabButtonSel(tabIndex: .PlayList, img: "music.note.list", geometry: geometry)
+                        TabButtonSel(tabIndex: .chart, img: "crown", geometry: geometry)
                         TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     }
+                    .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                     .preferredColorScheme(.light)
+                    .onAppear(){
+                        self.isLandscape = false
+                    }
                 }
                 VStack{
                     HStack{

@@ -35,6 +35,9 @@
 		0383C97229E3EAE800A625EC /* GetPopurlarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0383C97129E3EAE800A625EC /* GetPopurlarChart.swift */; };
 		0383C97529E3F39800A625EC /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 0383C97429E3F39800A625EC /* SwiftSoup */; };
 		0383C97829E6662F00A625EC /* ScoreWavedata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0383C97729E6662F00A625EC /* ScoreWavedata.swift */; };
+		038B76E229EC09290016522A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038B76E129EC09290016522A /* SceneDelegate.swift */; };
+		038B76E429EC0AAC0016522A /* EnvPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038B76E329EC0AAC0016522A /* EnvPlayer.swift */; };
+		038B76E629EFE5150016522A /* TopChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038B76E529EFE5150016522A /* TopChart.swift */; };
 		03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */; };
 		03962DD6291F781500A376F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD5291F781500A376F3 /* Assets.xcassets */; };
 		03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03962DD8291F781500A376F3 /* Preview Assets.xcassets */; };
@@ -76,6 +79,9 @@
 		037D082129B724E50069ED88 /* PlayListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListView.swift; sourceTree = "<group>"; };
 		0383C97129E3EAE800A625EC /* GetPopurlarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopurlarChart.swift; sourceTree = "<group>"; };
 		0383C97729E6662F00A625EC /* ScoreWavedata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWavedata.swift; sourceTree = "<group>"; };
+		038B76E129EC09290016522A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		038B76E329EC0AAC0016522A /* EnvPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvPlayer.swift; sourceTree = "<group>"; };
+		038B76E529EFE5150016522A /* TopChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChart.swift; sourceTree = "<group>"; };
 		03962DCE291F781400A376F3 /* NeotubeKaraoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeotubeKaraoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeotubeKaraokeApp.swift; sourceTree = "<group>"; };
 		03962DD5291F781500A376F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -153,11 +159,29 @@
 		0383C97629E665E300A625EC /* playlist */ = {
 			isa = PBXGroup;
 			children = (
-				037D082129B724E50069ED88 /* PlayListView.swift */,
 				03CA4C8A29BDD13800507E26 /* ListView.swift */,
 				0383C97129E3EAE800A625EC /* GetPopurlarChart.swift */,
 			);
 			path = playlist;
+			sourceTree = "<group>";
+		};
+		038B76E729F0114C0016522A /* External Display */ = {
+			isa = PBXGroup;
+			children = (
+				035657FC29E8286D000227D9 /* ExternalDisplay.swift */,
+				038B76E129EC09290016522A /* SceneDelegate.swift */,
+				038B76E329EC0AAC0016522A /* EnvPlayer.swift */,
+			);
+			path = "External Display";
+			sourceTree = "<group>";
+		};
+		038B76E829F0116C0016522A /* Etc */ = {
+			isa = PBXGroup;
+			children = (
+				0383C97729E6662F00A625EC /* ScoreWavedata.swift */,
+				033C57F529D31DC400340988 /* GADInterstitialAd.swift */,
+			);
+			path = Etc;
 			sourceTree = "<group>";
 		};
 		03962DC5291F781400A376F3 = {
@@ -181,6 +205,7 @@
 		03962DD0291F781400A376F3 /* NeotubeKaraoke */ = {
 			isa = PBXGroup;
 			children = (
+				038B76E829F0116C0016522A /* Etc */,
 				03962DD1291F781400A376F3 /* NeotubeKaraokeApp.swift */,
 				03962DD5291F781500A376F3 /* Assets.xcassets */,
 				03962DDA291F781500A376F3 /* Persistence.swift */,
@@ -189,12 +214,12 @@
 				03962DD7291F781500A376F3 /* Preview Content */,
 				037C4D9A298B42FE007B6DF3 /* learn */,
 				03962DED2921C80500A376F3 /* ContentView.swift */,
+				037D082129B724E50069ED88 /* PlayListView.swift */,
+				038B76E529EFE5150016522A /* TopChart.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
-				033C57F529D31DC400340988 /* GADInterstitialAd.swift */,
-				0383C97729E6662F00A625EC /* ScoreWavedata.swift */,
-				035657FC29E8286D000227D9 /* ExternalDisplay.swift */,
+				038B76E729F0114C0016522A /* External Display */,
 				0383C97629E665E300A625EC /* playlist */,
 				0397115E29D9D374005ADE0E /* YTSearch */,
 				033C57ED29D2DAC600340988 /* en.lproj */,
@@ -392,8 +417,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				038B76E429EC0AAC0016522A /* EnvPlayer.swift in Sources */,
 				0316559E295BAC5C00B18342 /* TableCell.swift in Sources */,
 				03F36CC12963DE61001AEB7A /* Models.swift in Sources */,
+				038B76E229EC09290016522A /* SceneDelegate.swift in Sources */,
 				037D082229B724E60069ED88 /* PlayListView.swift in Sources */,
 				03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */,
 				0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */,
@@ -416,6 +443,7 @@
 				03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */,
 				037D081C29B5861B0069ED88 /* DragVidProgress.swift in Sources */,
 				036DDD9C29A9C3A000396B94 /* PlayerViewController.swift in Sources */,
+				038B76E629EFE5150016522A /* TopChart.swift in Sources */,
 				0379B1AE29E04E480044F997 /* YTWrapper.swift in Sources */,
 				03D77A2F2935D4E80037061E /* Video.swift in Sources */,
 				037D081E29B5D18A0069ED88 /* SettingView.swift in Sources */,
@@ -586,7 +614,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -623,7 +651,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
