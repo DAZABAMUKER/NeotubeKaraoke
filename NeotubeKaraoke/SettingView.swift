@@ -12,13 +12,20 @@ enum Resolution {
     case high
     case ultra
 }
-
+enum Karaoke {
+    case Tj
+    case KY
+}
 struct SettingView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     @State var showAlert = false
     @State var sheet = false
     @State var profile = false
+    @State var karaoke: Karaoke = Karaoke.Tj
+    @State var titleOfSong = ""
+    @StateObject private var getPopularChart = GetPopularChart()
+    
     @Binding var resolution: Resolution
     
     private let pasteboard = UIPasteboard.general
@@ -35,6 +42,13 @@ struct SettingView: View {
     private let alertMic: LocalizedStringKey = "Please allow Microphone Usage."
     private let cancel: LocalizedStringKey = "Cancel"
     private let OK: LocalizedStringKey = "OK"
+    private let searchNumberOfSongs: LocalizedStringKey = "Searching for number of karaoke songs."
+    private let selResolution: LocalizedStringKey = "Selecting Resolution"
+    private let searchSongTitle: LocalizedStringKey = "title of the song"
+    private let numberOfSong: LocalizedStringKey = "Number of the song"
+    private let title: LocalizedStringKey = "Title"
+    private let artist: LocalizedStringKey = "Artist"
+    private let noResults: LocalizedStringKey = "No results"
     
     var body: some View {
         NavigationStack{
@@ -81,24 +95,78 @@ struct SettingView: View {
                     } footer: {
                         Text(self.contact)
                     }
-                    VStack {
-                        Text(self.titleOfResolution)
-                            .bold()
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .padding(0)
-                        Picker("해상도 선택", selection: $resolution) {
-                            Text("Basic").tag(Resolution.basic)
-                            Text("1080").tag(Resolution.high)
-                            Text("1080+").tag(Resolution.ultra)
+                    Section {
+                        VStack {
+                            Text(self.titleOfResolution)
+                                .bold()
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .padding(0)
+                            Picker(self.selResolution, selection: $resolution) {
+                                Text("Basic").tag(Resolution.basic)
+                                Text("1080").tag(Resolution.high)
+                                Text("1080+").tag(Resolution.ultra)
+                            }
+                            .pickerStyle(.segmented)
+                            Text(self.ifHigher)
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
                         }
-                        .pickerStyle(.segmented)
-                        Text(self.ifHigher)
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
+                        Toggle(isOn: $micPermission) {
+                            Text("Show music score")
+                        }
                     }
-                    Toggle(isOn: $micPermission) {
-                        Text("Show music score")
+                    Section{
+                        VStack{
+                            Picker(self.searchNumberOfSongs, selection: $karaoke) {
+                                Text("Tj").tag(Karaoke.Tj)
+                                Text("KY").tag(Karaoke.KY)
+                            }
+                            TextField(self.searchSongTitle, text: $titleOfSong)
+                                .autocorrectionDisabled(true)
+                                .autocapitalization(.none)
+                                .onSubmit {
+                                    if self.karaoke == .KY {
+                                        self.getPopularChart.searchSongOfKY(val: titleOfSong)
+                                    } else {
+                                        self.getPopularChart.searchSongOfTj(val: titleOfSong)
+                                    }
+
+                                }
+                            
+                        }
+                    }
+                    Section{
+                        VStack{
+                            HStack{
+                                Text(self.numberOfSong)
+                                    .bold()
+                                    .frame(width: 80)
+                                Text(self.title)
+                                    .bold()
+                                Spacer()
+                                Text(self.artist)
+                                    .bold()
+                            }
+                            .padding(.top, 5)
+                            Divider()
+                            if !self.getPopularChart.Titles.isEmpty {
+                                ForEach(0..<self.getPopularChart.Titles.count, id: \.self) { index in
+                                    VStack{
+                                        HStack{
+                                            Text(self.getPopularChart.Numbers[index])
+                                                .frame(width: 80)
+                                            Text(self.getPopularChart.Titles[index])
+                                            Spacer()
+                                            Text(self.getPopularChart.Singers[index])
+                                        }
+                                        Divider()
+                                    }
+                                }
+                            } else if self.getPopularChart.Numbers.contains("검색결과를 찾을수 없습니다.") {
+                                Text(self.noResults)
+                            }
+                        }
                     }
                     .alert(Text(self.alertMic), isPresented: $showAlert) {
                         Button {
@@ -110,7 +178,7 @@ struct SettingView: View {
                         } label: {
                             Text(self.OK)
                         }
-
+                        
                         Button {
                             self.showAlert = false
                             self.micPermission = false

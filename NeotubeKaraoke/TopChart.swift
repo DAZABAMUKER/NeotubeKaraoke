@@ -115,7 +115,7 @@ struct TopChart: View {
                                 Text("KY 가요 \nTop100")
                                     .tint(.white)
                             }
-                        }.shadow(color: Color.black.opacity(0.8), radius: 7)
+                        }.shadow(color: Color.black, radius: 7)
                         .padding(.horizontal, 10)
                         
                     }
@@ -178,7 +178,7 @@ struct TopChart: View {
                         Section{
                             ForEach(0..<getPopularChart.KYChartTitle.count, id: \.self) { index in
                                 Button {
-                                    self.inputVal = "\(getPopularChart.tjChartTitle[index]) \(getPopularChart.tjChartMusician[index]) tj 노래방"
+                                    self.inputVal = "\(getPopularChart.KYChartTitle[index]) \(getPopularChart.KYChartMusician[index]) 금영 노래방"
                                     self.searching = true
                                 } label: {
                                     LinearGradient(colors: [

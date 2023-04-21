@@ -35,3 +35,11 @@
 "Score:" = "점수:";
 "Please allow Microphone Usage." = "마이크 접근을 허용해주세요.";
 "Recent" = "최근 \n플레이리스트";
+"Playlist already have this video." = "이미 포함하고 있는 항목입니다.";
+"Searching for number of karaoke songs." = "노래방 곡번호 검색";
+"Selecting Resolution" = "해상도 선택";
+"title of the song" = "곡제목";
+"Number of the song" = "곡번호";
+"Title" = "제목";
+"Artist" = "가수";
+"No results" = "검색결과를 찾을수 없습니다.";

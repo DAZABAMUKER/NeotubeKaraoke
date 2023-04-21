@@ -14,6 +14,53 @@ class GetPopularChart: ObservableObject {
     @Published var tjChartTitle = [String]()
     @Published var KYChartMusician = [String]()
     @Published var KYChartTitle = [String]()
+    @Published var Numbers = [String]()
+    @Published var Titles = [String]()
+    @Published var Singers = [String]()
+    
+    func searchSongOfTj(val: String) {
+        let baseUrl = "http://m.tjmedia.com/tjsong/song_search_result.asp?strCond=1&natType=&strType=0&strText=\(val)"
+        let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let url = URL(string: urlEncoded)
+        DispatchQueue.main.async {
+            self.Numbers = []
+            self.Titles = []
+            self.Singers = []
+        }
+        URLSession.shared.dataTask(with: url!) { data, response, error in
+            // if there were any error
+            if error != nil || data == nil {
+                print(error as Any)
+                return
+            }
+            do {
+                let content = String(decoding: data!, as: UTF8.self)
+                self.searchTjSongParse(html: content)
+            }
+        }.resume()
+    }
+    
+    func searchSongOfKY(val: String) {
+        let baseUrl = "https://kysing.kr/search/?category=2&keyword=\(val)"
+        let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let url = URL(string: urlEncoded)
+        DispatchQueue.main.async {
+            self.Numbers = []
+            self.Titles = []
+            self.Singers = []
+        }
+        URLSession.shared.dataTask(with: url!) { data, response, error in
+            // if there were any error
+            if error != nil || data == nil {
+                print(error as Any)
+                return
+            }
+            do {
+                let content = String(decoding: data!, as: UTF8.self)
+                self.searchKYSongParse(html: content)
+            }
+        }.resume()
+    }
     
     func tjKaraoke() {
         self.tjChartMusician = [String]()
@@ -91,6 +138,56 @@ class GetPopularChart: ObservableObject {
             print("tj Parse error:", error)
         }
     }
+    
+    func searchTjSongParse(html: String) {
+        do {
+            let document = try SwiftSoup.parse(html)
+            print(document.charset())
+            guard let body = document.body() else {
+                return
+            }
+            let numbers = try body.getElementById("BoardType1")?.getElementsByTag("tr").map{try $0.select("td:nth-child(1)")}.map{try $0.text()}
+            let singers = try body.getElementById("BoardType1")?.getElementsByTag("tr").map{try $0.select("td:nth-child(3)")}.map{try $0.text()}
+            let titles = try body.getElementById("BoardType1")?.getElementsByClass("left").map{try $0.text()}
+            DispatchQueue.main.async {
+                self.Numbers = numbers!.filter{!$0.isEmpty}
+                self.Singers = singers!.filter{!$0.isEmpty}
+                self.Titles = titles!
+                print(self.Numbers)
+                print(self.Singers)
+                print(self.Titles)
+            }
+            
+        }
+        catch {
+            print("tj 곡 검색 오류: ", error)
+        }
+    }
+    
+    func searchKYSongParse(html: String) {
+        do {
+            let document = try SwiftSoup.parse(html)
+            print(document.charset())
+            guard let body = document.body() else {
+                return
+            }
+            let numbers = try body.getElementsByClass("search_chart_num").map{try $0.text()}
+            let singers = try body.getElementsByClass("search_chart_list clear").select("span.tit.mo-art").map{try $0.text()}
+            let titles = try body.getElementsByClass("search_chart_list clear").select("li.search_chart_tit.clear > span:nth-child(1)").map{try $0.text()}
+            DispatchQueue.main.async {
+                self.Numbers = numbers.filter{$0 != "곡번호"}
+                self.Singers = singers
+                self.Titles = titles
+                print(numbers)
+                print(singers)
+                print(titles)
+            }
+        }
+        catch {
+            print("KY 곡 검색 오류: ", error)
+        }
+    }
+    
     func KYKaraoke() {
         self.KYChartTitle = [String]()
         self.KYChartMusician = [String]()
@@ -109,7 +206,7 @@ class GetPopularChart: ObservableObject {
                 if content.contains("scode=") {
                     let firsts = content.ranges(of: "scode=")
                     let ends = content.ranges(of: "&&amp")
-                    let index = content.distance(from: content.startIndex, to: firsts.last!.lowerBound)
+                    //let index = content.distance(from: content.startIndex, to: firsts.last!.lowerBound)
                     let scode = String(content[content.index(firsts.first!.lowerBound, offsetBy: 6)...content.index(before: ends.first!.lowerBound)])
                     print(scode)
                     self.KYKaraokePages(page: 2, scode: scode)

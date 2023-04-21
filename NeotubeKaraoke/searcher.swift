@@ -22,6 +22,7 @@ struct searcher: View{
     @State var addVideo: LikeVideo!
     @State var lastNowPL = false
     @State var rightAfterNowPL = false
+    @State var alreadyHave = false
     
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -36,6 +37,7 @@ struct searcher: View{
     @Binding var inputVal: String
     @Binding var isLandscape: Bool
     @Binding var score: Int
+    @Binding var recent: [LikeVideo]
     
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
@@ -43,6 +45,42 @@ struct searcher: View{
     private let rANowPlaying: LocalizedStringKey = "Add right after to now playing"
     private let add: LocalizedStringKey = "Add"
     private let cancel: LocalizedStringKey = "Cancel"
+    private let already: LocalizedStringKey = "Playlist already have this video."
+    
+    func saveRecent(video: LikeVideo) {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if self.recent.contains(video) {
+            self.recent.remove(at: self.recent.firstIndex(of: video)!)
+        }
+        if self.recent.count > 10 {
+            self.recent.removeLast()
+            self.recent.insert(video, at: 0)
+        } else {
+            if self.recent.isEmpty {
+                self.recent.append(video)
+            } else {
+                self.recent.insert(video, at: 0)
+            }
+        }
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            try? FileManager.default.removeItem(at: fileurl)
+        }
+        let encoder = JSONEncoder()
+        let myData = try? encoder.encode(self.recent)
+        FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: myData)
+    }
+    
+    func openRecent() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            guard let js = NSData(contentsOf: fileurl) else { return }
+            let decoder = JSONDecoder()
+            let myData = try? decoder.decode([LikeVideo].self, from: js as Data)
+            self.recent = myData!
+        }
+    }
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -69,6 +107,10 @@ struct searcher: View{
                 let decoder = JSONDecoder()
                 var myData = try? decoder.decode([LikeVideo].self, from: js as Data)
                 print(myData?.count ?? 0)
+                if myData!.contains(item) {
+                    self.alreadyHave = true
+                    return
+                }
                 myData?.append(item)
                 print(myData?.count ?? 0)
                 try FileManager.default.removeItem(at: fileurl)
@@ -97,9 +139,11 @@ struct searcher: View{
                     }
                 }
                  */
+                
                 if self.searching {
                     VStack{}.onAppear(){
-                        let _ = models.getVideos(val: inputVal)
+                        self.ytSearch.search(value: self.inputVal)
+                        //let _ = models.getVideos(val: inputVal)
                         self.searching = false
                     }
                 }
@@ -123,7 +167,6 @@ struct searcher: View{
                 }
                 ZStack{
                     VStack(spacing: 9){
-                        //MARK: - SearchBar
                         Spacer()
                             .frame(height: 60)
                         if !self.ytVideos.isEmpty {
@@ -145,6 +188,7 @@ struct searcher: View{
                                                 //print("리로드")
                                                 self.nowPlayList.append(LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
                                                 self.videoOrder = nowPlayList.count - 1
+                                                saveRecent(video: responseitems)
                                             }
                                         } label: {
                                             ZStack{
@@ -201,6 +245,7 @@ struct searcher: View{
                     .edgesIgnoringSafeArea(.bottom)
                     VStack{
                         HStack{
+                            //MARK: - SearchBar
                             ZStack{
                                 Image(systemName: "arrow.triangle.2.circlepath")
                                     .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
@@ -214,6 +259,9 @@ struct searcher: View{
                                     .font(.system(size: 25))
                                     .padding(.leading, 10)
                                     .padding(.bottom, 5)
+                            }
+                            .onAppear(){
+                                openRecent()
                             }
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                                 .autocapitalization(.none)
@@ -344,6 +392,19 @@ struct searcher: View{
                         }
                         .frame(width: 300, height: 250)
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    }
+                    if self.alreadyHave {
+                        VStack{
+                            Text(self.already)
+                                .padding(20)
+                                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                                .onAppear(){
+                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3 ) {
+                                        self.alreadyHave = false
+                                    }
+                                }
+                                .animation(.easeIn, value: self.alreadyHave)
+                        }
                     }
                 }
             }

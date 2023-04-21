@@ -27,15 +27,18 @@ struct PlayListView: View {
     @Binding var searching: Bool
     @Binding var isLandscape: Bool
     @Binding var score: Int
+    @Binding var recent: [LikeVideo]
     
     private let showNowPlaying: LocalizedStringKey = "Show now playing list"
     private let nowPlaying: LocalizedStringKey = "Now Playing List"
-    private let recent: LocalizedStringKey = "Recent"
+    private let Recent: LocalizedStringKey = "Recent"
     private let createdList: LocalizedStringKey = "Created Playlist"
     private let addList: LocalizedStringKey = "Add Playlist"
     private let inputTilte: LocalizedStringKey = "Input your playlist title"
     private let OK: LocalizedStringKey = "OK"
     private let cancel: LocalizedStringKey = "Cancel"
+    let heights = 100.0
+    
     
     //MARK: - PlayListView 함수
     //playlist.json에서 플레이리스트들 가져옴.
@@ -48,6 +51,26 @@ struct PlayListView: View {
             let myData = try? decoder.decode([String].self, from: js as Data)
             self.playlist = myData!
         }
+    }
+    
+    func saveRecent(video: LikeVideo) {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if self.recent.count > 10 {
+            self.recent.removeLast()
+            self.recent.insert(video, at: 0)
+        } else {
+            if self.recent.isEmpty {
+                self.recent.append(video)
+            }
+            self.recent.insert(video, at: 0)
+        }
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            try? FileManager.default.removeItem(at: fileurl)
+        }
+        let encoder = JSONEncoder()
+        let myData = try? encoder.encode(self.recent)
+        FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: myData)
     }
     
     // 플레이리스트 생성 함수
@@ -113,13 +136,43 @@ struct PlayListView: View {
                     //MARK: 최근 재생목록
                     ScrollView(.horizontal){
                         HStack{
-                            Text(self.recent)
+                            Text(self.Recent)
                                 .bold()
                                 .lineLimit(2)
                                 .multilineTextAlignment(.center)
                                 .font(.headline)
                                 .padding(5)
                                 .padding(.leading, 10)
+                                .frame(height: 150)
+                            ForEach(recent, id: \.self) { recent in
+                                Button {
+                                    self.isReady = false
+                                    videoPlay = VideoPlay(videoId: recent.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
+                                    reloads = true
+                                    self.videoOrder = self.nowPlayList.firstIndex(of: recent) ?? -1
+                                    self.nowPlayList.append(LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
+                                    saveRecent(video: recent)
+                                    print("video order: ", videoOrder)
+                                } label: {
+                                    VStack{
+                                        AsyncImage(url: URL(string: recent.thumbnail)) { image in
+                                            image.image?.resizable()
+                                                .resizable()
+                                                .frame(width: heights/9*16, height: heights/9*12)
+                                                .clipShape(Rectangle().size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
+                                                .frame(width: heights/9*16, height: heights)
+                                                .shadow(color: .black,radius: 10, x: 0, y: 10)
+                                        }
+                                        Text(recent.title)
+                                            .lineLimit(2)
+                                            .frame(width: 160)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .frame(height: 150)
+                                }
+                                .padding(.horizontal, 8)
+                            }
+                            /*
                             Button {
                                 self.showNowPL.toggle()
                             } label: {
@@ -131,6 +184,7 @@ struct PlayListView: View {
                                     Text(self.nowPlaying)
                                 }
                             }
+                             */
                         }
                         .tint(.white)
                         .font(.caption)
@@ -159,73 +213,81 @@ struct PlayListView: View {
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
                         .frame(width: geometry.size.width, height: 1)
                     NavigationStack{
-                        if showNowPL {
-                            List {
-                                ForEach(nowPlayList, id: \.self) { list in
+                        List{
+                            NavigationLink{
+                                List {
+                                    ForEach(nowPlayList, id: \.self) { list in
+                                        Button {
+                                            self.isReady = false
+                                            videoPlay = VideoPlay(videoId: list.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
+                                            reloads = true
+                                            self.videoOrder = self.nowPlayList.firstIndex(of: list) ?? -1
+                                            saveRecent(video: list)
+                                            print("video order: ", videoOrder)
+                                        } label: {
+                                            ListView(Video: list)
+                                        }
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                            Button {
+                                                self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: list)!)
+                                            } label: {
+                                                Image(systemName: "trash")
+                                            }
+                                            .tint(.red)
+                                        }
+                                        .disabled(!isReady)
+                                    }
+                                    VStack{}.frame(height: 70)
+                                }
+                                .listStyle(.plain)
+                                .environment(\.defaultMinListRowHeight, 80)
+                            } label: {
+                                HStack{
+                                    Image("playlist")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 30)
+                                    Text(self.nowPlaying)
+                                }
+                            }
+                            ForEach(self.playlist, id: \.self) { item in
+                                //TableCell(Video: video)
+                                NavigationLink {
+                                    showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score, recent: $recent) // 해당 재생목록 영상 리스트 뷰로 이동
+                                        .onAppear(){
+                                            self.PLAppear = true
+                                        }
+                                        .onDisappear(){
+                                            self.PLAppear = false
+                                        }
+                                } label: {
+                                    Text(item)
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     Button {
-                                        self.isReady = false
-                                        videoPlay = VideoPlay(videoId: list.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                                        reloads = true
-                                        self.videoOrder = self.nowPlayList.firstIndex(of: list) ?? -1
-                                        print("video order: ",videoOrder)
-                                    } label: {
-                                        ListView(Video: list)
-                                    }
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                        Button {
-                                            print("제거")
-                                        } label: {
-                                            Image(systemName: "trash")
+                                        //재생목록 제거
+                                        print("제거")
+                                        let listIndex = self.playlist.firstIndex(of: item)
+                                        self.playlist.remove(at: listIndex!)
+                                        savePlayList(title: "")
+                                        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                                        let existPlaylist = doc.appendingPathComponent(item, conformingTo: .json)
+                                        do {
+                                            if FileManager.default.fileExists(atPath: existPlaylist.path(percentEncoded: false)) {
+                                                try FileManager.default.removeItem(atPath: existPlaylist.path(percentEncoded: false))
+                                            }
+                                        } catch {
+                                            print("removePList Error:",error)
                                         }
-                                        .tint(.red)
-                                    }
-                                    .disabled(!isReady)
-                                }
-                                VStack{}.frame(height: 70)
-                            }
-                            .listStyle(.plain)
-                            .environment(\.defaultMinListRowHeight, 80)
-                        } else {
-                            List{
-                                ForEach(self.playlist, id: \.self) { item in
-                                    //TableCell(Video: video)
-                                    NavigationLink {
-                                        showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score) // 해당 재생목록 영상 리스트 뷰로 이동
-                                            .onAppear(){
-                                                self.PLAppear = true
-                                            }
-                                            .onDisappear(){
-                                                self.PLAppear = false
-                                            }
                                     } label: {
-                                        Text(item)
+                                        Image(systemName: "trash")
                                     }
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                        Button {
-                                            //재생목록 제거
-                                            print("제거")
-                                            let listIndex = self.playlist.firstIndex(of: item)
-                                            self.playlist.remove(at: listIndex!)
-                                            savePlayList(title: "")
-                                            let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                                            let existPlaylist = doc.appendingPathComponent(item, conformingTo: .json)
-                                            do {
-                                                if FileManager.default.fileExists(atPath: existPlaylist.path(percentEncoded: false)) {
-                                                    try FileManager.default.removeItem(atPath: existPlaylist.path(percentEncoded: false))
-                                                }
-                                            } catch {
-                                                print("removePList Error:",error)
-                                            }
-                                        } label: {
-                                            Image(systemName: "trash")
-                                        }
-                                        .tint(.red)
-                                        
-                                    }
+                                    .tint(.red)
+                                    
                                 }
                             }
-                            .listStyle(.plain)
                         }
+                        .listStyle(.plain)
                     }
                 }
                 .preferredColorScheme(.dark)
@@ -323,6 +385,7 @@ struct showList: View {
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
     @Binding var score: Int
+    @Binding var recent: [LikeVideo]
     
     //MARK: 해당 재생목록 파일 읽어오기
     func getLists() {
@@ -344,6 +407,40 @@ struct showList: View {
         }
     }
     
+    func saveLists() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent(listName, conformingTo: .json)
+        let encoder = JSONEncoder()
+        print(fileurl)
+        do {
+            if FileManager.default.fileExists(atPath: fileurl.path(percentEncoded: false)) {
+                try? FileManager.default.removeItem(atPath: fileurl.path(percentEncoded: false))
+            }
+            let myData = try? encoder.encode(self.playlist)
+            FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: myData)
+        }
+    }
+    
+    func saveRecent(video: LikeVideo) {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if self.recent.count > 10 {
+            self.recent.removeLast()
+            self.recent.insert(video, at: 0)
+        } else {
+            if self.recent.isEmpty {
+                self.recent.append(video)
+            }
+            self.recent.insert(video, at: 0)
+        }
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            try? FileManager.default.removeItem(at: fileurl)
+        }
+        let encoder = JSONEncoder()
+        let myData = try? encoder.encode(self.recent)
+        FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: myData)
+    }
+    
     //MARK: showList 바디
     var body: some View {
         VStack{}.onAppear(){
@@ -358,12 +455,14 @@ struct showList: View {
                     reloads = true
                     self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
                     print("video order: ",videoOrder)
+                    saveRecent(video: playlist)
                 } label: {
                     ListView(Video: playlist)
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button {
-                        print("제거")
+                        self.playlist.remove(at: self.playlist.firstIndex(of: playlist)!)
+                        saveLists()
                     } label: {
                         Image(systemName: "trash")
                     }

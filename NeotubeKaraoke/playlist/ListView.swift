@@ -20,6 +20,10 @@ struct ListView: View {
                 ZStack{
                     AsyncImage(url: URL(string: Video.thumbnail)){ image in
                         image.resizable()
+                            .frame(width: 70/9*16, height: 70/9*12)
+                            .clipShape(Rectangle().size(width: 70/9*16, height: 70).offset(x: 0, y: 70/6))
+                            .frame(width: 70/9*16, height: 70)
+                            .shadow(color: .black,radius: 10, x: 0, y: 10)
                     } placeholder: {
                         ZStack{
                             Rectangle()
@@ -36,10 +40,11 @@ struct ListView: View {
                                 .frame(height: 30)
                                 .aspectRatio(0.92, contentMode: .fit)
                                 .foregroundColor(Color.white)
-                        }.padding(.leading,7)
+                        }.frame(height: 90)
+                        .padding(.leading,7)
                     }
                     .aspectRatio(16/12, contentMode: .fit)
-                    .frame(height: 90)
+                    
                     .padding(.leading, -13)
                     .padding(.bottom, 10)
                     HStack{
