@@ -18,6 +18,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
     @Published var isAppears = false
     @Published var isplaying = false
     @Published var intervals = 0.0
+    var vidSync = 0.0
     
     var currrnts: Double {
         let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)

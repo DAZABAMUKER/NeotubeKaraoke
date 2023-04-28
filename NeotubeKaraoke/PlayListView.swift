@@ -40,6 +40,13 @@ struct PlayListView: View {
     let heights = 100.0
     
     
+    func addToNowPlaying(vid: LikeVideo) {
+        if self.nowPlayList.contains(vid) {
+            self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: vid)!)
+        }
+        self.nowPlayList.append(vid)
+    }
+    
     //MARK: - PlayListView 함수
     //playlist.json에서 플레이리스트들 가져옴.
     func decodePList() {
@@ -56,6 +63,9 @@ struct PlayListView: View {
     func saveRecent(video: LikeVideo) {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if self.recent.contains(video) {
+            self.recent.remove(at: self.recent.firstIndex(of: video)!)
+        }
         if self.recent.count > 10 {
             self.recent.removeLast()
             self.recent.insert(video, at: 0)
@@ -149,8 +159,10 @@ struct PlayListView: View {
                                     self.isReady = false
                                     videoPlay = VideoPlay(videoId: recent.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                     reloads = true
-                                    self.videoOrder = self.nowPlayList.firstIndex(of: recent) ?? -1
                                     self.nowPlayList.append(LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
+//                                    addToNowPlaying(vid: LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
+//                                    self.videoOrder = self.nowPlayList.firstIndex(of: recent) ?? -1
+                                    self.videoOrder = self.nowPlayList.count - 1
                                     saveRecent(video: recent)
                                     print("video order: ", videoOrder)
                                 } label: {
@@ -424,6 +436,9 @@ struct showList: View {
     func saveRecent(video: LikeVideo) {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if self.recent.contains(video) {
+            self.recent.remove(at: self.recent.firstIndex(of: video)!)
+        }
         if self.recent.count > 10 {
             self.recent.removeLast()
             self.recent.insert(video, at: 0)

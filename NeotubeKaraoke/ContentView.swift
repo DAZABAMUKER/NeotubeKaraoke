@@ -19,8 +19,8 @@ struct ContentView: View {
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     @EnvironmentObject var envPlayer: EnvPlayer
     
-    private let adViewControllerRepresentable = AdViewControllerRepresentable()
-    private let adCoordinator = AdCoordinator()
+    @State var adViewControllerRepresentable = AdViewControllerRepresentable()
+    @StateObject var adCoordinator = AdCoordinator()
     @State var isLandscape = false
     @State var searching: Bool = false
     @State var inputVal: String = ""
@@ -46,14 +46,16 @@ struct ContentView: View {
                     if self.adCount % 2 == 0 {
                         print("광고중")
                         print(self.adCount)
-                        adCoordinator.loadAd()
+                        //adCoordinator.loadAd()
+                        //print(adCoordinator.ad)
                         adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
                     } else {
                         print("홀수")
-                        if !once {
-                            adCoordinator.loadAd()
-                            self.once = true
-                        }
+                        adCoordinator.loadAd()
+//                        if !once {
+//                            adCoordinator.loadAd()
+//                            self.once = true
+//                        }
                     }
                 }
             }
@@ -147,9 +149,17 @@ struct ContentView: View {
                     TopChart(inputVal: $inputVal, searching: $searching)
                         .tag(TabIndex.chart)
                 }
+                
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
                     ZStack{
+//                        
+//                        if adCoordinator.ad != nil {
+//                            Spacer().onAppear() {
+//                                print(adCoordinator.ad)
+//                            }
+//                        }
+//                        
                         if vidFull && UIDevice.current.model == "iPad" {
                             VStack{}.onAppear(){
                                 self.isLandscape = true
@@ -231,6 +241,13 @@ struct ContentView: View {
                     Spacer()
                         .frame(height: self.vidFull ? 0 : 50)
                 }
+                .background {
+                    // Add the adViewControllerRepresentable to the background so it
+                    // doesn't influence the placement of other views in the view hierarchy.
+                    adViewControllerRepresentable
+                        .frame(width: .zero, height: .zero)
+                }
+                
                 if !vidFull {
                     Circle()
                         .frame(width: 100)
@@ -296,12 +313,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .background {
-                // Add the adViewControllerRepresentable to the background so it
-                // doesn't influence the placement of other views in the view hierarchy.
-                adViewControllerRepresentable
-                    .frame(width: .zero, height: .zero)
-            }.ignoresSafeArea(.keyboard, edges: .bottom)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 }

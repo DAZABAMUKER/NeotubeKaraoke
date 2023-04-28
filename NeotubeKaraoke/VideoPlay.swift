@@ -70,6 +70,7 @@ struct VideoPlay: View {
     @State var record: Bool = false
     @State var sample = [Float]()
     @State var isMicOn = false
+    @State var vidSync = 0.0
     @Binding var score: Int
     
     private let tempoString: LocalizedStringKey = "Tempo"
@@ -181,7 +182,7 @@ struct VideoPlay: View {
                 DispatchQueue.main.async {
                     url.map { extractInfo(url: $0) }
                 }
-                print("loads")
+                //print("loads")
             }
             catch {
                 print(#function, error)
@@ -391,7 +392,6 @@ struct VideoPlay: View {
                                 //.border(.green)
                                 
                                     if tap && vidFull{
-                                        
                                         VStack{
                                             if !isLandscape{
                                                 Spacer()
@@ -491,12 +491,14 @@ struct VideoPlay: View {
                                         }
                                         .frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
                                         .padding(.top, isLandscape ? 20 : 0)
+                                        //.border(.white)
                                         VStack{
                                             if !isLandscape {
                                                 Spacer()
-                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 160)
+                                                    .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 220)
+                                                    //.offset(x: 0, y: geometry.size.width*9/32)
+                                                    //.border(.blue)
                                             }
-                                            
                                             HStack{
                                                 Spacer()
                                                 Button {
@@ -576,17 +578,22 @@ struct VideoPlay: View {
                                             .shadow(color: !isLandscape ? .pink : .black, radius: 10)
                                             .frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
                                             .padding(.top, isLandscape ? 20 : 0)
-                                            
+                                            .scaleEffect(isiPad ? 1.2 : 1.0)
                                         }
                                         VStack{
                                             if vidFull {
                                                 if !isLandscape {
                                                     Spacer()
-                                                        .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 120)
+                                                        .frame(width: geometry.size.width, height: geometry.size.width*9/16  + 100)
+                                                        //.border(.red)
+                                                } else {
+                                                    Spacer()
+                                                        .frame(width: geometry.size.width, height: geometry.size.height*2/3)
                                                 }
-                                                Spacer()
-                                                    .frame(height: isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
-                                                HStack(spacing: 50){
+//                                                Spacer()
+//                                                    .frame(width: 50, height: isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
+//                                                    .border(.green)
+                                                HStack(spacing: 60){
                                                     Button {
                                                         self.tempo -= 0.02
                                                         player.tempo(spd: tempo)
@@ -600,7 +607,7 @@ struct VideoPlay: View {
                                                         }
                                                         .background {
                                                             VStack{}
-                                                                .frame(width: 90, height: 60)
+                                                                .frame(width: 90, height: 40)
                                                                 .background(.thinMaterial.opacity(0.7))
                                                                 .cornerRadius(10)
                                                                 .shadow(color: !isLandscape ? .white : .clear, radius: 5)
@@ -610,11 +617,11 @@ struct VideoPlay: View {
                                                         Text(self.tempoString)
                                                         Text(": x")
                                                             .font(.caption)
-                                                        Text(String(self.tempo))
+                                                        Text(String(format: "%.2f", self.tempo))
                                                     }
                                                     .background {
                                                         VStack{}
-                                                            .frame(width: 110, height: 60)
+                                                            .frame(width: 110, height: 40)
                                                             .background(.thinMaterial.opacity(0.7))
                                                             .cornerRadius(10)
                                                             .shadow(color: !isLandscape ? .white : .clear, radius: 5)
@@ -632,17 +639,17 @@ struct VideoPlay: View {
                                                         }
                                                         .background {
                                                             VStack{}
-                                                                .frame(width: 90, height: 60)
+                                                                .frame(width: 90, height: 40)
                                                                 .background(.thinMaterial.opacity(0.7))
                                                                 .cornerRadius(10)
                                                                 .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                         }
                                                     }
                                                 }
-                                                HStack(spacing: 40){
+                                                HStack(spacing: 45){
                                                     if !isLandscape {
                                                         Button {
-                                                            self.tone -= 1
+                                                            self.tone -= 1.0
                                                             audioManager.pitchChange(tone: self.tone)
                                                         } label: {
                                                             Text("KeyDown")
@@ -671,6 +678,46 @@ struct VideoPlay: View {
                                                                     .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                             }
                                                     }
+                                                    if isLandscape {
+                                                        Button {
+                                                            self.vidSync -= 0.1
+                                                            audioManager.vidSync = self.vidSync
+                                                        } label: {
+                                                            Text("-0.1s")
+                                                                .opacity(0.8)
+                                                                .font(.title3)
+                                                                .background {
+                                                                    VStack{}
+                                                                        .frame(width: 100, height: 40)
+                                                                        .background(.thinMaterial.opacity(0.7))
+                                                                        .cornerRadius(10)
+                                                                        .shadow(color: !isLandscape ? .white : .clear, radius: 5)
+                                                                }
+                                                        }
+                                                        HStack {
+                                                            Text(String(format: "%.2f", self.vidSync))
+                                                            Text("s")
+                                                        }
+                                                        .frame(width: 80, height: 40)
+                                                        .background(.thinMaterial.opacity(0.7))
+                                                        .cornerRadius(10)
+                                                        .shadow(color: !isLandscape ? .white : .clear, radius: 5)
+                                                        Button {
+                                                            self.vidSync += 0.1
+                                                            audioManager.vidSync = self.vidSync
+                                                        } label: {
+                                                            Text("+0.1s")
+                                                                .opacity(0.8)
+                                                                .font(.title3)
+                                                                .background {
+                                                                    VStack{}
+                                                                        .frame(width: 100, height: 40)
+                                                                        .background(.thinMaterial.opacity(0.7))
+                                                                        .cornerRadius(10)
+                                                                        .shadow(color: !isLandscape ? .white : .clear, radius: 5)
+                                                                }
+                                                        }
+                                                    }
                                                     Button {
                                                         audioManager.playCrowd()
                                                     } label: {
@@ -687,7 +734,7 @@ struct VideoPlay: View {
                                                     }
                                                     if !isLandscape {
                                                         Button {
-                                                            self.tone += 1
+                                                            self.tone += 1.0
                                                             audioManager.pitchChange(tone: self.tone)
                                                         } label: {
                                                             Text("KeyUp")
@@ -703,13 +750,58 @@ struct VideoPlay: View {
                                                         }
                                                     }
                                                 }
-                                                .padding(.top, 40)
-                                                Spacer()
+                                                .padding(.top, 30)
+                                                HStack(spacing: 60) {
+                                                    if !isLandscape {
+                                                        Button {
+                                                            self.vidSync -= 0.1
+                                                            audioManager.vidSync = self.vidSync
+                                                        } label: {
+                                                            Text("-0.1s")
+                                                                .opacity(0.8)
+                                                                .font(.title3)
+                                                                .background {
+                                                                    VStack{}
+                                                                        .frame(width: 100, height: 40)
+                                                                        .background(.thinMaterial.opacity(0.7))
+                                                                        .cornerRadius(10)
+                                                                        .shadow(color: !isLandscape ? .white : .clear, radius: 5)
+                                                                }
+                                                        }
+                                                        HStack {
+                                                            Text(String(format: "%.2f", self.vidSync))
+                                                            Text("s")
+                                                        }
+                                                        .frame(width: 80, height: 40)
+                                                        .background(.thinMaterial.opacity(0.7))
+                                                        .cornerRadius(10)
+                                                        .shadow(color: !isLandscape ? .white : .clear, radius: 5)
+                                                        Button {
+                                                            self.vidSync += 0.1
+                                                            audioManager.vidSync = self.vidSync
+                                                        } label: {
+                                                            Text("+0.1s")
+                                                                .opacity(0.8)
+                                                                .font(.title3)
+                                                                .background {
+                                                                    VStack{}
+                                                                        .frame(width: 100, height: 40)
+                                                                        .background(.thinMaterial.opacity(0.7))
+                                                                        .cornerRadius(10)
+                                                                        .shadow(color: !isLandscape ? .white : .clear, radius: 5)
+                                                                }
+                                                        }
+                                                    }
+                                                }
+                                                .padding(.top, 20)
+//                                                Spacer()
+//                                                    .frame(height: 70)
                                             }
                                         }
                                         .tint(.white)
-                                        .frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
-                                        
+                                        .scaleEffect(isiPad ? 1.5 : 1)
+                                        //.frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
+                                        //.border(.yellow)
                                         if player.progress {
                                             VStack(alignment: .center){
                                                 Circle()

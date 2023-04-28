@@ -47,6 +47,13 @@ struct searcher: View{
     private let cancel: LocalizedStringKey = "Cancel"
     private let already: LocalizedStringKey = "Playlist already have this video."
     
+    func addToNowPlaying(vid: LikeVideo) {
+        if self.nowPlayList.contains(vid) {
+            self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: vid)!)
+        }
+        self.nowPlayList.append(vid)
+    }
+    
     func saveRecent(video: LikeVideo) {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
@@ -142,8 +149,8 @@ struct searcher: View{
                 
                 if self.searching {
                     VStack{}.onAppear(){
-                        self.ytSearch.search(value: self.inputVal)
-                        //let _ = models.getVideos(val: inputVal)
+                        //self.ytSearch.search(value: self.inputVal)
+                        let _ = models.getVideos(val: inputVal)
                         self.searching = false
                     }
                 }
@@ -213,6 +220,8 @@ struct searcher: View{
                                     }
                                     BannerAd()
                                         .frame(width: geometry.size.width, height: 70)
+                                    VStack{}
+                                        .frame(height: 200)
                                 }
                                 .background(Color.black.opacity(0.6))
                             }
@@ -228,7 +237,7 @@ struct searcher: View{
                             .listStyle(.plain)
                             .environment(\.defaultMinListRowHeight, 80)
                             .preferredColorScheme(.dark)
-                            VStack{}.frame(height: 135).background(.red)
+                            //VStack{}.frame(height: 135).background(.red)
                         } else {
                             ZStack{
                                 Image("clear")

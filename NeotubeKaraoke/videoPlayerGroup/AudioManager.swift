@@ -10,6 +10,7 @@ import AVFoundation
 
 class AudioManager: ObservableObject {
     
+    var vidSync = 0.0
     let playerNode = AVAudioPlayerNode()
     let clapNode = AVAudioPlayerNode()
     let crowdNode = AVAudioPlayerNode()
@@ -162,6 +163,7 @@ class AudioManager: ObservableObject {
     
     public func controlFrame(jump: Double) {
         print(jump)
+        let jump = jump + self.vidSync
         guard let audioFile = audioFile else { print("오디오 파일 에러"); return }
         let frameLocaition = AVAudioFramePosition(jump * audioFile.processingFormat.sampleRate)
         //jumpFrame = currentFrame + frameLocaition
@@ -194,7 +196,7 @@ class AudioManager: ObservableObject {
     
     public func checkVidTime(vidTime: Double) {
         let audiTime = offsetFrame + Double(currentFrame)/44100.0
-        var interval = audiTime - vidTime
+        var interval = audiTime - vidTime - self.vidSync
         //print(interval)
         if interval < 0 {
             interval *= -1

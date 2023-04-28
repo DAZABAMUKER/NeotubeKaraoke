@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import GoogleMobileAds
 
-
+/*
 struct GADInterstitialAds: View {
     private let adViewControllerRepresentable = AdViewControllerRepresentable()
     private let adCoordinator = AdCoordinator()
@@ -29,13 +29,13 @@ struct GADInterstitialAds: View {
             }
             
             Button("Watch an ad") {
-                adCoordinator.loadAd()
+                //adCoordinator.loadAd()
                 adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
             }
         }
     }
 }
-
+*/
 struct AdViewControllerRepresentable: UIViewControllerRepresentable {
   let viewController = UIViewController()
 
@@ -49,7 +49,11 @@ struct AdViewControllerRepresentable: UIViewControllerRepresentable {
 }
 
 class AdCoordinator: NSObject, GADFullScreenContentDelegate, ObservableObject {
-    private var ad: GADInterstitialAd?
+    private var ad: GADInterstitialAd? {
+        didSet {
+            print(ad, oldValue)
+        }
+    }
     @Published var isAdTwice: Bool = false
     @Published var showScore = false
     func loadAd() {
@@ -61,11 +65,13 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate, ObservableObject {
             }
             
             self.ad = ad
+            print(self.ad)
             self.ad?.fullScreenContentDelegate = self
         }
     }
     
     func presentAd(from viewController: UIViewController) {
+        print(self.ad == nil ? "nil~" : "ok")
         guard let fullScreenAd = ad else {
             return print("Ad wasn't ready")
         }
@@ -84,7 +90,7 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate, ObservableObject {
     }
     
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        print("\(#function) called")
+        print("\(#function) called", error)
     }
     
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
