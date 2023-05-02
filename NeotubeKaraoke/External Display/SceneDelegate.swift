@@ -19,11 +19,13 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = scene as? UIWindowScene else {
             return
         }
-        scene.screen.overscanCompensation = .none
+        //scene.screen.overscanCompensation = .none
+        //TV 연결시 화면 확대됨
         let content = ExternalDisplay()
             .environmentObject(EnvPlayer.shared)
         window = UIWindow(windowScene: scene)
-        window?.screen.overscanCompensation = .none
+        //window?.screen.overscanCompensation = .none
+        //TV 연결시 화면 확대됨
         window?.rootViewController = UIHostingController(rootView: content)
         window?.isHidden = false
     }

@@ -65,6 +65,8 @@ struct SettingView: View {
                         }
                     }
                 }
+                BannerAd()
+                    .frame(height: 60)
                 List{
                     Section{
                         Button{
@@ -186,8 +188,10 @@ struct SettingView: View {
                             Text(self.cancel)
                         }
                     }
-                    
+                    Spacer()
+                        .frame(height: 100)
                 }
+                /*
                 Button {
                     
                 } label: {
@@ -201,9 +205,7 @@ struct SettingView: View {
                     }
                     .frame(width: 300, height: 50)
                 }
-                
-                Spacer()
-                    .frame(height: 100)
+                */
             }
             .preferredColorScheme(.dark)
         }

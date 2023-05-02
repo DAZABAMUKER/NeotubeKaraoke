@@ -84,6 +84,7 @@ struct VideoPlay: View {
             } else {
                 let value = UIInterfaceOrientation.landscapeLeft.rawValue
                 UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = true
             }
         } else {
             if #available(iOS 16.0, *) {
@@ -93,6 +94,7 @@ struct VideoPlay: View {
             } else {
                 let value = UIInterfaceOrientation.portrait.rawValue
                 UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = false
             }
         }
     }
@@ -144,21 +146,24 @@ struct VideoPlay: View {
                     let bestAudio = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.first
                     //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
                     //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded }.last
-                    //let bestAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
+                    let onlyAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
                     print(bestAudio!, bestVideo!)
                     //print(self.info!)
                     guard let aUrl = bestAudio?.url else { return }
                     guard let vUrl = bestVideo?.url else { return }
-                    print(vUrl)
+                    guard let onlyAudioUrl = onlyAudio?.url else { return }
+                    //print(vUrl)
                     //self.audioUrl = aUrl
                     //self.videoUrl = vUrl
                     //print(self.audioUrl)
-                    print(bestVideo?.filesize ?? 0)
-                    print(bestAudio?.filesize ?? 0)
+                    //let size = try? onlyAudioUrl.resourceValues(forKeys: [.totalFileSizeKey]).totalFileSize
+                    //print(size)
+                    //print(bestVideo?.filesize ?? 0)
+                    //print(bestAudio?.filesize ?? 0)
                     player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0, isOk: isOk)
                     envPlayer.player = self.player
                     envPlayer.isOn = true
-                    loadAVAssets(url: aUrl, size: bestAudio?.filesize ?? 0)
+                    loadAVAssets(url: aUrl, size: onlyAudio?.filesize ?? 0, aUrl: onlyAudioUrl)
                 }
             }
             catch {
@@ -203,8 +208,13 @@ struct VideoPlay: View {
         }
     }
     
-    func loadAVAssets(url: URL, size: Int64) {
-        var request = URLRequest(url: url)
+    func loadAVAssets(url: URL, size: Int64, aUrl: URL) {
+        print("sizes:",size)
+        var urlToUse = url
+//        if size < 6000000 {
+//            urlToUse = aUrl
+//        }
+        var request = URLRequest(url: urlToUse)
         request.httpMethod = "GET"
         let task = URLSession(configuration: .default).dataTask(with: request) { data, urlResponse, error in
             let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -370,9 +380,12 @@ struct VideoPlay: View {
                             .opacity(isLandscape && vidFull ? 0 : 1)
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
-                                    .frame(width: isiPad ? geometry.size.width : isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height:isiPad ? !isLandscape ? geometry.size.width*9/16 : geometry.size.height : isLandscape ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16)
-                                    .padding(.top, isLandscape ? 20 : 0)
+                                    .frame(width: isiPad ? geometry.size.width : (isLandscape && vidFull) ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height: isiPad ? !isLandscape ? geometry.size.width*9/16 : vidFull ? geometry.size.height : geometry.size.width*9/16 : isLandscape ? vidFull ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16 : geometry.size.width*9/16)
+                                    .padding(.top, (isLandscape && vidFull) ? 20 : 0)
                                     .navigationBarTitleDisplayMode(.inline)
+                                    .onAppear(){
+                                        player.plays()
+                                    }
                                 //.edgesIgnoringSafeArea(.bottom)
                                 HStack{
                                     VStack{}

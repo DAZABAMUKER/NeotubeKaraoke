@@ -74,6 +74,7 @@ struct ContentView: View {
             } else {
                 let value = UIInterfaceOrientation.landscapeLeft.rawValue
                 UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = true
             }
         } else {
             if #available(iOS 16.0, *) {
@@ -83,6 +84,7 @@ struct ContentView: View {
             } else {
                 let value = UIInterfaceOrientation.portrait.rawValue
                 UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = false
             }
         }
     }
@@ -263,9 +265,10 @@ struct ContentView: View {
                     }
                     .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                     .preferredColorScheme(.light)
-                    .onAppear(){
-                        self.isLandscape = false
-                    }
+//                    .onAppear(){
+//                        
+//                        self.isLandscape = false
+//                    }
                 }
                 VStack{
                     HStack{
