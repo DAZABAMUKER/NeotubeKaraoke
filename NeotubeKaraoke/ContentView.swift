@@ -12,6 +12,7 @@ enum TabIndex {
     case Setting
     case PlayList
     case chart
+    case peer
 }
 // 메인 뷰
 struct ContentView: View {
@@ -100,6 +101,8 @@ struct ContentView: View {
             return Color(red: 152/255, green: 216/255, blue: 170/255)
         case .chart:
             return Color(red: 247/255, green: 208/255, blue: 96/255)
+        case .peer:
+            return Color.indigo
         }
     }
     
@@ -107,13 +110,15 @@ struct ContentView: View {
     func CircleOffset(tabIndex: TabIndex, geometry: GeometryProxy) -> CGFloat {
         switch tabIndex {
         case .PlayList:
-            return -geometry.size.width * 3 / 8
-        case .Home:
-            return geometry.size.width / 8
-        case .Setting:
-            return geometry.size.width * 3 / 8
+            return -geometry.size.width * 4 / 10
         case .chart:
-            return -geometry.size.width / 8
+            return -geometry.size.width * 2 / 10
+        case .Home:
+            return 0
+        case .peer:
+            return geometry.size.width * 2 / 10
+        case .Setting:
+            return geometry.size.width * 4 / 10
         }
     }
     
@@ -127,7 +132,7 @@ struct ContentView: View {
                 .font(.system(size: 30))
                 .scaleEffect(self.tabIndex == tabIndex ? 1.7 : 1.0)
                 .foregroundColor(self.tabIndex == tabIndex ? changeColor(tabIndex: tabIndex) : Color.gray)
-                .frame(width: geometry.size.width / 4, height: 50)
+                .frame(width: geometry.size.width / 5, height: 50)
                 .offset(y: self.tabIndex == tabIndex ? -5 : 0)
                 .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                 .shadow(radius: 10)
@@ -150,6 +155,8 @@ struct ContentView: View {
                         .tag(TabIndex.Setting)
                     TopChart(inputVal: $inputVal, searching: $searching)
                         .tag(TabIndex.chart)
+                    FindingView()
+                        .tag(TabIndex.peer)
                 }
                 
                 //탭뷰 위에 플레이어화면을 올려줌
@@ -261,6 +268,7 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .PlayList, img: "music.note.list", geometry: geometry)
                         TabButtonSel(tabIndex: .chart, img: "crown", geometry: geometry)
                         TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
+                        TabButtonSel(tabIndex: .peer, img: "shared.with.you", geometry: geometry)
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     }
                     .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))

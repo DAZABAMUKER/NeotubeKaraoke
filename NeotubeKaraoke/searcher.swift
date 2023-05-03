@@ -328,8 +328,9 @@ struct searcher: View{
                     if self.likeModal {
                         VStack(spacing: 0){
                             Text(self.addToList)
-                                .padding(10)
-                                .font(.title2)
+                                .padding(15)
+                                .bold()
+                                //.font(.title)
                             List {
                                 Button {
                                     self.lastNowPL.toggle()
