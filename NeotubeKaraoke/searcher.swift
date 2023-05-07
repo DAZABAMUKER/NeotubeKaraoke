@@ -7,10 +7,11 @@
 
 import SwiftUI
 import PythonKit
+import MultipeerConnectivity
 
 struct searcher: View{
     
-   
+    @StateObject var peers = ConnectPeer()
     @State var showplayer = false
     @State var isEditing: Bool = false
     @State var likeModal: Bool = false
@@ -19,7 +20,6 @@ struct searcher: View{
     @State var playlist = [playlists]()
     @State var ResponseItems = [Video]()
     @State var ytVideos = [LikeVideo]()
-    @State var addVideo: LikeVideo!
     @State var lastNowPL = false
     @State var rightAfterNowPL = false
     @State var alreadyHave = false
@@ -38,6 +38,7 @@ struct searcher: View{
     @Binding var isLandscape: Bool
     @Binding var score: Int
     @Binding var recent: [LikeVideo]
+    @Binding var addVideo: LikeVideo
     
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
@@ -211,7 +212,6 @@ struct searcher: View{
                                                         .onTapGesture {
                                                             self.likeModal = true
                                                             self.addVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle, runTime: responseitems.runTime)
-                                                            print("long")
                                                         }
                                                 }
                                             }
@@ -330,8 +330,15 @@ struct searcher: View{
                             Text(self.addToList)
                                 .padding(15)
                                 .bold()
-                                //.font(.title)
+                            //.font(.title)
                             List {
+                                Button {
+                                    self.tabIndex = .peer
+                                    self.likeModal = false
+                                } label: {
+                                    Text("Add video to peers.")
+                                }
+                                .listRowBackground(Color.black.opacity(0.5))
                                 Button {
                                     self.lastNowPL.toggle()
                                 } label: {
@@ -386,6 +393,7 @@ struct searcher: View{
                                     }
                                     self.lastNowPL = false
                                     self.rightAfterNowPL = false
+                                    self.addVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
                                 } label: {
                                     Text(self.add)
                                         .padding(10)
@@ -394,6 +402,7 @@ struct searcher: View{
                                     .frame(width: 60,height: 50)
                                 Button {
                                     self.likeModal = false
+                                    self.addVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
                                 } label: {
                                     Text(self.cancel)
                                         .padding(10)

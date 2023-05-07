@@ -6,6 +6,7 @@
 //
 import GoogleMobileAds
 import SwiftUI
+import MultipeerConnectivity
 //커스텀 텝바를 위한 enum
 enum TabIndex {
     case Home
@@ -39,6 +40,8 @@ struct ContentView: View {
     @State var score: Int = 0
     @State var showScore = false
     @State var recent = [LikeVideo]()
+    @State var addVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
+    //@State var connectedPeers = [MCPeerID]()
     
     @State var adCount: Int = 0 {
         didSet{
@@ -146,7 +149,7 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent)
@@ -155,7 +158,7 @@ struct ContentView: View {
                         .tag(TabIndex.Setting)
                     TopChart(inputVal: $inputVal, searching: $searching)
                         .tag(TabIndex.chart)
-                    FindingView()
+                    FindingView(addVideo: $addVideo, nowPlayList: $nowPlayList)
                         .tag(TabIndex.peer)
                 }
                 

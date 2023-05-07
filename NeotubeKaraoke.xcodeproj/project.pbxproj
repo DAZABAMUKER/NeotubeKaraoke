@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
+		0324413F2A03A21D003C1300 /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0324413E2A03A21D003C1300 /* Swipe.swift */; };
 		032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032DE3E229AEDAC50097C58A /* videoClass.swift */; };
 		0330C4E329A1B94000B3E6D3 /* VideoPlayers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */; };
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
@@ -61,6 +62,7 @@
 /* Begin PBXFileReference section */
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
+		0324413E2A03A21D003C1300 /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
 		032DE3E229AEDAC50097C58A /* videoClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoClass.swift; sourceTree = "<group>"; };
 		0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayers.swift; sourceTree = "<group>"; };
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				037A998D2A02B0EB00A05065 /* ConnectPeer.swift */,
+				0324413E2A03A21D003C1300 /* Swipe.swift */,
 				037A998F2A02B11600A05065 /* PeerDevice.swift */,
 			);
 			path = Peers;
@@ -434,6 +437,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0324413F2A03A21D003C1300 /* Swipe.swift in Sources */,
 				038B76E429EC0AAC0016522A /* EnvPlayer.swift in Sources */,
 				0316559E295BAC5C00B18342 /* TableCell.swift in Sources */,
 				03F36CC12963DE61001AEB7A /* Models.swift in Sources */,
@@ -640,7 +644,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -677,7 +681,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

@@ -8,6 +8,12 @@
 import Foundation
 import MultipeerConnectivity
 
+protocol ConnectPeersDelegate {
+    func send()
+    
+}
+
+
 class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdvertiserDelegate, MCSessionDelegate, ObservableObject{
     
     //MARK: Session Delegate
@@ -27,6 +33,16 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         //Indicates that an NSData object has been received from a nearby peer.
+        do {
+            print(String(data: data, encoding: .utf8) ?? "Non-data received.")
+            let video = try JSONDecoder().decode(LikeVideo.self, from: data)
+            DispatchQueue.main.async {
+                self.receivedVideo = video
+            }
+        }
+        catch {
+            print("Recieiving Video", error)
+        }
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
@@ -88,6 +104,7 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
     let mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser
     @Published var foundPeer = [MCPeerID]()
     @Published var connectedPeers = [MCPeerID]()
+    @Published var receivedVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     
     //initailize
     override init() {
@@ -98,6 +115,7 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
         self.mcSession.delegate = self
         self.mcNearbyServiceBrowser.delegate = self // 브라우저 대리자 설정
         self.mcNearbyServiceAdvertiser.delegate = self // 송신 대리자 설정
+        
     }
     //deinitialize
     deinit {

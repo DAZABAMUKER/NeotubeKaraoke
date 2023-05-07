@@ -4,6 +4,15 @@
 <dict>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7240659336832390~9495342297</string>
+	<key>com.apple.developer.device-information.user-assigned-device-name</key>
+	<true/>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Needed for connecting devicces to reservation.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_Dazaba-Neotube._tcp</string>
+		<string>_Dazaba-Neotube._udp</string>
+	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This is need for karaoke scoring.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
