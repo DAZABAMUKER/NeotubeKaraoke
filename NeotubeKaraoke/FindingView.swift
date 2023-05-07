@@ -13,6 +13,7 @@ struct FindingView: View {
     @State var isbrowser = false
     @State var isAd = false
     @State var isOn = false
+    @State var showPopOver = false
     @State var connectedPeers = [MCPeerID]()
     @Binding var addVideo: LikeVideo
     @Binding var nowPlayList: [LikeVideo]
@@ -30,6 +31,7 @@ struct FindingView: View {
                 if peers.receivedVideo.videoId != "nil" && self.nowPlayList.last != peers.receivedVideo {
                     VStack{}.onAppear(){
                         self.nowPlayList.append(peers.receivedVideo)
+                        peers.receivedVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
                     }
                 }
                 
@@ -49,7 +51,7 @@ struct FindingView: View {
                 LazyVGrid(columns: self.columns, spacing: 0){
                     ForEach(peers.foundPeer, id: \.self) {peerID in
                         Text(peerID.displayName)
-                            .PeerDevices(device: peerID, peers: $peers.connectedPeers)
+                            .PeerDevices(device: peerID, peers: $peers.connectedPeers, mcSession: $peers.mcSession, mcBrowser: $peers.mcNearbyServiceBrowser, addVideo: $addVideo)
                             .frame(width: 150)
                             .onTapGesture {
                                 if connectedPeers.contains(peerID) {
@@ -64,6 +66,7 @@ struct FindingView: View {
                                     peers.invite(peerID: peerID)
                                 }
                             }
+                            
                     }
                 }
                 .frame(width: geometry.size.width)
@@ -120,7 +123,7 @@ struct FindingView: View {
                         Image(systemName: "shared.with.you")
                     }
                 }
-                .padding(.horizontal)
+                .padding()
                 if self.isOn {
                     VStack{}.onAppear(){
                         peers.mcNearbyServiceAdvertiser.startAdvertisingPeer()

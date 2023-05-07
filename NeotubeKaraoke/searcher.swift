@@ -39,6 +39,7 @@ struct searcher: View{
     @Binding var score: Int
     @Binding var recent: [LikeVideo]
     @Binding var addVideo: LikeVideo
+    @Binding var nowVideo: LikeVideo
     
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
@@ -194,7 +195,8 @@ struct searcher: View{
                                                 videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                                 reloads = true
                                                 //print("리로드")
-                                                self.nowPlayList.append(LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle))
+                                                self.nowVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
+                                                self.nowPlayList.append(self.nowVideo)
                                                 self.videoOrder = nowPlayList.count - 1
                                                 saveRecent(video: responseitems)
                                             }
@@ -411,12 +413,14 @@ struct searcher: View{
                         }
                         .frame(width: 300, height: 250)
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                        .shadow(radius: 10)
                     }
                     if self.alreadyHave {
                         VStack{
                             Text(self.already)
                                 .padding(20)
                                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                                .shadow(radius: 10)
                                 .onAppear(){
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3 ) {
                                         self.alreadyHave = false

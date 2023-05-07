@@ -41,6 +41,8 @@ struct ContentView: View {
     @State var showScore = false
     @State var recent = [LikeVideo]()
     @State var addVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
+    @State var nowVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
+    @State var isNewitem = false
     //@State var connectedPeers = [MCPeerID]()
     
     @State var adCount: Int = 0 {
@@ -68,6 +70,7 @@ struct ContentView: View {
     
     private let loading: LocalizedStringKey = "Loading...\n"
     private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
+    private let newVideoAdded: LocalizedStringKey = "New Video reserved"
     
     func rotateLandscape() {
         if !isLandscape {
@@ -128,7 +131,6 @@ struct ContentView: View {
     // 선택된 탭바 아이템을 총괄하여 적용시켜주는 함수
     func TabButtonSel(tabIndex: TabIndex, img: String, geometry: GeometryProxy) -> some View {
         Button(action: {
-            print("click")
             self.tabIndex = tabIndex
         }) {
             Image(systemName: img)
@@ -149,7 +151,7 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
                     PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent)
@@ -161,6 +163,15 @@ struct ContentView: View {
                     FindingView(addVideo: $addVideo, nowPlayList: $nowPlayList)
                         .tag(TabIndex.peer)
                 }
+                .onChange(of: self.nowPlayList) { [nowPlayList] newValue in
+                    print(newValue.last, self.nowVideo, nowPlayList.last)
+                    if newValue.last != nowPlayList.last && newValue.last ?? LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None") != self.nowVideo {
+                        self.isNewitem = true
+                    }
+                }
+                .alert(self.newVideoAdded, isPresented: $isNewitem) {
+                    
+                }
                 
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
@@ -171,7 +182,6 @@ struct ContentView: View {
 //                                print(adCoordinator.ad)
 //                            }
 //                        }
-//                        
                         if vidFull && UIDevice.current.model == "iPad" {
                             VStack{}.onAppear(){
                                 self.isLandscape = true

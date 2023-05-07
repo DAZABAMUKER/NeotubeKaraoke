@@ -70,7 +70,7 @@ struct Swipe: ViewModifier {
 }
 
 extension View {
-    func Swipes(geometry: GeometryProxy) {
-        //self.modifier(Swipe(geometry: geometry))
+    func Swipes(geometry: GeometryProxy) -> some View {
+        self.modifier(Swipe(geometry: geometry))
     }
 }

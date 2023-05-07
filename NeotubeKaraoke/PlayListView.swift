@@ -28,6 +28,7 @@ struct PlayListView: View {
     @Binding var isLandscape: Bool
     @Binding var score: Int
     @Binding var recent: [LikeVideo]
+    @Binding var nowVideo: LikeVideo
     
     private let showNowPlaying: LocalizedStringKey = "Show now playing list"
     private let nowPlaying: LocalizedStringKey = "Now Playing List"
@@ -159,7 +160,8 @@ struct PlayListView: View {
                                     self.isReady = false
                                     videoPlay = VideoPlay(videoId: recent.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                     reloads = true
-                                    self.nowPlayList.append(LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
+                                    self.nowVideo = LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle)
+                                    self.nowPlayList.append(self.nowVideo)
 //                                    addToNowPlaying(vid: LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
 //                                    self.videoOrder = self.nowPlayList.firstIndex(of: recent) ?? -1
                                     self.videoOrder = self.nowPlayList.count - 1
@@ -360,6 +362,7 @@ struct PlayListView: View {
                     .frame(width: 300)
                     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 15))
                     .offset(y: -100)
+                    .shadow(radius: 10)
                 }
             }
             .background(content: {

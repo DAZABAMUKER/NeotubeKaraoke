@@ -22,6 +22,7 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
         if state == .connected {
             DispatchQueue.main.async {
                 self.connectedPeers.append(peerID)
+                print("연결 완료")
             }
         } else if state == .connecting {
             print("연결중")
@@ -41,7 +42,18 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
             }
         }
         catch {
-            print("Recieiving Video", error)
+            print("Recieiving Video:", error)
+            guard let dataString = String(data: data, encoding: .utf8) else {
+                print("Real Error! not string data")
+                return
+            }
+            print("data is String:", dataString)
+            if dataString == "환호" {
+                self.audioManager.playCrowd()
+            } else if dataString == "clap" {
+                self.audioManager.playClap()
+            }
+            
         }
     }
     
@@ -98,9 +110,10 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
     }
     
     //MARK: Variable
+    let audioManager = AudioManager()
     let mcPeerID = MCPeerID(displayName: UIDevice.current.name) //showing device name
-    var mcSession: MCSession
-    let mcNearbyServiceBrowser: MCNearbyServiceBrowser
+    @Published var mcSession: MCSession
+    @Published var mcNearbyServiceBrowser: MCNearbyServiceBrowser
     let mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser
     @Published var foundPeer = [MCPeerID]()
     @Published var connectedPeers = [MCPeerID]()
@@ -115,7 +128,7 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
         self.mcSession.delegate = self
         self.mcNearbyServiceBrowser.delegate = self // 브라우저 대리자 설정
         self.mcNearbyServiceAdvertiser.delegate = self // 송신 대리자 설정
-        
+        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
     }
     //deinitialize
     deinit {
