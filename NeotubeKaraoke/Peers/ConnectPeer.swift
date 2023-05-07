@@ -53,7 +53,6 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
             } else if dataString == "clap" {
                 self.audioManager.playClap()
             }
-            
         }
     }
     
