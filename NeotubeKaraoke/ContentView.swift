@@ -154,7 +154,7 @@ struct ContentView: View {
                     searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
                         .tag(TabIndex.PlayList)
                     SettingView(resolution: $resolution)
                         .tag(TabIndex.Setting)

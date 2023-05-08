@@ -171,7 +171,6 @@
 				037D081729B4780B0069ED88 /* clap.wav */,
 				0369980029D1CCBE00656D28 /* crowd.wav */,
 				037D081F29B719BC0069ED88 /* me.PNG */,
-				0356F76C29A496F40005EE2D /* downloadManager.swift */,
 			);
 			path = learn;
 			sourceTree = "<group>";
@@ -198,6 +197,7 @@
 		038B76E829F0116C0016522A /* Etc */ = {
 			isa = PBXGroup;
 			children = (
+				0356F76C29A496F40005EE2D /* downloadManager.swift */,
 				0383C97729E6662F00A625EC /* ScoreWavedata.swift */,
 				033C57F529D31DC400340988 /* GADInterstitialAd.swift */,
 				03C9B62E2A07987600BCA61A /* Pop.swift */,

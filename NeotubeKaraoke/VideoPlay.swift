@@ -33,6 +33,7 @@ struct VideoPlay: View {
     //@State var audioUrl = URL(string: "https://dazabamuker.tistory.com")!
     //@State var videoUrl = URL(string: "https://dazabamuker.tistory.com")!
     @ObservedObject var audioManager = AudioManager()
+    @StateObject var downloadManager = MultiPartsDownloadTask()
     @State var tone: Float = 0.0 {
         didSet {
             if tone > 24.0 {
@@ -163,7 +164,8 @@ struct VideoPlay: View {
                     player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0, isOk: isOk)
                     envPlayer.player = self.player
                     envPlayer.isOn = true
-                    loadAVAssets(url: aUrl, size: onlyAudio?.filesize ?? 0, aUrl: onlyAudioUrl)
+                    //loadAVAssets(url: aUrl, size: onlyAudio?.filesize ?? 0, aUrl: onlyAudioUrl)
+                    self.downloadManager.createDownloadParts(url: onlyAudioUrl, size: onlyAudio?.filesize ?? 0)
                 }
             }
             catch {
@@ -208,6 +210,13 @@ struct VideoPlay: View {
         }
     }
     
+    func audioEngineSet() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileUrl = doc.appendingPathComponent("audio.m4a")
+        audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+        self.isAppear = true
+        self.isReady = true
+    }
     func loadAVAssets(url: URL, size: Int64, aUrl: URL) {
         print("sizes:",size)
         var urlToUse = url
@@ -299,6 +308,11 @@ struct VideoPlay: View {
         NavigationStack{
             GeometryReader { geometry in
                 ZStack{
+                    if self.downloadManager.que {
+                        VStack{}.onAppear(){
+                            self.audioEngineSet()
+                        }
+                    }
                     if !self.player.isMuted {
                         VStack{}.onAppear(){
                             self.player.isMuted = true
