@@ -28,7 +28,9 @@ class DownloadTask {
                 if taskClass.parts.filter({$0.done == true}).count == taskClass.numberOfRequests {
                     do {
                         try FileManager.default.merge(files: taskClass.urls, to: taskClass.destination)
-                        taskClass.que = true
+                        DispatchQueue.main.async {
+                            taskClass.que = true
+                        }
                     }
                     catch {
                         print("merge error: ")

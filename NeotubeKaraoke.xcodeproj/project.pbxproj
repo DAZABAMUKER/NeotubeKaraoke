@@ -50,6 +50,11 @@
 		03962DEE2921C80500A376F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DED2921C80500A376F3 /* ContentView.swift */; };
 		03962DF029230D7D00A376F3 /* searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEF29230D7C00A376F3 /* searcher.swift */; };
 		0397116029D9D38E005ADE0E /* HTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0397115F29D9D38E005ADE0E /* HTMLParser.swift */; };
+		03A0A1C12A147C25000C5159 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C02A147C25000C5159 /* FirebaseAnalytics */; };
+		03A0A1C32A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C22A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion */; };
+		03A0A1C52A147C25000C5159 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C42A147C25000C5159 /* FirebaseAnalyticsSwift */; };
+		03A0A1C72A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C62A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		03A0A1C92A1481A8000C5159 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03A0A1C82A1481A8000C5159 /* GoogleService-Info.plist */; };
 		03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEE50129D5163C001B66E3 /* MyWebView.swift */; };
 		03C9B62F2A07987600BCA61A /* Pop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C9B62E2A07987600BCA61A /* Pop.swift */; };
 		03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CA4C8A29BDD13800507E26 /* ListView.swift */; };
@@ -101,6 +106,7 @@
 		03962DED2921C80500A376F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		03962DEF29230D7C00A376F3 /* searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searcher.swift; sourceTree = "<group>"; };
 		0397115F29D9D38E005ADE0E /* HTMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLParser.swift; sourceTree = "<group>"; };
+		03A0A1C82A1481A8000C5159 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		03AEE50129D5163C001B66E3 /* MyWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
 		03C9B62E2A07987600BCA61A /* Pop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pop.swift; sourceTree = "<group>"; };
 		03CA4C8A29BDD13800507E26 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
@@ -118,12 +124,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03A0A1C52A147C25000C5159 /* FirebaseAnalyticsSwift in Frameworks */,
+				03A0A1C72A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				03A0A1C12A147C25000C5159 /* FirebaseAnalytics in Frameworks */,
 				035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */,
 				17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */,
 				035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */,
 				0379B1AC29E04DCB0044F997 /* YouTubeiOSPlayerHelper in Frameworks */,
 				0379B1B129E174090044F997 /* PythonKit in Frameworks */,
 				0383C97529E3F39800A625EC /* SwiftSoup in Frameworks */,
+				03A0A1C32A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +249,7 @@
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
 				037A998B2A02B0BB00A05065 /* FindingView.swift */,
+				03A0A1C82A1481A8000C5159 /* GoogleService-Info.plist */,
 				037A99912A02B18500A05065 /* Peers */,
 				038B76E729F0114C0016522A /* External Display */,
 				0383C97629E665E300A625EC /* playlist */,
@@ -330,6 +341,10 @@
 				0379B1AB29E04DCB0044F997 /* YouTubeiOSPlayerHelper */,
 				0379B1B029E174090044F997 /* PythonKit */,
 				0383C97429E3F39800A625EC /* SwiftSoup */,
+				03A0A1C02A147C25000C5159 /* FirebaseAnalytics */,
+				03A0A1C22A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion */,
+				03A0A1C42A147C25000C5159 /* FirebaseAnalyticsSwift */,
+				03A0A1C62A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -366,6 +381,7 @@
 				0379B1AA29E04DCB0044F997 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				0379B1AF29E174090044F997 /* XCRemoteSwiftPackageReference "PythonKit" */,
 				0383C97329E3F39800A625EC /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -382,6 +398,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				037D082029B719BC0069ED88 /* me.PNG in Resources */,
+				03A0A1C92A1481A8000C5159 /* GoogleService-Info.plist in Resources */,
 				033C57F029D2DAC600340988 /* Localizable.strings in Resources */,
 				0369980129D1CCBE00656D28 /* crowd.wav in Resources */,
 				033C57F129D2DAC600340988 /* Localizable.strings in Resources */,
@@ -642,7 +659,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -679,7 +696,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -757,6 +774,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -784,6 +809,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0383C97329E3F39800A625EC /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		03A0A1C02A147C25000C5159 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		03A0A1C22A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		03A0A1C42A147C25000C5159 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		03A0A1C62A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 
