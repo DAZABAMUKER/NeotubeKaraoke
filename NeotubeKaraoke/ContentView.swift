@@ -241,7 +241,7 @@ struct ContentView: View {
                             Text(loading)
                                 .frame(width: geometry.size.width, height: 60)
                                 .onAppear(){
-                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
                                         self.reloads = false
                                         self.envPlayer.isOn = false
                                     }

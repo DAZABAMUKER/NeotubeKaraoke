@@ -21,7 +21,7 @@ class Models: ObservableObject {
             vals = "노래방"
         }
         //vals += " karaoke"
-        let urls = "https://www.googleapis.com/youtube/v3/search?part=\(Constant.API_PART)&q=\(vals)&videoEmbeddable=true&order=relevance&type=video&maxResults=20&key=\(Constant.API_KEY)"
+        let urls = "https://www.googleapis.com/youtube/v3/search?part=\(Constant.API_PART)&q=\(vals)&order=relevance&type=video&maxResults=20&key=\(Constant.API_KEY)"
         let urlEncoded = urls.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: urlEncoded)
         
@@ -70,9 +70,9 @@ class Models: ObservableObject {
                 DispatchQueue.main.async {
                     if response.items != nil {
                         self.nothings = false
-                        self.responseitems = response.items ?? []
+                        self.responseitems = response.items?.filter{$0.live == false} ?? []
                         self.isResponseitems = true
-                        guard let TiTle = response.items?.first?.title else {
+                        guard let TiTle = response.items?.filter{$0.live == false}.first?.title else {
                             print("result is noting!")
                             self.nothings = true
                             print(self.nothings)

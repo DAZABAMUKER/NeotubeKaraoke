@@ -49,6 +49,7 @@ struct SettingView: View {
     private let title: LocalizedStringKey = "Title"
     private let artist: LocalizedStringKey = "Artist"
     private let noResults: LocalizedStringKey = "No results"
+    private let manual: LocalizedStringKey = "Manual of NeotubeKaraoke"
     
     var body: some View {
         NavigationStack{
@@ -89,6 +90,12 @@ struct SettingView: View {
                                 .presentationDetents([.large])
                                 .presentationDragIndicator(.visible)
                         }
+                        Button {
+                            UIApplication.shared.openURL(URL(string: "https://dazabamuker.tistory.com/entry/%EB%84%88%ED%8A%9C%EB%B8%8C-%EB%85%B8%EB%9E%98%EB%B0%A9-%EC%95%B1-%EC%82%AC%EC%9A%A9%EB%B2%95How-to-use-NeotubeKaraoke-App")!)
+                        } label: {
+                            Text(self.manual)
+                        }
+
                     } header: {
                         Text("Contact")
                             .bold()

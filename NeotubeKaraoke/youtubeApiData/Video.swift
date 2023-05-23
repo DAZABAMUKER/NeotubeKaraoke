@@ -13,6 +13,7 @@ struct Video : Decodable{
     var description: String = ""
     var published = Date()
     var channelTitle: String = ""
+    var live = false
  
     enum CodingKeys: String, CodingKey {
         
@@ -28,12 +29,18 @@ struct Video : Decodable{
         case description
         case published = "publishedAt"
         case channelTitle
+        case liveBroadcastContent
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let snippetContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .snippet)
+        let finding = try snippetContainer.decode(String.self, forKey: .liveBroadcastContent)
+        if finding == "live" {
+            self.live = true
+            return
+        }
         self.title = try snippetContainer.decode(String.self, forKey: .title)
         self.title = String(htmlEncodedString: self.title)!
         self.description = try snippetContainer.decode(String.self, forKey: .description)
