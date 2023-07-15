@@ -159,6 +159,7 @@ struct searcher: View{
                 if models.stsCode != 200 && models.stsCode != 0 {
                     VStack{}.onAppear(){
                         self.ytSearch.search(value: self.inputVal)
+                        models.stsCode = 0
                     }
                 }
                 if ytSearch.isResults {
@@ -181,7 +182,6 @@ struct searcher: View{
                         if !self.ytVideos.isEmpty {
                             
                             //MARK: - 리스트
-                            
                             ScrollView{
                                 VStack{
                                     BannerAd()
@@ -289,7 +289,7 @@ struct searcher: View{
                                     //getSome()
                                     //self.ytSearch.search(value: self.inputVal)
                                 }
-                            
+                            //Text(String(models.stsCode))
                             Button {
                                 self.inputVal = ""
                             } label: {
@@ -297,6 +297,7 @@ struct searcher: View{
                                     Image(systemName: "multiply.circle.fill")
                                         .foregroundColor(.gray)
                                         .font(.system(size: 20))
+                                        .padding(.trailing, 5)
                                 }
                             }
                         }

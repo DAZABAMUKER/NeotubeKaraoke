@@ -60,6 +60,7 @@ class Models: ObservableObject {
                     DispatchQueue.main.sync {
                         self.nothings = true
                         self.stsCode = responsStatusCode
+                        print(self.stsCode)
                     }
                     return
                 }

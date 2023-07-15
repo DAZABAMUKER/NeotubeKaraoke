@@ -164,7 +164,7 @@ struct ContentView: View {
                         .tag(TabIndex.peer)
                 }
                 .onChange(of: self.nowPlayList) { [nowPlayList] newValue in
-                    print(newValue.last, self.nowVideo, nowPlayList.last)
+                    //print(newValue.last, self.nowVideo, nowPlayList.last)
                     if newValue.last != nowPlayList.last && newValue.last ?? LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None") != self.nowVideo {
                         self.isNewitem = true
                     }
