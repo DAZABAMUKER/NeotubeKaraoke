@@ -141,6 +141,8 @@ struct VideoPlay: View {
                         } else {
                             bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
                         }
+                    } else if resolution == .low {
+                        bestVideo = formats.filter{!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.first
                     } else {
                         bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
                     }

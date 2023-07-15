@@ -11,6 +11,7 @@ enum Resolution {
     case basic
     case high
     case ultra
+    case low
 }
 enum Karaoke {
     case Tj
@@ -112,6 +113,7 @@ struct SettingView: View {
                                 .foregroundColor(.white)
                                 .padding(0)
                             Picker(self.selResolution, selection: $resolution) {
+                                Text("Low").tag(Resolution.low)
                                 Text("Basic").tag(Resolution.basic)
                                 Text("1080").tag(Resolution.high)
                                 Text("1080+").tag(Resolution.ultra)
