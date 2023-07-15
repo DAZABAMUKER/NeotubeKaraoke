@@ -42,7 +42,7 @@ class AudioManager: ObservableObject {
     }
     
     init(){
-        
+        //setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
     }
     
     deinit{
@@ -203,7 +203,7 @@ class AudioManager: ObservableObject {
         }
         if Double(audioFileLength / 44100) - audiTime < 1 {
             playerNode.stop()
-            //audioEngine.stop()
+            audioEngine.stop()
         }
         //print("체크",vidTime, audiTime, interval)
         if interval > self.intervalLimit {

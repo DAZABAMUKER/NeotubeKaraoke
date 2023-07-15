@@ -156,7 +156,7 @@ struct ContentView: View {
                         .tag(TabIndex.Home)
                     PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
                         .tag(TabIndex.PlayList)
-                    SettingView(resolution: $resolution)
+                    SettingView(resolution: $resolution, isLandscape: $isLandscape)
                         .tag(TabIndex.Setting)
                     TopChart(inputVal: $inputVal, searching: $searching)
                         .tag(TabIndex.chart)

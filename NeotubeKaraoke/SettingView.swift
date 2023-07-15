@@ -23,12 +23,19 @@ struct SettingView: View {
     @State var showAlert = false
     @State var sheet = false
     @State var profile = false
+    @State var showCheer = false
     @State var karaoke: Karaoke = Karaoke.Tj
     @State var titleOfSong = ""
+    @State var ment = ""
+    @State var isEditing: Bool = false
     @StateObject private var getPopularChart = GetPopularChart()
+    @State var isAnimation = false
+    @State var cheerColor = [Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.indigo, Color.purple]
+    @State var colorIndex = 0
+    let audioManager = AudioManager(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
     
     @Binding var resolution: Resolution
-    
+    @Binding var isLandscape: Bool
     private let pasteboard = UIPasteboard.general
     
     private let devProfile: LocalizedStringKey = "Developer Profile"
@@ -51,6 +58,42 @@ struct SettingView: View {
     private let artist: LocalizedStringKey = "Artist"
     private let noResults: LocalizedStringKey = "No results"
     private let manual: LocalizedStringKey = "Manual of NeotubeKaraoke"
+    private let cheer: LocalizedStringKey = "Cheer for your friends"
+    
+    func rotateLandscape() {
+        if !isLandscape {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+                self.isLandscape = true
+            } else {
+                let value = UIInterfaceOrientation.landscapeLeft.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = true
+            }
+        } else {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+                self.isLandscape = false
+            } else {
+                let value = UIInterfaceOrientation.portrait.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = false
+            }
+        }
+    }
+    
+    func chageColor() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if (self.cheerColor.count == colorIndex + 1) {
+                self.colorIndex = 0
+            } else {
+                self.colorIndex += 1
+            }
+            chageColor()
+        }
+    }
     
     var body: some View {
         NavigationStack{
@@ -128,9 +171,102 @@ struct SettingView: View {
                         }
                     }
                     Section{
-                        VStack{
-                            Picker(self.searchNumberOfSongs, selection: $karaoke) {
-                                Text("Tj").tag(Karaoke.Tj)
+                        Button {
+                            self.showCheer = true
+                        } label: {
+                            Text(self.cheer)
+                        }
+                        .sheet(isPresented: $showCheer) {
+                            ZStack{
+                                VStack{
+                                    Text(ment)
+                                        .font(.system(size: 300, weight: .bold))
+                                        .minimumScaleFactor(0.3)
+                                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                                        .foregroundColor(isAnimation ? cheerColor[colorIndex] : .white )
+                                        .animation(.linear(duration: 1.0), value: self.colorIndex)
+                                        .onTapGesture {
+                                            rotateLandscape()
+                                        }
+                                    if isAnimation {
+                                        VStack{}.onAppear(){
+                                            chageColor()
+                                        }
+                                    }
+                                    if !isLandscape {
+                                        HStack{
+                                            TextField(self.cheer, text: $ment, onEditingChanged: {isEditing = $0 })
+                                                .padding()
+                                                .onAppear(){
+                                                    self.isAnimation = false
+                                                    
+                                                }
+                                                .onDisappear(){
+                                                    self.isAnimation = true
+                                                }
+                                            Button {
+                                                self.ment = ""
+                                            } label: {
+                                                if (self.ment.count > 0) {
+                                                    Image(systemName: "multiply.circle.fill")
+                                                        .foregroundColor(.gray)
+                                                        .font(.system(size: 20))
+                                                        .padding(.trailing, 5)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                VStack{
+                                    Spacer()
+                                    HStack{
+                                        Button {
+                                            self.audioManager.playClap()
+                                        } label: {
+                                            Image(systemName: "hands.clap.fill")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .foregroundColor(.secondary)
+                                                .padding(.trailing,20)
+                                                .opacity(0.5)
+                                        }
+                                        Spacer()
+                                        if UIDevice.current.model == "iPad" {
+                                            Button {
+                                                rotateLandscape()
+                                            } label: {
+                                                Image(systemName: "text.bubble.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .foregroundColor(.secondary)
+                                                    .padding(.trailing,20)
+                                                    .opacity(0.5)
+                                            }
+                                        }
+                                        Button {
+                                            self.audioManager.playCrowd()
+                                        } label: {
+                                            Image(systemName: "shareplay")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .foregroundColor(.secondary)
+                                                .padding(.trailing,20)
+                                                .opacity(0.5)
+                                        }
+                                        
+                                    }
+                                    .frame(height: 50, alignment: .trailing)
+                                    Spacer()
+                                        .frame(height: !isLandscape ? 50 : 10)
+                                }
+                            }
+                        }
+                    }
+                        Section{
+                            VStack{
+                                
+                                Picker(self.searchNumberOfSongs, selection: $karaoke) {
+                                    Text("Tj").tag(Karaoke.Tj)
                                 Text("KY").tag(Karaoke.KY)
                             }
                             TextField(self.searchSongTitle, text: $titleOfSong)
