@@ -174,6 +174,8 @@ struct VideoPlay: View {
                 guard let pyError = error as? PythonError, case let .exception(exception, traceback: _) = pyError else {
                     return
                 }
+                player.close()
+                audioManager.close()
                 if (String(exception.args[0]) ?? "").contains("Unsupported URL: ") {
                 }
             }
