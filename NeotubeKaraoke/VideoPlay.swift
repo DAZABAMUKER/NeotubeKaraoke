@@ -174,8 +174,8 @@ struct VideoPlay: View {
                 guard let pyError = error as? PythonError, case let .exception(exception, traceback: _) = pyError else {
                     return
                 }
-                self.vidEnd = true
-                self.vidFull = false
+                //self.vidEnd = true
+                //self.vidFull = false
                 if (String(exception.args[0]) ?? "").contains("Unsupported URL: ") {
                 }
             }

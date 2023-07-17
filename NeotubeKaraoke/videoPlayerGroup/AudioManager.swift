@@ -203,7 +203,7 @@ class AudioManager: ObservableObject {
         }
         if Double(audioFileLength / 44100) - audiTime < 1 {
             playerNode.stop()
-            audioEngine.stop()
+            //audioEngine.stop()
         }
         //print("체크",vidTime, audiTime, interval)
         if interval > self.intervalLimit {
