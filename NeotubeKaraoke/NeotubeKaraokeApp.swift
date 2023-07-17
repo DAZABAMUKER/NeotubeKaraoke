@@ -22,15 +22,22 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct NeotubeKaraokeApp: App {
+    
     let persistenceController = PersistenceController.shared
     @StateObject var envPlayer: EnvPlayer = EnvPlayer.shared
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+    @StateObject var purchaseManager = PurchaseManager()
 
     var body: some Scene {
         WindowGroup {
             ContentView(tabIndex: .Home)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(envPlayer)
+                .environmentObject(purchaseManager)
+                .task {
+                    await purchaseManager.updatePurchasedProducts()
+                }
         }
     }
     init() {

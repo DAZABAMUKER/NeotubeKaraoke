@@ -20,7 +20,7 @@ struct ContentView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     @EnvironmentObject var envPlayer: EnvPlayer
-    
+    @EnvironmentObject var purchaseManager: PurchaseManager
     @State var adViewControllerRepresentable = AdViewControllerRepresentable()
     @StateObject var adCoordinator = AdCoordinator()
     @State var isLandscape = false
@@ -154,11 +154,13 @@ struct ContentView: View {
                 TabView(selection: $tabIndex) {
                     searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo)
                         .toolbar(.hidden, for: .tabBar)
+                        .environmentObject(self.purchaseManager)
                         .tag(TabIndex.Home)
                     PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
                         .tag(TabIndex.PlayList)
                     SettingView(resolution: $resolution, isLandscape: $isLandscape)
                         .tag(TabIndex.Setting)
+                        .environmentObject(self.purchaseManager)
                     TopChart(inputVal: $inputVal, searching: $searching)
                         .tag(TabIndex.chart)
                     FindingView(addVideo: $addVideo, nowPlayList: $nowPlayList)

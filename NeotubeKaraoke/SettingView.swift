@@ -7,6 +7,8 @@
 
 import SwiftUI
 import AVKit
+import StoreKit
+
 enum Resolution {
     case basic
     case high
@@ -17,6 +19,7 @@ enum Karaoke {
     case Tj
     case KY
 }
+
 struct SettingView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
@@ -33,6 +36,7 @@ struct SettingView: View {
     @State var cheerColor = [Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.indigo, Color.purple]
     @State var colorIndex = 0
     let audioManager = AudioManager(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+    @EnvironmentObject var purchaseManager: PurchaseManager
     
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
@@ -170,6 +174,72 @@ struct SettingView: View {
                             Text("Show music score")
                         }
                     }
+                    Section {
+                        VStack{
+                            if purchaseManager.hasUnlockedPro {
+                                Text("헉!! 감동이에요!🥰")
+                            } else {
+                                Text("광고를 제거하세요!")
+                                ForEach(purchaseManager.products) { product in
+                                    Button {
+                                        Task{
+                                            do {
+                                                try await purchaseManager.purchase(product)
+                                            }
+                                            catch {
+                                                print(#function, error)
+                                            }
+                                        }
+                                    } label: {
+                                        HStack{
+                                            Text(product.displayName)
+                                                .foregroundColor(.white)
+                                            Spacer()
+                                            HStack{
+                                                Text(product.displayPrice)
+                                                    .foregroundColor(.white)
+                                            }
+                                            .padding(5)
+                                            .background {
+                                                RoundedRectangle(cornerRadius: 20)
+                                            }
+                                        }
+                                    }
+                                    Divider()
+                                }
+                                Button {
+                                    Task{
+                                        do {
+                                            try await AppStore.sync()
+                                        }
+                                        catch {
+                                            print("구매복원 오류: ", error)
+                                        }
+                                    }
+                                } label: {
+                                    HStack{
+                                        Image(systemName: "store")
+                                        Text("구매 복원하기")
+                                    }
+                                    .padding(5)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 20)
+                                    }
+                                }
+
+                            }
+                        }.task {
+                            do {
+                                try await purchaseManager.loadProducts()
+                            }
+                            catch {
+                                print("Loading Store Info error: ", error)
+                            }
+                        }
+                            
+                    } header: {
+                        Text("광고제거")
+                    }
                     Section{
                         Button {
                             self.showCheer = true
@@ -262,11 +332,11 @@ struct SettingView: View {
                             }
                         }
                     }
-                        Section{
-                            VStack{
-                                
-                                Picker(self.searchNumberOfSongs, selection: $karaoke) {
-                                    Text("Tj").tag(Karaoke.Tj)
+                    Section{
+                        VStack{
+                            
+                            Picker(self.searchNumberOfSongs, selection: $karaoke) {
+                                Text("Tj").tag(Karaoke.Tj)
                                 Text("KY").tag(Karaoke.KY)
                             }
                             TextField(self.searchSongTitle, text: $titleOfSong)
@@ -278,7 +348,7 @@ struct SettingView: View {
                                     } else {
                                         self.getPopularChart.searchSongOfTj(val: titleOfSong)
                                     }
-
+                                    
                                 }
                             
                         }

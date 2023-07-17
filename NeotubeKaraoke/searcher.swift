@@ -42,6 +42,8 @@ struct searcher: View{
     @Binding var addVideo: LikeVideo
     @Binding var nowVideo: LikeVideo
     
+    @EnvironmentObject var purchaseManager: PurchaseManager
+    
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
     private let lastList: LocalizedStringKey = "Add to last of now playing list"
