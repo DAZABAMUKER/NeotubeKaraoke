@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import StoreKit
 
+@MainActor
 class PurchaseManager: NSObject ,ObservableObject {
     
     let productIds = ["com.NeotubeKaraoke.adRemoval"]
