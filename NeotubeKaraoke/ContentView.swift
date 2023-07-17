@@ -33,6 +33,7 @@ struct ContentView: View {
     @State var closes = false
     @State var nowPlayList = [LikeVideo]()
     @State var vidEnd = false
+    @State var clickVid = false
     @State var videoOrder: Int = 0
     @State var isReady: Bool = true
     @State var resolution: Resolution = .basic
@@ -151,10 +152,10 @@ struct ContentView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom){
                 TabView(selection: $tabIndex) {
-                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo)
+                    searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo)
                         .toolbar(.hidden, for: .tabBar)
                         .tag(TabIndex.Home)
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
                         .tag(TabIndex.PlayList)
                     SettingView(resolution: $resolution, isLandscape: $isLandscape)
                         .tag(TabIndex.Setting)
@@ -187,12 +188,14 @@ struct ContentView: View {
                                 self.isLandscape = true
                             }
                         }
+                        /*
                         if adCoordinator.isAdTwice {
                             VStack{}.onAppear(){
                                 self.adCount -= 1
                                 adCoordinator.isAdTwice = false
                             }
                         }
+                         */
                         if UIDevice.current.model != "iPad" {
                             if UIDevice.current.orientation.isLandscape {
                                 VStack{}.onAppear(){
@@ -213,6 +216,11 @@ struct ContentView: View {
                                 self.tabIndex = .Home
                             }
                         }
+                        if self.clickVid {
+                            VStack{}.onAppear(){
+                                self.adCount += 1
+                            }
+                        }
                         if self.vidEnd {
                             VStack{}.onAppear(){
                                 print(vidEnd)
@@ -220,12 +228,14 @@ struct ContentView: View {
                                 if isLandscape {
                                     rotateLandscape()
                                 }
+                                
                                 if isReady {
-                                    self.adCount += 1
+                                    //self.adCount += 1
                                     if nowPlayList.count - 1 > videoOrder {
                                         vidFull = false
                                         videoOrder += 1
                                         self.isReady = false
+                                        self.clickVid = true
                                         videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                         reloads = true
                                         print("리로드")
@@ -244,6 +254,7 @@ struct ContentView: View {
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
                                         self.reloads = false
                                         self.envPlayer.isOn = false
+                                        self.clickVid = false
                                     }
                                 }
                                 .background(Color(red: 44/255, green: 54/255, blue: 51/255))

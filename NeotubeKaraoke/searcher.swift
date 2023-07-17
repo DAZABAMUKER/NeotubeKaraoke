@@ -30,6 +30,7 @@ struct searcher: View{
     @Binding var vidFull: Bool
     @Binding var nowPlayList: [LikeVideo]
     @Binding var vidEnd: Bool
+    @Binding var clickVid: Bool
     @Binding var videoOrder: Int
     @Binding var isReady: Bool
     @Binding var resolution: Resolution
@@ -192,6 +193,7 @@ struct searcher: View{
                                             if self.isReady {
                                                 self.vidEnd = true
                                                 self.isReady = false
+                                                self.clickVid = true
                                                 videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                                 reloads = true
                                                 //print("리로드")

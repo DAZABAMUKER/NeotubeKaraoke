@@ -20,6 +20,7 @@ struct PlayListView: View {
     @Binding var reloads: Bool
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
+    @Binding var clickVid: Bool
     @Binding var videoOrder: Int
     @Binding var isReady: Bool
     @Binding var resolution: Resolution
@@ -158,6 +159,7 @@ struct PlayListView: View {
                             ForEach(recent, id: \.self) { recent in
                                 Button {
                                     self.isReady = false
+                                    self.clickVid = true
                                     videoPlay = VideoPlay(videoId: recent.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                     reloads = true
                                     self.nowVideo = LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle)
@@ -233,6 +235,7 @@ struct PlayListView: View {
                                     ForEach(nowPlayList, id: \.self) { list in
                                         Button {
                                             self.isReady = false
+                                            self.clickVid = true
                                             videoPlay = VideoPlay(videoId: list.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                             reloads = true
                                             self.videoOrder = self.nowPlayList.firstIndex(of: list) ?? -1
@@ -267,7 +270,7 @@ struct PlayListView: View {
                             ForEach(self.playlist, id: \.self) { item in
                                 //TableCell(Video: video)
                                 NavigationLink {
-                                    showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score, recent: $recent) // 해당 재생목록 영상 리스트 뷰로 이동
+                                    showList(listName: item, nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score, recent: $recent) // 해당 재생목록 영상 리스트 뷰로 이동
                                         .onAppear(){
                                             self.PLAppear = true
                                         }
@@ -395,6 +398,7 @@ struct showList: View {
     @Binding var reloads: Bool
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
+    @Binding var clickVid: Bool
     @Binding var videoOrder: Int
     @Binding var isReady: Bool
     @Binding var resolution: Resolution
@@ -469,6 +473,7 @@ struct showList: View {
                 Button {
                     self.nowPlayList = self.playlist // 재생할 영상이 속한 재생목록으로 재생목록 변경
                     self.isReady = false
+                    self.clickVid = true
                     videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                     reloads = true
                     self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
