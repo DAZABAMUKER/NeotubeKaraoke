@@ -198,6 +198,9 @@ struct SettingView: View {
                                             }
                                         }
                                     } label: {
+                                        if purchaseManager.products.isEmpty {
+                                            Text("Please wait! It's still up in the air.")
+                                        }
                                         HStack{
                                             Image(systemName: "hand.raised.fingers.spread")
                                                 .foregroundColor(.white)
