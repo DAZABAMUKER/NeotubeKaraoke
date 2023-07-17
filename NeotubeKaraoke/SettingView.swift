@@ -64,6 +64,10 @@ struct SettingView: View {
     private let noResults: LocalizedStringKey = "No results"
     private let manual: LocalizedStringKey = "Manual of NeotubeKaraoke"
     private let cheer: LocalizedStringKey = "Cheer for your friends"
+    private let thanks: LocalizedStringKey = "Oh my gosh! I'm touched! 🥰"
+    private let RMAds: LocalizedStringKey = "You can remove Ads!"
+    private let RSPurchased: LocalizedStringKey = "Restore In-App purchases"
+    private let RMAdsTitle: LocalizedStringKey = "Remove Ads"
     
     func rotateLandscape() {
         if !isLandscape {
@@ -180,9 +184,9 @@ struct SettingView: View {
                     Section {
                         VStack{
                             if entitlementManager.hasPro {
-                                Text("헉!! 감동이에요!🥰")
+                                Text(self.thanks)
                             } else {
-                                Text("광고를 제거하세요!")
+                                Text(self.RMAds)
                                 ForEach(purchaseManager.products) { product in
                                     Button {
                                         Task{
@@ -227,7 +231,7 @@ struct SettingView: View {
                                 } label: {
                                     HStack{
                                         Image(systemName: "cart.fill")
-                                        Text("구매 복원하기")
+                                        Text(self.RSPurchased)
                                     }
                                     .padding(5)
                                     .padding(.horizontal, 10)
@@ -248,7 +252,7 @@ struct SettingView: View {
                         }
                             
                     } header: {
-                        Text("광고제거")
+                        Text(self.RMAdsTitle)
                     }
                     Section{
                         Button {
