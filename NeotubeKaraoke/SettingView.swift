@@ -37,6 +37,7 @@ struct SettingView: View {
     @State var colorIndex = 0
     let audioManager = AudioManager(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
     @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var entitlementManager: EntitlementManager
     
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
@@ -114,8 +115,10 @@ struct SettingView: View {
                         }
                     }
                 }
-                BannerAd()
-                    .frame(height: 60)
+                if !entitlementManager.hasPro {
+                    BannerAd()
+                        .frame(height: 60)
+                }
                 List{
                     Section{
                         Button{
@@ -176,7 +179,7 @@ struct SettingView: View {
                     }
                     Section {
                         VStack{
-                            if purchaseManager.hasUnlockedPro {
+                            if entitlementManager.hasPro {
                                 Text("헉!! 감동이에요!🥰")
                             } else {
                                 Text("광고를 제거하세요!")
@@ -192,6 +195,8 @@ struct SettingView: View {
                                         }
                                     } label: {
                                         HStack{
+                                            Image(systemName: "hand.raised.fingers.spread")
+                                                .foregroundColor(.white)
                                             Text(product.displayName)
                                                 .foregroundColor(.white)
                                             Spacer()
@@ -200,8 +205,11 @@ struct SettingView: View {
                                                     .foregroundColor(.white)
                                             }
                                             .padding(5)
+                                            .padding(.horizontal, 10)
                                             .background {
                                                 RoundedRectangle(cornerRadius: 20)
+                                                    .strokeBorder(lineWidth: 3)
+                                                    .foregroundColor(.white)
                                             }
                                         }
                                     }
@@ -218,10 +226,12 @@ struct SettingView: View {
                                     }
                                 } label: {
                                     HStack{
-                                        Image(systemName: "store")
+                                        Image(systemName: "cart.fill")
                                         Text("구매 복원하기")
                                     }
                                     .padding(5)
+                                    .padding(.horizontal, 10)
+                                    .foregroundColor(.white)
                                     .background {
                                         RoundedRectangle(cornerRadius: 20)
                                     }

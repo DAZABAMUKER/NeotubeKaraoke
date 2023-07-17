@@ -6,22 +6,25 @@
 //
 
 import Foundation
+import SwiftUI
 import StoreKit
 
-class PurchaseManager: ObservableObject {
+class PurchaseManager: NSObject ,ObservableObject {
     
-    let productIds = ["com.NeotubeKaraoke.adRemoval", "adRemoval"]
+    let productIds = ["com.NeotubeKaraoke.adRemoval"]
     @Published var purchasedProductIDs = Set<String>()
     @Published var products: [Product] = []
+    private let entitlementManager: EntitlementManager
     private var updates: Task<Void, Never>? = nil
     private var productsLoaded = false
-    var hasUnlockedPro: Bool {
-        return !self.purchasedProductIDs.isEmpty
-    }
     
-    init() {
-        updates = observeTransactionUpdates()
-    }
+    init(entitlementManager: EntitlementManager) {
+            self.entitlementManager = entitlementManager
+            super.init()
+            self.updates = observeTransactionUpdates()
+            SKPaymentQueue.default().add(self)
+        }
+
     
     deinit {
         updates?.cancel()
@@ -76,7 +79,23 @@ class PurchaseManager: ObservableObject {
             } else {
                 self.purchasedProductIDs.remove(transaction.productID)
             }
-            
+            self.entitlementManager.hasPro = !self.purchasedProductIDs.isEmpty
         }
     }
+}
+extension PurchaseManager: SKPaymentTransactionObserver {
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+
+    }
+
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        return true
+    }
+}
+
+class EntitlementManager: ObservableObject {
+    static let userDefaults = UserDefaults(suiteName: "group.your.app")!
+
+    @AppStorage("hasPro", store: userDefaults)
+    var hasPro: Bool = false
 }

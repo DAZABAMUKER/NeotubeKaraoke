@@ -43,6 +43,7 @@ struct searcher: View{
     @Binding var nowVideo: LikeVideo
     
     @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var entitlementManager: EntitlementManager
     
     private let search: LocalizedStringKey = "Search"
     private let addToList: LocalizedStringKey = "Add to Playlist"
@@ -187,8 +188,10 @@ struct searcher: View{
                             //MARK: - 리스트
                             ScrollView{
                                 VStack{
-                                    BannerAd()
-                                        .frame(width: geometry.size.width, height: 70)
+                                    if !entitlementManager.hasPro{
+                                        BannerAd()
+                                            .frame(width: geometry.size.width, height: 70)
+                                    }
                                     ForEach(self.ytVideos, id: \.videoId){ responseitems in
                                         Button {
                                             //videoPlay.closes = true
@@ -224,8 +227,10 @@ struct searcher: View{
                                         }
                                         .disabled(!isReady)
                                     }
-                                    BannerAd()
-                                        .frame(width: geometry.size.width, height: 70)
+                                    if !entitlementManager.hasPro {
+                                        BannerAd()
+                                            .frame(width: geometry.size.width, height: 70)
+                                    }
                                     VStack{}
                                         .frame(height: 200)
                                 }

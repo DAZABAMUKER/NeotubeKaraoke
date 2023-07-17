@@ -13,11 +13,11 @@ import AdSupport
 import Firebase
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-    return true
-  }
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        return true
+    }
 }
 
 @main
@@ -27,7 +27,8 @@ struct NeotubeKaraokeApp: App {
     @StateObject var envPlayer: EnvPlayer = EnvPlayer.shared
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    @StateObject var purchaseManager = PurchaseManager()
+    @StateObject var purchaseManager: PurchaseManager
+    @StateObject private var entitlementManager: EntitlementManager
 
     var body: some Scene {
         WindowGroup {
@@ -35,6 +36,7 @@ struct NeotubeKaraokeApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(envPlayer)
                 .environmentObject(purchaseManager)
+                .environmentObject(entitlementManager)
                 .task {
                     await purchaseManager.updatePurchasedProducts()
                 }
@@ -43,6 +45,10 @@ struct NeotubeKaraokeApp: App {
     init() {
         PythonSupport.initialize()
         GADMobileAds.sharedInstance().start(completionHandler: nil)
+        let entitlementManager = EntitlementManager()
+        let purchaseManager = PurchaseManager(entitlementManager: entitlementManager)
+        self._entitlementManager = StateObject(wrappedValue: entitlementManager)
+        self._purchaseManager = StateObject(wrappedValue: purchaseManager)
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 //            ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
 //        }
