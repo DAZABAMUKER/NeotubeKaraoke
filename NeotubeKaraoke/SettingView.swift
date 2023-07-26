@@ -200,23 +200,24 @@ struct SettingView: View {
                                     } label: {
                                         if purchaseManager.products.isEmpty {
                                             Text("Please wait! It's still up in the air.")
-                                        }
-                                        HStack{
-                                            Image(systemName: "hand.raised.fingers.spread")
-                                                .foregroundColor(.white)
-                                            Text(product.displayName)
-                                                .foregroundColor(.white)
-                                            Spacer()
+                                        } else {
                                             HStack{
-                                                Text(product.displayPrice)
+                                                Image(systemName: "hand.raised.fingers.spread")
                                                     .foregroundColor(.white)
-                                            }
-                                            .padding(5)
-                                            .padding(.horizontal, 10)
-                                            .background {
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .strokeBorder(lineWidth: 3)
+                                                Text(product.displayName)
                                                     .foregroundColor(.white)
+                                                Spacer()
+                                                HStack{
+                                                    Text(product.displayPrice)
+                                                        .foregroundColor(.white)
+                                                }
+                                                .padding(5)
+                                                .padding(.horizontal, 10)
+                                                .background {
+                                                    RoundedRectangle(cornerRadius: 20)
+                                                        .strokeBorder(lineWidth: 3)
+                                                        .foregroundColor(.white)
+                                                }
                                             }
                                         }
                                     }

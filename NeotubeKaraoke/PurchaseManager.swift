@@ -3,7 +3,7 @@
 //  NeotubeKaraoke
 //
 //  Created by 안병욱 on 2023/07/17.
-//
+// 스위츠트 store kit을 이용하여 앱내 구입을 만들어 주는 파일
 
 import Foundation
 import SwiftUI
