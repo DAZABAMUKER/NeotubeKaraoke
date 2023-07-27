@@ -35,6 +35,7 @@ struct SettingView: View {
     @State var isAnimation = false
     @State var cheerColor = [Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.indigo, Color.purple]
     @State var colorIndex = 0
+    @State var refund = false
     let audioManager = AudioManager(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
@@ -185,6 +186,30 @@ struct SettingView: View {
                         VStack{
                             if entitlementManager.hasPro {
                                 Text(self.thanks)
+                                    .font(.title3)
+                                Divider()
+                                Button {
+                                    self.refund = true
+                                } label: {
+                                    HStack{
+                                        Spacer()
+                                        Image(systemName: "shippingbox.and.arrow.backward.fill")
+                                        Text("환불하기")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.white)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .strokeBorder(lineWidth: 3)
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 50)
+                                            .padding(.vertical, -10)
+                                    }
+                                    .padding(5)
+                                }
+                                .sheet(isPresented: $refund) {
+                                    MakeRefund(products: purchaseManager.products)
+                                }
                             } else {
                                 Text(self.RMAds)
                                 ForEach(purchaseManager.products) { product in
@@ -260,7 +285,7 @@ struct SettingView: View {
                     }
                     Section{
                         Button {
-                            self.showCheer = true
+                            self.showCheer.toggle()
                         } label: {
                             Text(self.cheer)
                         }
