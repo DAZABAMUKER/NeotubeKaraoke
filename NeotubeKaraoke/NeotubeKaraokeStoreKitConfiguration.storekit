@@ -1,0 +1,40 @@
+{
+  "identifier" : "5D10E475",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "6451375508",
+      "localizations" : [
+        {
+          "description" : "Remove all ads",
+          "displayName" : "Remove Ads",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "앱의 전체화면 광고와 배너 광고를 제거합니다.",
+          "displayName" : "광고제거",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "com.NeotubeKaraoke.adRemoval",
+      "referenceName" : "광고제거",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6446870035",
+    "_developerTeamID" : "CRJ3674QVG",
+    "_lastSynchronizedDate" : 711274921.38324594
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}
