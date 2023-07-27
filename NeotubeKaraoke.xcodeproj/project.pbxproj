@@ -64,6 +64,7 @@
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
 		03D77A2F2935D4E80037061E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2E2935D4E80037061E /* Video.swift */; };
 		03F36CC12963DE61001AEB7A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F36CC02963DE61001AEB7A /* Models.swift */; };
+		03F9189B2A71ED0D003115A1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F9189A2A71ED0D003115A1 /* StoreKit.framework */; };
 		17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +119,7 @@
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		03D77A2E2935D4E80037061E /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		03F36CC02963DE61001AEB7A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		03F9189A2A71ED0D003115A1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		33DD4112FD9FB9295E643CD6 /* Pods-NeotubeKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.release.xcconfig"; sourceTree = "<group>"; };
 		51DAB10F11134AAEEB85A799 /* Pods-NeotubeKaraoke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.debug.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.debug.xcconfig"; sourceTree = "<group>"; };
 		7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NeotubeKaraoke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,6 +140,7 @@
 				0379B1B129E174090044F997 /* PythonKit in Frameworks */,
 				0383C97529E3F39800A625EC /* SwiftSoup in Frameworks */,
 				03A0A1C32A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				03F9189B2A71ED0D003115A1 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,6 +166,7 @@
 		034744372999E16F00F2EBEE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				03F9189A2A71ED0D003115A1 /* StoreKit.framework */,
 				7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */,
 			);
 			name = Frameworks;
