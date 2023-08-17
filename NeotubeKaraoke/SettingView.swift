@@ -23,6 +23,7 @@ enum Karaoke {
 struct SettingView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
     @State var showAlert = false
     @State var sheet = false
     @State var profile = false
@@ -69,6 +70,7 @@ struct SettingView: View {
     private let RMAds: LocalizedStringKey = "You can remove Ads!"
     private let RSPurchased: LocalizedStringKey = "Restore In-App purchases"
     private let RMAdsTitle: LocalizedStringKey = "Remove Ads"
+    private let goOrBackTime: LocalizedStringKey = "Select go/backward time"
     
     func rotateLandscape() {
         if !isLandscape {
@@ -164,7 +166,7 @@ struct SettingView: View {
                         VStack {
                             Text(self.titleOfResolution)
                                 .bold()
-                                .font(.title)
+                                .font(.title3)
                                 .foregroundColor(.white)
                                 .padding(0)
                             Picker(self.selResolution, selection: $resolution) {
@@ -176,7 +178,22 @@ struct SettingView: View {
                             .pickerStyle(.segmented)
                             Text(self.ifHigher)
                                 .font(.footnote)
+                                .lineLimit(2)
                                 .foregroundColor(.secondary)
+                        }
+                        VStack {
+                            Text(self.goOrBackTime)
+                                .bold()
+                                .font(.title3)
+                                .foregroundColor(.white)
+                                .padding(0)
+                            Picker(self.goOrBackTime, selection: $goBackTime) {
+                                Text("5s").tag(5.0)
+                                Text("15s").tag(15.0)
+                                Text("30s").tag(30.0)
+                                Text("60s").tag(60.0)
+                            }
+                            .pickerStyle(.segmented)
                         }
                         Toggle(isOn: $micPermission) {
                             Text("Show music score")
@@ -290,89 +307,7 @@ struct SettingView: View {
                             Text(self.cheer)
                         }
                         .sheet(isPresented: $showCheer) {
-                            ZStack{
-                                VStack{
-                                    Text(ment)
-                                        .font(.system(size: 300, weight: .bold))
-                                        .minimumScaleFactor(0.3)
-                                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                                        .foregroundColor(isAnimation ? cheerColor[colorIndex] : .white )
-                                        .animation(.linear(duration: 1.0), value: self.colorIndex)
-                                        .onTapGesture {
-                                            rotateLandscape()
-                                        }
-                                    if isAnimation {
-                                        VStack{}.onAppear(){
-                                            chageColor()
-                                        }
-                                    }
-                                    if !isLandscape {
-                                        HStack{
-                                            TextField(self.cheer, text: $ment, onEditingChanged: {isEditing = $0 })
-                                                .padding()
-                                                .onAppear(){
-                                                    self.isAnimation = false
-                                                    
-                                                }
-                                                .onDisappear(){
-                                                    self.isAnimation = true
-                                                }
-                                            Button {
-                                                self.ment = ""
-                                            } label: {
-                                                if (self.ment.count > 0) {
-                                                    Image(systemName: "multiply.circle.fill")
-                                                        .foregroundColor(.gray)
-                                                        .font(.system(size: 20))
-                                                        .padding(.trailing, 5)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                VStack{
-                                    Spacer()
-                                    HStack{
-                                        Button {
-                                            self.audioManager.playClap()
-                                        } label: {
-                                            Image(systemName: "hands.clap.fill")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .foregroundColor(.secondary)
-                                                .padding(.trailing,20)
-                                                .opacity(0.5)
-                                        }
-                                        Spacer()
-                                        if UIDevice.current.model == "iPad" {
-                                            Button {
-                                                rotateLandscape()
-                                            } label: {
-                                                Image(systemName: "text.bubble.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .foregroundColor(.secondary)
-                                                    .padding(.trailing,20)
-                                                    .opacity(0.5)
-                                            }
-                                        }
-                                        Button {
-                                            self.audioManager.playCrowd()
-                                        } label: {
-                                            Image(systemName: "shareplay")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .foregroundColor(.secondary)
-                                                .padding(.trailing,20)
-                                                .opacity(0.5)
-                                        }
-                                        
-                                    }
-                                    .frame(height: 50, alignment: .trailing)
-                                    Spacer()
-                                        .frame(height: !isLandscape ? 50 : 10)
-                                }
-                            }
+                            cheerView
                         }
                     }
                     Section{
@@ -506,5 +441,91 @@ struct SettingView: View {
             
         }
         .preferredColorScheme(.dark)
+    }
+    
+    var cheerView: some View {
+        ZStack{
+            VStack{
+                Text(ment)
+                    .font(.system(size: 300, weight: .bold))
+                    .minimumScaleFactor(0.3)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .foregroundColor(isAnimation ? cheerColor[colorIndex] : .white )
+                    .animation(.linear(duration: 1.0), value: self.colorIndex)
+                    .onTapGesture {
+                        rotateLandscape()
+                    }
+                if isAnimation {
+                    VStack{}.onAppear(){
+                        chageColor()
+                    }
+                }
+                if !isLandscape {
+                    HStack{
+                        TextField(self.cheer, text: $ment, onEditingChanged: {isEditing = $0 })
+                            .padding()
+                            .onAppear(){
+                                self.isAnimation = false
+                                
+                            }
+                            .onDisappear(){
+                                self.isAnimation = true
+                            }
+                        Button {
+                            self.ment = ""
+                        } label: {
+                            if (self.ment.count > 0) {
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 20))
+                                    .padding(.trailing, 5)
+                            }
+                        }
+                    }
+                }
+            }
+            VStack{
+                Spacer()
+                HStack{
+                    Button {
+                        self.audioManager.playClap()
+                    } label: {
+                        Image(systemName: "hands.clap.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.secondary)
+                            .padding(.trailing,20)
+                            .opacity(0.5)
+                    }
+                    Spacer()
+                    if UIDevice.current.model == "iPad" {
+                        Button {
+                            rotateLandscape()
+                        } label: {
+                            Image(systemName: "text.bubble.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.secondary)
+                                .padding(.trailing,20)
+                                .opacity(0.5)
+                        }
+                    }
+                    Button {
+                        self.audioManager.playCrowd()
+                    } label: {
+                        Image(systemName: "shareplay")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.secondary)
+                            .padding(.trailing,20)
+                            .opacity(0.5)
+                    }
+                    
+                }
+                .frame(height: 50, alignment: .trailing)
+                Spacer()
+                    .frame(height: !isLandscape ? 50 : 10)
+            }
+        }
     }
 }

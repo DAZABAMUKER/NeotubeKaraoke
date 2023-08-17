@@ -14,6 +14,7 @@ struct VideoPlay: View {
     //@Environment(\.scenePhase) var scenePhase
     @Environment(\.dismiss) private var dismiss
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
     @EnvironmentObject var envPlayer: EnvPlayer
     
     @State var isiPad = false
@@ -539,13 +540,26 @@ struct VideoPlay: View {
                                                     //.border(.blue)
                                             }
                                             HStack{
-                                                Spacer()
+                                                Button {
+                                                    if !isLandscape {
+                                                        player.moveFrame(to: self.goBackTime * -1)
+                                                    }
+                                                } label: {
+                                                    if !isLandscape {
+                                                        Image(systemName: "gobackward.\(Int(self.goBackTime))")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(height: 30)
+                                                            .opacity(0.8)
+                                                            .padding(.horizontal ,10)
+                                                    }
+                                                }
                                                 Button {
                                                     if isLandscape {
                                                         self.tone -= 1
                                                         audioManager.pitchChange(tone: self.tone)
                                                     } else {
-                                                        player.moveFrame(to: -20)
+                                                        player.moveFrame(to: -10)
                                                     }
                                                 } label: {
                                                     if isLandscape {
@@ -554,14 +568,14 @@ struct VideoPlay: View {
                                                             .scaledToFit()
                                                             .frame(height: 100)
                                                     } else {
-                                                        Image(systemName: "backward.fill")
+                                                        Image(systemName: "gobackward.10")
                                                             .resizable()
                                                             .scaledToFit()
-                                                            .frame(height: 30)
+                                                            .frame(height: 40)
                                                             .opacity(0.8)
+                                                            .padding(.horizontal ,10)
                                                     }
                                                 }
-                                                Spacer()
                                                 Button{
                                                     audioManager.play()
                                                     player.plays()
@@ -587,15 +601,16 @@ struct VideoPlay: View {
                                                     Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
                                                         .resizable()
                                                         .scaledToFit()
-                                                        .frame(height: 50)
+                                                        .frame(height: 60)
+                                                        //.border(.red)
                                                 }
-                                                Spacer()
+                                                .padding(.horizontal ,20)
                                                 Button {
                                                     if isLandscape {
                                                         self.tone += 1
                                                         audioManager.pitchChange(tone: self.tone)
                                                     } else {
-                                                        player.moveFrame(to: 20)
+                                                        player.moveFrame(to: 10)
                                                     }
                                                 } label: {
                                                     if isLandscape {
@@ -604,14 +619,28 @@ struct VideoPlay: View {
                                                             .scaledToFit()
                                                             .frame(height: 100)
                                                     } else {
-                                                        Image(systemName: "forward.fill")
+                                                        Image(systemName: "goforward.10")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(height: 40)
+                                                            .opacity(0.8)
+                                                            .padding(.horizontal ,10)
+                                                    }
+                                                }
+                                                Button {
+                                                    if !isLandscape {
+                                                        player.moveFrame(to: self.goBackTime)
+                                                    }
+                                                } label: {
+                                                    if !isLandscape {
+                                                        Image(systemName: "goforward.\(Int(self.goBackTime))")
                                                             .resizable()
                                                             .scaledToFit()
                                                             .frame(height: 30)
                                                             .opacity(0.8)
+                                                            .padding(.horizontal ,10)
                                                     }
                                                 }
-                                                Spacer()
                                             }
                                             .tint(.white)
                                             .shadow(color: !isLandscape ? .pink : .black, radius: 10)
