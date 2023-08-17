@@ -19,7 +19,9 @@ struct DragVideo: ViewModifier {
                 .onChanged({ gesture in
                 })
                 .onEnded({ gesture in
-                    self.vidFull.toggle()
+                    if gesture.location.y > 150 {
+                        self.vidFull.toggle()
+                    }
                 })
             )
     }

@@ -129,6 +129,7 @@ struct TopChart: View {
                                     self.inputVal = "\(getPopularChart.tjChartTitle[index]) \(getPopularChart.tjChartMusician[index]) tj 노래방"
                                     self.searching = true
                                 } label: {
+                                    /*
                                     LinearGradient(colors: [
                                         Color(red: 1, green: 112 / 255.0, blue: 0),
                                         Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
@@ -146,6 +147,15 @@ struct TopChart: View {
                                         }
                                         .bold()
                                     }
+                                     */
+                                    HStack{
+                                        Text(String(Int(index) + 1))
+                                        Text(getPopularChart.tjChartTitle[Int(index)])
+                                        Spacer()
+                                        Text(getPopularChart.tjChartMusician[Int(index)])
+                                    }
+                                    .foregroundColor(.orange)
+                                    .bold()
                                 }
                             }
                             VStack{}.frame(height: 70)
@@ -181,6 +191,7 @@ struct TopChart: View {
                                     self.inputVal = "\(getPopularChart.KYChartTitle[index]) \(getPopularChart.KYChartMusician[index]) 금영 노래방"
                                     self.searching = true
                                 } label: {
+                                    /*
                                     LinearGradient(colors: [
                                         Color(red: 1, green: 112 / 255.0, blue: 0),
                                         Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
@@ -198,6 +209,15 @@ struct TopChart: View {
                                         }
                                         .bold()
                                     }
+                                    */
+                                    HStack{
+                                        Text(String(Int(index) + 1))
+                                        Text(getPopularChart.tjChartTitle[Int(index)])
+                                        Spacer()
+                                        Text(getPopularChart.tjChartMusician[Int(index)])
+                                    }
+                                    .foregroundColor(.orange)
+                                    .bold()
                                 }
                             }
                             VStack{}.frame(height: 70)

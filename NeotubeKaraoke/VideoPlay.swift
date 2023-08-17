@@ -307,7 +307,7 @@ struct VideoPlay: View {
         await exportSession.export()
     }
 
-    
+    //MARK: - 뷰 바디 여기 있음
     var body: some View {
         NavigationStack{
             GeometryReader { geometry in
@@ -376,6 +376,7 @@ struct VideoPlay: View {
                     }
                     if isAppear {
                         VStack(spacing: 0){
+                            /*
                             LinearGradient(colors: [
                                 Color(red: 1, green: 112 / 255.0, blue: 0),
                                 Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
@@ -388,22 +389,29 @@ struct VideoPlay: View {
                                 Text(info?.title ?? "노래방")
                                     .bold()
                             }
-                            .background(Color(red: 44/255, green: 54/255, blue: 51/255))
-                            .onTapGesture {
-                                self.vidFull.toggle()
-                                print("vidFull: ", vidFull)
-                                print("landscape: ", isLandscape)
-                            }
+                             */
+                            Text(info?.title ?? "노래방")
+                                .frame(width: geometry.size.width, height: 45)
+                                .bold()
+                                .foregroundColor(.orange)
+                                .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+                                .onTapGesture {
+                                    self.vidFull.toggle()
+                                    print("vidFull: ", vidFull)
+                                    print("landscape: ", isLandscape)
+                                }
                             .DragVid(vidFull: $vidFull)
                             .opacity(isLandscape && vidFull ? 0 : 1)
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
                                     .frame(width: isiPad ? geometry.size.width : (isLandscape && vidFull) ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height: isiPad ? !isLandscape ? geometry.size.width*9/16 : vidFull ? geometry.size.height : geometry.size.width*9/16 : isLandscape ? vidFull ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16 : geometry.size.width*9/16)
                                     .padding(.top, (isLandscape && vidFull) ? 20 : 0)
+                                    .DragVid(vidFull: $vidFull)
                                     .navigationBarTitleDisplayMode(.inline)
                                     .onAppear(){
                                         player.plays()
                                     }
+                                
                                 //.edgesIgnoringSafeArea(.bottom)
                                 HStack{
                                     VStack{}

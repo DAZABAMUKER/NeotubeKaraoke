@@ -62,6 +62,7 @@ struct ListView: View {
                         .padding(.leading, -13)
                 }
                 VStack(alignment: .leading) {
+                    /*
                     LinearGradient(colors: [
                         Color(red: 1, green: 112 / 255.0, blue: 0),
                         Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
@@ -79,6 +80,16 @@ struct ListView: View {
                             //.foregroundColor(.orange)
                             .font(.system(size: 18))
                     }
+                     */
+                    Text(Video.title)
+                        .bold()
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                        .frame(height: 45)
+                    //.background(Color.green)
+                        //.foregroundColor(.orange)
+                        .font(.system(size: 18))
+                        .foregroundColor(.orange)
                     Text(Video.channelTitle)
                         .lineLimit(1)
                         //.background(.blue)
