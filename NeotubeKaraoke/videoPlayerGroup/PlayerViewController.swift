@@ -16,6 +16,9 @@ struct PlayerViewController: UIViewControllerRepresentable {
         let controller = AVPlayerViewController()
         controller.player = player
         controller.showsPlaybackControls = false
+        if #available(iOS 16.0, *) {
+            controller.allowsVideoFrameAnalysis = false
+        }
         return controller
     }
     func updateUIViewController(_ uiViewController: AVPlayerViewController, context: Context) {
