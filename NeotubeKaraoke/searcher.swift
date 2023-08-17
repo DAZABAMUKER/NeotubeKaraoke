@@ -208,21 +208,23 @@ struct searcher: View{
                                                 saveRecent(video: responseitems)
                                             }
                                         } label: {
-                                            ZStack{
+                                            HStack(spacing: 0){
                                                 ListView(Video: responseitems)
                                                     .padding(.leading, 15)
+                                                    //.border(.red)
                                                 HStack(spacing: 0){
-                                                    Spacer()
                                                     Image(systemName: "ellipsis")
                                                         .rotationEffect(Angle(degrees: 90))
                                                         .tint(.secondary)
-                                                        .frame(width: 50, height: 70)
+                                                        .frame(width: 15, height: 70)
                                                         .background(.black.opacity(0.01))
                                                         .onTapGesture {
                                                             self.likeModal = true
                                                             self.addVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle, runTime: responseitems.runTime)
                                                         }
+                                                        .padding(.trailing, 5)
                                                 }
+                                                //.border(.green)
                                             }
                                         }
                                         .disabled(!isReady)
@@ -388,6 +390,17 @@ struct searcher: View{
                             .listStyle(.plain)
                             .background(.clear)
                             HStack{
+                                //취소버튼
+                                Button {
+                                    self.likeModal = false
+                                    self.addVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
+                                } label: {
+                                    Text(self.cancel)
+                                        .padding(10)
+                                }
+                                Divider()
+                                    .frame(width: 60,height: 50)
+                                //추가버튼
                                 Button {
                                     let tempList = self.playlist.filter{$0.isSelected == true}
                                     self.likeModal = false
@@ -410,15 +423,7 @@ struct searcher: View{
                                     Text(self.add)
                                         .padding(10)
                                 }
-                                Divider()
-                                    .frame(width: 60,height: 50)
-                                Button {
-                                    self.likeModal = false
-                                    self.addVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
-                                } label: {
-                                    Text(self.cancel)
-                                        .padding(10)
-                                }
+                                
                             }
                         }
                         .frame(width: 300, height: 250)

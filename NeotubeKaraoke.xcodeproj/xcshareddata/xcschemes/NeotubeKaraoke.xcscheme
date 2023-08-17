@@ -50,6 +50,9 @@
             ReferencedContainer = "container:NeotubeKaraoke.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <StoreKitConfigurationFileReference
+         identifier = "../NeotubeKaraoke/NeotubeKaraokeStoreKitConfiguration.storekit">
+      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
