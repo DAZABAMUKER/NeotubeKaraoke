@@ -329,7 +329,7 @@ struct ContentView: View {
                                 .padding(.leading, 15)
                                 .opacity(vidFull ? isLandscape ? 0.01 : 0.5 : 0.01)
                         }
-                        .animation(.easeInOut, value: vidFull)
+                        //.animation(.easeInOut, value: vidFull)
                         Spacer()
                     }
                     if !vidFull {
