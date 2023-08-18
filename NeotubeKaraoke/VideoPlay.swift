@@ -183,14 +183,13 @@ struct VideoPlay: View {
         }
     }
     
+    
+    
     func loadPythonModule() {
-        guard FileManager.default.fileExists(atPath: YoutubeDL.pythonModuleURL.path) else {
-            downloadPythonModule()
-            return
-        }
         DispatchQueue.global(qos: .default).async {
             do {
                 youtubeDL = try YoutubeDL()
+                //guard youtubeDL?.version < 2023.
                 DispatchQueue.main.async {
                     url.map { extractInfo(url: $0) }
                 }
@@ -200,17 +199,6 @@ struct VideoPlay: View {
                 print(#function, error)
                 DispatchQueue.main.async {
                 }
-            }
-        }
-    }
-    
-    func downloadPythonModule() {
-        YoutubeDL.downloadPythonModule { error in
-            DispatchQueue.main.async {
-                guard error == nil else {
-                    return
-                }
-                loadPythonModule()
             }
         }
     }

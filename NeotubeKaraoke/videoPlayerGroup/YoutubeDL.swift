@@ -124,7 +124,7 @@ open class YoutubeDL: NSObject {
         self.options = options
         
         version = String(pythonModule.version.__version__)
-        print(version ?? "version info: nil")
+        //print(version ?? "version info: nil")
     }
     
     open func extractInfo(url: URL) throws -> (Info?) {

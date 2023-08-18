@@ -36,6 +36,23 @@ class HTMLParser: ObservableObject {
         }.resume()
     }
     
+    public func callYTDLVersion() {
+        let latestVersionUrl = URL(string: "https://github.com/yt-dlp/yt-dlp/releases/latest")
+        URLSession.shared.dataTask(with: latestVersionUrl!) { data, response, error in
+            if error != nil || data == nil {
+                print(error as Any)
+                return
+            }
+            do {
+                let content = String(data: data!, encoding: .utf8)
+                do {
+                    
+                }
+            }
+        }.resume()
+        
+    }
+    
     func parse(html: String) {
         do {
             if html.contains("ytInitialData") {

@@ -7,6 +7,7 @@
 import GoogleMobileAds
 import SwiftUI
 import MultipeerConnectivity
+import SwiftSoup
 //커스텀 텝바를 위한 enum
 enum TabIndex {
     case Home
@@ -45,6 +46,7 @@ struct ContentView: View {
     @State var addVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var nowVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var isNewitem = false
+    @State var restartApp = false
     //@State var connectedPeers = [MCPeerID]()
     
     @State var adCount: Int = 0 {
@@ -73,6 +75,87 @@ struct ContentView: View {
     private let loading: LocalizedStringKey = "Loading...\n"
     private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
     private let newVideoAdded: LocalizedStringKey = "New Video reserved"
+    private let coreUpdate: LocalizedStringKey = "Core Process is updated please restart the App."
+    private let okay: LocalizedStringKey = "OK"
+    
+    func loadPythonModule() {
+        guard FileManager.default.fileExists(atPath: YoutubeDL.pythonModuleURL.path) else {
+            downloadPythonModule()
+            return
+        }
+        DispatchQueue.global(qos: .default).async {
+            do {
+                let youtubeDL = try YoutubeDL()
+                let latestVersionUrl = URL(string: "https://github.com/yt-dlp/yt-dlp/releases/latest")
+                URLSession.shared.dataTask(with: latestVersionUrl!) { data, response, error in
+                    if error != nil || data == nil {
+                        print(error as Any)
+                        return
+                    }
+                    do {
+                        let content = String(data: data!, encoding: .utf8)
+                        do {
+                            let document = try SwiftSoup.parse(content ?? "")
+                            print(document.charset())
+                            guard let body = document.body() else {
+                                return
+                            }
+                            let date = try body.getElementsByAttribute("aria-current").map{try $0.text()}.filter{$0.contains(".")}.first ?? ""
+                            print(date)
+                            
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy.MM.dd"
+                            dateFormatter.timeZone = TimeZone(identifier: "UTC")
+                            guard let versionDate = dateFormatter.date(from: youtubeDL.version ?? "failure") else {
+                                print("버전 날짜 변경 안됨")
+                                return
+                            }
+                            guard let LatestVersionDate = dateFormatter.date(from: date ?? "failure") else {
+                                print("버전 날짜 변경 안됨")
+                                return
+                            }
+                            if versionDate.compare(LatestVersionDate) == .orderedAscending {
+                                print("현재 버전: \(versionDate)")
+                                print("최신 버전은: \(LatestVersionDate)")
+                                print("새버전 필요")
+                                downloadPythonModuleOnce()
+                                self.restartApp = true
+                            }
+                            
+                        }
+                        catch{
+                            print(error)
+                        }
+                    }
+                }.resume()
+                
+            }
+            catch {
+                print(#function, error)
+            }
+        }
+    }
+    
+    func downloadPythonModule() {
+        YoutubeDL.downloadPythonModule { error in
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    return
+                }
+                loadPythonModule()
+            }
+        }
+    }
+    
+    func downloadPythonModuleOnce() {
+        YoutubeDL.downloadPythonModule { error in
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    return
+                }
+            }
+        }
+    }
     
     func rotateLandscape() {
         if !isLandscape {
@@ -148,6 +231,13 @@ struct ContentView: View {
         .background(.clear)
     }
     
+    func closeApp() {
+        UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            exit(0)
+        }
+    }
+    
     //MARK: - 뷰
     var body: some View {
         GeometryReader { geometry in
@@ -177,6 +267,17 @@ struct ContentView: View {
                 }
                 .alert(self.newVideoAdded, isPresented: $isNewitem) {
                     
+                }
+                .onAppear(){
+                    loadPythonModule()
+                }
+                .alert(coreUpdate, isPresented: $restartApp) {
+                    Button {
+                        closeApp()
+                    } label: {
+                        Text(self.okay)
+                    }
+
                 }
                 
                 //탭뷰 위에 플레이어화면을 올려줌
