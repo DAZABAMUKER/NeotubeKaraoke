@@ -402,6 +402,7 @@ struct VideoPlay: View {
                                     }
                                 
                                 //.edgesIgnoringSafeArea(.bottom)
+                                //MARK: 건너뛰기 버튼
                                 HStack{
                                     VStack{}
                                         .frame(width: 120, height: geometry.size.width*9/16)
@@ -409,6 +410,7 @@ struct VideoPlay: View {
                                         .onTapGesture(count: 2) {
                                             player.moveFrame(to: -10.0)
                                         }
+                                        .DragVid(vidFull: $vidFull)
                                     Spacer()
                                     VStack{}
                                         .frame(width: 120, height: geometry.size.width*9/16)
@@ -416,6 +418,7 @@ struct VideoPlay: View {
                                         .onTapGesture(count: 2) {
                                             player.moveFrame(to: 10.0)
                                         }
+                                        .DragVid(vidFull: $vidFull)
                                 }
                                 //.border(.green)
                                 

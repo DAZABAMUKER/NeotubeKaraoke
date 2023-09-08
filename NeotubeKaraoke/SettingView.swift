@@ -24,6 +24,7 @@ struct SettingView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
+    
     @State var showAlert = false
     @State var sheet = false
     @State var profile = false
@@ -122,10 +123,12 @@ struct SettingView: View {
                         }
                     }
                 }
+                
                 if !entitlementManager.hasPro {
                     BannerAd()
                         .frame(height: 60)
                 }
+                
                 List{
                     Section{
                         Button{
@@ -199,6 +202,7 @@ struct SettingView: View {
                             Text("Show music score")
                         }
                     }
+                    
                     Section {
                         VStack{
                             if entitlementManager.hasPro {
@@ -300,6 +304,7 @@ struct SettingView: View {
                     } header: {
                         Text(self.RMAdsTitle)
                     }
+                    
                     Section{
                         Button {
                             self.showCheer.toggle()
@@ -310,9 +315,9 @@ struct SettingView: View {
                             cheerView
                         }
                     }
+                    
                     Section{
                         VStack{
-                            
                             Picker(self.searchNumberOfSongs, selection: $karaoke) {
                                 Text("Tj").tag(Karaoke.Tj)
                                 Text("KY").tag(Karaoke.KY)
@@ -328,7 +333,6 @@ struct SettingView: View {
                                     }
                                     
                                 }
-                            
                         }
                     }
                     Section{
