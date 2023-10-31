@@ -7,7 +7,7 @@
 
 import SwiftUI
 import AVKit
-import PythonKit
+//import PythonKit
 import UIKit
 
 struct VideoPlay: View {
@@ -113,12 +113,20 @@ struct VideoPlay: View {
     
     func getTubeInfo() {
         let hd720 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "720p"}.last
-        let hd360 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "360p"}.last?.url
-        let low144 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "144p"}.last?.url
+        let hd360 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "360p"}.last
+        //let low144 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "144p"}.last?.url
+        
         let audio = self.innertube.info?.streamingData.adaptiveFormats.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+        
+        var selectedVideo = TubeFormats(audioQuality: "")
+        if resolution == .low {
+            selectedVideo = hd360 ?? TubeFormats(audioQuality: "")
+        } else {
+            selectedVideo = hd720 ?? TubeFormats(audioQuality: "")
+        }
         //print()
         //extractAudio(docUrl: URL(string: hd720?.url ?? "http://www.youtube.com")!)
-        player.prepareToPlay(url: URL(string: hd720?.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(hd720?.contentLength ?? "") ?? 0, isOk: false)
+        player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: false)
         //player.replaceCurrentItem(with: AVPlayerItem(url: lowVideUrl))
         envPlayer.player = self.player
         envPlayer.isOn = true

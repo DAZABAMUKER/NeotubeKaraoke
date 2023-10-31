@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import PythonSupport
+//import PythonSupport
 import GoogleMobileAds
 import AppTrackingTransparency
 import AdSupport
@@ -44,7 +44,7 @@ struct NeotubeKaraokeApp: App {
         }
     }
     init() {
-        PythonSupport.initialize()
+        //PythonSupport.initialize()
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         let entitlementManager = EntitlementManager()
         let purchaseManager = PurchaseManager(entitlementManager: entitlementManager)

@@ -77,7 +77,7 @@ struct ContentView: View {
     private let newVideoAdded: LocalizedStringKey = "New Video reserved"
     private let coreUpdate: LocalizedStringKey = "Core Process is updated please restart the App."
     private let okay: LocalizedStringKey = "OK"
-    
+    /*
     func loadPythonModule() {
         guard FileManager.default.fileExists(atPath: YoutubeDL.pythonModuleURL.path) else {
             downloadPythonModule()
@@ -156,7 +156,7 @@ struct ContentView: View {
             }
         }
     }
-    
+    */
     func rotateLandscape() {
         if !isLandscape {
             if #available(iOS 16.0, *) {
@@ -268,9 +268,11 @@ struct ContentView: View {
                 .alert(self.newVideoAdded, isPresented: $isNewitem) {
                     
                 }
+                /*
                 .onAppear(){
                     loadPythonModule()
                 }
+                 */
                 .alert(coreUpdate, isPresented: $restartApp) {
                     Button {
                         closeApp()
