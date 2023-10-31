@@ -115,11 +115,12 @@ struct VideoPlay: View {
         let hd720 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "720p"}.last
         let hd360 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "360p"}.last
         //let low144 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "144p"}.last?.url
-        
+        //print("111 hd360 \(hd360?.qualityLabel)")
+        //print("111 hd720 \(hd720?.mimeType)")
         let audio = self.innertube.info?.streamingData.adaptiveFormats.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
         
         var selectedVideo = TubeFormats(audioQuality: "")
-        if resolution == .low {
+        if resolution == .low || hd720 == nil {
             selectedVideo = hd360 ?? TubeFormats(audioQuality: "")
         } else {
             selectedVideo = hd720 ?? TubeFormats(audioQuality: "")
