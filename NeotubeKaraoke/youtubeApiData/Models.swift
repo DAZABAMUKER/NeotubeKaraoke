@@ -73,7 +73,7 @@ class Models: ObservableObject {
                         self.nothings = false
                         self.responseitems = response.items?.filter{$0.live == false} ?? []
                         self.isResponseitems = true
-                        guard let TiTle = response.items?.filter{$0.live == false}.first?.title else {
+                        guard let TiTle = response.items?.filter({$0.live == false}).first?.title else {
                             print("result is noting!")
                             self.nothings = true
                             print(self.nothings)

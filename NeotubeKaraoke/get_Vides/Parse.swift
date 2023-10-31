@@ -10,7 +10,7 @@ import Foundation
 class Parse {
     
     func get_Parse(url: String) {
-        var watchUrl = URL(string: url)!
+        let watchUrl = URL(string: url)!
         var request = URLRequest(url: watchUrl)
         request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
         request.setValue("en-US,en", forHTTPHeaderField: "accept-language")
@@ -20,7 +20,7 @@ class Parse {
                 return
             }
             do {
-                var content = String(data: data!, encoding: .utf8) ?? ""
+                let content = String(data: data!, encoding: .utf8) ?? ""
                 //print(content)
                 guard let regData = content.range(of: #"ytInitialPlayerResponse\s*=\s*"#, options: .regularExpression) else {
                     return
@@ -65,7 +65,7 @@ class Parse {
             
             curr_char = html[html.index(html.startIndex, offsetBy: i)]
             print(i)
-            var curr_context = stack[stack.index(before: stack.endIndex)]
+            let curr_context = stack[stack.index(before: stack.endIndex)]
             
             if curr_char == context_closers[curr_context] {
                 //print("here")

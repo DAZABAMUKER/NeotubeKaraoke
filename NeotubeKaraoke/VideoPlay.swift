@@ -132,7 +132,7 @@ struct VideoPlay: View {
         envPlayer.player = self.player
         envPlayer.isOn = true
         //loadAVAssets(url: URL(string: hd720?.url ?? "http://www.youtube.com")!, size: Int(hd720?.contentLength ?? "") ?? 0)
-        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0 ?? 0)
+        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0 )
     }
     
     /*

@@ -9,7 +9,7 @@
         "header": {
             "User-Agent": "Mozilla/5.0"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
     "ANDROID": {
         "context": {
@@ -22,7 +22,7 @@
         "header": {
             "User-Agent": "com.google.android.youtube/"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
     "IOS": {
         "context": {
@@ -35,7 +35,7 @@
         "header": {
             "User-Agent": "com.google.ios.youtube/"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
 
     "WEB_EMBED": {
@@ -49,7 +49,7 @@
         "header": {
             "User-Agent": "Mozilla/5.0"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
     "ANDROID_EMBED": {
         "context": {
@@ -63,7 +63,7 @@
         "header": {
             "User-Agent": "com.google.android.youtube/"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
     "IOS_EMBED": {
         "context": {
@@ -76,7 +76,7 @@
         "header": {
             "User-Agent": "com.google.ios.youtube/"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
 
     "WEB_MUSIC": {
@@ -89,7 +89,7 @@
         "header": {
             "User-Agent": "Mozilla/5.0"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
     "ANDROID_MUSIC": {
         "context": {
@@ -102,7 +102,7 @@
         "header": {
             "User-Agent": "com.google.android.apps.youtube.music/"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
     "IOS_MUSIC": {
         "context": {
@@ -115,7 +115,7 @@
         "header": {
             "User-Agent": "com.google.ios.youtubemusic/"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
 
     "WEB_CREATOR": {
@@ -128,7 +128,7 @@
         "header": {
             "User-Agent": "Mozilla/5.0"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
     "ANDROID_CREATOR": {
         "context": {
@@ -154,7 +154,7 @@
         "header": {
             "User-Agent": "com.google.ios.ytcreator/"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
 
     "MWEB": {
@@ -167,7 +167,7 @@
         "header": {
             "User-Agent": "Mozilla/5.0"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
 
     "TV_EMBED": {
@@ -180,6 +180,6 @@
         "header": {
             "User-Agent": "Mozilla/5.0"
         },
-        "api_key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     }
 }

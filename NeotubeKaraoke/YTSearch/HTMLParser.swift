@@ -44,7 +44,7 @@ class HTMLParser: ObservableObject {
                 return
             }
             do {
-                let content = String(data: data!, encoding: .utf8)
+                _ = String(data: data!, encoding: .utf8)
                 do {
                     
                 }
