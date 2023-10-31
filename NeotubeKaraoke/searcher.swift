@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import PythonKit
+//import PythonKit
 import MultipeerConnectivity
 
 struct searcher: View{
