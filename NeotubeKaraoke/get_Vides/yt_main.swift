@@ -6,3 +6,26 @@
 //
 
 import Foundation
+
+class Yt_main {
+    
+    var url: String
+    var extract = Extract()
+    
+    init(url: String) {
+        self.url = url
+    }
+    
+    func streams() -> StreamQuary {
+        check_availability()
+        return StreamQuary()
+    }
+    
+    func check_availability() {
+        //extract.
+    }
+    
+    func get_Parse() {
+        
+    }
+}

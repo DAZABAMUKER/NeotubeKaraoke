@@ -33,6 +33,7 @@ struct NeotubeKaraokeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(tabIndex: .Home)
+            //fortestView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(envPlayer)
                 .environmentObject(purchaseManager)

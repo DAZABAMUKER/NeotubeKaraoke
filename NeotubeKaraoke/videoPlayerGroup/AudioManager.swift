@@ -37,18 +37,20 @@ class AudioManager: ObservableObject {
     }
     var jumpFrame: AVAudioFramePosition = 0
     
-    init(file: URL, frequency: [Int], tone: Float){
-        setEngine(file: file, frequency: frequency, tone: tone)
+    init(file: URL, frequency: [Int], tone: Float, views: String){
+        setEngine(file: file, frequency: frequency, tone: tone, views: views)
     }
+    
+    
     
     init(){
         //setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
     }
-    
-    deinit{
-        print("deinit")
-    }
-    
+//    
+//    deinit{
+//        print("deinit")
+//    }
+//    
     func close() {
         playerNode.pause()
         playerNode.stop()
@@ -98,7 +100,7 @@ class AudioManager: ObservableObject {
     }
         
     
-    func setEngine(file: URL, frequency: [Int], tone: Float) {
+    func setEngine(file: URL, frequency: [Int], tone: Float, views: String) {
         do {
             audioEngine.reset()
             try AVAudioSession.sharedInstance().setCategory(.playback)
@@ -123,6 +125,7 @@ class AudioManager: ObservableObject {
         }
         
         audioFileLength = audioFile.length 
+        print(views)
         print("오디오 파일 길이",audioFileLength/44100)
         pitchNode = AVAudioUnitTimePitch()
         pitchNode.overlap = 3.0
@@ -151,6 +154,7 @@ class AudioManager: ObservableObject {
         audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(mixer, to: audioEngine.outputNode, format: audioEngine.outputNode.outputFormat(forBus: 0))
         playerNode.scheduleFile(audioFile, at: nil, completionHandler: nil)
         audioEngine.prepare()
         do {
@@ -158,7 +162,7 @@ class AudioManager: ObservableObject {
         } catch {
             assertionFailure("failed to audioEngine start. Error: \(error)")
         }
-        print("제발 되라")
+        //print("제발 되라")
     }
     
     public func controlFrame(jump: Double) {

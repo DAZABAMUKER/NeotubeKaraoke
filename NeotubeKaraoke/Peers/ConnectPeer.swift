@@ -127,7 +127,7 @@ class ConnectPeer: NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdve
         self.mcSession.delegate = self
         self.mcNearbyServiceBrowser.delegate = self // 브라우저 대리자 설정
         self.mcNearbyServiceAdvertiser.delegate = self // 송신 대리자 설정
-        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "PeerView")
     }
     //deinitialize
     deinit {

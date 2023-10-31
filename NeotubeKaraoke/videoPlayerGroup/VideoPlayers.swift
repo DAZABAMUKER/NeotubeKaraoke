@@ -56,7 +56,14 @@ class VideoPlayers: AVPlayer, ObservableObject {
         player?.rate = spd
     }
     
-    func prepareToPlay(url: URL,  audioManager: AudioManager, fileSize: Int64, isOk: Bool) {
+//    func changeVideo(url: URL) {
+//        let item = AVPlayerItem(url: url)
+//        let cTime = player?.currentTime()
+//        self.player?.replaceCurrentItem(with: item)
+//        self.player?.seek(to: cTime!)
+//    }
+//    
+    func prepareToPlay(url: URL,  audioManager: AudioManager, fileSize: Int, isOk: Bool) {
         self.audiomanager = audioManager
         //self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
         //self.player?.removeObserver(self, forKeyPath: "status")
@@ -94,9 +101,9 @@ class VideoPlayers: AVPlayer, ObservableObject {
                     if isOk {
                         self.intervals = self.intervals/2
                     }
-                    if self.intervals - jump < 1 {
+                    if self.intervals - jump < 0.1 {
                         self.player?.pause()
-                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()/* + 5*/) {
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                             DispatchQueue.main.async {
                                 self.end = true
                                 self.player?.removeObserver(self, forKeyPath: "timeControlStatus")

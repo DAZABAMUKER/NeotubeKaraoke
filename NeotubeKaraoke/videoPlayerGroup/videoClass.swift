@@ -4,7 +4,7 @@
 //
 //  Created by 안병욱 on 2023/03/01.
 //
-
+/*
 import Foundation
 import PythonKit
 import PythonSupport
@@ -124,3 +124,4 @@ class VidClass: ObservableObject {
     }
     
 }
+*/

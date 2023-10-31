@@ -10,7 +10,7 @@ import Foundation
 class DownloadTask {
     var done = false
     
-    func dowmloadtask(for url: URL, from start: Int64, to end: Int64, in session: URLSession, order num: Int, taskClass: MultiPartsDownloadTask) {
+    func dowmloadtask(for url: URL, from start: Int, to end: Int, in session: URLSession, order num: Int, taskClass: MultiPartsDownloadTask) {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -59,11 +59,11 @@ class MultiPartsDownloadTask: ObservableObject{
         self.destination = self.doc.appendingPathComponent("audio.m4a")
         print(self.destination)
     }
-    func createDownloadParts(url: URL, size: Int64) {
+    func createDownloadParts(url: URL, size: Int) {
         print(size)
         for i in 0..<numberOfRequests {
-            let start = Int64(ceil(CGFloat(Int64(i) * size) / CGFloat(numberOfRequests)))
-            let end = Int64(ceil(CGFloat(Int64(i + 1) * size) / CGFloat(numberOfRequests)))
+            let start = Int(ceil(CGFloat(Int(i) * size) / CGFloat(numberOfRequests)))
+            let end = Int(ceil(CGFloat(Int(i + 1) * size) / CGFloat(numberOfRequests)))
             let downloadTask = DownloadTask()
             downloadTask.dowmloadtask(for: url, from: start, to: end, in: URLSession(configuration: .default), order: i, taskClass: self)
             parts.append(downloadTask)

@@ -21,6 +21,7 @@ struct VideoPlay: View {
     @State var que = false
     @ObservedObject var player = VideoPlayers()
     //@State var indeterminateProgressKey: String?
+    /*
     @State var youtubeDL: YoutubeDL?
     @State var info: Info?
     @State var url: URL? {
@@ -31,6 +32,7 @@ struct VideoPlay: View {
             extractInfo(url: url)
         }
     }
+     */
     //@State var audioUrl = URL(string: "https://dazabamuker.tistory.com")!
     //@State var videoUrl = URL(string: "https://dazabamuker.tistory.com")!
     @ObservedObject var audioManager = AudioManager()
@@ -55,6 +57,8 @@ struct VideoPlay: View {
     }
     //@State var itemUrl: URL!
     var videoId: String = ""
+    @StateObject var innertube = InnerTube()
+    
     @State var tap = false
     //@State var isPlaying = false
     @State private var isLoading = false
@@ -74,6 +78,7 @@ struct VideoPlay: View {
     @State var isMicOn = false
     @State var vidSync = 0.0
     @Binding var score: Int
+    @State var lowVideoUrl: URL?
     
     private let tempoString: LocalizedStringKey = "Tempo"
     
@@ -106,6 +111,22 @@ struct VideoPlay: View {
         audioManager.close()
     }
     
+    func getTubeInfo() {
+        let hd720 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "720p"}.last
+        let hd360 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "360p"}.last?.url
+        let low144 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "144p"}.last?.url
+        let audio = self.innertube.info?.streamingData.adaptiveFormats.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+        //print()
+        //extractAudio(docUrl: URL(string: hd720?.url ?? "http://www.youtube.com")!)
+        player.prepareToPlay(url: URL(string: hd720?.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(hd720?.contentLength ?? "") ?? 0, isOk: false)
+        //player.replaceCurrentItem(with: AVPlayerItem(url: lowVideUrl))
+        envPlayer.player = self.player
+        envPlayer.isOn = true
+        //loadAVAssets(url: URL(string: hd720?.url ?? "http://www.youtube.com")!, size: Int(hd720?.contentLength ?? "") ?? 0)
+        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0 ?? 0)
+    }
+    
+    /*
     func extractInfo(url: URL) {
         guard let youtubeDL = youtubeDL else {
             loadPythonModule()
@@ -123,6 +144,7 @@ struct VideoPlay: View {
                         return
                     }
                     var bestVideo: Format?
+                    var lowVideo: Format? = formats.filter{!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.first
                     var isOk = false
                     //print(info?.format?.url)
                     if resolution == .ultra {
@@ -155,6 +177,8 @@ struct VideoPlay: View {
                     //print(self.info!)
                     guard let aUrl = bestAudio?.url else { return }
                     guard let vUrl = bestVideo?.url else { return }
+                    guard let lowUrl = bestVideo?.url else { return }
+                    self.lowVideoUrl = lowUrl
                     guard let onlyAudioUrl = onlyAudio?.url else { return }
                     //print(vUrl)
                     //self.audioUrl = aUrl
@@ -164,11 +188,12 @@ struct VideoPlay: View {
                     //print(size)
                     //print(bestVideo?.filesize ?? 0)
                     //print(bestAudio?.filesize ?? 0)
-                    player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: bestVideo?.filesize ?? 0, isOk: isOk)
+                    player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: Int(bestVideo?.filesize ?? 0), isOk: isOk)
+                    //player.replaceCurrentItem(with: AVPlayerItem(url: lowVideUrl))
                     envPlayer.player = self.player
                     envPlayer.isOn = true
                     //loadAVAssets(url: aUrl, size: onlyAudio?.filesize ?? 0, aUrl: onlyAudioUrl)
-                    self.downloadManager.createDownloadParts(url: onlyAudioUrl, size: onlyAudio?.filesize ?? 0)
+                    //self.downloadManager.createDownloadParts(url: onlyAudioUrl, size: onlyAudio?.filesize ?? 0)
                 }
             }
             catch {
@@ -182,9 +207,8 @@ struct VideoPlay: View {
             }
         }
     }
-    
-    
-    
+     */
+    /*
     func loadPythonModule() {
         DispatchQueue.global(qos: .default).async {
             do {
@@ -202,15 +226,16 @@ struct VideoPlay: View {
             }
         }
     }
-    
+    */
     func audioEngineSet() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileUrl = doc.appendingPathComponent("audio.m4a")
-        audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+        audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View audio engine set")
         self.isAppear = true
         self.isReady = true
     }
-    func loadAVAssets(url: URL, size: Int64, aUrl: URL) {
+    /*
+    func loadAVAssets(url: URL, size: Int/*, aUrl: URL*/) {
         print("sizes:",size)
         var urlToUse = url
 //        if size < 6000000 {
@@ -237,7 +262,8 @@ struct VideoPlay: View {
         }
         task.resume()
     }
-    
+     */
+    /*
     func extractAudio(docUrl: URL) {
         let composition = AVMutableComposition()
         let fileUrl = docUrl.appendingPathComponent("audio.mp4")
@@ -259,7 +285,7 @@ struct VideoPlay: View {
                 let _: () = Service.shared.buffer(url: outputUrl, samplesCount: 300) { results in
                     self.sample = results
                 }
-                audioManager.setEngine(file: outputUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+                audioManager.setEngine(file: outputUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View extract audio")
                 
                 self.isAppear = true
                 self.isReady = true
@@ -269,12 +295,9 @@ struct VideoPlay: View {
         }
         
     }
-    
-    func export(video: AVAsset,
-                withPreset preset: String = AVAssetExportPresetHighestQuality,
-                toFileType outputFileType: AVFileType = .mov,
-                atURL outputURL: URL) async {
-        
+    */
+    /*
+    func export(video: AVAsset, withPreset preset: String = AVAssetExportPresetHighestQuality, toFileType outputFileType: AVFileType = .mov, atURL outputURL: URL) async {
         // Check the compatibility of the preset to export the video to the output file type.
         guard await AVAssetExportSession.compatibility(ofExportPreset: preset,
                                                        with: video,
@@ -295,7 +318,7 @@ struct VideoPlay: View {
         // Convert the video to the output file type and export it to the output URL.
         await exportSession.export()
     }
-
+*/
     //MARK: - 뷰 바디 여기 있음
     var body: some View {
         NavigationStack{
@@ -323,6 +346,14 @@ struct VideoPlay: View {
                             audioManager.close()
                         }
                     }
+                    if innertube.infoReady {
+                        VStack{}.onAppear(){
+                            getTubeInfo()
+                        }
+                    }
+                    
+                    
+                    //비디오 종료시 실향할 함수
                     if player.end {
                         VStack{}.onAppear(){
                             self.vidEnd = true
@@ -379,7 +410,9 @@ struct VideoPlay: View {
                                     .bold()
                             }
                              */
-                            Text(info?.title ?? "노래방")
+                            
+                            //MARK: 영상 제목 뷰
+                            Text(self.innertube.info?.videoDetails.title ?? "노래방")
                                 .frame(width: geometry.size.width, height: 45)
                                 .bold()
                                 .foregroundColor(.orange)
@@ -391,6 +424,7 @@ struct VideoPlay: View {
                                 }
                             .DragVid(vidFull: $vidFull)
                             .opacity(isLandscape && vidFull ? 0 : 1)
+                            //MARK: 비디오
                             ZStack(alignment: .top){
                                 PlayerViewController(player: player.player!)
                                     .frame(width: isiPad ? geometry.size.width : (isLandscape && vidFull) ? (geometry.size.height + geometry.safeAreaInsets.bottom) * 16/9 : geometry.size.width, height: isiPad ? !isLandscape ? geometry.size.width*9/16 : vidFull ? geometry.size.height : geometry.size.width*9/16 : isLandscape ? vidFull ? (geometry.size.height + geometry.safeAreaInsets.bottom) : geometry.size.width*9/16 : geometry.size.width*9/16)
@@ -422,12 +456,14 @@ struct VideoPlay: View {
                                 }
                                 //.border(.green)
                                 
+                                //MARK: 비디오 조작 버튼
                                     if tap && vidFull{
                                         VStack{
                                             if !isLandscape{
                                                 Spacer()
                                                     .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 85)
                                             }
+                                            //비디오 상태 표시 줄
                                             ZStack(alignment: .leading){
                                                 Rectangle()
                                                     .frame(width: geometry.size.width, height: 10)
@@ -441,6 +477,8 @@ struct VideoPlay: View {
                                                     .vidSlider(duartion: player.intervals, width: geometry.size.width, player: player)
                                             }
                                             .padding(.top, 4)
+                                            
+                                            //MARK: 음정 표시 뷰
                                             HStack(spacing: 2){
                                                 LinearGradient(colors: [
                                                     Color.blue,
@@ -515,6 +553,21 @@ struct VideoPlay: View {
                                                                 }
                                                                 .opacity(0.5)
                                                         }
+                                                        /*
+                                                        Button {
+                                                            player.changeVideo(url: self.lowVideoUrl!)
+                                                        } label: {
+                                                            Image(systemName: "swift")
+                                                                .padding()
+                                                                .tint(.white)
+                                                                .background {
+                                                                    Circle()
+                                                                        .frame(width: 50, height: 50)
+                                                                        .foregroundColor(.secondary)
+                                                                }
+                                                                .opacity(0.5)
+                                                        }
+                                                         */
                                                     }
                                                 }
                                             }
@@ -893,6 +946,8 @@ struct VideoPlay: View {
                         
                         
                     }
+                    
+                    //MARK: - 처음 시작
                     if !isAppear{
                         ProgressView()
                             .scaleEffect(1.5)
@@ -902,7 +957,9 @@ struct VideoPlay: View {
                             .onAppear() {
                                 //self.isReady = false
                                 if !isAppear {
-                                    url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+                                    //url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+                                    //getTubeInfo(videoId: videoId)
+                                    self.innertube.player(videoId: videoId)
                                     self.vidEnd = false
                                     if UIDevice.current.model == "iPad" {
                                         self.isiPad = true
@@ -936,7 +993,7 @@ struct VideoPlay: View {
         }
     }
 }
-
+/*
 let av1CodecPrefix = "av01."
 extension Format {
     var isRemuxingNeeded: Bool { isVideoOnly || isAudioOnly }
@@ -947,4 +1004,4 @@ extension Format {
         : self.ext != "m4a"
     }
 }
-
+*/

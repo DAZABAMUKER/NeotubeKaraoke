@@ -38,7 +38,7 @@ struct SettingView: View {
     @State var cheerColor = [Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.indigo, Color.purple]
     @State var colorIndex = 0
     @State var refund = false
-    let audioManager = AudioManager(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
+    @State var audioManager = AudioManager()
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
     
@@ -72,6 +72,7 @@ struct SettingView: View {
     private let RSPurchased: LocalizedStringKey = "Restore In-App purchases"
     private let RMAdsTitle: LocalizedStringKey = "Remove Ads"
     private let goOrBackTime: LocalizedStringKey = "Select go/backward time"
+    private let cheerMent: LocalizedStringKey = "Please enter your comment"
     
     func rotateLandscape() {
         if !isLandscape {
@@ -313,6 +314,9 @@ struct SettingView: View {
                         }
                         .sheet(isPresented: $showCheer) {
                             cheerView
+                                .onAppear(){
+                                    self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "SettingView")
+                                }
                         }
                     }
                     
@@ -450,15 +454,24 @@ struct SettingView: View {
     var cheerView: some View {
         ZStack{
             VStack{
-                Text(ment)
-                    .font(.system(size: 300, weight: .bold))
-                    .minimumScaleFactor(0.3)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                    .foregroundColor(isAnimation ? cheerColor[colorIndex] : .white )
-                    .animation(.linear(duration: 1.0), value: self.colorIndex)
-                    .onTapGesture {
-                        rotateLandscape()
-                    }
+                if ment == "" {
+                    Text(self.cheerMent)
+                        .font(.system(size: 300, weight: .bold))
+                        .minimumScaleFactor(0.3)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .foregroundColor(.secondary )
+                        .animation(.linear(duration: 1.0), value: self.colorIndex)
+                } else {
+                    Text(ment)
+                        .font(.system(size: 300, weight: .bold))
+                        .minimumScaleFactor(0.3)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .foregroundColor(isAnimation ? cheerColor[colorIndex] : .white )
+                        .animation(.linear(duration: 1.0), value: self.colorIndex)
+                        .onTapGesture {
+                            rotateLandscape()
+                        }
+                }
                 if isAnimation {
                     VStack{}.onAppear(){
                         chageColor()
@@ -466,7 +479,7 @@ struct SettingView: View {
                 }
                 if !isLandscape {
                     HStack{
-                        TextField(self.cheer, text: $ment, onEditingChanged: {isEditing = $0 })
+                        TextField(self.cheerMent, text: $ment, onEditingChanged: {isEditing = $0 })
                             .padding()
                             .onAppear(){
                                 self.isAnimation = false
