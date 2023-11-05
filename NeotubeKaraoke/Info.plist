@@ -232,7 +232,7 @@
 		<key>UIColorName</key>
 		<string>AccentColor</string>
 		<key>UIImageName</key>
-		<string>mic</string>
+		<string>icon</string>
 	</dict>
 	<key>CFBundleIdentifier</key>
 	<string></string>

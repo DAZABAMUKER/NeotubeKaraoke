@@ -85,9 +85,10 @@ struct Tubeavailability: Codable {
 }
 
 struct TubeStreamingData: Codable {
-    var formats: [TubeFormats]
-    var adaptiveFormats: [TubeAdaptiveFormats]
+    var formats: [TubeFormats]?
+    var adaptiveFormats: [TubeAdaptiveFormats]?
     var expiresInSeconds: String
+    var hlsManifestUrl: String?
 }
 
 struct TubeFormats: Codable {

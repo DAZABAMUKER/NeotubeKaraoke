@@ -20,6 +20,9 @@ enum TabIndex {
 struct ContentView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     @EnvironmentObject var envPlayer: EnvPlayer
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
@@ -225,7 +228,7 @@ struct ContentView: View {
                 .frame(width: geometry.size.width / 5, height: 50)
                 .offset(y: self.tabIndex == tabIndex ? -5 : 0)
                 .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
-                .shadow(radius: 10)
+                //.shadow(radius: 10)
         }
         //.background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
         .background(.clear)
@@ -367,14 +370,14 @@ struct ContentView: View {
                                         self.clickVid = false
                                     }
                                 }
-                                .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+                                //.background(Color(red: 44/255, green: 54/255, blue: 51/255))
                             
                             // 플레이어 뷰 첫 화면
                         } else if videoPlay.videoId == "nil" && !reloads {
-                            Text(self.selSong)
+                            //Text(self.selSong)
                             //.bold()
-                                .frame(width: geometry.size.width, height: 60)
-                                .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+                                //.frame(width: geometry.size.width, height: 60)
+                                //.background(Color(red: 44/255, green: 54/255, blue: 51/255))
                         } else {
                             //찐 플레이어 뷰
                             videoPlay
@@ -395,12 +398,18 @@ struct ContentView: View {
                 }
                 
                 if !vidFull {
+                    HStack{
+                        Rectangle()
+                            .frame(width: geometry.size.width, height: 50)
+                    }
+                    .shadow(radius: 5)
                     Circle()
                         .frame(width: 100)
                         .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
-                        .foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                        //.foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                        .foregroundColor(.white)
                         .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
-                        .shadow(radius: 10)
+                        .shadow(radius: 5)
                     HStack(spacing: 0) {
                         TabButtonSel(tabIndex: .PlayList, img: "music.note.list", geometry: geometry)
                         TabButtonSel(tabIndex: .chart, img: "crown", geometry: geometry)
@@ -408,7 +417,8 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .peer, img: "shared.with.you", geometry: geometry)
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     }
-                    .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                    //.background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                    .background(self.colorScheme == .light ? .white : Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                     .preferredColorScheme(.light)
 //                    .onAppear(){
 //                        

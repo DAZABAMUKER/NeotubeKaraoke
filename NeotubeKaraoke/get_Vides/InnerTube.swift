@@ -29,7 +29,7 @@ let api_keys = [
     var default_clients_client: Client!
     @Published var info: TubeResponse?
     @Published var infoReady = false
-    
+    @Published var HLSManifest = false
     
     init(client: String = "ANDROID_EMBED", use_oath: Bool = false, allow_cache: Bool = false) {
         self.allow_cache = allow_cache
@@ -76,7 +76,13 @@ let api_keys = [
                     do {
                         //print("1")
                         //print(String(data: data!, encoding: .utf8))
+                        
                         self.info = try JSONDecoder().decode(TubeResponse.self, from: data!)
+                        if self.info?.streamingData.hlsManifestUrl != nil {
+                            self.HLSManifest = true
+                            print("HLS Manifest url")
+                            return
+                        }
                         self.infoReady = true
                         //print("2")
                         //print(tubeResponse.streamingData.formats.first?.contentLength)

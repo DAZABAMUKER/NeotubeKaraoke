@@ -25,7 +25,7 @@ struct ExternalDisplay: View {
                         }
                 }
             }
-            .preferredColorScheme(.dark)
+            //.preferredColorScheme(.dark)
             .edgesIgnoringSafeArea(.all )
         }
     }

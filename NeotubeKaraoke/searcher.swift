@@ -195,7 +195,7 @@ struct searcher: View{
                                     ForEach(self.ytVideos, id: \.videoId){ responseitems in
                                         Button {
                                             //videoPlay.closes = true
-                                            if self.isReady {
+                                            //if self.isReady {
                                                 self.vidEnd = true
                                                 self.isReady = false
                                                 self.clickVid = true
@@ -206,7 +206,7 @@ struct searcher: View{
                                                 self.nowPlayList.append(self.nowVideo)
                                                 self.videoOrder = nowPlayList.count - 1
                                                 saveRecent(video: responseitems)
-                                            }
+                                            //}
                                         } label: {
                                             HStack(spacing: 0){
                                                 ListView(Video: responseitems)
@@ -227,7 +227,7 @@ struct searcher: View{
                                                 //.border(.green)
                                             }
                                         }
-                                        .disabled(!isReady)
+                                        //.disabled(!isReady)
                                     }
                                     if !entitlementManager.hasPro {
                                         BannerAd()
@@ -249,7 +249,7 @@ struct searcher: View{
                             .padding(.top, -8)
                             .listStyle(.plain)
                             .environment(\.defaultMinListRowHeight, 80)
-                            .preferredColorScheme(.dark)
+                            //.preferredColorScheme(.dark)
                             //VStack{}.frame(height: 135).background(.red)
                         } else {
                             ZStack{
@@ -261,7 +261,7 @@ struct searcher: View{
                                     .opacity(0.3)
                             }
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .preferredColorScheme(.dark)
+                            //.preferredColorScheme(.dark)
                         }
                     }
                     .edgesIgnoringSafeArea(.bottom)

@@ -29,8 +29,8 @@ struct SettingView: View {
     @State var sheet = false
     @State var profile = false
     @State var showCheer = false
-    @State var karaoke: Karaoke = Karaoke.Tj
-    @State var titleOfSong = ""
+//    @State var karaoke: Karaoke = Karaoke.Tj
+//    @State var titleOfSong = ""
     @State var ment = ""
     @State var isEditing: Bool = false
     @StateObject private var getPopularChart = GetPopularChart()
@@ -58,13 +58,13 @@ struct SettingView: View {
     private let alertMic: LocalizedStringKey = "Please allow Microphone Usage."
     private let cancel: LocalizedStringKey = "Cancel"
     private let OK: LocalizedStringKey = "OK"
-    private let searchNumberOfSongs: LocalizedStringKey = "Searching for number of karaoke songs."
+//    private let searchNumberOfSongs: LocalizedStringKey = "Searching for number of karaoke songs."
     private let selResolution: LocalizedStringKey = "Selecting Resolution"
-    private let searchSongTitle: LocalizedStringKey = "title of the song"
-    private let numberOfSong: LocalizedStringKey = "Number of the song"
-    private let title: LocalizedStringKey = "Title"
-    private let artist: LocalizedStringKey = "Artist"
-    private let noResults: LocalizedStringKey = "No results"
+//    private let searchSongTitle: LocalizedStringKey = "title of the song"
+//    private let numberOfSong: LocalizedStringKey = "Number of the song"
+//    private let title: LocalizedStringKey = "Title"
+//    private let artist: LocalizedStringKey = "Artist"
+//    private let noResults: LocalizedStringKey = "No results"
     private let manual: LocalizedStringKey = "Manual of NeotubeKaraoke"
     private let cheer: LocalizedStringKey = "Cheer for your friends"
     private let thanks: LocalizedStringKey = "Oh my gosh! I'm touched! 🥰"
@@ -305,7 +305,7 @@ struct SettingView: View {
                     } header: {
                         Text(self.RMAdsTitle)
                     }
-                    
+                    /*
                     Section{
                         Button {
                             self.showCheer.toggle()
@@ -371,6 +371,7 @@ struct SettingView: View {
                             }
                         }
                     }
+                     */
                     .alert(Text(self.alertMic), isPresented: $showAlert) {
                         Button {
                             self.showAlert = false
@@ -408,7 +409,7 @@ struct SettingView: View {
                 }
                 */
             }
-            .preferredColorScheme(.dark)
+            //.preferredColorScheme(.dark)
         }
     }
     
@@ -448,7 +449,7 @@ struct SettingView: View {
             }
             
         }
-        .preferredColorScheme(.dark)
+        //.preferredColorScheme(.dark)
     }
     
     var cheerView: some View {

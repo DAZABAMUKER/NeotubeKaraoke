@@ -43,7 +43,7 @@ struct VideoPlay: View {
                 tone = oldValue
             } else if tone < -24.0 {
                 tone = oldValue
-            }
+            } else {}
         }
     }
     @State var tempo: Float = 1.0 {
@@ -52,7 +52,7 @@ struct VideoPlay: View {
                 tone = oldValue
             } else if tempo < -24.0 {
                 tempo = oldValue
-            }
+            } else {}
         }
     }
     //@State var itemUrl: URL!
@@ -112,27 +112,38 @@ struct VideoPlay: View {
     }
     
     func getTubeInfo() {
-        let hd720 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "720p"}.last
-        let hd360 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "360p"}.last
+        let hd720 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
+        let hd360 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
         //let low144 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "144p"}.last?.url
         //print("111 hd360 \(hd360?.qualityLabel)")
         //print("111 hd720 \(hd720?.mimeType)")
-        let audio = self.innertube.info?.streamingData.adaptiveFormats.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+        
         
         var selectedVideo = TubeFormats(audioQuality: "")
         if resolution == .low || hd720 == nil {
+            /*
+            guard let heightMin = innertube.info?.streamingData.formats?.map({$0.height ?? 1080}).min() else {
+                return
+            }
+            guard let audio = innertube.info?.streamingData.formats?.filter{$0.height == heightMin}.first else {
+                return
+            }
+             */
+            //self.downloadManager.createDownloadParts(url: URL(string: audio.url ?? "http://www.youtube.com")!, size: Int(audio.contentLength ?? "") ?? 0, video: true)
+            //loadAVAssets(url: URL(string: minIndex.url ?? "http://www.youtube.com")!, size: Int(minIndex.contentLength ?? "0") ?? 0)
+            //extractAudio(docUrl: )
             selectedVideo = hd360 ?? TubeFormats(audioQuality: "")
         } else {
             selectedVideo = hd720 ?? TubeFormats(audioQuality: "")
         }
-        //print()
-        //extractAudio(docUrl: URL(string: hd720?.url ?? "http://www.youtube.com")!)
+        let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
         player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: false)
         //player.replaceCurrentItem(with: AVPlayerItem(url: lowVideUrl))
         envPlayer.player = self.player
         envPlayer.isOn = true
         //loadAVAssets(url: URL(string: hd720?.url ?? "http://www.youtube.com")!, size: Int(hd720?.contentLength ?? "") ?? 0)
-        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0 )
+        
     }
     
     /*
@@ -246,20 +257,20 @@ struct VideoPlay: View {
     }
     /*
     func loadAVAssets(url: URL, size: Int/*, aUrl: URL*/) {
-        print("sizes:",size)
         var urlToUse = url
+        print(urlToUse)
 //        if size < 6000000 {
 //            urlToUse = aUrl
 //        }
         var request = URLRequest(url: urlToUse)
-        request.httpMethod = "GET"
-        let task = URLSession(configuration: .default).dataTask(with: request) { data, urlResponse, error in
+        //request.httpMethod = "GET"
+        let task = URLSession.shared.dataTask(with: urlToUse) { data, urlResponse, error in
             let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let fileUrl = doc.appendingPathComponent("audio.mp4")
             do {
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
                     try FileManager.default.removeItem(at: fileUrl)
-                }
+                } else {}
                 //try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
                 try data?.write(to: fileUrl)
                 //print(fileUrl)
@@ -272,22 +283,20 @@ struct VideoPlay: View {
         }
         task.resume()
     }
-     */
-    /*
     func extractAudio(docUrl: URL) {
         let composition = AVMutableComposition()
         let fileUrl = docUrl.appendingPathComponent("audio.mp4")
-        let outputUrl = docUrl.appendingPathComponent("audio.m4a")
+        let outputUrl = docUrl.appendingPathComponent("audios.m4a")
         if FileManager.default.fileExists(atPath: outputUrl.path) {
             try? FileManager.default.removeItem(atPath: outputUrl.path)
-        }
+        } else {}
         Task{
             do {
                 let asset = AVURLAsset(url: fileUrl)
                 //guard let audioAssetTrack = asset.tracks(withMediaType: AVMediaType.audio).first else { return }
                 if FileManager.default.fileExists(atPath: outputUrl.path) {
                     try? FileManager.default.removeItem(atPath: outputUrl.path)
-                }
+                } else {}
                 let audiotrack = try await asset.loadTracks(withMediaType: AVMediaType.audio)
                 guard let audioCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
                 try await audioCompositionTrack.insertTimeRange( audiotrack.first!.load(.timeRange), of: audiotrack.first!, at: .zero)
@@ -299,19 +308,16 @@ struct VideoPlay: View {
                 
                 self.isAppear = true
                 self.isReady = true
+                self.vidFull = true
             } catch {
                 print(error)
             }
         }
         
     }
-    */
-    /*
     func export(video: AVAsset, withPreset preset: String = AVAssetExportPresetHighestQuality, toFileType outputFileType: AVFileType = .mov, atURL outputURL: URL) async {
         // Check the compatibility of the preset to export the video to the output file type.
-        guard await AVAssetExportSession.compatibility(ofExportPreset: preset,
-                                                       with: video,
-                                                       outputFileType: outputFileType) else {
+        guard await AVAssetExportSession.compatibility(ofExportPreset: preset, with: video, outputFileType: outputFileType) else {
             print("The preset can't export the video to the output file type.")
             return
         }
@@ -327,8 +333,9 @@ struct VideoPlay: View {
         
         // Convert the video to the output file type and export it to the output URL.
         await exportSession.export()
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``")
     }
-*/
+     */
     //MARK: - 뷰 바디 여기 있음
     var body: some View {
         NavigationStack{
@@ -338,29 +345,29 @@ struct VideoPlay: View {
                         VStack{}.onAppear(){
                             self.audioEngineSet()
                         }
-                    }
+                    } else {}
                     if !self.player.isMuted {
                         VStack{}.onAppear(){
                             self.player.isMuted = true
                         }
-                    }
+                    } else {}
                     if !isLandscape {
                         VStack{}.onAppear(){
                             self.tap = true
                         }
-                    }
+                    } else {}
                     if closes {
                         VStack{}.onAppear(){
                             print("종료")
                             player.close()
                             audioManager.close()
                         }
-                    }
+                    } else {}
                     if innertube.infoReady {
                         VStack{}.onAppear(){
                             getTubeInfo()
                         }
-                    }
+                    } else {}
                     
                     
                     //비디오 종료시 실향할 함수
@@ -390,7 +397,7 @@ struct VideoPlay: View {
                                         var diff = self.sample[index] - result[index]
                                         if diff < 0 {
                                             diff *= -1
-                                        }
+                                        } else {}
                                         scoreArray.append(diff)
                                     }
                                     self.score = 110 - (scoreArray.reduce(0) { Int(Float($0) + $1) } / scoreArray.count) * 100 / Int(self.sample.max()!)
@@ -401,26 +408,11 @@ struct VideoPlay: View {
                                         score = 50
                                     }
                                 }
-                            }
+                            } else {}
                         }
-                    }
+                    } else {}
                     if isAppear {
                         VStack(spacing: 0){
-                            /*
-                            LinearGradient(colors: [
-                                Color(red: 1, green: 112 / 255.0, blue: 0),
-                                Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                            ],
-                                           startPoint: .topLeading,
-                                           endPoint: .bottomTrailing
-                            )
-                            .frame(width: geometry.size.width, height: 45)
-                            .mask(alignment: .center) {
-                                Text(info?.title ?? "노래방")
-                                    .bold()
-                            }
-                             */
-                            
                             //MARK: 영상 제목 뷰
                             Text(self.innertube.info?.videoDetails.title ?? "노래방")
                                 .frame(width: geometry.size.width, height: 45)
@@ -472,7 +464,7 @@ struct VideoPlay: View {
                                             if !isLandscape{
                                                 Spacer()
                                                     .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 85)
-                                            }
+                                            } else {}
                                             //비디오 상태 표시 줄
                                             ZStack(alignment: .leading){
                                                 Rectangle()
@@ -507,7 +499,7 @@ struct VideoPlay: View {
                                                                     .frame(width: 5, height: 20)
                                                             }
                                                         }
-                                                    }
+                                                    } else {}
                                                 }
                                                 Text(String(self.tone)).padding(10).shadow(radius: 20)
                                                 LinearGradient(colors: [
@@ -528,7 +520,7 @@ struct VideoPlay: View {
                                                                     .frame(width: 5, height: 20)
                                                             }
                                                         }
-                                                    }
+                                                    } else {}
                                                 }
                                                 
                                             }.frame(width: geometry.size.width)
@@ -580,7 +572,7 @@ struct VideoPlay: View {
                                                          */
                                                     }
                                                 }
-                                            }
+                                            } else {}
                                             Spacer()
                                         }
                                         .frame(height: isLandscape ? geometry.size.height : geometry.size.width*9/16)
@@ -592,12 +584,12 @@ struct VideoPlay: View {
                                                     .frame(width: geometry.size.width, height: geometry.size.width*9/16 + 220)
                                                     //.offset(x: 0, y: geometry.size.width*9/32)
                                                     //.border(.blue)
-                                            }
+                                            } else {}
                                             HStack{
                                                 Button {
                                                     if !isLandscape {
                                                         player.moveFrame(to: self.goBackTime * -1)
-                                                    }
+                                                    } else {}
                                                 } label: {
                                                     if !isLandscape {
                                                         Image(systemName: "gobackward.\(Int(self.goBackTime))")
@@ -606,7 +598,7 @@ struct VideoPlay: View {
                                                             .frame(height: 30)
                                                             .opacity(0.8)
                                                             .padding(.horizontal ,10)
-                                                    }
+                                                    } else {}
                                                 }
                                                 Button {
                                                     if isLandscape {
@@ -640,7 +632,7 @@ struct VideoPlay: View {
                                                                 let recordFile = url.appendingPathComponent("recoredForScore.m4a")
                                                                 if FileManager.default.fileExists(atPath: recordFile.path) {
                                                                     try? FileManager.default.removeItem(atPath: recordFile.path)
-                                                                }
+                                                                } else {}
                                                                 let settings = [AVFormatIDKey: Int(kAudioFormatMPEG4AAC), AVSampleRateKey: 12000, AVNumberOfChannelsKey: 1, AVEncoderAudioQualityKey: AVAudioQuality.medium.rawValue]
                                                                 self.recorder = try AVAudioRecorder(url: recordFile, settings: settings)
                                                                 self.recorder.record()
@@ -649,8 +641,8 @@ struct VideoPlay: View {
                                                             catch {
                                                                 print("setting recorder: ", error)
                                                             }
-                                                        }
-                                                    }
+                                                        } else {}
+                                                    } else {}
                                                 } label: {
                                                     Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
                                                         .resizable()
@@ -684,7 +676,7 @@ struct VideoPlay: View {
                                                 Button {
                                                     if !isLandscape {
                                                         player.moveFrame(to: self.goBackTime)
-                                                    }
+                                                    } else {}
                                                 } label: {
                                                     if !isLandscape {
                                                         Image(systemName: "goforward.\(Int(self.goBackTime))")
@@ -693,7 +685,7 @@ struct VideoPlay: View {
                                                             .frame(height: 30)
                                                             .opacity(0.8)
                                                             .padding(.horizontal ,10)
-                                                    }
+                                                    } else {}
                                                 }
                                             }
                                             .tint(.white)
@@ -785,7 +777,7 @@ struct VideoPlay: View {
                                                                         .shadow(color: !isLandscape ? .green : .clear, radius: 5)
                                                                 }
                                                         }
-                                                    }
+                                                    } else {}
                                                     Button {
                                                         audioManager.playClap()
                                                     } label: {
@@ -839,7 +831,7 @@ struct VideoPlay: View {
                                                                         .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                                 }
                                                         }
-                                                    }
+                                                    } else {}
                                                     Button {
                                                         audioManager.playCrowd()
                                                     } label: {
@@ -870,7 +862,7 @@ struct VideoPlay: View {
                                                                         .shadow(color: !isLandscape ? .orange : .clear, radius: 5)
                                                                 }
                                                         }
-                                                    }
+                                                    } else {}
                                                 }
                                                 .padding(.top, 30)
                                                 HStack(spacing: 60) {
@@ -913,12 +905,12 @@ struct VideoPlay: View {
                                                                         .shadow(color: !isLandscape ? .white : .clear, radius: 5)
                                                                 }
                                                         }
-                                                    }
+                                                    } else {}
                                                 }
                                                 .padding(.top, 20)
 //                                                Spacer()
 //                                                    .frame(height: 70)
-                                            }
+                                            } else {}
                                         }
                                         .tint(.white)
                                         .scaleEffect(isiPad ? 1.5 : 1)
@@ -937,9 +929,8 @@ struct VideoPlay: View {
                                                     }
                                             }
                                             .frame(width: geometry.size.width, height: geometry.size.width*9/16, alignment: .center)
-                                        }
-                                    }
-                                    
+                                        } else {}
+                                    } else {}
                             }
                             //.frame(width: geometry.size.width, height: geometry.size.height - 65)
                             .offset(y: isLandscape && vidFull ? -65 : 0)
@@ -950,51 +941,49 @@ struct VideoPlay: View {
                                     self.tap = true
                                 }
                             }
-                            
-
                         }
-                        
-                        
-                    }
-                    
+                    } else {}
                     //MARK: - 처음 시작
                     if !isAppear{
-                        ProgressView()
-                            .scaleEffect(1.5)
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .background(Color(red: 44/255, green: 54/255, blue: 51/255))
-                            .onAppear() {
-                                //self.isReady = false
-                                if !isAppear {
-                                    //url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
-                                    //getTubeInfo(videoId: videoId)
-                                    self.innertube.player(videoId: videoId)
-                                    self.vidEnd = false
-                                    if UIDevice.current.model == "iPad" {
-                                        self.isiPad = true
-                                    }
-                                    if self.micPermission {
-                                        do {
-                                            self.session = AVAudioSession.sharedInstance()
-                                            try self.session.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: [.defaultToSpeaker, .allowBluetoothA2DP])
-                                            self.session.requestRecordPermission { (status) in
-                                                if !status {
-                                                    self.isMicOn = false
-                                                    print("Need permisson for use microphone")
-                                                } else {
-                                                    self.isMicOn = true
+                        if innertube.HLSManifest {
+                            Text("지원되지 않는 형식 입니다.")
+                        } else {
+                            ProgressView()
+                                .scaleEffect(1.5)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .background(Color(red: 44/255, green: 54/255, blue: 51/255))
+                                .onAppear() {
+                                    //self.isReady = false
+                                    if !isAppear {
+                                        //url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
+                                        //getTubeInfo(videoId: videoId)
+                                        self.innertube.player(videoId: videoId)
+                                        self.vidEnd = false
+                                        if UIDevice.current.model == "iPad" {
+                                            self.isiPad = true
+                                        } else {}
+                                        if self.micPermission {
+                                            do {
+                                                self.session = AVAudioSession.sharedInstance()
+                                                try self.session.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: [.defaultToSpeaker, .allowBluetoothA2DP])
+                                                self.session.requestRecordPermission { (status) in
+                                                    if !status {
+                                                        self.isMicOn = false
+                                                        print("Need permisson for use microphone")
+                                                    } else {
+                                                        self.isMicOn = true
+                                                    }
                                                 }
                                             }
-                                        }
-                                        catch {
-                                            print("Microphone Permission: ", error)
-                                        }
-                                    }
+                                            catch {
+                                                print("Microphone Permission: ", error)
+                                            }
+                                        } else {}
+                                    } else {}
                                 }
-                            }
-                    }
-                    
+                        }
+                    } else {}
                 }
                 .onDisappear(){
                     close()

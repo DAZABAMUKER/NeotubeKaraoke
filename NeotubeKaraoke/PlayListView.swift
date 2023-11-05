@@ -109,24 +109,33 @@ struct PlayListView: View {
     var body: some View {
         GeometryReader{ geometry in
             ZStack{
-                VStack(alignment: .leading){
+                VStack(alignment: .leading, spacing: 0){
                     //MARK: 네비게이션 바
                     HStack{
-                        LinearGradient(colors: [
-                            Color(red: 1, green: 112 / 255.0, blue: 0),
-                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                        ],
-                                       startPoint: .topLeading,
-                                       endPoint: .bottomTrailing
-                        )
-                        .frame(height: 60)
-                        .mask(alignment: .leading) {
-                            Text("Playlist")
-                                .italic()
-                                .bold()
-                                .font(.largeTitle)
-                                .padding(.horizontal, 20)
-                        }
+                        Text("Playlist")
+                            .italic()
+                            .bold()
+                            .font(.largeTitle)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 5)
+                            //.foregroundStyle(Color(red: 152/255, green: 216/255, blue: 170/255))
+                            .foregroundStyle(Color.green)
+//
+//                        LinearGradient(colors: [
+//                            Color(red: 1, green: 112 / 255.0, blue: 0),
+//                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
+//                        ],
+//                                       startPoint: .topLeading,
+//                                       endPoint: .bottomTrailing
+//                        )
+//                        .frame(height: 60)
+//                        .mask(alignment: .leading) {
+//                            Text("Playlist")
+//                                .italic()
+//                                .bold()
+//                                .font(.largeTitle)
+//                                .padding(.horizontal, 20)
+//                        }
                         Spacer()
                             .onAppear(){
                                 decodePList() // 네비게이션 그려지면 플레이리스트 가져오기
@@ -139,23 +148,26 @@ struct PlayListView: View {
                                 .scaledToFit()
                                 .frame(height: 30)
                                 .padding(.horizontal ,20)
-                                .foregroundColor(.white)
+                                .foregroundColor(.gray)
                         }
                     }
-                    .frame(height: 70)
+                    Divider()
+                    //.frame(height: 70)
                     //.background(.thinMaterial)
                     
                     //MARK: 최근 재생목록
+                    Text(self.Recent)
+                        .bold()
+                        //.lineLimit(2)
+                        //.multilineTextAlignment(.center)
+                        .font(.headline)
+                        .padding(10)
+                        //.padding(.leading, 10)
+                        //.frame(height: 150)
                     ScrollView(.horizontal){
                         HStack{
-                            Text(self.Recent)
-                                .bold()
-                                .lineLimit(2)
-                                .multilineTextAlignment(.center)
-                                .font(.headline)
-                                .padding(5)
-                                .padding(.leading, 10)
-                                .frame(height: 150)
+                            Spacer()
+                                .frame(width: 10)
                             ForEach(recent, id: \.self) { recent in
                                 Button {
                                     self.isReady = false
@@ -175,18 +187,28 @@ struct PlayListView: View {
                                             image.image?.resizable()
                                                 .resizable()
                                                 .frame(width: heights/9*16, height: heights/9*12)
-                                                .clipShape(Rectangle().size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
+                                                .clipShape(RoundedRectangle(cornerRadius: 10).size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
                                                 .frame(width: heights/9*16, height: heights)
-                                                .shadow(color: .black,radius: 10, x: 0, y: 10)
+                                                .padding(5)
+                                                //.shadow(color: .secondary,radius: 5, x: 0, y: 5)
                                         }
                                         Text(recent.title)
+                                            .bold()
                                             .lineLimit(2)
                                             .frame(width: 160)
                                             .multilineTextAlignment(.center)
+                                            .foregroundStyle(.black)
+                                            .padding(.bottom, 10)
                                     }
-                                    .frame(height: 150)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            //.foregroundStyle(Color.secondary)
+                                            .shadow(color: .secondary,radius: 5, x: 0, y: 5)
+                                    }
+                                    .padding(.bottom)
+                                    //.frame(height: 150)
                                 }
-                                .padding(.horizontal, 8)
+                                //.padding(.horizontal, 5)
                             }
                             /*
                             Button {
@@ -205,6 +227,7 @@ struct PlayListView: View {
                         .tint(.white)
                         .font(.caption)
                     }
+                    //.border(.red)
                     
                     //MARK: 재생목록 리스트
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
@@ -307,7 +330,7 @@ struct PlayListView: View {
                         .listStyle(.plain)
                     }
                 }
-                .preferredColorScheme(.dark)
+                //.preferredColorScheme(.dark)
                 
                 
                 //MARK: 재생목록 추가 뷰
@@ -368,10 +391,10 @@ struct PlayListView: View {
                     .shadow(radius: 10)
                 }
             }
-            .background(content: {
-                LinearGradient(colors: [Color(red: 152/255, green: 216/255, blue: 170/255).opacity(0.5), .clear, .clear, .clear], startPoint: .top, endPoint: .bottom)
-                    .edgesIgnoringSafeArea(.top)
-            })
+//            .background(content: {
+//                LinearGradient(colors: [Color(red: 152/255, green: 216/255, blue: 170/255).opacity(0.5), .clear, .clear, .clear], startPoint: .top, endPoint: .bottom)
+//                    .edgesIgnoringSafeArea(.top)
+//            })
             .edgesIgnoringSafeArea(.bottom)
         }
     }

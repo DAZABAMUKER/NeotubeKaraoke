@@ -10,7 +10,7 @@ import Foundation
 class DownloadTask {
     var done = false
     
-    func dowmloadtask(for url: URL, from start: Int, to end: Int, in session: URLSession, order num: Int, taskClass: MultiPartsDownloadTask) {
+    func dowmloadtask(for url: URL, from start: Int, to end: Int, in session: URLSession, order num: Int, taskClass: MultiPartsDownloadTask, video: Bool) {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -18,7 +18,7 @@ class DownloadTask {
         session.downloadTask(with: request, completionHandler: { tempUrl, response, error in
             do {
                 let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let fileUrl = doc.appendingPathComponent("audio_\(num).m4a")
+                let fileUrl = doc.appendingPathComponent("audio_\(num).\(video ? "mp4" : "m4a")")
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
                     try FileManager.default.removeItem(at: fileUrl)
                 }
@@ -27,6 +27,11 @@ class DownloadTask {
                 self.done = true
                 if taskClass.parts.filter({$0.done == true}).count == taskClass.numberOfRequests {
                     do {
+                        if video {
+                            DispatchQueue.main.sync {
+                                taskClass.destination = doc.appendingPathComponent("audio.mp4")
+                            }
+                        }
                         try FileManager.default.merge(files: taskClass.urls, to: taskClass.destination)
                         DispatchQueue.main.async {
                             taskClass.que = true
@@ -49,7 +54,7 @@ class MultiPartsDownloadTask: ObservableObject{
     let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     var urls = [URL]()
     let numberOfRequests = 20
-    var destination = URL(string: "https://dazabamuker.tistory.com")!
+    @Published var destination = URL(string: "https://dazabamuker.tistory.com")!
     init(parts: [DownloadTask] = [DownloadTask](), que: Int = 0) {
         self.parts = parts
         for i in 0..<numberOfRequests {
@@ -59,16 +64,23 @@ class MultiPartsDownloadTask: ObservableObject{
         self.destination = self.doc.appendingPathComponent("audio.m4a")
         print(self.destination)
     }
-    func createDownloadParts(url: URL, size: Int) {
-        print(size)
+    func createDownloadParts(url: URL, size: Int, video: Bool) {
+        //print(size)
+        self.urls = []
         for i in 0..<numberOfRequests {
+            if video {
+                let fileUrl = doc.appendingPathComponent("audio_\(i).mp4")
+                self.urls.append(fileUrl)
+            } else {
+                let fileUrl = doc.appendingPathComponent("audio_\(i).m4a")
+                self.urls.append(fileUrl)
+            }
             let start = Int(ceil(CGFloat(Int(i) * size) / CGFloat(numberOfRequests)))
             let end = Int(ceil(CGFloat(Int(i + 1) * size) / CGFloat(numberOfRequests)))
             let downloadTask = DownloadTask()
-            downloadTask.dowmloadtask(for: url, from: start, to: end, in: URLSession(configuration: .default), order: i, taskClass: self)
+            downloadTask.dowmloadtask(for: url, from: start, to: end, in: URLSession(configuration: .default), order: i, taskClass: self, video: video)
             parts.append(downloadTask)
         }
-        
     }
 }
 

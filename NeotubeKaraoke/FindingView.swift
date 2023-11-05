@@ -145,7 +145,7 @@ struct FindingView: View {
                 .padding(.horizontal)
             }
         }
-        .preferredColorScheme(.dark)
+        //.preferredColorScheme(.dark)
     }
 }
 
