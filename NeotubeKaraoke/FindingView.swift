@@ -118,7 +118,7 @@ struct FindingView: View {
                 }
                 Toggle(isOn: $isOn) {
                     Label {
-                        Text("Search Peers")
+                        Text("친구 찾기")
                     } icon: {
                         Image(systemName: "shared.with.you")
                     }

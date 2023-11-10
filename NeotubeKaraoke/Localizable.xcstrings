@@ -1,5 +1,5 @@
 {
-  "sourceLanguage" : "en",
+  "sourceLanguage" : "ko",
   "strings" : {
     "" : {
 
@@ -34,9 +34,6 @@
     "1080+" : {
 
     },
-    "Add video to peers." : {
-
-    },
     "Back" : {
 
     },
@@ -44,7 +41,14 @@
 
     },
     "Basic이 아닌 1080 이상의 해상도를 선택할 경우 로딩 시간이 늘어날 수 있습니다." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you select a resolution higher than 1080 rather than Basic, the loading time may increase."
+          }
+        }
+      }
     },
     "Button" : {
 
@@ -71,7 +75,14 @@
 
     },
     "KY 가요" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KY K-Pop"
+          }
+        }
+      }
     },
     "loading" : {
 
@@ -85,19 +96,10 @@
     "Playlist" : {
 
     },
-    "Please wait! It's still up in the air." : {
-
-    },
     "Purchased " : {
 
     },
     "s" : {
-
-    },
-    "Search Peers" : {
-
-    },
-    "Show music score" : {
 
     },
     "Tj" : {
@@ -110,142 +112,497 @@
 
     },
     "TJ 가요" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TJ K-Pop"
+          }
+        }
+      }
     },
     "TJ 가요 Top100" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TJ Top 100 K-Pop songs"
+          }
+        }
+      }
     },
     "wookis112@gmail.com" : {
 
     },
     "가수" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "artist"
+          }
+        }
+      }
     },
     "개발자 블로그" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer Web Page"
+          }
+        }
+      }
     },
     "개발자에게 질문이 있거나 요청이 있으시면 프로필의 이메일을 통하거나 블로그를 통해 연락하십시오." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you have any questions or requests from the developer, please contact me via email or Web Page on my profile"
+          }
+        }
+      }
     },
     "검색" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
     },
     "검색결과를 찾을수 없습니다." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No result."
+          }
+        }
+      }
     },
     "곡검색" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
     },
     "곡번호" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song no."
+          }
+        }
+      }
     },
     "곡제목" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song Title"
+          }
+        }
+      }
     },
     "광고 제거하기" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Ads"
+          }
+        }
+      }
     },
     "광고를 제거하세요!" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can remove ads."
+          }
+        }
+      }
     },
     "구매 복원하기" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore purchase."
+          }
+        }
+      }
     },
     "금영 가요 Top100" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KY Top 100 K-pop songs "
+          }
+        }
+      }
+    },
+    "내 노래 점수 보기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show music score"
+          }
+        }
+      }
     },
     "노래방 곡번호 검색" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search by song number"
+          }
+        }
+      }
+    },
+    "로딩중이에요. 잠시만 기다려주세요." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please wait! It's still up in the air."
+          }
+        }
+      }
     },
     "마이크 접근을 허용해주세요." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please allow Microphone Usage."
+          }
+        }
+      }
     },
     "생성된 재생목록" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generated Playlist"
+          }
+        }
+      }
     },
     "선호 해상도 선택" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select preferred resolution"
+          }
+        }
+      }
     },
     "앱 사용법" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to use?"
+          }
+        }
+      }
     },
     "에약되었습니다." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserved."
+          }
+        }
+      }
     },
     "영상 건너뛰기 시간 선택" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select skip time"
+          }
+        }
+      }
+    },
+    "영상 공유하기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share video with peer."
+          }
+        }
+      }
     },
     "응원 멘트를 입력해주세요" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your cheering comments"
+          }
+        }
+      }
     },
     "응원 멘트를 입력해주세요." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your cheering comments"
+          }
+        }
+      }
     },
     "이메일: " : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email: "
+          }
+        }
+      }
     },
     "이미 포함하고 있는 항목입니다." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This item is already added."
+          }
+        }
+      }
     },
     "인기차트" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karaoke Chart"
+          }
+        }
+      }
     },
     "재생목록 추가" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add playlist"
+          }
+        }
+      }
     },
     "제목" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        }
+      }
     },
     "종이만드는 비전공 대학생 개발자" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A college student majoring in Paper-making"
+          }
+        }
+      }
     },
     "지원되지 않는 형식 입니다." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsupported format."
+          }
+        }
+      }
     },
     "최근 플레이리스트" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Playlist"
+          }
+        }
+      }
     },
     "추가" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        }
+      }
     },
     "취소" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "친구 찾기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Peers"
+          }
+        }
+      }
     },
     "카카오톡 아이디" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kakaotalk ID"
+          }
+        }
+      }
     },
     "타이틀을 입력하세요" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your playlist title."
+          }
+        }
+      }
     },
     "템포" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempo"
+          }
+        }
+      }
     },
     "템포: x" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempo: x"
+          }
+        }
+      }
     },
     "해상도 선택" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select prefer resolution"
+          }
+        }
+      }
     },
     "헉!! 감동이에요! 🥰" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thanks I'm touched! 🥰"
+          }
+        }
+      }
     },
     "현재 노래 다음에 추가" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add right after to now playing"
+          }
+        }
+      }
     },
     "현재 재생목록" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now Playing List"
+          }
+        }
+      }
     },
     "현재 재생목록 마지막에 추가" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to last of now playing list"
+          }
+        }
+      }
     },
     "확인" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "환불하기" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request a refund"
+          }
+        }
+      }
     },
     "환불할 상품을 선택하세요" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a item you want to refund"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -342,7 +342,7 @@ struct searcher: View{
                                     self.tabIndex = .peer
                                     self.likeModal = false
                                 } label: {
-                                    Text("Add video to peers.")
+                                    Text("영상 공유하기")
                                 }
                                 .listRowBackground(Color.black.opacity(0.5))
                                 Button {

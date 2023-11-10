@@ -4,17 +4,6 @@
 <dict>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7240659336832390~9495342297</string>
-	<key>com.apple.developer.device-information.user-assigned-device-name</key>
-	<true/>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>Needed for connecting devicces to reservation.</string>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_Dazaba-Neotube._tcp</string>
-		<string>_Dazaba-Neotube._udp</string>
-	</array>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This is need for karaoke scoring.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>
@@ -22,6 +11,11 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_Dazaba-Neotube._tcp</string>
+		<string>_Dazaba-Neotube._udp</string>
+	</array>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
@@ -225,17 +219,6 @@
 			<string>3qcr597p9d.skadnetwork</string>
 		</dict>
 	</array>
-	<key>UIBackgroundModes</key>
-	<array/>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIColorName</key>
-		<string>AccentColor</string>
-		<key>UIImageName</key>
-		<string>icon</string>
-	</dict>
-	<key>CFBundleIdentifier</key>
-	<string></string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -245,13 +228,24 @@
 			<key>UIWindowSceneSessionRoleExternalDisplay</key>
 			<array>
 				<dict>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
 					<key>UISceneConfigurationName</key>
 					<string>ExternalDisplay</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
 				</dict>
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array/>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>AccentColor</string>
+		<key>UIImageName</key>
+		<string>icon</string>
+	</dict>
+	<key>com.apple.developer.device-information.user-assigned-device-name</key>
+	<true/>
 </dict>
 </plist>

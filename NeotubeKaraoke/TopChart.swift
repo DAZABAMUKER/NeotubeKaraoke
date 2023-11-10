@@ -53,6 +53,7 @@ struct TopChart: View {
                     Text("인기차트")
                         .font(.largeTitle)
                         .foregroundStyle(.orange)
+                        .multilineTextAlignment(.center)
                         .bold()
                     Spacer()
                     Button {

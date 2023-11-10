@@ -202,7 +202,7 @@ struct SettingView: View {
                         .pickerStyle(.segmented)
                     }
                     Toggle(isOn: $micPermission) {
-                        Text("Show music score")
+                        Text("내 노래 점수 보기")
                     }
                     
                     Section {
@@ -247,7 +247,7 @@ struct SettingView: View {
                                         }
                                     } label: {
                                         if purchaseManager.products.isEmpty {
-                                            Text("Please wait! It's still up in the air.")
+                                            Text("로딩중이에요. 잠시만 기다려주세요.")
                                         } else {
                                             HStack{
                                                 Image(systemName: "hand.raised.fingers.spread")

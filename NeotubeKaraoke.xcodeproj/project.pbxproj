@@ -84,11 +84,11 @@
 		032DE3E229AEDAC50097C58A /* videoClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoClass.swift; sourceTree = "<group>"; };
 		0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayers.swift; sourceTree = "<group>"; };
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
-		033C57EC29D2DAC600340988 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Localizables.strings; sourceTree = "<group>"; };
-		033C57EF29D2DAC600340988 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizables.strings; sourceTree = "<group>"; };
 		033C57F529D31DC400340988 /* GADInterstitialAd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GADInterstitialAd.swift; sourceTree = "<group>"; };
 		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		034EF01A2AFDD4C10085188C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		034EF0202AFDF0D10085188C /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ../ko.lproj/Localizables.strings; sourceTree = "<group>"; };
+		034EF0212AFDF0D10085188C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/Localizables.strings; sourceTree = "<group>"; };
 		035657FC29E8286D000227D9 /* ExternalDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalDisplay.swift; sourceTree = "<group>"; };
 		0356F76C29A496F40005EE2D /* downloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = downloadManager.swift; sourceTree = "<group>"; };
 		036658EE2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; name = NeotubeKaraokeStoreKitConfiguration.storekit; path = NeotubeKaraoke/NeotubeKaraokeStoreKitConfiguration.storekit; sourceTree = "<group>"; };
@@ -412,7 +412,7 @@
 			};
 			buildConfigurationList = 03962DC9291F781400A376F3 /* Build configuration list for PBXProject "NeotubeKaraoke" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -560,7 +560,7 @@
 		033C57EB29D2DAC600340988 /* Localizables.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				033C57EC29D2DAC600340988 /* ko */,
+				034EF0212AFDF0D10085188C /* en */,
 			);
 			name = Localizables.strings;
 			sourceTree = "<group>";
@@ -568,7 +568,7 @@
 		033C57EE29D2DAC600340988 /* Localizables.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				033C57EF29D2DAC600340988 /* en */,
+				034EF0202AFDF0D10085188C /* ko */,
 			);
 			name = Localizables.strings;
 			sourceTree = "<group>";
@@ -707,7 +707,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NeotubeKaraoke/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Needed for connecting devicces to reservation.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This is need for karaoke scoring.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -744,7 +745,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NeotubeKaraoke/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Needed for connecting devicces to reservation.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This is need for karaoke scoring.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
