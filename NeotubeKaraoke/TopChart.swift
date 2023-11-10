@@ -18,15 +18,6 @@ struct TopChart: View {
     @State var searchToggle = false
     
     @StateObject private var getPopularChart = GetPopularChart()
-    private let KY: LocalizedStringKey = "KY karaoke Top 100"
-    private let Tj: LocalizedStringKey = "Tj karaoke Top 100"
-    private let searchNumberOfSongs: LocalizedStringKey = "Searching for number of karaoke songs."
-    private let selResolution: LocalizedStringKey = "Selecting Resolution"
-    private let searchSongTitle: LocalizedStringKey = "title of the song"
-    private let numberOfSong: LocalizedStringKey = "Number of the song"
-    private let title: LocalizedStringKey = "Title"
-    private let artist: LocalizedStringKey = "Artist"
-    private let noResults: LocalizedStringKey = "No results"
     
     @State var scHeight = 0.0
     @State var scWidth = 0.0
@@ -85,7 +76,7 @@ struct TopChart: View {
                                 .foregroundStyle(.clear)
                                 .frame(height: 25)
                             Spacer()
-                            Text(self.searchNumberOfSongs)
+                            Text("노래방 곡번호 검색")
                                 .font(.title3)
                                 .bold()
                                 .padding()
@@ -101,13 +92,13 @@ struct TopChart: View {
                                     .padding()
                             }
                         }
-                        Picker(self.searchNumberOfSongs, selection: $karaoke) {
+                        Picker("노래방 곡번호 검색", selection: $karaoke) {
                             Text("Tj").tag(Karaoke.Tj)
                             Text("KY").tag(Karaoke.KY)
                         }
                         .pickerStyle(.segmented)
                         .padding()
-                        TextField(self.searchSongTitle, text: $titleOfSong)
+                        TextField("곡제목", text: $titleOfSong)
                             .autocorrectionDisabled(true)
                             .autocapitalization(.none)
                             .onSubmit {
@@ -130,13 +121,13 @@ struct TopChart: View {
                             Section{
                                 VStack{
                                     HStack{
-                                        Text(self.numberOfSong)
+                                        Text("곡번호")
                                             .bold()
                                             .frame(width: 80)
-                                        Text(self.title)
+                                        Text("제목")
                                             .bold()
                                         Spacer()
-                                        Text(self.artist)
+                                        Text("가수")
                                             .bold()
                                     }
                                     .padding(.top, 5)
@@ -155,7 +146,7 @@ struct TopChart: View {
                                             }
                                         }
                                     } else if self.getPopularChart.Numbers.contains("검색결과를 찾을수 없습니다.") {
-                                        Text(self.noResults)
+                                        Text("검색결과를 찾을수 없습니다.")
                                     }
                                     Spacer()
                                         .frame(height: 40)
@@ -338,7 +329,7 @@ struct TopChart: View {
                             Text("금영 가요 Top100")
                                 .bold()
                                 .font(.title3)
-                                .foregroundColor(.black)
+                                .foregroundColor(.orange)
                         }
                         //.listStyle(.plain)
                     }

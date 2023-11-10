@@ -17,8 +17,8 @@ struct MakeRefund: View {
     @State private var refundSheetIsPresented = false
     @State var products: [Product] = []
     
-    private let refund: LocalizedStringKey = "Request a refund"
-    private let selProduct: LocalizedStringKey = "Select a purchase to refund"
+    //private let refund: LocalizedStringKey = "Request a refund"
+    //private let selProduct: LocalizedStringKey = "Select a purchase to refund"
     
     var body: some View {
         VStack{
@@ -31,14 +31,14 @@ struct MakeRefund: View {
             }
             .safeAreaInset(edge: .bottom) {
                 VStack(spacing: 0) {
-                    Text(self.selProduct)
+                    Text("환불할 상품을 선택하세요")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .padding()
                     Button {
                         refundSheetIsPresented = true
                     } label: {
-                        Text(self.refund)
+                        Text("환불하기")
                             .bold()
                             .padding(.vertical, 5)
                             .frame(maxWidth: .infinity)

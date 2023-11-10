@@ -31,14 +31,6 @@ struct PlayListView: View {
     @Binding var recent: [LikeVideo]
     @Binding var nowVideo: LikeVideo
     
-    private let showNowPlaying: LocalizedStringKey = "Show now playing list"
-    private let nowPlaying: LocalizedStringKey = "Now Playing List"
-    private let Recent: LocalizedStringKey = "Recent"
-    private let createdList: LocalizedStringKey = "Created Playlist"
-    private let addList: LocalizedStringKey = "Add Playlist"
-    private let inputTilte: LocalizedStringKey = "Input your playlist title"
-    private let OK: LocalizedStringKey = "OK"
-    private let cancel: LocalizedStringKey = "Cancel"
     let heights = 100.0
     
     
@@ -156,7 +148,7 @@ struct PlayListView: View {
                     //.background(.thinMaterial)
                     
                     //MARK: 최근 재생목록
-                    Text(self.Recent)
+                    Text("최근 플레이리스트")
                         .bold()
                         //.lineLimit(2)
                         //.multilineTextAlignment(.center)
@@ -219,7 +211,7 @@ struct PlayListView: View {
                                         .resizable()
                                         .scaledToFit()
                                         .frame(height: 100)
-                                    Text(self.nowPlaying)
+                                    Text("현재 재생목록")
                                 }
                             }
                              */
@@ -233,7 +225,7 @@ struct PlayListView: View {
                     LinearGradient(colors: [Color.white, Color.secondary.opacity(0)], startPoint: .leading, endPoint: .trailing)
                         .frame(width: geometry.size.width, height: 1)
                     HStack{
-                        Text(showNowPL ? self.nowPlaying : self.createdList)
+                        Text(showNowPL ? "현재 재생목록" : "생성된 재생목록")
                             .font(.title3)
                             .bold()
                             .padding(5)
@@ -287,7 +279,7 @@ struct PlayListView: View {
                                         .resizable()
                                         .scaledToFit()
                                         .frame(height: 30)
-                                    Text(self.nowPlaying)
+                                    Text("현재 재생목록")
                                 }
                             }
                             ForEach(self.playlist, id: \.self) { item in
@@ -344,11 +336,11 @@ struct PlayListView: View {
                             hideKeyboard()
                         }
                     VStack(spacing: 0){
-                        Text(self.addList)
+                        Text("재생목록 추가")
                             .font(.title2)
                             .padding()
                         //Divider()
-                        TextField(self.inputTilte, text: $pTitle)
+                        TextField("타이틀을 입력하세요", text: $pTitle)
                             .background(content: {
                                 Spacer()
                                     .frame(width: 300,height: 50)
@@ -371,7 +363,7 @@ struct PlayListView: View {
                                     self.pTitle = ""
                                 }
                             } label: {
-                                Text(self.OK)
+                                Text("확인")
                             }
                             .padding()
                             Divider()
@@ -380,7 +372,7 @@ struct PlayListView: View {
                                 self.plusPlayList = false
                                 self.pTitle = ""
                             } label: {
-                                Text(self.cancel)
+                                Text("취소")
                             }
                             .padding()
                         }

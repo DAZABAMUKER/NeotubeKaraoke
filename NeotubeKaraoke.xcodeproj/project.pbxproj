@@ -13,10 +13,11 @@
 		032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032DE3E229AEDAC50097C58A /* videoClass.swift */; };
 		0330C4E329A1B94000B3E6D3 /* VideoPlayers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */; };
 		0337C0CC2972650D0069899A /* VideoPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337C0CB2972650D0069899A /* VideoPlay.swift */; };
-		033C57F029D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EB29D2DAC600340988 /* Localizable.strings */; };
-		033C57F129D2DAC600340988 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EE29D2DAC600340988 /* Localizable.strings */; };
+		033C57F029D2DAC600340988 /* Localizables.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EB29D2DAC600340988 /* Localizables.strings */; };
+		033C57F129D2DAC600340988 /* Localizables.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033C57EE29D2DAC600340988 /* Localizables.strings */; };
 		033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C57F529D31DC400340988 /* GADInterstitialAd.swift */; };
 		034744362999DFF800F2EBEE /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034744352999DFF800F2EBEE /* AudioManager.swift */; };
+		034EF01B2AFDD4C10085188C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 034EF01A2AFDD4C10085188C /* Localizable.xcstrings */; };
 		035657FD29E8286D000227D9 /* ExternalDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035657FC29E8286D000227D9 /* ExternalDisplay.swift */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
 		035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63629DDBD9C0010398B /* Python-iOS */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -83,10 +84,11 @@
 		032DE3E229AEDAC50097C58A /* videoClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = videoClass.swift; sourceTree = "<group>"; };
 		0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayers.swift; sourceTree = "<group>"; };
 		0337C0CB2972650D0069899A /* VideoPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlay.swift; sourceTree = "<group>"; };
-		033C57EC29D2DAC600340988 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Localizable.strings; sourceTree = "<group>"; };
-		033C57EF29D2DAC600340988 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		033C57EC29D2DAC600340988 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Localizables.strings; sourceTree = "<group>"; };
+		033C57EF29D2DAC600340988 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizables.strings; sourceTree = "<group>"; };
 		033C57F529D31DC400340988 /* GADInterstitialAd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GADInterstitialAd.swift; sourceTree = "<group>"; };
 		034744352999DFF800F2EBEE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		034EF01A2AFDD4C10085188C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		035657FC29E8286D000227D9 /* ExternalDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalDisplay.swift; sourceTree = "<group>"; };
 		0356F76C29A496F40005EE2D /* downloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = downloadManager.swift; sourceTree = "<group>"; };
 		036658EE2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; name = NeotubeKaraokeStoreKitConfiguration.storekit; path = NeotubeKaraoke/NeotubeKaraokeStoreKitConfiguration.storekit; sourceTree = "<group>"; };
@@ -166,7 +168,7 @@
 		033C57EA29D2DAC600340988 /* ko.lproj */ = {
 			isa = PBXGroup;
 			children = (
-				033C57EB29D2DAC600340988 /* Localizable.strings */,
+				033C57EB29D2DAC600340988 /* Localizables.strings */,
 			);
 			path = ko.lproj;
 			sourceTree = "<group>";
@@ -174,7 +176,7 @@
 		033C57ED29D2DAC600340988 /* en.lproj */ = {
 			isa = PBXGroup;
 			children = (
-				033C57EE29D2DAC600340988 /* Localizable.strings */,
+				033C57EE29D2DAC600340988 /* Localizables.strings */,
 			);
 			path = en.lproj;
 			sourceTree = "<group>";
@@ -287,6 +289,7 @@
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
 				037A998B2A02B0BB00A05065 /* FindingView.swift */,
+				034EF01A2AFDD4C10085188C /* Localizable.xcstrings */,
 				036658F02A6525E9001C5BB9 /* PurchaseManager.swift */,
 				03B17CB02A71FF7B00FA7AAF /* MakeRefund.swift */,
 				037DC4842AD841B6008D7281 /* fortestView.swift */,
@@ -442,9 +445,10 @@
 				037D082029B719BC0069ED88 /* me.PNG in Resources */,
 				036658EF2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit in Resources */,
 				03A0A1C92A1481A8000C5159 /* GoogleService-Info.plist in Resources */,
-				033C57F029D2DAC600340988 /* Localizable.strings in Resources */,
+				033C57F029D2DAC600340988 /* Localizables.strings in Resources */,
 				0369980129D1CCBE00656D28 /* crowd.wav in Resources */,
-				033C57F129D2DAC600340988 /* Localizable.strings in Resources */,
+				033C57F129D2DAC600340988 /* Localizables.strings in Resources */,
+				034EF01B2AFDD4C10085188C /* Localizable.xcstrings in Resources */,
 				037D081829B4780B0069ED88 /* clap.wav in Resources */,
 				03962DD9291F781500A376F3 /* Preview Assets.xcassets in Resources */,
 				03962DD6291F781500A376F3 /* Assets.xcassets in Resources */,
@@ -553,20 +557,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		033C57EB29D2DAC600340988 /* Localizable.strings */ = {
+		033C57EB29D2DAC600340988 /* Localizables.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				033C57EC29D2DAC600340988 /* ko */,
 			);
-			name = Localizable.strings;
+			name = Localizables.strings;
 			sourceTree = "<group>";
 		};
-		033C57EE29D2DAC600340988 /* Localizable.strings */ = {
+		033C57EE29D2DAC600340988 /* Localizables.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				033C57EF29D2DAC600340988 /* en */,
 			);
-			name = Localizable.strings;
+			name = Localizables.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

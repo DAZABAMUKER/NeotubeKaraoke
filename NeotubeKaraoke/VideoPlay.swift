@@ -80,7 +80,6 @@ struct VideoPlay: View {
     @Binding var score: Int
     @State var lowVideoUrl: URL?
     
-    private let tempoString: LocalizedStringKey = "Tempo"
     
     func rotateLandscape() {
         if !isLandscape {
@@ -145,108 +144,6 @@ struct VideoPlay: View {
         //loadAVAssets(url: URL(string: hd720?.url ?? "http://www.youtube.com")!, size: Int(hd720?.contentLength ?? "") ?? 0)
         
     }
-    
-    /*
-    func extractInfo(url: URL) {
-        guard let youtubeDL = youtubeDL else {
-            loadPythonModule()
-            return
-        }
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let info = try youtubeDL.extractInfo(url: url)
-                DispatchQueue.main.async {
-                    self.info = info
-                    self.isAppear = false
-                    //self.isReady = false
-                    //print(isReady)
-                    guard let formats = info?.formats else {
-                        return
-                    }
-                    var bestVideo: Format?
-                    var lowVideo: Format? = formats.filter{!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.first
-                    var isOk = false
-                    //print(info?.format?.url)
-                    if resolution == .ultra {
-                        isOk = true
-                        let vids = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded}
-                        if !vids.isEmpty {
-                            bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded}.last
-                            isOk = true
-                        } else {
-                            bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
-                        }
-                    } else if resolution == .high {
-                        let vids = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded}
-                        if !vids.isEmpty && (vids.last?.height)! >= 1080 {
-                            bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
-                            isOk = true
-                        } else {
-                            bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
-                        }
-                    } else if resolution == .low {
-                        bestVideo = formats.filter{!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.first
-                    } else {
-                        bestVideo = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.last
-                    }
-                    let bestAudio = formats.filter {!$0.isRemuxingNeeded && !$0.isTranscodingNeeded}.first
-                    //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded && $0.height == 1080}.last
-                    //let bestVideo = formats.filter { $0.isVideoOnly && !$0.isTranscodingNeeded }.last
-                    let onlyAudio = formats.filter { $0.isAudioOnly && $0.ext == "m4a" }.last
-                    print(bestAudio!, bestVideo!)
-                    //print(self.info!)
-                    guard let aUrl = bestAudio?.url else { return }
-                    guard let vUrl = bestVideo?.url else { return }
-                    guard let lowUrl = bestVideo?.url else { return }
-                    self.lowVideoUrl = lowUrl
-                    guard let onlyAudioUrl = onlyAudio?.url else { return }
-                    //print(vUrl)
-                    //self.audioUrl = aUrl
-                    //self.videoUrl = vUrl
-                    //print(self.audioUrl)
-                    //let size = try? onlyAudioUrl.resourceValues(forKeys: [.totalFileSizeKey]).totalFileSize
-                    //print(size)
-                    //print(bestVideo?.filesize ?? 0)
-                    //print(bestAudio?.filesize ?? 0)
-                    player.prepareToPlay(url: vUrl, audioManager: audioManager, fileSize: Int(bestVideo?.filesize ?? 0), isOk: isOk)
-                    //player.replaceCurrentItem(with: AVPlayerItem(url: lowVideUrl))
-                    envPlayer.player = self.player
-                    envPlayer.isOn = true
-                    //loadAVAssets(url: aUrl, size: onlyAudio?.filesize ?? 0, aUrl: onlyAudioUrl)
-                    //self.downloadManager.createDownloadParts(url: onlyAudioUrl, size: onlyAudio?.filesize ?? 0)
-                }
-            }
-            catch {
-                guard let pyError = error as? PythonError, case let .exception(exception, traceback: _) = pyError else {
-                    return
-                }
-                //self.vidEnd = true
-                //self.vidFull = false
-                if (String(exception.args[0]) ?? "").contains("Unsupported URL: ") {
-                }
-            }
-        }
-    }
-     */
-    /*
-    func loadPythonModule() {
-        DispatchQueue.global(qos: .default).async {
-            do {
-                youtubeDL = try YoutubeDL()
-                //guard youtubeDL?.version < 2023.
-                DispatchQueue.main.async {
-                    url.map { extractInfo(url: $0) }
-                }
-                //print("loads")
-            }
-            catch {
-                print(#function, error)
-                DispatchQueue.main.async {
-                }
-            }
-        }
-    }
-    */
     func audioEngineSet() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileUrl = doc.appendingPathComponent("audio.m4a")
@@ -255,92 +152,13 @@ struct VideoPlay: View {
         self.isReady = true
         self.vidFull = true
     }
-    /*
-    func loadAVAssets(url: URL, size: Int/*, aUrl: URL*/) {
-        var urlToUse = url
-        print(urlToUse)
-//        if size < 6000000 {
-//            urlToUse = aUrl
-//        }
-        var request = URLRequest(url: urlToUse)
-        //request.httpMethod = "GET"
-        let task = URLSession.shared.dataTask(with: urlToUse) { data, urlResponse, error in
-            let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileUrl = doc.appendingPathComponent("audio.mp4")
-            do {
-                if FileManager.default.fileExists(atPath: fileUrl.path()) {
-                    try FileManager.default.removeItem(at: fileUrl)
-                } else {}
-                //try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
-                try data?.write(to: fileUrl)
-                //print(fileUrl)
-                extractAudio(docUrl: doc)
-            }
-            catch {
-                print(error)
-                return
-            }
-        }
-        task.resume()
-    }
-    func extractAudio(docUrl: URL) {
-        let composition = AVMutableComposition()
-        let fileUrl = docUrl.appendingPathComponent("audio.mp4")
-        let outputUrl = docUrl.appendingPathComponent("audios.m4a")
-        if FileManager.default.fileExists(atPath: outputUrl.path) {
-            try? FileManager.default.removeItem(atPath: outputUrl.path)
-        } else {}
-        Task{
-            do {
-                let asset = AVURLAsset(url: fileUrl)
-                //guard let audioAssetTrack = asset.tracks(withMediaType: AVMediaType.audio).first else { return }
-                if FileManager.default.fileExists(atPath: outputUrl.path) {
-                    try? FileManager.default.removeItem(atPath: outputUrl.path)
-                } else {}
-                let audiotrack = try await asset.loadTracks(withMediaType: AVMediaType.audio)
-                guard let audioCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { return }
-                try await audioCompositionTrack.insertTimeRange( audiotrack.first!.load(.timeRange), of: audiotrack.first!, at: .zero)
-                await export(video: composition, withPreset: AVAssetExportPresetAppleM4A, toFileType: .m4a , atURL: outputUrl)
-                let _: () = Service.shared.buffer(url: outputUrl, samplesCount: 300) { results in
-                    self.sample = results
-                }
-                audioManager.setEngine(file: outputUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View extract audio")
-                
-                self.isAppear = true
-                self.isReady = true
-                self.vidFull = true
-            } catch {
-                print(error)
-            }
-        }
-        
-    }
-    func export(video: AVAsset, withPreset preset: String = AVAssetExportPresetHighestQuality, toFileType outputFileType: AVFileType = .mov, atURL outputURL: URL) async {
-        // Check the compatibility of the preset to export the video to the output file type.
-        guard await AVAssetExportSession.compatibility(ofExportPreset: preset, with: video, outputFileType: outputFileType) else {
-            print("The preset can't export the video to the output file type.")
-            return
-        }
-        
-        // Create and configure the export session.
-        guard let exportSession = AVAssetExportSession(asset: video,
-                                                       presetName: preset) else {
-            print("Failed to create export session.")
-            return
-        }
-        exportSession.outputFileType = outputFileType
-        exportSession.outputURL = outputURL
-        
-        // Convert the video to the output file type and export it to the output URL.
-        await exportSession.export()
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``")
-    }
-     */
     //MARK: - 뷰 바디 여기 있음
     var body: some View {
         NavigationStack{
             GeometryReader { geometry in
+                
                 ZStack{
+                    
                     if self.downloadManager.que {
                         VStack{}.onAppear(){
                             self.audioEngineSet()
@@ -411,6 +229,7 @@ struct VideoPlay: View {
                             } else {}
                         }
                     } else {}
+                    
                     if isAppear {
                         VStack(spacing: 0){
                             //MARK: 영상 제목 뷰
@@ -699,14 +518,10 @@ struct VideoPlay: View {
                                                 if !isLandscape {
                                                     Spacer()
                                                         .frame(width: geometry.size.width, height: geometry.size.width*9/16  + 100)
-                                                        //.border(.red)
                                                 } else {
                                                     Spacer()
                                                         .frame(width: geometry.size.width, height: geometry.size.height*2/3)
                                                 }
-//                                                Spacer()
-//                                                    .frame(width: 50, height: isLandscape ? geometry.size.height * 4/5 : geometry.size.width*9/20)
-//                                                    .border(.green)
                                                 HStack(spacing: 60){
                                                     Button {
                                                         self.tempo -= 0.02
@@ -714,7 +529,7 @@ struct VideoPlay: View {
                                                         audioManager.tempo(spd: tempo)
                                                     } label: {
                                                         HStack{
-                                                            Text(self.tempoString)
+                                                            Text("템포")
                                                             Image(systemName: "arrowtriangle.down.fill")
                                                                 .opacity(0.8)
                                                                 .font(.title2)
@@ -728,8 +543,7 @@ struct VideoPlay: View {
                                                         }
                                                     }
                                                     HStack(spacing: 0){
-                                                        Text(self.tempoString)
-                                                        Text(": x")
+                                                        Text("템포: x")
                                                             .font(.caption)
                                                         Text(String(format: "%.2f", self.tempo))
                                                     }
@@ -746,7 +560,7 @@ struct VideoPlay: View {
                                                         audioManager.tempo(spd: tempo)
                                                     } label: {
                                                         HStack{
-                                                            Text(self.tempoString)
+                                                            Text("템포")
                                                             Image(systemName: "arrowtriangle.up.fill")
                                                                 .opacity(0.8)
                                                                 .font(.title2)
@@ -956,8 +770,6 @@ struct VideoPlay: View {
                                 .onAppear() {
                                     //self.isReady = false
                                     if !isAppear {
-                                        //url = URL(string: "https://www.youtube.com/watch?v=\(videoId)")
-                                        //getTubeInfo(videoId: videoId)
                                         self.innertube.player(videoId: videoId)
                                         self.vidEnd = false
                                         if UIDevice.current.model == "iPad" {
@@ -992,15 +804,3 @@ struct VideoPlay: View {
         }
     }
 }
-/*
-let av1CodecPrefix = "av01."
-extension Format {
-    var isRemuxingNeeded: Bool { isVideoOnly || isAudioOnly }
-    
-    var isTranscodingNeeded: Bool {
-        self.ext == "mp4"
-        ? (self.vcodec ?? "").hasPrefix(av1CodecPrefix)
-        : self.ext != "m4a"
-    }
-}
-*/

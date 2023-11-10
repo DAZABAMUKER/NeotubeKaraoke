@@ -49,7 +49,7 @@ struct ContentView: View {
     @State var addVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var nowVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var isNewitem = false
-    @State var restartApp = false
+    //@State var restartApp = false
     //@State var connectedPeers = [MCPeerID]()
     
     @State var adCount: Int = 0 {
@@ -65,101 +65,12 @@ struct ContentView: View {
                     } else {
                         print("홀수")
                         adCoordinator.loadAd()
-//                        if !once {
-//                            adCoordinator.loadAd()
-//                            self.once = true
-//                        }
                     }
                 }
             }
         }
     }
     
-    private let loading: LocalizedStringKey = "Loading...\n"
-    private let selSong: LocalizedStringKey = "Please select your song to sing -^^-\n"
-    private let newVideoAdded: LocalizedStringKey = "New Video reserved"
-    private let coreUpdate: LocalizedStringKey = "Core Process is updated please restart the App."
-    private let okay: LocalizedStringKey = "OK"
-    /*
-    func loadPythonModule() {
-        guard FileManager.default.fileExists(atPath: YoutubeDL.pythonModuleURL.path) else {
-            downloadPythonModule()
-            return
-        }
-        DispatchQueue.global(qos: .default).async {
-            do {
-                let youtubeDL = try YoutubeDL()
-                let latestVersionUrl = URL(string: "https://github.com/yt-dlp/yt-dlp/releases/latest")
-                URLSession.shared.dataTask(with: latestVersionUrl!) { data, response, error in
-                    if error != nil || data == nil {
-                        print(error as Any)
-                        return
-                    }
-                    do {
-                        let content = String(data: data!, encoding: .utf8)
-                        do {
-                            let document = try SwiftSoup.parse(content ?? "")
-                            print(document.charset())
-                            guard let body = document.body() else {
-                                return
-                            }
-                            let date = try body.getElementsByAttribute("aria-current").map{try $0.text()}.filter{$0.contains(".")}.first ?? ""
-                            print(date)
-                            
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.dateFormat = "yyyy.MM.dd"
-                            dateFormatter.timeZone = TimeZone(identifier: "UTC")
-                            guard let versionDate = dateFormatter.date(from: youtubeDL.version ?? "failure") else {
-                                print("버전 날짜 변경 안됨")
-                                return
-                            }
-                            guard let LatestVersionDate = dateFormatter.date(from: date ?? "failure") else {
-                                print("버전 날짜 변경 안됨")
-                                return
-                            }
-                            if versionDate.compare(LatestVersionDate) == .orderedAscending {
-                                print("현재 버전: \(versionDate)")
-                                print("최신 버전은: \(LatestVersionDate)")
-                                print("새버전 필요")
-                                downloadPythonModuleOnce()
-                                self.restartApp = true
-                            }
-                            
-                        }
-                        catch{
-                            print(error)
-                        }
-                    }
-                }.resume()
-                
-            }
-            catch {
-                print(#function, error)
-            }
-        }
-    }
-    
-    func downloadPythonModule() {
-        YoutubeDL.downloadPythonModule { error in
-            DispatchQueue.main.async {
-                guard error == nil else {
-                    return
-                }
-                loadPythonModule()
-            }
-        }
-    }
-    
-    func downloadPythonModuleOnce() {
-        YoutubeDL.downloadPythonModule { error in
-            DispatchQueue.main.async {
-                guard error == nil else {
-                    return
-                }
-            }
-        }
-    }
-    */
     func rotateLandscape() {
         if !isLandscape {
             if #available(iOS 16.0, *) {
@@ -268,45 +179,17 @@ struct ContentView: View {
                         self.isNewitem = true
                     }
                 }
-                .alert(self.newVideoAdded, isPresented: $isNewitem) {
+                .alert("에약되었습니다.", isPresented: $isNewitem) {
                     
                 }
-                /*
-                .onAppear(){
-                    loadPythonModule()
-                }
-                 */
-                .alert(coreUpdate, isPresented: $restartApp) {
-                    Button {
-                        closeApp()
-                    } label: {
-                        Text(self.okay)
-                    }
-
-                }
-                
                 //탭뷰 위에 플레이어화면을 올려줌
                 VStack{
                     ZStack{
-//                        
-//                        if adCoordinator.ad != nil {
-//                            Spacer().onAppear() {
-//                                print(adCoordinator.ad)
-//                            }
-//                        }
                         if vidFull && UIDevice.current.model == "iPad" {
                             VStack{}.onAppear(){
                                 self.isLandscape = true
                             }
                         }
-                        /*
-                        if adCoordinator.isAdTwice {
-                            VStack{}.onAppear(){
-                                self.adCount -= 1
-                                adCoordinator.isAdTwice = false
-                            }
-                        }
-                         */
                         if UIDevice.current.model != "iPad" {
                             if UIDevice.current.orientation.isLandscape {
                                 VStack{}.onAppear(){
@@ -361,7 +244,7 @@ struct ContentView: View {
                         }
                         // 플레이어를 새로 그리기 위해 시간 텀이 필요
                         if reloads {
-                            Text(loading)
+                            Text("loading")
                                 .frame(width: geometry.size.width, height: 60)
                                 .onAppear(){
                                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
@@ -370,14 +253,8 @@ struct ContentView: View {
                                         self.clickVid = false
                                     }
                                 }
-                                //.background(Color(red: 44/255, green: 54/255, blue: 51/255))
-                            
                             // 플레이어 뷰 첫 화면
                         } else if videoPlay.videoId == "nil" && !reloads {
-                            //Text(self.selSong)
-                            //.bold()
-                                //.frame(width: geometry.size.width, height: 60)
-                                //.background(Color(red: 44/255, green: 54/255, blue: 51/255))
                         } else {
                             //찐 플레이어 뷰
                             videoPlay
@@ -406,7 +283,6 @@ struct ContentView: View {
                     Circle()
                         .frame(width: 100)
                         .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
-                        //.foregroundColor(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                         .foregroundColor(.white)
                         .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                         .shadow(radius: 5)
@@ -417,13 +293,8 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .peer, img: "shared.with.you", geometry: geometry)
                         TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
                     }
-                    //.background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                     .background(self.colorScheme == .light ? .white : Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                     .preferredColorScheme(.light)
-//                    .onAppear(){
-//                        
-//                        self.isLandscape = false
-//                    }
                 }
                 VStack{
                     HStack{

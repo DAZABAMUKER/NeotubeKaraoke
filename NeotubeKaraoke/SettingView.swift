@@ -46,33 +46,33 @@ struct SettingView: View {
     @Binding var isLandscape: Bool
     private let pasteboard = UIPasteboard.general
     
-    private let devProfile: LocalizedStringKey = "Developer Profile"
-    private let devBlog: LocalizedStringKey = "Developer's Blog"
-    private let contact: LocalizedStringKey = "If you have any questions or requests from the developer, please contact us via email or blog on my profile"
-    private let someone: LocalizedStringKey = "A paper-making university student developer"
-    private let email: LocalizedStringKey = "Email: "
-    private let kakaotalk: LocalizedStringKey = "KakaoTalk ID: "
-    private let titleOfResolution: LocalizedStringKey = "Select prefer resolution"
-    private let ifHigher: LocalizedStringKey = "If you select a resolution higher than 1080 rather than Basic, the loading time may increase."
-    private let rmAds: LocalizedStringKey = "Remove Ads(To be updated...)"
-    private let alertMic: LocalizedStringKey = "Please allow Microphone Usage."
-    private let cancel: LocalizedStringKey = "Cancel"
-    private let OK: LocalizedStringKey = "OK"
-//    private let searchNumberOfSongs: LocalizedStringKey = "Searching for number of karaoke songs."
-    private let selResolution: LocalizedStringKey = "Selecting Resolution"
-//    private let searchSongTitle: LocalizedStringKey = "title of the song"
-//    private let numberOfSong: LocalizedStringKey = "Number of the song"
-//    private let title: LocalizedStringKey = "Title"
-//    private let artist: LocalizedStringKey = "Artist"
-//    private let noResults: LocalizedStringKey = "No results"
-    private let manual: LocalizedStringKey = "Manual of NeotubeKaraoke"
-    private let cheer: LocalizedStringKey = "Cheer for your friends"
-    private let thanks: LocalizedStringKey = "Oh my gosh! I'm touched! 🥰"
-    private let RMAds: LocalizedStringKey = "You can remove Ads!"
-    private let RSPurchased: LocalizedStringKey = "Restore In-App purchases"
-    private let RMAdsTitle: LocalizedStringKey = "Remove Ads"
-    private let goOrBackTime: LocalizedStringKey = "Select go/backward time"
-    private let cheerMent: LocalizedStringKey = "Please enter your comment"
+//    private let devProfile: LocalizedStringKey = "Developer Profile"
+//    private let devBlog: LocalizedStringKey = "Developer's Blog"
+//    private let contact: LocalizedStringKey = "If you have any questions or requests from the developer, please contact us via email or blog on my profile"
+//    private let someone: LocalizedStringKey = "A paper-making university student developer"
+//    private let email: LocalizedStringKey = "Email: "
+//    private let kakaotalk: LocalizedStringKey = "KakaoTalk ID: "
+//    private let titleOfResolution: LocalizedStringKey = "Select prefer resolution"
+//    private let ifHigher: LocalizedStringKey = "If you select a resolution higher than 1080 rather than Basic, the loading time may increase."
+//    private let rmAds: LocalizedStringKey = "Remove Ads(To be updated...)"
+//    private let alertMic: LocalizedStringKey = "Please allow Microphone Usage."
+//    private let cancel: LocalizedStringKey = "Cancel"
+//    private let OK: LocalizedStringKey = "OK"
+////    private let searchNumberOfSongs: LocalizedStringKey = "Searching for number of karaoke songs."
+//    private let selResolution: LocalizedStringKey = "Selecting Resolution"
+////    private let searchSongTitle: LocalizedStringKey = "title of the song"
+////    private let numberOfSong: LocalizedStringKey = "Number of the song"
+////    private let title: LocalizedStringKey = "Title"
+////    private let artist: LocalizedStringKey = "Artist"
+////    private let noResults: LocalizedStringKey = "No results"
+//    private let manual: LocalizedStringKey = "Manual of NeotubeKaraoke"
+//    private let cheer: LocalizedStringKey = "Cheer for your friends"
+//    private let thanks: LocalizedStringKey = "Oh my gosh! I'm touched! 🥰"
+//    private let RMAds: LocalizedStringKey = "You can remove Ads!"
+//    private let RSPurchased: LocalizedStringKey = "Restore In-App purchases"
+//    private let RMAdsTitle: LocalizedStringKey = "Remove Ads"
+//    private let goOrBackTime: LocalizedStringKey = "Select go/backward time"
+//    private let cheerMent: LocalizedStringKey = "Please enter your comment"
     
     func rotateLandscape() {
         if !isLandscape {
@@ -135,7 +135,7 @@ struct SettingView: View {
                         Button{
                             self.profile = true
                         } label: {
-                            Text(self.devProfile)
+                            Text("종이만드는 비전공 대학생 개발자")
                         }
                         .sheet(isPresented: $profile) {
                             profileView
@@ -145,7 +145,7 @@ struct SettingView: View {
                         Button {
                             self.sheet = true
                         } label: {
-                            Text(self.devBlog)
+                            Text("개발자 블로그")
                         }
                         .sheet(isPresented: $sheet) {
                             MyWebView(UrlTOLoad: "https://dazabamuker.tistory.com")
@@ -155,7 +155,7 @@ struct SettingView: View {
                         Button {
                             UIApplication.shared.openURL(URL(string: "https://dazabamuker.tistory.com/entry/%EB%84%88%ED%8A%9C%EB%B8%8C-%EB%85%B8%EB%9E%98%EB%B0%A9-%EC%95%B1-%EC%82%AC%EC%9A%A9%EB%B2%95How-to-use-NeotubeKaraoke-App")!)
                         } label: {
-                            Text(self.manual)
+                            Text("앱 사용법")
                         }
 
                     } header: {
@@ -164,50 +164,51 @@ struct SettingView: View {
                             .font(.title)
                             .foregroundColor(.white)
                     } footer: {
-                        Text(self.contact)
+                        Text("개발자에게 질문이 있거나 요청이 있으시면 프로필의 이메일을 통하거나 블로그를 통해 연락하십시오.")
                     }
+                    
                     Section {
                         VStack {
-                            Text(self.titleOfResolution)
+                            Text("선호 해상도 선택")
                                 .bold()
                                 .font(.title3)
                                 .foregroundColor(.white)
                                 .padding(0)
-                            Picker(self.selResolution, selection: $resolution) {
+                            Picker("해상도 선택", selection: $resolution) {
                                 Text("Low").tag(Resolution.low)
                                 Text("Basic").tag(Resolution.basic)
                                 Text("1080").tag(Resolution.high)
                                 Text("1080+").tag(Resolution.ultra)
                             }
                             .pickerStyle(.segmented)
-                            Text(self.ifHigher)
+                            Text("Basic이 아닌 1080 이상의 해상도를 선택할 경우 로딩 시간이 늘어날 수 있습니다.")
                                 .font(.footnote)
                                 .lineLimit(2)
                                 .foregroundColor(.secondary)
                         }
-                        VStack {
-                            Text(self.goOrBackTime)
-                                .bold()
-                                .font(.title3)
-                                .foregroundColor(.white)
-                                .padding(0)
-                            Picker(self.goOrBackTime, selection: $goBackTime) {
-                                Text("5s").tag(5.0)
-                                Text("15s").tag(15.0)
-                                Text("30s").tag(30.0)
-                                Text("60s").tag(60.0)
-                            }
-                            .pickerStyle(.segmented)
+                    }
+                    VStack {
+                        Text("영상 건너뛰기 시간 선택")
+                            .bold()
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding(0)
+                        Picker("영상 건너뛰기 시간 선택", selection: $goBackTime) {
+                            Text("5s").tag(5.0)
+                            Text("15s").tag(15.0)
+                            Text("30s").tag(30.0)
+                            Text("60s").tag(60.0)
                         }
-                        Toggle(isOn: $micPermission) {
-                            Text("Show music score")
-                        }
+                        .pickerStyle(.segmented)
+                    }
+                    Toggle(isOn: $micPermission) {
+                        Text("Show music score")
                     }
                     
                     Section {
                         VStack{
                             if entitlementManager.hasPro {
-                                Text(self.thanks)
+                                Text("헉!! 감동이에요! 🥰")
                                     .font(.title3)
                                 Divider()
                                 Button {
@@ -233,7 +234,7 @@ struct SettingView: View {
                                     MakeRefund(products: purchaseManager.products)
                                 }
                             } else {
-                                Text(self.RMAds)
+                                Text("광고를 제거하세요!")
                                 ForEach(purchaseManager.products) { product in
                                     Button {
                                         Task{
@@ -282,7 +283,7 @@ struct SettingView: View {
                                 } label: {
                                     HStack{
                                         Image(systemName: "cart.fill")
-                                        Text(self.RSPurchased)
+                                        Text("구매 복원하기")
                                     }
                                     .padding(5)
                                     .padding(.horizontal, 10)
@@ -303,7 +304,7 @@ struct SettingView: View {
                         }
                             
                     } header: {
-                        Text(self.RMAdsTitle)
+                        Text("광고 제거하기")
                     }
                     /*
                     Section{
@@ -372,7 +373,7 @@ struct SettingView: View {
                         }
                     }
                      */
-                    .alert(Text(self.alertMic), isPresented: $showAlert) {
+                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
                         Button {
                             self.showAlert = false
                             self.micPermission = false
@@ -380,14 +381,14 @@ struct SettingView: View {
                                 UIApplication.shared.open(url)
                             }
                         } label: {
-                            Text(self.OK)
+                            Text("확인")
                         }
                         
                         Button {
                             self.showAlert = false
                             self.micPermission = false
                         } label: {
-                            Text(self.cancel)
+                            Text("취소")
                         }
                     }
                     Spacer()
@@ -424,14 +425,14 @@ struct SettingView: View {
                 })
                 .clipShape(RoundedRectangle(cornerRadius: 20))
             
-            Text(self.someone)
+            Text("종이만드는 비전공 대학생 개발자")
                 .foregroundColor(.secondary)
                 .padding(.bottom, 10)
             Button {
                 pasteboard.string = "wookis112@gmail.com"
             } label: {
                 HStack{
-                    Text(self.email)
+                    Text("이메일: ")
                         .bold()
                     Text("wookis112@gmail.com")
                     Image(systemName: "rectangle.on.rectangle")
@@ -441,7 +442,7 @@ struct SettingView: View {
                 pasteboard.string = "Dazabamuker"
             } label: {
                 HStack{
-                    Text(self.kakaotalk)
+                    Text("카카오톡 아이디")
                         .bold()
                     Text("Dazabamuker")
                     Image(systemName: "rectangle.on.rectangle")
@@ -456,7 +457,7 @@ struct SettingView: View {
         ZStack{
             VStack{
                 if ment == "" {
-                    Text(self.cheerMent)
+                    Text("응원 멘트를 입력해주세요.")
                         .font(.system(size: 300, weight: .bold))
                         .minimumScaleFactor(0.3)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
@@ -480,7 +481,7 @@ struct SettingView: View {
                 }
                 if !isLandscape {
                     HStack{
-                        TextField(self.cheerMent, text: $ment, onEditingChanged: {isEditing = $0 })
+                        TextField("응원 멘트를 입력해주세요", text: $ment, onEditingChanged: {isEditing = $0 })
                             .padding()
                             .onAppear(){
                                 self.isAnimation = false

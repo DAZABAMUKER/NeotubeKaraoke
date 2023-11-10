@@ -44,15 +44,7 @@ struct searcher: View{
     
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
-    
-    private let search: LocalizedStringKey = "Search"
-    private let addToList: LocalizedStringKey = "Add to Playlist"
-    private let lastList: LocalizedStringKey = "Add to last of now playing list"
-    private let rANowPlaying: LocalizedStringKey = "Add right after to now playing"
-    private let add: LocalizedStringKey = "Add"
-    private let cancel: LocalizedStringKey = "Cancel"
-    private let already: LocalizedStringKey = "Playlist already have this video."
-    
+  
     func addToNowPlaying(vid: LikeVideo) {
         if self.nowPlayList.contains(vid) {
             self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: vid)!)
@@ -292,7 +284,7 @@ struct searcher: View{
                                 .foregroundColor(.white)
                                 .padding(.trailing, 30)
                                 .padding(.leading, 20)
-                                .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: self.search))
+                                .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
                                 .onSubmit {
                                     let _ = models.getVideos(val: inputVal)
                                     //getResults(val: inputVal)
@@ -341,7 +333,7 @@ struct searcher: View{
                     //MARK: 재생목록 추가 뷰
                     if self.likeModal {
                         VStack(spacing: 0){
-                            Text(self.addToList)
+                            Text("재생목록 추가")
                                 .padding(15)
                                 .bold()
                             //.font(.title)
@@ -357,7 +349,7 @@ struct searcher: View{
                                     self.lastNowPL.toggle()
                                 } label: {
                                     HStack{
-                                        Text(self.lastList)
+                                        Text("현재 재생목록 마지막에 추가")
                                             .listRowBackground(Color.black.opacity(0.5))
                                         Spacer()
                                         Image(systemName: self.lastNowPL ? "checkmark.circle.fill" : "circle")
@@ -368,7 +360,7 @@ struct searcher: View{
                                     self.rightAfterNowPL.toggle()
                                 } label: {
                                     HStack{
-                                        Text(self.rANowPlaying)
+                                        Text("현재 노래 다음에 추가")
                                         Spacer()
                                         Image(systemName: self.rightAfterNowPL ? "checkmark.circle.fill" : "circle")
                                     }
@@ -395,7 +387,7 @@ struct searcher: View{
                                     self.likeModal = false
                                     self.addVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
                                 } label: {
-                                    Text(self.cancel)
+                                    Text("취소")
                                         .padding(10)
                                 }
                                 Divider()
@@ -420,7 +412,7 @@ struct searcher: View{
                                     self.rightAfterNowPL = false
                                     self.addVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
                                 } label: {
-                                    Text(self.add)
+                                    Text("추가")
                                         .padding(10)
                                 }
                                 
@@ -432,7 +424,7 @@ struct searcher: View{
                     }
                     if self.alreadyHave {
                         VStack{
-                            Text(self.already)
+                            Text("이미 포함하고 있는 항목입니다.")
                                 .padding(20)
                                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
                                 .shadow(radius: 10)
