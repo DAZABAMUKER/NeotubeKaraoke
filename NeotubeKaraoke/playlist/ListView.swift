@@ -10,6 +10,8 @@ struct ListView: View {
     
     private var Video: LikeVideo
     private var image: UIImageView!
+    @Environment(\.colorScheme) var colorScheme
+    
     init(Video: LikeVideo ) {
         self.Video = Video
     }
@@ -19,33 +21,40 @@ struct ListView: View {
             HStack() {
                 ZStack{
                     AsyncImage(url: URL(string: Video.thumbnail)){ image in
-                        image.resizable()
-                            .frame(width: 70/9*16, height: 70/9*12)
-                            .clipShape(Rectangle().size(width: 70/9*16, height: 70).offset(x: 0, y: 70/6))
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 70/9*16, height: 70*4/3)
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .size(width: 70/9*16, height: 70)
+                                    .offset(x: 0, y: 70/6)
+                                       
+                            )
+                            //.border(.red)
                             .frame(width: 70/9*16, height: 70)
-                            .shadow(color: .black,radius: 10, x: 0, y: 10)
+                            //.border(.green)
+                            //.shadow(color: .black,radius: 10, x: 0, y: 10)
                     } placeholder: {
                         ZStack{
                             Rectangle()
-                                .fill(LinearGradient(colors: [
-                                    Color.pink,
-                                    Color(red: 253 / 255, green: 138 / 255, blue: 138 / 255)
-                                ], startPoint: .top, endPoint: .bottom))
+                                .foregroundStyle(Color(red: 1, green: 112 / 255.0, blue: 0))
                                 .aspectRatio(16/9, contentMode: .fill)
                                 .scaledToFit()
                                 .cornerRadius(8)
                                 .frame(height: 60)
                             Image(systemName: "music.note.tv")
                                 .resizable()
-                                .frame(height: 30)
-                                .aspectRatio(0.92, contentMode: .fit)
+                                .scaledToFit()
+                                .frame(height: 40)
                                 .foregroundColor(Color.white)
-                        }.frame(height: 90)
+                        }
+                        .frame(height: 90)
                         .padding(.leading,7)
                     }
                     .aspectRatio(16/12, contentMode: .fit)
                     
-                    .padding(.leading, -13)
+                    //.padding(.leading, -13)
                     .padding(.bottom, 10)
                     HStack{
                         Spacer()
@@ -55,32 +64,13 @@ struct ListView: View {
                                 .foregroundColor(.white)
                                 .font(.subheadline)
                                 .lineLimit(1)
-                                .background(.black)
+                                .background(.black.opacity(0.6))
                         }
                     }
                     .frame(width: 120, height: 50)
                         .padding(.leading, -13)
                 }
                 VStack(alignment: .leading) {
-                    /*
-                    LinearGradient(colors: [
-                        Color(red: 1, green: 112 / 255.0, blue: 0),
-                        Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-                    ],
-                                   startPoint: .topLeading,
-                                   endPoint: .bottomTrailing
-                    )
-                    .mask(alignment: .leading) {
-                        Text(Video.title)
-                            .bold()
-                            .lineLimit(2)
-                            .multilineTextAlignment(.leading)
-                            .frame(height: 45)
-                        //.background(Color.green)
-                            //.foregroundColor(.orange)
-                            .font(.system(size: 18))
-                    }
-                     */
                     Text(Video.title)
                         .bold()
                         .lineLimit(2)
@@ -98,7 +88,7 @@ struct ListView: View {
                         .padding(.top, 0)
                     Spacer()
                 }
-                .foregroundColor(Color.white)
+                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 Spacer()
             }
             .frame(width: geometry.size.width, height: 80)
@@ -109,6 +99,6 @@ struct ListView: View {
 
 struct previewPList : PreviewProvider {
     static var previews: some View {
-        ListView(Video: LikeVideo(videoId: "rdpBZ5_b48g", title: "Wake Me UP", thumbnail: "https://i.ytimg.com/vi/rdpBZ5_b48g/hqdefault.jpg", channelTitle: "Green Day", runTime: "3:50"))
+        ListView(Video: LikeVideo(videoId: "rdpBZ5_b48g", title: "Wake Me UP", thumbnail: "https://i.ytimg.com/vi/vRiFFMBLGAc/hqdefault.jpg", channelTitle: "Green Day", runTime: "3:50"))
     }
 }

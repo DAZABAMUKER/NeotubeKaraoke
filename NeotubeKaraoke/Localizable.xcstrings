@@ -90,9 +90,6 @@
     "Low" : {
 
     },
-    "NearByConnect" : {
-
-    },
     "Playlist" : {
 
     },
@@ -270,6 +267,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search by song number"
+          }
+        }
+      }
+    },
+    "디바이스 연결" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NearByConnect"
+          }
+        }
+      }
+    },
+    "디바이스 찾기" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "search peer"
           }
         }
       }
@@ -475,6 +492,7 @@
       }
     },
     "친구 찾기" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

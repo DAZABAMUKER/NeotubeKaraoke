@@ -176,13 +176,28 @@ struct PlayListView: View {
                                 } label: {
                                     VStack{
                                         AsyncImage(url: URL(string: recent.thumbnail)) { image in
-                                            image.image?.resizable()
+                                            image.resizable()
                                                 .resizable()
                                                 .frame(width: heights/9*16, height: heights/9*12)
                                                 .clipShape(RoundedRectangle(cornerRadius: 10).size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
                                                 .frame(width: heights/9*16, height: heights)
                                                 .padding(5)
-                                                //.shadow(color: .secondary,radius: 5, x: 0, y: 5)
+                                        } placeholder: {
+                                            ZStack{
+                                                Rectangle()
+                                                    .foregroundStyle(Color.green)
+                                                    .frame(width: heights/9*16, height: heights/9*12)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10).size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
+                                                    .frame(width: heights/9*16, height: heights)
+                                                    .padding(5)
+                                                Image(systemName: "music.note.tv")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: heights/9*8, height: heights)
+                                                    .padding(5)
+                                                    .foregroundColor(Color.white)
+                                            }.frame(height: 90)
+                                            .padding(.leading,7)
                                         }
                                         Text(recent.title)
                                             .bold()

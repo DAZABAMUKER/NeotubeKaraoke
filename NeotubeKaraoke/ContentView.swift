@@ -101,7 +101,7 @@ struct ContentView: View {
         case .Home:
             return Color(red: 1, green: 109/255, blue: 96/255)
         case .Setting:
-            return Color.white
+            return Color.gray
         case .PlayList:
             return Color(red: 152/255, green: 216/255, blue: 170/255)
         case .chart:

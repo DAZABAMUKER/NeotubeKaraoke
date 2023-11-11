@@ -44,6 +44,7 @@ struct searcher: View{
     
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
+    @Environment(\.colorScheme) var colorScheme
   
     func addToNowPlaying(vid: LikeVideo) {
         if self.nowPlayList.contains(vid) {
@@ -136,15 +137,6 @@ struct searcher: View{
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                /*
-                if models.isResponseitems {
-                    VStack{}.onAppear(){
-                        self.ResponseItems = models.responseitems
-                        models.isResponseitems = false
-                    }
-                }
-                 */
-                
                 if self.searching {
                     VStack{}.onAppear(){
                         //self.ytSearch.search(value: self.inputVal)
@@ -176,7 +168,6 @@ struct searcher: View{
                         Spacer()
                             .frame(height: 60)
                         if !self.ytVideos.isEmpty {
-                            
                             //MARK: - 리스트
                             ScrollView{
                                 VStack{
@@ -202,7 +193,7 @@ struct searcher: View{
                                         } label: {
                                             HStack(spacing: 0){
                                                 ListView(Video: responseitems)
-                                                    .padding(.leading, 15)
+                                                    .padding(.leading, 5)
                                                     //.border(.red)
                                                 HStack(spacing: 0){
                                                     Image(systemName: "ellipsis")
@@ -228,16 +219,17 @@ struct searcher: View{
                                     VStack{}
                                         .frame(height: 200)
                                 }
-                                .background(Color.black.opacity(0.6))
+                                //.background(Color.black.opacity(0.6))
                             }
                             //.frame(width:geometry.size.width,height: geometry.size.height - 60)
-                            .background(){
-                                Image("clear")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: geometry.size.width)
-                                    .opacity(0.3)
-                            }
+//                            .background(){
+//                                Image("clear")
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fit)
+//                                    .frame(width: geometry.size.width)
+//                                    .opacity(0.3)
+//                                    .brightness(-0.3)
+//                            }
                             .padding(.top, -8)
                             .listStyle(.plain)
                             .environment(\.defaultMinListRowHeight, 80)
@@ -251,26 +243,31 @@ struct searcher: View{
                                     .frame(width: geometry.size.width)
                                     .padding(.top, -200)
                                     .opacity(0.3)
+                                    .brightness(-0.3)
                             }
                             .frame(width: geometry.size.width, height: geometry.size.height)
+                            
                             //.preferredColorScheme(.dark)
                         }
                     }
+                    //.border(Color.black)
+                    .background{
+                        Color.black.opacity(!self.ytVideos.isEmpty ? 0.0 : 0.05)
+                    }
                     .edgesIgnoringSafeArea(.bottom)
                     VStack{
-                        HStack{
+                        HStack(spacing: 0){
                             //MARK: - SearchBar
+                            //이미지
                             ZStack{
-                                Image(systemName: "arrow.triangle.2.circlepath")
-                                    .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
+                                Image(systemName: "circle")
+                                    .foregroundColor(Color(red: 1, green: 112 / 255.0, blue: 0))
                                     .font(.system(size: 50))
                                     .padding(.leading, 10)
                                     .padding(.bottom, 5)
-                                    .rotationEffect(Angle(degrees: vidFull ? 360 : 0))
-                                    .animation(.easeInOut, value: vidFull)
                                 Image(systemName: "music.mic")
-                                    .foregroundColor(Color(UIColor(red: 1, green: 112 / 255.0, blue: 0, alpha: 1)))
-                                    .font(.system(size: 25))
+                                    .foregroundColor(Color(red: 1, green: 112 / 255.0, blue: 0))
+                                    .font(.system(size: 30))
                                     .padding(.leading, 10)
                                     .padding(.bottom, 5)
                             }
@@ -281,7 +278,7 @@ struct searcher: View{
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
                                 .background(border)
-                                .foregroundColor(.white)
+                                //.foregroundColor(.white)
                                 .padding(.trailing, 30)
                                 .padding(.leading, 20)
                                 .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
@@ -300,18 +297,28 @@ struct searcher: View{
                                     Image(systemName: "multiply.circle.fill")
                                         .foregroundColor(.gray)
                                         .font(.system(size: 20))
-                                        .padding(.trailing, 5)
+                                        .padding(.trailing, 10)
+                                        .padding(.leading, -10)
                                 }
                             }
                         }
                         .onAppear(){
                             decodePList()
                         }
-                        .background() {
-                            Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1))
-                                .edgesIgnoringSafeArea(.horizontal)
-                                .frame(width: geometry.size.width)
-                                .padding(.top, -geometry.safeAreaInsets.top)
+                        .background{
+                            if self.colorScheme == .dark {
+                                Color(red: 0.13, green: 0.13, blue: 0.13)
+                                    .edgesIgnoringSafeArea(.horizontal)
+                                    .frame(width: geometry.size.width)
+                                    .padding(.top, -geometry.safeAreaInsets.top)
+                                    .shadow(radius: 5)
+                            } else {
+                                Color.white
+                                    .edgesIgnoringSafeArea(.horizontal)
+                                    .frame(width: geometry.size.width)
+                                    .padding(.top, -geometry.safeAreaInsets.top)
+                                    .shadow(radius: 5)
+                            }
                         }
                         Spacer()
                     }

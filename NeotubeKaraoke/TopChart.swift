@@ -71,7 +71,7 @@ struct TopChart: View {
                     }
                     .sheet(isPresented: self.$searchToggle, content: {
                         HStack{
-                            Image(systemName: "x.circle.fill")
+                            Image(systemName: "multiply.circle.fill")
                                 .resizable()
                                 .scaledToFit()
                                 .foregroundStyle(.clear)
@@ -85,7 +85,7 @@ struct TopChart: View {
                             Button{
                                 self.searchToggle = false
                             } label: {
-                                Image(systemName: "x.circle.fill")
+                                Image(systemName: "multiply.circle.fill")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(height: 25)

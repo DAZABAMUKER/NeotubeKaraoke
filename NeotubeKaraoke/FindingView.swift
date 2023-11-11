@@ -36,10 +36,10 @@ struct FindingView: View {
                 }
                 
                 ZStack{
-                    LinearGradient(colors: [.blue.opacity(0.7), .indigo.opacity(0.1)], startPoint: .top, endPoint: .bottom)
-                    ForEach(0..<Int(geometry.size.height/150) + 1) { index in
+                    Color.blue.opacity(0.7)
+                    ForEach(0..<Int(geometry.size.height/150) + 2) { index in
                         Circle()
-                            .stroke(lineWidth: 0.3)
+                            .stroke(lineWidth: 0.4)
                             .frame(width: 150 * CGFloat(index), height: 150 * CGFloat(index))
                             .opacity(1 - Double(index) / 10 )
                             .foregroundColor(.white)
@@ -71,9 +71,10 @@ struct FindingView: View {
                 }
                 .frame(width: geometry.size.width)
             }
-            VStack{
+            VStack(spacing: 0){
                 HStack{
-                    Text("NearByConnect")
+                    Text("디바이스 연결")
+                        .foregroundStyle(.white)
                         .bold()
                         .font(.title)
                         .padding()
@@ -118,12 +119,14 @@ struct FindingView: View {
                 }
                 Toggle(isOn: $isOn) {
                     Label {
-                        Text("친구 찾기")
+                        Text("디바이스 찾기")
+                            .foregroundStyle(.white)
                     } icon: {
                         Image(systemName: "shared.with.you")
+                            .foregroundStyle(.white)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
                 if self.isOn {
                     VStack{}.onAppear(){
                         peers.mcNearbyServiceAdvertiser.startAdvertisingPeer()
@@ -137,12 +140,12 @@ struct FindingView: View {
                 }
                 HStack{
                     ListView(Video: self.addVideo)
-                        .scaleEffect(0.8)
+                        //.scaleEffect(0.8)
                 }
                 .background(.thinMaterial)
                 .cornerRadius(12)
                 .frame(height: 70)
-                .padding(.horizontal)
+                .padding()
             }
         }
         //.preferredColorScheme(.dark)
