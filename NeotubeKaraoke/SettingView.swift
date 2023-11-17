@@ -213,12 +213,7 @@ struct SettingView: View {
                     //                        } label: {
                     //                            Text(self.cheer)
                     //                        }
-                    //                        .sheet(isPresented: $showCheer) {
-                    //                            cheerView
-                    //                                .onAppear(){
-                    //                                    self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "SettingView")
-                    //                                }
-                    //                        }
+                    //                        
                     VStack(alignment: .leading, spacing: 10){
                         HStack{
                             Text("앱 버전")

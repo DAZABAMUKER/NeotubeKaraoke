@@ -199,6 +199,12 @@ struct searcher: View{
                                     openRecent()
                                 }
                             }
+                            .sheet(isPresented: $showCheer) {
+                                cheerView
+                                    .onAppear(){
+                                        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "SettingView")
+                                    }
+                            }
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
