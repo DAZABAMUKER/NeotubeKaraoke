@@ -28,9 +28,6 @@ struct SettingView: View {
     @State var showAlert = false
     @State var sheet = false
     @State var profile = false
-    @State var showCheer = false
-//    @State var karaoke: Karaoke = Karaoke.Tj
-//    @State var titleOfSong = ""
     @State var ment = ""
     @State var isEditing: Bool = false
     @StateObject private var getPopularChart = GetPopularChart()
@@ -46,33 +43,7 @@ struct SettingView: View {
     @Binding var isLandscape: Bool
     private let pasteboard = UIPasteboard.general
     
-//    private let devProfile: LocalizedStringKey = "Developer Profile"
-//    private let devBlog: LocalizedStringKey = "Developer's Blog"
-//    private let contact: LocalizedStringKey = "If you have any questions or requests from the developer, please contact us via email or blog on my profile"
-//    private let someone: LocalizedStringKey = "A paper-making university student developer"
-//    private let email: LocalizedStringKey = "Email: "
-//    private let kakaotalk: LocalizedStringKey = "KakaoTalk ID: "
-//    private let titleOfResolution: LocalizedStringKey = "Select prefer resolution"
-//    private let ifHigher: LocalizedStringKey = "If you select a resolution higher than 1080 rather than Basic, the loading time may increase."
-//    private let rmAds: LocalizedStringKey = "Remove Ads(To be updated...)"
-//    private let alertMic: LocalizedStringKey = "Please allow Microphone Usage."
-//    private let cancel: LocalizedStringKey = "Cancel"
-//    private let OK: LocalizedStringKey = "OK"
-////    private let searchNumberOfSongs: LocalizedStringKey = "Searching for number of karaoke songs."
-//    private let selResolution: LocalizedStringKey = "Selecting Resolution"
-////    private let searchSongTitle: LocalizedStringKey = "title of the song"
-////    private let numberOfSong: LocalizedStringKey = "Number of the song"
-////    private let title: LocalizedStringKey = "Title"
-////    private let artist: LocalizedStringKey = "Artist"
-////    private let noResults: LocalizedStringKey = "No results"
-//    private let manual: LocalizedStringKey = "Manual of NeotubeKaraoke"
-//    private let cheer: LocalizedStringKey = "Cheer for your friends"
-//    private let thanks: LocalizedStringKey = "Oh my gosh! I'm touched! 🥰"
-//    private let RMAds: LocalizedStringKey = "You can remove Ads!"
-//    private let RSPurchased: LocalizedStringKey = "Restore In-App purchases"
-//    private let RMAdsTitle: LocalizedStringKey = "Remove Ads"
-//    private let goOrBackTime: LocalizedStringKey = "Select go/backward time"
-//    private let cheerMent: LocalizedStringKey = "Please enter your comment"
+    @Environment(\.colorScheme) var colorschome
     
     func rotateLandscape() {
         if !isLandscape {
@@ -110,269 +81,46 @@ struct SettingView: View {
     }
     
     var body: some View {
-        NavigationStack{
-            VStack{
-                if self.micPermission {
-                    VStack{}.onAppear(){
-                        AVAudioSession.sharedInstance().requestRecordPermission { (status) in
-                            if !status {
-                                self.micPermission = false
-                                self.showAlert = true
-                            } else {
-                                self.micPermission = true
-                            }
+        VStack{
+            if self.micPermission {
+                VStack{}.onAppear(){
+                    AVAudioSession.sharedInstance().requestRecordPermission { (status) in
+                        if !status {
+                            self.micPermission = false
+                            self.showAlert = true
+                        } else {
+                            self.micPermission = true
                         }
                     }
                 }
-                
-                if !entitlementManager.hasPro {
-                    BannerAd()
-                        .frame(height: 60)
-                }
-                
-                List{
-                    Section{
-                        Button{
-                            self.profile = true
-                        } label: {
-                            Text("종이만드는 비전공 대학생 개발자")
-                        }
-                        .sheet(isPresented: $profile) {
-                            profileView
-                                .presentationDetents([.medium])
-                                .presentationDragIndicator(.visible)
-                        }
-                        Button {
-                            self.sheet = true
-                        } label: {
-                            Text("개발자 블로그")
-                        }
-                        .sheet(isPresented: $sheet) {
-                            MyWebView(UrlTOLoad: "https://dazabamuker.tistory.com")
-                                .presentationDetents([.large])
-                                .presentationDragIndicator(.visible)
-                        }
-                        Button {
-                            UIApplication.shared.openURL(URL(string: "https://dazabamuker.tistory.com/entry/%EB%84%88%ED%8A%9C%EB%B8%8C-%EB%85%B8%EB%9E%98%EB%B0%A9-%EC%95%B1-%EC%82%AC%EC%9A%A9%EB%B2%95How-to-use-NeotubeKaraoke-App")!)
-                        } label: {
-                            Text("앱 사용법")
-                        }
-
-                    } header: {
-                        Text("Contact")
-                            .bold()
-                            .font(.title)
-                            .foregroundColor(.white)
-                    } footer: {
-                        Text("개발자에게 질문이 있거나 요청이 있으시면 프로필의 이메일을 통하거나 블로그를 통해 연락하십시오.")
+            }
+            
+            if !entitlementManager.hasPro {
+                BannerAd()
+                    .frame(height: 60)
+            }
+            List{
+                VStack {
+                    Picker("해상도 선택", selection: $resolution) {
+                        Text("Low").tag(Resolution.low)
+                        Text("Basic").tag(Resolution.basic)
+                        Text("1080").tag(Resolution.high)
+                        Text("1080+").tag(Resolution.ultra)
                     }
-                    
-                    Section {
-                        VStack {
-                            Text("선호 해상도 선택")
-                                .bold()
-                                .font(.title3)
-                                .foregroundColor(.white)
-                                .padding(0)
-                            Picker("해상도 선택", selection: $resolution) {
-                                Text("Low").tag(Resolution.low)
-                                Text("Basic").tag(Resolution.basic)
-                                Text("1080").tag(Resolution.high)
-                                Text("1080+").tag(Resolution.ultra)
-                            }
-                            .pickerStyle(.segmented)
-                            Text("Basic이 아닌 1080 이상의 해상도를 선택할 경우 로딩 시간이 늘어날 수 있습니다.")
-                                .font(.footnote)
-                                .lineLimit(2)
-                                .foregroundColor(.secondary)
-                        }
+                    .pickerStyle(.menu)
+                    .tint(Color.orange)
+                    Picker("영상 건너뛰기 시간 선택", selection: $goBackTime) {
+                        Text("5s").tag(5.0)
+                        Text("15s").tag(15.0)
+                        Text("30s").tag(30.0)
+                        Text("60s").tag(60.0)
                     }
-                    VStack {
-                        Text("영상 건너뛰기 시간 선택")
-                            .bold()
-                            .font(.title3)
-                            .foregroundColor(.white)
-                            .padding(0)
-                        Picker("영상 건너뛰기 시간 선택", selection: $goBackTime) {
-                            Text("5s").tag(5.0)
-                            Text("15s").tag(15.0)
-                            Text("30s").tag(30.0)
-                            Text("60s").tag(60.0)
-                        }
-                        .pickerStyle(.segmented)
-                    }
+                    .pickerStyle(.menu)
+                    .tint(Color.orange)
                     Toggle(isOn: $micPermission) {
                         Text("내 노래 점수 보기")
                     }
-                    
-                    Section {
-                        VStack{
-                            if entitlementManager.hasPro {
-                                Text("헉!! 감동이에요! 🥰")
-                                    .font(.title3)
-                                Divider()
-                                Button {
-                                    self.refund = true
-                                } label: {
-                                    HStack{
-                                        Spacer()
-                                        Image(systemName: "shippingbox.and.arrow.backward.fill")
-                                        Text("환불하기")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.white)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .strokeBorder(lineWidth: 3)
-                                            .foregroundColor(.white)
-                                            .padding(.horizontal, 50)
-                                            .padding(.vertical, -10)
-                                    }
-                                    .padding(5)
-                                }
-                                .sheet(isPresented: $refund) {
-                                    MakeRefund(products: purchaseManager.products)
-                                }
-                            } else {
-                                Text("광고를 제거하세요!")
-                                ForEach(purchaseManager.products) { product in
-                                    Button {
-                                        Task{
-                                            do {
-                                                try await purchaseManager.purchase(product)
-                                            }
-                                            catch {
-                                                print(#function, error)
-                                            }
-                                        }
-                                    } label: {
-                                        if purchaseManager.products.isEmpty {
-                                            Text("로딩중이에요. 잠시만 기다려주세요.")
-                                        } else {
-                                            HStack{
-                                                Image(systemName: "hand.raised.fingers.spread")
-                                                    .foregroundColor(.white)
-                                                Text(product.displayName)
-                                                    .foregroundColor(.white)
-                                                Spacer()
-                                                HStack{
-                                                    Text(product.displayPrice)
-                                                        .foregroundColor(.white)
-                                                }
-                                                .padding(5)
-                                                .padding(.horizontal, 10)
-                                                .background {
-                                                    RoundedRectangle(cornerRadius: 20)
-                                                        .strokeBorder(lineWidth: 3)
-                                                        .foregroundColor(.white)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    Divider()
-                                }
-                                Button {
-                                    Task{
-                                        do {
-                                            try await AppStore.sync()
-                                        }
-                                        catch {
-                                            print("구매복원 오류: ", error)
-                                        }
-                                    }
-                                } label: {
-                                    HStack{
-                                        Image(systemName: "cart.fill")
-                                        Text("구매 복원하기")
-                                    }
-                                    .padding(5)
-                                    .padding(.horizontal, 10)
-                                    .foregroundColor(.white)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 20)
-                                    }
-                                }
-
-                            }
-                        }.task {
-                            do {
-                                try await purchaseManager.loadProducts()
-                            }
-                            catch {
-                                print("Loading Store Info error: ", error)
-                            }
-                        }
-                            
-                    } header: {
-                        Text("광고 제거하기")
-                    }
-                    /*
-                    Section{
-                        Button {
-                            self.showCheer.toggle()
-                        } label: {
-                            Text(self.cheer)
-                        }
-                        .sheet(isPresented: $showCheer) {
-                            cheerView
-                                .onAppear(){
-                                    self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "SettingView")
-                                }
-                        }
-                    }
-                    
-                    Section{
-                        VStack{
-                            Picker(self.searchNumberOfSongs, selection: $karaoke) {
-                                Text("Tj").tag(Karaoke.Tj)
-                                Text("KY").tag(Karaoke.KY)
-                            }
-                            TextField(self.searchSongTitle, text: $titleOfSong)
-                                .autocorrectionDisabled(true)
-                                .autocapitalization(.none)
-                                .onSubmit {
-                                    if self.karaoke == .KY {
-                                        self.getPopularChart.searchSongOfKY(val: titleOfSong)
-                                    } else {
-                                        self.getPopularChart.searchSongOfTj(val: titleOfSong)
-                                    }
-                                    
-                                }
-                        }
-                    }
-                    Section{
-                        VStack{
-                            HStack{
-                                Text(self.numberOfSong)
-                                    .bold()
-                                    .frame(width: 80)
-                                Text(self.title)
-                                    .bold()
-                                Spacer()
-                                Text(self.artist)
-                                    .bold()
-                            }
-                            .padding(.top, 5)
-                            Divider()
-                            if !self.getPopularChart.Titles.isEmpty {
-                                ForEach(0..<self.getPopularChart.Titles.count, id: \.self) { index in
-                                    VStack{
-                                        HStack{
-                                            Text(self.getPopularChart.Numbers[index])
-                                                .frame(width: 80)
-                                            Text(self.getPopularChart.Titles[index])
-                                            Spacer()
-                                            Text(self.getPopularChart.Singers[index])
-                                        }
-                                        Divider()
-                                    }
-                                }
-                            } else if self.getPopularChart.Numbers.contains("검색결과를 찾을수 없습니다.") {
-                                Text(self.noResults)
-                            }
-                        }
-                    }
-                     */
+                    .tint(Color.orange)
                     .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
                         Button {
                             self.showAlert = false
@@ -391,66 +139,248 @@ struct SettingView: View {
                             Text("취소")
                         }
                     }
-                    Spacer()
-                        .frame(height: 100)
                 }
-                /*
-                Button {
-                    
-                } label: {
-                    HStack{
-                        Text(self.rmAds)
-                            .foregroundColor(.white)
-                            .background {
-                                RoundedRectangle(cornerRadius: 30)
-                                    .frame(width: 300, height: 50)
+                
+                Section {
+                    VStack{
+                        if entitlementManager.hasPro {
+                            Text("헉!! 감동이에요! 🥰")
+                                .font(.title3)
+                            Button {
+                                self.refund = true
+                            } label: {
+                                HStack{
+                                    Spacer()
+                                    Image(systemName: "shippingbox.and.arrow.backward.fill")
+                                    Text("환불하기")
+                                    Spacer()
+                                }
+                                .foregroundColor(.white)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .strokeBorder(lineWidth: 3)
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 50)
+                                        .padding(.vertical, -10)
+                                }
+                                .padding(5)
                             }
+                            .sheet(isPresented: $refund) {
+                                MakeRefund(products: purchaseManager.products)
+                            }
+                        } else {
+                            ForEach(purchaseManager.products) { product in
+                                Button {
+                                    Task{
+                                        do {
+                                            try await purchaseManager.purchase(product)
+                                        }
+                                        catch {
+                                            print(#function, error)
+                                        }
+                                    }
+                                } label: {
+                                    if purchaseManager.products.isEmpty {
+                                        Text("로딩중이에요. 잠시만 기다려주세요.")
+                                    } else {
+                                        HStack{
+                                            Image(systemName: "video.slash.fill")
+                                            //.foregroundColor(.white)
+                                            Text(product.displayName)
+                                            //.foregroundColor(.white)
+                                            Spacer()
+                                            HStack{
+                                                Text(product.displayPrice)
+                                                //.foregroundColor(.white)
+                                            }
+                                            .padding(5)
+                                            .padding(.horizontal, 10)
+                                            .background {
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .strokeBorder(lineWidth: 3)
+                                                //.foregroundColor(.white)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            HStack{
+                                Text("구매 복원하기")
+                                Spacer()
+                                Button {
+                                    Task{
+                                        do {
+                                            try await AppStore.sync()
+                                        }
+                                        catch {
+                                            print("구매복원 오류: ", error)
+                                        }
+                                    }
+                                } label: {
+                                    HStack{
+                                        Image(systemName: "cart.fill")
+                                        Text("구매 복원하기")
+                                    }
+                                    .padding(5)
+                                    .padding(.horizontal, 10)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .strokeBorder(lineWidth: 3)
+                                        //.foregroundColor(.white)
+                                    }
+                                }
+                            }
+                        }
+                    }.task {
+                        do {
+                            try await purchaseManager.loadProducts()
+                        }
+                        catch {
+                            print("Loading Store Info error: ", error)
+                        }
                     }
-                    .frame(width: 300, height: 50)
+                } header: {
+                    Text("광고 제거하기")
                 }
-                */
+                
+                Section{
+                    //                        Button {
+                    //                            self.showCheer.toggle()
+                    //                        } label: {
+                    //                            Text(self.cheer)
+                    //                        }
+                    //                        .sheet(isPresented: $showCheer) {
+                    //                            cheerView
+                    //                                .onAppear(){
+                    //                                    self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "SettingView")
+                    //                                }
+                    //                        }
+                    VStack(alignment: .leading, spacing: 10){
+                        HStack{
+                            Text("앱 버전")
+                            Spacer()
+                            Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String)
+                        }
+                        Button{
+                            self.profile = true
+                        } label: {
+                            Text("문의 하기")
+                                .foregroundStyle(.orange)
+                        }
+                        .sheet(isPresented: $profile) {
+                            profileView
+                                .presentationDetents([.medium])
+                                .presentationDragIndicator(.visible)
+                        }
+                        Button {
+                            
+                        } label: {
+                            Text("앱 사용 법")
+                                .foregroundStyle(.orange)
+                        }
+                        
+                    }
+                } header: {
+                    Text("Contact")
+                }
             }
-            //.preferredColorScheme(.dark)
+            .listStyle(.plain)
         }
     }
-    
+    //
+//    var contact: some View {
+//        Section{
+//            Button{
+//                self.profile = true
+//            } label: {
+//                Text("종이만드는 비전공 대학생 개발자")
+//            }
+//            .sheet(isPresented: $profile) {
+//                profileView
+//                    .presentationDetents([.medium])
+//                    .presentationDragIndicator(.visible)
+//            }
+//            Button {
+//                self.sheet = true
+//            } label: {
+//                Text("개발자 블로그")
+//            }
+//            .sheet(isPresented: $sheet) {
+//                MyWebView(UrlTOLoad: "https://dazabamuker.tistory.com")
+//                    .presentationDetents([.large])
+//                    .presentationDragIndicator(.visible)
+//            }
+//            Button {
+//                UIApplication.shared.openURL(URL(string: "https://dazabamuker.tistory.com/entry/%EB%84%88%ED%8A%9C%EB%B8%8C-%EB%85%B8%EB%9E%98%EB%B0%A9-%EC%95%B1-%EC%82%AC%EC%9A%A9%EB%B2%95How-to-use-NeotubeKaraoke-App")!)
+//            } label: {
+//                Text("앱 사용법")
+//            }
+//        } header: {
+//            Text("Contact")
+//                .bold()
+//                .font(.title)
+//                .foregroundColor(.white)
+//        } footer: {
+//            Text("개발자에게 질문이 있거나 요청이 있으시면 프로필의 이메일을 통하거나 블로그를 통해 연락하십시오.")
+//        }
+//    }
+//    
     var profileView: some View {
         VStack(spacing: 10){
             Image("me")
                 .resizable()
                 .scaledToFit()
                 .frame(height: 100)
-                .background(content: {
-                    Color.white
-                })
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .background(.white)
+                .clipShape(Circle())
+                .padding(5)
+                .background{
+                    Circle()
+                        .stroke(lineWidth: 3.0)
+                        .foregroundStyle(.orange)
+                }
             
-            Text("종이만드는 비전공 대학생 개발자")
-                .foregroundColor(.secondary)
-                .padding(.bottom, 10)
             Button {
                 pasteboard.string = "wookis112@gmail.com"
             } label: {
                 HStack{
                     Text("이메일: ")
-                        .bold()
+                    Spacer()
                     Text("wookis112@gmail.com")
+                        .tint(colorschome == .dark ? .white : .black)
                     Image(systemName: "rectangle.on.rectangle")
-                }.tint(.white)
+                        .padding(.horizontal)
+                }
+                .foregroundStyle(.foreground)
             }
+            .padding(.horizontal)
             Button {
                 pasteboard.string = "Dazabamuker"
             } label: {
                 HStack{
-                    Text("카카오톡 아이디")
-                        .bold()
+                    Text("카카오톡 ID:")
+                    Spacer()
                     Text("Dazabamuker")
                     Image(systemName: "rectangle.on.rectangle")
-                }.tint(.white)
+                        .padding(.horizontal)
+                }
+                .foregroundStyle(.foreground)
             }
-            
+            .padding(.horizontal)
+            Button {
+                UIApplication.shared.open(URL(string: "https://dazabamuker.github.io/web-porfolio/")!)
+            } label: {
+                Text("개발자 포트폴리오")
+                    .foregroundStyle(.background)
+                    .padding(.horizontal)
+                    .padding(.vertical, 5)
+                    .background{
+                        RoundedRectangle(cornerRadius: 20)
+                    }
+            }
+            .padding(.horizontal)
+            .foregroundStyle(.foreground)
         }
-        //.preferredColorScheme(.dark)
     }
     
     var cheerView: some View {

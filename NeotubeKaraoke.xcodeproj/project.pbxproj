@@ -20,7 +20,6 @@
 		034EF01B2AFDD4C10085188C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 034EF01A2AFDD4C10085188C /* Localizable.xcstrings */; };
 		035657FD29E8286D000227D9 /* ExternalDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035657FC29E8286D000227D9 /* ExternalDisplay.swift */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
-		035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63629DDBD9C0010398B /* Python-iOS */; settings = {ATTRIBUTES = (Weak, ); }; };
 		035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63929DDBDD00010398B /* ArgumentParser */; };
 		036658EF2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 036658EE2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit */; };
 		036658F12A6525E9001C5BB9 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036658F02A6525E9001C5BB9 /* PurchaseManager.swift */; };
@@ -29,7 +28,6 @@
 		036EF0092955559E00789D57 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036EF0082955559E00789D57 /* Response.swift */; };
 		0379B1AC29E04DCB0044F997 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 0379B1AB29E04DCB0044F997 /* YouTubeiOSPlayerHelper */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0379B1AE29E04E480044F997 /* YTWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0379B1AD29E04E480044F997 /* YTWrapper.swift */; };
-		0379B1B129E174090044F997 /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0379B1B029E174090044F997 /* PythonKit */; settings = {ATTRIBUTES = (Weak, ); }; };
 		037A998C2A02B0BB00A05065 /* FindingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A998B2A02B0BB00A05065 /* FindingView.swift */; };
 		037A998E2A02B0EB00A05065 /* ConnectPeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A998D2A02B0EB00A05065 /* ConnectPeer.swift */; };
 		037A99902A02B11600A05065 /* PeerDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037A998F2A02B11600A05065 /* PeerDevice.swift */; };
@@ -151,11 +149,9 @@
 				03A0A1C52A147C25000C5159 /* FirebaseAnalyticsSwift in Frameworks */,
 				03A0A1C72A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				03A0A1C12A147C25000C5159 /* FirebaseAnalytics in Frameworks */,
-				035BF63729DDBD9C0010398B /* Python-iOS in Frameworks */,
 				17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */,
 				035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */,
 				0379B1AC29E04DCB0044F997 /* YouTubeiOSPlayerHelper in Frameworks */,
-				0379B1B129E174090044F997 /* PythonKit in Frameworks */,
 				0383C97529E3F39800A625EC /* SwiftSoup in Frameworks */,
 				03A0A1C32A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				03F9189B2A71ED0D003115A1 /* StoreKit.framework in Frameworks */,
@@ -381,10 +377,8 @@
 			);
 			name = NeotubeKaraoke;
 			packageProductDependencies = (
-				035BF63629DDBD9C0010398B /* Python-iOS */,
 				035BF63929DDBDD00010398B /* ArgumentParser */,
 				0379B1AB29E04DCB0044F997 /* YouTubeiOSPlayerHelper */,
-				0379B1B029E174090044F997 /* PythonKit */,
 				0383C97429E3F39800A625EC /* SwiftSoup */,
 				03A0A1C02A147C25000C5159 /* FirebaseAnalytics */,
 				03A0A1C22A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion */,
@@ -421,10 +415,8 @@
 			);
 			mainGroup = 03962DC5291F781400A376F3;
 			packageReferences = (
-				035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */,
 				035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				0379B1AA29E04DCB0044F997 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
-				0379B1AF29E174090044F997 /* XCRemoteSwiftPackageReference "PythonKit" */,
 				0383C97329E3F39800A625EC /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
@@ -792,14 +784,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kewlbear/Python-iOS.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.62514;
-			};
-		};
 		035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
@@ -814,14 +798,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
-			};
-		};
-		0379B1AF29E174090044F997 /* XCRemoteSwiftPackageReference "PythonKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pvieito/PythonKit.git";
-			requirement = {
-				branch = master;
-				kind = branch;
 			};
 		};
 		0383C97329E3F39800A625EC /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -843,11 +819,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		035BF63629DDBD9C0010398B /* Python-iOS */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 035BF63529DDBD9C0010398B /* XCRemoteSwiftPackageReference "Python-iOS" */;
-			productName = "Python-iOS";
-		};
 		035BF63929DDBDD00010398B /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
@@ -857,11 +828,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0379B1AA29E04DCB0044F997 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
 			productName = YouTubeiOSPlayerHelper;
-		};
-		0379B1B029E174090044F997 /* PythonKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0379B1AF29E174090044F997 /* XCRemoteSwiftPackageReference "PythonKit" */;
-			productName = PythonKit;
 		};
 		0383C97429E3F39800A625EC /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;

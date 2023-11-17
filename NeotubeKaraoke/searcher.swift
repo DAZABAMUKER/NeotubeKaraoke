@@ -23,6 +23,7 @@ struct searcher: View{
     @State var lastNowPL = false
     @State var rightAfterNowPL = false
     @State var alreadyHave = false
+    @State var showCheer = false
     
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -259,20 +260,24 @@ struct searcher: View{
                         HStack(spacing: 0){
                             //MARK: - SearchBar
                             //이미지
-                            ZStack{
-                                Image(systemName: "circle")
-                                    .foregroundColor(Color(red: 1, green: 112 / 255.0, blue: 0))
-                                    .font(.system(size: 50))
-                                    .padding(.leading, 10)
-                                    .padding(.bottom, 5)
-                                Image(systemName: "music.mic")
-                                    .foregroundColor(Color(red: 1, green: 112 / 255.0, blue: 0))
-                                    .font(.system(size: 30))
-                                    .padding(.leading, 10)
-                                    .padding(.bottom, 5)
-                            }
-                            .onAppear(){
-                                openRecent()
+                            Button {
+                                self.showCheer = true
+                            } label: {
+                                ZStack{
+                                    Image(systemName: "circle")
+                                        .foregroundColor(Color(red: 1, green: 112 / 255.0, blue: 0))
+                                        .font(.system(size: 50))
+                                        .padding(.leading, 10)
+                                        .padding(.bottom, 5)
+                                    Image(systemName: "music.mic")
+                                        .foregroundColor(Color(red: 1, green: 112 / 255.0, blue: 0))
+                                        .font(.system(size: 30))
+                                        .padding(.leading, 10)
+                                        .padding(.bottom, 5)
+                                }
+                                .onAppear(){
+                                    openRecent()
+                                }
                             }
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                                 .autocapitalization(.none)
