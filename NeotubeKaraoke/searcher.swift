@@ -23,7 +23,14 @@ struct searcher: View{
     @State var lastNowPL = false
     @State var rightAfterNowPL = false
     @State var alreadyHave = false
+    
+    //Cheer View 변수
+    @State var cheerColor = [Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.indigo, Color.purple]
+    @State var colorIndex = 0
     @State var showCheer = false
+    @State var ment = ""
+    @State var isAnimation = false
+    @State var audioManager = AudioManager()
     
     @Binding var videoPlay: VideoPlay
     @Binding var reloads: Bool
@@ -46,94 +53,7 @@ struct searcher: View{
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
     @Environment(\.colorScheme) var colorScheme
-  
-    func addToNowPlaying(vid: LikeVideo) {
-        if self.nowPlayList.contains(vid) {
-            self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: vid)!)
-        }
-        self.nowPlayList.append(vid)
-    }
     
-    func saveRecent(video: LikeVideo) {
-        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
-        if self.recent.contains(video) {
-            self.recent.remove(at: self.recent.firstIndex(of: video)!)
-        }
-        if self.recent.count > 10 {
-            self.recent.removeLast()
-            self.recent.insert(video, at: 0)
-        } else {
-            if self.recent.isEmpty {
-                self.recent.append(video)
-            } else {
-                self.recent.insert(video, at: 0)
-            }
-        }
-        if FileManager.default.fileExists(atPath: fileurl.path()) {
-            try? FileManager.default.removeItem(at: fileurl)
-        }
-        let encoder = JSONEncoder()
-        let myData = try? encoder.encode(self.recent)
-        FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: myData)
-    }
-    
-    func openRecent() {
-        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
-        if FileManager.default.fileExists(atPath: fileurl.path()) {
-            guard let js = NSData(contentsOf: fileurl) else { return }
-            let decoder = JSONDecoder()
-            let myData = try? decoder.decode([LikeVideo].self, from: js as Data)
-            self.recent = myData!
-        }
-    }
-    
-    func decodePList() {
-        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
-        if FileManager.default.fileExists(atPath: fileurl.path()) {
-            guard let js = NSData(contentsOf: fileurl) else { return }
-            let decoder = JSONDecoder()
-            let myData = try? decoder.decode([String].self, from: js as Data)
-            self.playlist = myData!.map { playlists(name: $0)}
-        }
-    }
-    
-    func addVideoToPlist(item: LikeVideo, listName: String) {
-        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileurl = doc.appendingPathComponent("\(listName)", conformingTo: .json)
-        //print(fileUrl)
-        //let urlEncode = fileUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        //let fileurl = URL(string: fileUrl)!
-        print(fileurl)
-        do {
-            if FileManager.default.fileExists(atPath: fileurl.path(percentEncoded: false)) {
-                print(fileurl)
-                let js = try Data(contentsOf: fileurl)
-                let decoder = JSONDecoder()
-                var myData = try? decoder.decode([LikeVideo].self, from: js as Data)
-                print(myData?.count ?? 0)
-                if myData!.contains(item) {
-                    self.alreadyHave = true
-                    return
-                }
-                myData?.append(item)
-                print(myData?.count ?? 0)
-                try FileManager.default.removeItem(at: fileurl)
-                let data = try JSONEncoder().encode(myData)
-                FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: data)
-            } else {
-                let myData = [item]
-                let data = try JSONEncoder().encode(myData)
-                FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: data)
-                
-            }
-        }
-        catch {
-            print(error)
-        }
-    }
     
     var body: some View {
         NavigationStack {
@@ -454,6 +374,14 @@ struct searcher: View{
         }
     }
     
+}
+
+
+
+
+//MARK: -  뷰
+extension searcher {
+    
     var border: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 20)
@@ -469,6 +397,230 @@ struct searcher: View{
                 .frame(height: 40)
                 .padding(-20)
             
+        }
+    }
+    
+    
+    
+    var cheerView: some View {
+        ZStack{
+            VStack{
+                if ment == "" {
+                    Text("응원 멘트를 입력해주세요.")
+                        .font(.system(size: 300, weight: .bold))
+                        .minimumScaleFactor(0.3)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .foregroundColor(.secondary )
+                        .animation(.linear(duration: 1.0), value: self.colorIndex)
+                } else {
+                    Text(ment)
+                        .font(.system(size: 300, weight: .bold))
+                        .minimumScaleFactor(0.3)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .foregroundColor(isAnimation ? cheerColor[colorIndex] : .white )
+                        .animation(.linear(duration: 1.0), value: self.colorIndex)
+                        .onTapGesture {
+                            rotateLandscape()
+                        }
+                }
+                if isAnimation {
+                    VStack{}.onAppear(){
+                        chageColor()
+                    }
+                }
+                if !isLandscape {
+                    HStack{
+                        TextField("응원 멘트를 입력해주세요", text: $ment, onEditingChanged: {isEditing = $0 })
+                            .padding()
+                            .onAppear(){
+                                self.isAnimation = false
+                                
+                            }
+                            .onDisappear(){
+                                self.isAnimation = true
+                            }
+                        Button {
+                            self.ment = ""
+                        } label: {
+                            if (self.ment.count > 0) {
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 20))
+                                    .padding(.trailing, 5)
+                            }
+                        }
+                    }
+                }
+            }
+            VStack{
+                Spacer()
+                HStack{
+                    Button {
+                        self.audioManager.playClap()
+                    } label: {
+                        Image(systemName: "hands.clap.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.secondary)
+                            .padding(.trailing,20)
+                            .opacity(0.5)
+                    }
+                    Spacer()
+                    if UIDevice.current.model == "iPad" {
+                        Button {
+                            rotateLandscape()
+                        } label: {
+                            Image(systemName: "text.bubble.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.secondary)
+                                .padding(.trailing,20)
+                                .opacity(0.5)
+                        }
+                    }
+                    Button {
+                        self.audioManager.playCrowd()
+                    } label: {
+                        Image(systemName: "shareplay")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.secondary)
+                            .padding(.trailing,20)
+                            .opacity(0.5)
+                    }
+                    
+                }
+                .frame(height: 50, alignment: .trailing)
+                Spacer()
+                    .frame(height: !isLandscape ? 50 : 10)
+            }
+        }
+    }
+}
+
+//MARK: 함수
+extension searcher {
+    
+    func rotateLandscape() {
+        if !isLandscape {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+                self.isLandscape = true
+            } else {
+                let value = UIInterfaceOrientation.landscapeLeft.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = true
+            }
+        } else {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+                self.isLandscape = false
+            } else {
+                let value = UIInterfaceOrientation.portrait.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = false
+            }
+        }
+    }
+    
+    func chageColor() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if (self.cheerColor.count == colorIndex + 1) {
+                self.colorIndex = 0
+            } else {
+                self.colorIndex += 1
+            }
+            chageColor()
+        }
+    }
+    
+    func addToNowPlaying(vid: LikeVideo) {
+        if self.nowPlayList.contains(vid) {
+            self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: vid)!)
+        }
+        self.nowPlayList.append(vid)
+    }
+    
+    func saveRecent(video: LikeVideo) {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if self.recent.contains(video) {
+            self.recent.remove(at: self.recent.firstIndex(of: video)!)
+        }
+        if self.recent.count > 10 {
+            self.recent.removeLast()
+            self.recent.insert(video, at: 0)
+        } else {
+            if self.recent.isEmpty {
+                self.recent.append(video)
+            } else {
+                self.recent.insert(video, at: 0)
+            }
+        }
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            try? FileManager.default.removeItem(at: fileurl)
+        }
+        let encoder = JSONEncoder()
+        let myData = try? encoder.encode(self.recent)
+        FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: myData)
+    }
+    
+    func openRecent() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            guard let js = NSData(contentsOf: fileurl) else { return }
+            let decoder = JSONDecoder()
+            let myData = try? decoder.decode([LikeVideo].self, from: js as Data)
+            self.recent = myData!
+        }
+    }
+    
+    func decodePList() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            guard let js = NSData(contentsOf: fileurl) else { return }
+            let decoder = JSONDecoder()
+            let myData = try? decoder.decode([String].self, from: js as Data)
+            self.playlist = myData!.map { playlists(name: $0)}
+        }
+    }
+    
+    func addVideoToPlist(item: LikeVideo, listName: String) {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("\(listName)", conformingTo: .json)
+        //print(fileUrl)
+        //let urlEncode = fileUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        //let fileurl = URL(string: fileUrl)!
+        print(fileurl)
+        do {
+            if FileManager.default.fileExists(atPath: fileurl.path(percentEncoded: false)) {
+                print(fileurl)
+                let js = try Data(contentsOf: fileurl)
+                let decoder = JSONDecoder()
+                var myData = try? decoder.decode([LikeVideo].self, from: js as Data)
+                print(myData?.count ?? 0)
+                if myData!.contains(item) {
+                    self.alreadyHave = true
+                    return
+                }
+                myData?.append(item)
+                print(myData?.count ?? 0)
+                try FileManager.default.removeItem(at: fileurl)
+                let data = try JSONEncoder().encode(myData)
+                FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: data)
+            } else {
+                let myData = [item]
+                let data = try JSONEncoder().encode(myData)
+                FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: data)
+                
+            }
+        }
+        catch {
+            print(error)
         }
     }
 }
