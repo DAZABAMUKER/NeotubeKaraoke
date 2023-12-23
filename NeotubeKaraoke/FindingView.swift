@@ -36,13 +36,13 @@ struct FindingView: View {
                 }
                 
                 ZStack{
-                    Color.blue.opacity(0.7)
+                    //Color.blue.opacity(0.7)
                     ForEach(0..<Int(geometry.size.height/150) + 2) { index in
                         Circle()
-                            .stroke(lineWidth: 0.4)
+                            .stroke(lineWidth: 0.6)
                             .frame(width: 150 * CGFloat(index), height: 150 * CGFloat(index))
+                            .foregroundColor(Color.blue.opacity(0.7))
                             .opacity(1 - Double(index) / 10 )
-                            .foregroundColor(.white)
                             .padding(.bottom, 50)
                     }
                 }
@@ -74,7 +74,7 @@ struct FindingView: View {
             VStack(spacing: 0){
                 HStack{
                     Text("디바이스 연결")
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.blue)
                         .bold()
                         .font(.title)
                         .padding()

@@ -160,8 +160,8 @@ struct SettingView: View {
                                             .padding(5)
                                             .padding(.horizontal, 10)
                                             .background {
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .strokeBorder(lineWidth: 3)
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .strokeBorder(lineWidth: 2)
                                                 //.foregroundColor(.white)
                                             }
                                         }
@@ -169,6 +169,7 @@ struct SettingView: View {
                                 }
                             }
                             HStack{
+                                Image(systemName: "checkmark.circle")
                                 Text("구매 복원하기")
                                 Spacer()
                                 Button {
@@ -188,8 +189,8 @@ struct SettingView: View {
                                     .padding(5)
                                     .padding(.horizontal, 10)
                                     .background {
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .strokeBorder(lineWidth: 3)
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .strokeBorder(lineWidth: 2)
                                         //.foregroundColor(.white)
                                     }
                                 }
@@ -224,7 +225,7 @@ struct SettingView: View {
                             self.profile = true
                         } label: {
                             Text("문의 하기")
-                                .foregroundStyle(.orange)
+                                //.foregroundStyle(.orange)
                         }
                         .sheet(isPresented: $profile) {
                             profileView
@@ -235,7 +236,7 @@ struct SettingView: View {
                             
                         } label: {
                             Text("앱 사용 법")
-                                .foregroundStyle(.orange)
+                                //.foregroundStyle(.orange)
                         }
                         
                     }

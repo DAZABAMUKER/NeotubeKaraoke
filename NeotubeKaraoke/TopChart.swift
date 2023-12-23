@@ -46,14 +46,14 @@ struct TopChart: View {
             VStack{
                 HStack(spacing: 0){
                     //Image(systemName: "crown")
-                    Text("곡검색")
-                        .foregroundStyle(.clear)
-                        .padding()
-                    Spacer()
+//                    Text("곡검색")
+//                        .foregroundStyle(.clear)
+//                        .padding()
+//                    Spacer()
                     Text("인기차트")
-                        .font(.largeTitle)
+                        .font(.title)
                         .foregroundStyle(.orange)
-                        .multilineTextAlignment(.center)
+                        .padding()
                         .bold()
                     Spacer()
                     Button {

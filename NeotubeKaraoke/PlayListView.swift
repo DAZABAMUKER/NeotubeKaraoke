@@ -105,11 +105,11 @@ struct PlayListView: View {
                     //MARK: 네비게이션 바
                     HStack{
                         Text("Playlist")
-                            .italic()
                             .bold()
-                            .font(.largeTitle)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 5)
+                            .font(.title)
+//                            .padding(.horizontal, 20)
+//                            .padding(.vertical, 5)
+                            .padding()
                             //.foregroundStyle(Color(red: 152/255, green: 216/255, blue: 170/255))
                             .foregroundStyle(Color.green)
 //
@@ -159,7 +159,7 @@ struct PlayListView: View {
                     ScrollView(.horizontal){
                         HStack{
                             Spacer()
-                                .frame(width: 10)
+                                .frame(width: 10, height: 120)
                             ForEach(recent, id: \.self) { recent in
                                 Button {
                                     self.isReady = false
