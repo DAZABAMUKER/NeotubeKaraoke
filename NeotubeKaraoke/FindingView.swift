@@ -37,6 +37,12 @@ struct FindingView: View {
                 
                 ZStack{
                     //Color.blue.opacity(0.7)
+                    Image(systemName: "person.line.dotted.person")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(.blue.opacity(0.5))
+                        .frame(width: 80)
+                        .offset(x: 0, y: -30)
                     ForEach(0..<Int(geometry.size.height/150) + 2) { index in
                         Circle()
                             .stroke(lineWidth: 0.6)
@@ -120,12 +126,13 @@ struct FindingView: View {
                 Toggle(isOn: $isOn) {
                     Label {
                         Text("디바이스 찾기")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.blue)
                     } icon: {
                         Image(systemName: "shared.with.you")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.blue)
                     }
                 }
+                //.frame(width: 100)
                 .padding(.horizontal)
                 if self.isOn {
                     VStack{}.onAppear(){

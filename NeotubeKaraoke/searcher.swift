@@ -202,7 +202,7 @@ struct searcher: View{
                             .sheet(isPresented: $showCheer) {
                                 cheerView
                                     .onAppear(){
-                                        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "SettingView")
+                                        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "Searcher View")
                                     }
                             }
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
@@ -254,13 +254,15 @@ struct searcher: View{
                         Spacer()
                     }
                     if self.isEditing {
+                        //MARK: 키보드 숨김 뷰 버튼
                         VStack{
                             Spacer()
                                 .frame(height: 60)
                             VStack{}
+                                .ignoresSafeArea(.all)
                                 .frame(width: geometry.size.width, height: geometry.size.height-60)
                                 .background {
-                                    Color.black.opacity(0.1)
+                                    Color.black.opacity(0.01)
                                 }
                                 .onTapGesture {
                                     hideKeyboard()
@@ -423,7 +425,7 @@ extension searcher {
                         .font(.system(size: 300, weight: .bold))
                         .minimumScaleFactor(0.3)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                        .foregroundColor(isAnimation ? cheerColor[colorIndex] : .white )
+                        .foregroundStyle(isAnimation ? cheerColor[colorIndex] : Color.primary)
                         .animation(.linear(duration: 1.0), value: self.colorIndex)
                         .onTapGesture {
                             rotateLandscape()

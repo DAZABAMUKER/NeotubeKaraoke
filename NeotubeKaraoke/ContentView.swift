@@ -49,6 +49,8 @@ struct ContentView: View {
     @State var addVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var nowVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var isNewitem = false
+    @State var colorMode = "auto"
+    @State var colorSchemeOfSystem: ColorScheme = .dark
     //@State var restartApp = false
     //@State var connectedPeers = [MCPeerID]()
     
@@ -68,6 +70,20 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+    }
+    
+    func colorResult(light: Color, dark: Color) -> Color {
+        if self.colorMode == "auto" {
+            if colorSchemeOfSystem == .dark {
+                return dark
+            } else {
+                return light
+            }
+        } else if self.colorMode == "dark" {
+            return dark
+        } else {
+            return light
         }
     }
     
@@ -162,9 +178,9 @@ struct ContentView: View {
                         .environmentObject(self.purchaseManager)
                         .environmentObject(self.entitlementManager)
                         .tag(TabIndex.Home)
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo, colorMode: $colorMode, colorSchemeOfSystem: $colorSchemeOfSystem)
                         .tag(TabIndex.PlayList)
-                    SettingView(resolution: $resolution, isLandscape: $isLandscape)
+                    SettingView(resolution: $resolution, isLandscape: $isLandscape, colorMode: $colorMode)
                         .tag(TabIndex.Setting)
                         .environmentObject(self.purchaseManager)
                         .environmentObject(self.entitlementManager)
@@ -172,6 +188,9 @@ struct ContentView: View {
                         .tag(TabIndex.chart)
                     FindingView(addVideo: $addVideo, nowPlayList: $nowPlayList)
                         .tag(TabIndex.peer)
+                }
+                .onAppear(){
+                    self.colorSchemeOfSystem = self.colorScheme
                 }
                 .onChange(of: self.nowPlayList) { [nowPlayList] newValue in
                     //print(newValue.last, self.nowVideo, nowPlayList.last)
@@ -283,7 +302,7 @@ struct ContentView: View {
                     Circle()
                         .frame(width: 100)
                         .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
-                        .foregroundColor(.white)
+                        .foregroundColor(colorResult(light: .white, dark: Color(red: 0.13, green: 0.13, blue: 0.13)))
                         .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                         .shadow(radius: 5)
                     HStack(spacing: 0) {
@@ -291,35 +310,44 @@ struct ContentView: View {
                         TabButtonSel(tabIndex: .chart, img: "crown", geometry: geometry)
                         TabButtonSel(tabIndex: .Home, img: "magnifyingglass", geometry: geometry)
                         TabButtonSel(tabIndex: .peer, img: "shared.with.you", geometry: geometry)
-                        TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
+                        if self.colorMode == "dark" {
+                            TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
+                                .preferredColorScheme(.dark)
+                        } else if self.colorMode == "light" {
+                            TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
+                                .preferredColorScheme(.light)
+                        } else {
+                            TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
+                                .preferredColorScheme(self.colorSchemeOfSystem)
+                        }
                     }
                     .background(self.colorScheme == .light ? .white : Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
-                    .preferredColorScheme(.light)
+                    
                 }
-                VStack{
-                    HStack{
-                        Button {
-                            rotateLandscape()
-                        } label: {
-                            Image(systemName: isLandscape ? "rotate.right" : "rotate.left")
-                                .padding()
-                                .tint(.white)
-                                .background {
-                                    Circle()
-                                        .frame(width: 50, height: 50)
-                                        .foregroundColor(.secondary)
-                                }
-                            //.padding(.bottom, 55)
-                                .padding(.leading, 15)
-                                .opacity(vidFull ? isLandscape ? 0.01 : 0.5 : 0.01)
-                        }
-                        //.animation(.easeInOut, value: vidFull)
-                        Spacer()
-                    }
-                    if !vidFull {
-                        Spacer()
-                    }
-                }
+//                VStack{
+//                    HStack{
+//                        Button {
+//                            rotateLandscape()
+//                        } label: {
+//                            Image(systemName: isLandscape ? "rotate.right" : "rotate.left")
+//                                .padding()
+//                                .tint(.white)
+//                                .background {
+//                                    Circle()
+//                                        .frame(width: 50, height: 50)
+//                                        .foregroundColor(.secondary)
+//                                }
+//                            //.padding(.bottom, 55)
+//                                .padding(.leading, 15)
+//                                .opacity(vidFull ? isLandscape ? 0.01 : 0.5 : 0.01)
+//                        }
+//                        //.animation(.easeInOut, value: vidFull)
+//                        Spacer()
+//                    }
+//                    if !vidFull {
+//                        Spacer()
+//                    }
+//                }
                 if self.showScore && self.micPermission {
                     if score != 0{
                         VStack{

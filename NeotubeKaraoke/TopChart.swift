@@ -24,6 +24,7 @@ struct TopChart: View {
     @State var karaoke: Karaoke = Karaoke.Tj
     @State var titleOfSong = ""
     
+    @Environment(\.colorScheme) var colorscheme
     //@Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -62,7 +63,7 @@ struct TopChart: View {
                         Text("곡검색")
                             .padding(5)
                             .padding(.horizontal, 5)
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.background)
                             .background{
                                 RoundedRectangle(cornerRadius: 8)
                                     .foregroundStyle(.orange)
@@ -176,7 +177,7 @@ struct TopChart: View {
                             
                             Text("TJ 가요")
                                 .lineLimit(2)
-                                .tint(.black)
+                                .tint(colorscheme == .dark ? .white : .black)
                         }
                         .offset(x: 0, y: self.showTjChart ? -10 : 0)
                         .scaleEffect(self.showTjChart ? CGSize(width: 1.05, height: 1.05) :  CGSize(width: 1.0, height: 1.0))
@@ -203,7 +204,7 @@ struct TopChart: View {
                                 .frame(height: 80)
                             
                             Text("KY Pop")
-                                .tint(.black)
+                                .tint(colorscheme == .dark ? .white : .black)
                         }
                         .offset(x: 0, y: self.showtjPopChart ? -10 : 0)
                         .scaleEffect(self.showtjPopChart ? CGSize(width: 1.05, height: 1.05) :  CGSize(width: 1.0, height: 1.0))
@@ -226,7 +227,7 @@ struct TopChart: View {
                                 .frame(height: 80)
                             
                             Text("KY J-Pop")
-                                .tint(.black)
+                                .tint(colorscheme == .dark ? .white : .black)
                         }
                         .offset(x: 0, y: self.showTjJPopChart ? -10 : 0)
                         .scaleEffect(self.showTjJPopChart ? CGSize(width: 1.05, height: 1.05) :  CGSize(width: 1.0, height: 1.0))
@@ -249,7 +250,7 @@ struct TopChart: View {
                                 .frame(height: 80)
                             
                             Text("KY 가요")
-                                .tint(.black)
+                                .tint(colorscheme == .dark ? .white : .black)
                         }
                         .offset(x: 0, y: self.showKYChart ? -10 : 0)
                         .scaleEffect(self.showKYChart ? CGSize(width: 1.05, height: 1.05) :  CGSize(width: 1.0, height: 1.0))
@@ -277,7 +278,7 @@ struct TopChart: View {
                                         Spacer()
                                         Text(getPopularChart.tjChartMusician[Int(index)])
                                     }
-                                    .foregroundColor(.black)
+                                    .foregroundStyle(.foreground)
                                     //.bold()
                                 }
                             }
@@ -321,7 +322,7 @@ struct TopChart: View {
                                         Spacer()
                                         Text(getPopularChart.KYChartMusician[Int(index)])
                                     }
-                                    .foregroundColor(.black)
+                                    .foregroundStyle(.foreground)
                                     //.bold()
                                 }
                             }

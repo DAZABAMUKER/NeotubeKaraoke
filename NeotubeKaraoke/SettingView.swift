@@ -38,8 +38,9 @@ struct SettingView: View {
     @Binding var isLandscape: Bool
     private let pasteboard = UIPasteboard.general
     
-    @Environment(\.colorScheme) var colorschome
-    
+    //@Environment(\.colorScheme) var colorschome
+    @Binding var colorMode: String
+//    @Binding var colorSchemeOfSystem: ColorScheme
     
     
     
@@ -64,47 +65,6 @@ struct SettingView: View {
                     .frame(height: 60)
             }
             List{
-                VStack {
-                    Picker("해상도 선택", selection: $resolution) {
-                        Text("Low").tag(Resolution.low)
-                        Text("Basic").tag(Resolution.basic)
-                        Text("1080").tag(Resolution.high)
-                        Text("1080+").tag(Resolution.ultra)
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.orange)
-                    Picker("영상 건너뛰기 시간 선택", selection: $goBackTime) {
-                        Text("5s").tag(5.0)
-                        Text("15s").tag(15.0)
-                        Text("30s").tag(30.0)
-                        Text("60s").tag(60.0)
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.orange)
-                    Toggle(isOn: $micPermission) {
-                        Text("내 노래 점수 보기")
-                    }
-                    .tint(Color.orange)
-                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
-                        Button {
-                            self.showAlert = false
-                            self.micPermission = false
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
-                            }
-                        } label: {
-                            Text("확인")
-                        }
-                        
-                        Button {
-                            self.showAlert = false
-                            self.micPermission = false
-                        } label: {
-                            Text("취소")
-                        }
-                    }
-                }
-                
                 Section {
                     VStack{
                         if entitlementManager.hasPro {
@@ -207,6 +167,55 @@ struct SettingView: View {
                 } header: {
                     Text("광고 제거하기")
                 }
+                VStack {
+                    Picker("해상도 선택", selection: $resolution) {
+                        Text("Low").tag(Resolution.low)
+                        Text("Basic").tag(Resolution.basic)
+                        Text("1080").tag(Resolution.high)
+                        Text("1080+").tag(Resolution.ultra)
+                    }
+                    .pickerStyle(.menu)
+                    .tint(Color.orange)
+                    Picker("영상 건너뛰기 시간 선택", selection: $goBackTime) {
+                        Text("5s").tag(5.0)
+                        Text("15s").tag(15.0)
+                        Text("30s").tag(30.0)
+                        Text("60s").tag(60.0)
+                    }
+                    .pickerStyle(.menu)
+                    .tint(Color.orange)
+                    Picker("다크모드", selection: $colorMode) {
+                        Text("다크모드").tag("dark")
+                        Text("라이트모드").tag("light")
+                        Text("Auto").tag("auto")
+                    }
+                    .pickerStyle(.menu)
+                    .tint(Color.orange)
+                    Toggle(isOn: $micPermission) {
+                        Text("내 노래 점수 보기")
+                    }
+                    .tint(Color.orange)
+                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
+                        Button {
+                            self.showAlert = false
+                            self.micPermission = false
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        } label: {
+                            Text("확인")
+                        }
+                        
+                        Button {
+                            self.showAlert = false
+                            self.micPermission = false
+                        } label: {
+                            Text("취소")
+                        }
+                    }
+                }
+                
+                
                 
                 Section{
                     //                        Button {
@@ -268,8 +277,7 @@ struct SettingView: View {
                 HStack{
                     Text("이메일: ")
                     Spacer()
-                    Text("wookis112@gmail.com")
-                        .tint(colorschome == .dark ? .white : .black)
+                    Text(verbatim: "wookis112@gmail.com")
                     Image(systemName: "rectangle.on.rectangle")
                         .padding(.horizontal)
                 }

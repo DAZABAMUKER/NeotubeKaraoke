@@ -35,10 +35,10 @@ struct PeerDevice : ViewModifier {
                     .scaledToFit()
                     .frame(height: 70)
                     .padding()
-                    .foregroundColor(peers.contains(device) ? .green : .white)
+                    .foregroundStyle(peers.contains(device) ? .green : Color.accentColor)
                     
                 content
-                    .foregroundColor(peers.contains(device) ? .green : .white)
+                    .foregroundStyle(peers.contains(device) ? .green : Color.accentColor)
                     .onAppear(){
                         self.sel()
                     }

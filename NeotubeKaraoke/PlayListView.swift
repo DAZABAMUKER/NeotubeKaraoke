@@ -30,9 +30,23 @@ struct PlayListView: View {
     @Binding var score: Int
     @Binding var recent: [LikeVideo]
     @Binding var nowVideo: LikeVideo
-    
+    @Binding var colorMode: String
+    @Binding var colorSchemeOfSystem: ColorScheme
     let heights = 100.0
     
+    func colorResult(light: Color, dark: Color) -> Color {
+        if self.colorMode == "auto" {
+            if colorSchemeOfSystem == .dark {
+                return dark
+            } else {
+                return light
+            }
+        } else if self.colorMode == "dark" {
+            return dark
+        } else {
+            return light
+        }
+    }
     
     func addToNowPlaying(vid: LikeVideo) {
         if self.nowPlayList.contains(vid) {
@@ -160,63 +174,99 @@ struct PlayListView: View {
                         HStack{
                             Spacer()
                                 .frame(width: 10, height: 120)
-                            ForEach(recent, id: \.self) { recent in
-                                Button {
-                                    self.isReady = false
-                                    self.clickVid = true
-                                    videoPlay = VideoPlay(videoId: recent.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                                    reloads = true
-                                    self.nowVideo = LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle)
-                                    self.nowPlayList.append(self.nowVideo)
-//                                    addToNowPlaying(vid: LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
-//                                    self.videoOrder = self.nowPlayList.firstIndex(of: recent) ?? -1
-                                    self.videoOrder = self.nowPlayList.count - 1
-                                    saveRecent(video: recent)
-                                    print("video order: ", videoOrder)
-                                } label: {
-                                    VStack{
-                                        AsyncImage(url: URL(string: recent.thumbnail)) { image in
-                                            image.resizable()
-                                                .resizable()
-                                                .frame(width: heights/9*16, height: heights/9*12)
-                                                .clipShape(RoundedRectangle(cornerRadius: 10).size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
-                                                .frame(width: heights/9*16, height: heights)
-                                                .padding(5)
-                                        } placeholder: {
-                                            ZStack{
-                                                Rectangle()
-                                                    .foregroundStyle(Color.green)
+                            
+                            if recent.isEmpty {
+                                VStack{
+                                    ZStack{
+                                        Rectangle()
+                                            .foregroundStyle(Color.green)
+                                            .frame(width: heights/9*16, height: heights/9*12)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10).size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
+                                            .frame(width: heights/9*16, height: heights)
+                                            .padding(5)
+                                        Image(systemName: "music.note.tv")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: heights/9*8, height: heights)
+                                            .padding(5)
+                                            .foregroundColor(Color.white)
+                                    }
+//                                    }.frame(height: 90)
+//                                        .padding(.leading,7)
+                                    
+                                    Text("최근 재생 영상이 여기 표시됩니다.")
+                                        .bold()
+                                        .lineLimit(2)
+                                        .frame(width: 160)
+                                        .multilineTextAlignment(.center)
+                                        .foregroundStyle(.black)
+                                        .padding(.bottom, 10)
+                                }
+                                .background {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(.foreground)
+                                        .shadow(color: .secondary,radius: 5, x: 0, y: 5)
+                                }
+                                .padding(.bottom)
+                            } else {
+                                ForEach(recent, id: \.self) { recent in
+                                    Button {
+                                        self.isReady = false
+                                        self.clickVid = true
+                                        videoPlay = VideoPlay(videoId: recent.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
+                                        reloads = true
+                                        self.nowVideo = LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle)
+                                        self.nowPlayList.append(self.nowVideo)
+                                        //                                    addToNowPlaying(vid: LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
+                                        //                                    self.videoOrder = self.nowPlayList.firstIndex(of: recent) ?? -1
+                                        self.videoOrder = self.nowPlayList.count - 1
+                                        saveRecent(video: recent)
+                                        print("video order: ", videoOrder)
+                                    } label: {
+                                        VStack{
+                                            AsyncImage(url: URL(string: recent.thumbnail)) { image in
+                                                image
+                                                    .resizable()
                                                     .frame(width: heights/9*16, height: heights/9*12)
                                                     .clipShape(RoundedRectangle(cornerRadius: 10).size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
                                                     .frame(width: heights/9*16, height: heights)
                                                     .padding(5)
-                                                Image(systemName: "music.note.tv")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: heights/9*8, height: heights)
-                                                    .padding(5)
-                                                    .foregroundColor(Color.white)
-                                            }.frame(height: 90)
-                                            .padding(.leading,7)
+                                            } placeholder: {
+                                                ZStack{
+                                                    Rectangle()
+                                                        .foregroundStyle(Color.green)
+                                                        .frame(width: heights/9*16, height: heights/9*12)
+                                                        .clipShape(RoundedRectangle(cornerRadius: 10).size(width: heights/9*16, height: heights).offset(x: 0, y: heights/6))
+                                                        .frame(width: heights/9*16, height: heights)
+                                                        .padding(5)
+                                                    Image(systemName: "music.note.tv")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: heights/9*8, height: heights)
+                                                        .padding(5)
+                                                        .foregroundColor(Color.white)
+                                                }.frame(height: 90)
+                                                    .padding(.leading,7)
+                                            }
+                                            Text(recent.title)
+                                                .bold()
+                                                .lineLimit(2)
+                                                .frame(width: 160)
+                                                .multilineTextAlignment(.center)
+                                                .foregroundStyle(.foreground)
+                                                .padding(.bottom, 10)
                                         }
-                                        Text(recent.title)
-                                            .bold()
-                                            .lineLimit(2)
-                                            .frame(width: 160)
-                                            .multilineTextAlignment(.center)
-                                            .foregroundStyle(.black)
-                                            .padding(.bottom, 10)
-                                    }
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 10)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 10)
                                             //.foregroundStyle(Color.secondary)
-                                            .shadow(color: .secondary,radius: 5, x: 0, y: 5)
+                                                .shadow(color: .secondary,radius: 5, x: 0, y: 5)
+                                        }
+                                        .padding(.bottom)
+                                        //.frame(height: 150)
                                     }
-                                    .padding(.bottom)
-                                    //.frame(height: 150)
+                                    //.padding(.horizontal, 5)
                                 }
-                                //.padding(.horizontal, 5)
-                            }
+                        }
                             /*
                             Button {
                                 self.showNowPL.toggle()
@@ -231,7 +281,7 @@ struct PlayListView: View {
                             }
                              */
                         }
-                        .tint(.white)
+                        .tint(colorResult(light: .white, dark: .secondary.opacity(0.2)))
                         .font(.caption)
                     }
                     //.border(.red)
@@ -241,7 +291,7 @@ struct PlayListView: View {
                         .frame(width: geometry.size.width, height: 1)
                     HStack{
                         Text(showNowPL ? "현재 재생목록" : "생성된 재생목록")
-                            .font(.title3)
+                            .font(.headline)
                             .bold()
                             .padding(5)
                         Spacer()
@@ -343,32 +393,36 @@ struct PlayListView: View {
                 //MARK: 재생목록 추가 뷰
                 if self.plusPlayList {
                     VStack{}
+                        .ignoresSafeArea(.all)
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .background {
-                            Color.black.opacity(0.1)
+                            Color.black.opacity(0.01)
                         }
                         .onTapGesture {
                             hideKeyboard()
                         }
                     VStack(spacing: 0){
                         Text("재생목록 추가")
-                            .font(.title2)
+                            .font(.title3)
                             .padding()
                         //Divider()
-                        TextField("타이틀을 입력하세요", text: $pTitle)
-                            .background(content: {
-                                Spacer()
-                                    .frame(width: 300,height: 50)
-                                    .background(.black.opacity(0.3))
-                            })
-                            .padding()
-                            .onSubmit {
-                                if !self.pTitle.isEmpty {
-                                    savePlayList(title: self.pTitle)
-                                    self.plusPlayList = false
-                                    self.pTitle = ""
+                        HStack{
+                            Spacer()
+                            TextField("타이틀을 입력하세요", text: $pTitle)
+                                .frame(width: 250,height: 20)
+                                .onSubmit {
+                                    if !self.pTitle.isEmpty {
+                                        savePlayList(title: self.pTitle)
+                                        self.plusPlayList = false
+                                        self.pTitle = ""
+                                    }
                                 }
-                            }
+                                .padding(8)
+                            Spacer()
+                        }
+                        .background{
+                            Color.secondary.opacity(0.1)
+                        }
                         Divider()
                         HStack{
                             Button {
@@ -380,7 +434,7 @@ struct PlayListView: View {
                             } label: {
                                 Text("확인")
                             }
-                            .padding()
+                            .padding(8)
                             Divider()
                                 .frame(width: 60,height: 50)
                             Button {
@@ -389,7 +443,7 @@ struct PlayListView: View {
                             } label: {
                                 Text("취소")
                             }
-                            .padding()
+                            .padding(8)
                         }
                     }
                     .frame(width: 300)
