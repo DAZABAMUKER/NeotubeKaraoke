@@ -39,6 +39,7 @@ struct VideoPlay: View {
                 } else {
                     tone -= 1
                 }
+                HapticManager.instance.impact(style: .light)
             } else {}
         }
     }
@@ -59,6 +60,7 @@ struct VideoPlay: View {
                 } else {
                     tempo -= 0.1
                 }
+                HapticManager.instance.impact(style: .light)
             } else {}
         }
     }
@@ -768,7 +770,8 @@ struct VideoPlay: View {
                 })
             }
             .ignoresSafeArea(.all)
-            .background(.background)
+            .background(Color(red: 0.13, green: 0.13, blue: 0.13))
+//            .background(Color(red: 0.9412, green: 0.9255, blue: 0.8980))
             .brightness(-0.02)
             VStack(spacing: 0.0){
                 if scWidth < scHeight {
@@ -876,7 +879,7 @@ struct VideoPlay: View {
                         } label: {
                             ZStack{
                                 Circle()
-                                    .foregroundStyle(.thinMaterial)
+                                    .foregroundStyle(.white)
                                     .frame(height: 90)
                                     .shadow(radius: 8, y: 5)
                                 Image(systemName: "play.fill")

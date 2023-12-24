@@ -70,6 +70,7 @@
 		03D22C6929A1E53C001D8B24 /* YoutubeDL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */; };
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
 		03D77A2F2935D4E80037061E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2E2935D4E80037061E /* Video.swift */; };
+		03E30DFC2B388C64003EBC6B /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E30DFB2B388C64003EBC6B /* HapticManager.swift */; };
 		03F36CC12963DE61001AEB7A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F36CC02963DE61001AEB7A /* Models.swift */; };
 		03F9189B2A71ED0D003115A1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F9189A2A71ED0D003115A1 /* StoreKit.framework */; };
 		17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */; };
@@ -134,6 +135,7 @@
 		03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeDL.swift; sourceTree = "<group>"; };
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		03D77A2E2935D4E80037061E /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		03E30DFB2B388C64003EBC6B /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		03F36CC02963DE61001AEB7A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		03F9189A2A71ED0D003115A1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		33DD4112FD9FB9295E643CD6 /* Pods-NeotubeKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.release.xcconfig"; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				038B76E529EFE5150016522A /* TopChart.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
+				03E30DFB2B388C64003EBC6B /* HapticManager.swift */,
 				037A998B2A02B0BB00A05065 /* FindingView.swift */,
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
 				034EF01A2AFDD4C10085188C /* Localizable.xcstrings */,
@@ -530,6 +533,7 @@
 				033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */,
 				032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */,
 				037D081A29B580290069ED88 /* DragVideo.swift in Sources */,
+				03E30DFC2B388C64003EBC6B /* HapticManager.swift in Sources */,
 				037A998E2A02B0EB00A05065 /* ConnectPeer.swift in Sources */,
 				036658F12A6525E9001C5BB9 /* PurchaseManager.swift in Sources */,
 				03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */,
