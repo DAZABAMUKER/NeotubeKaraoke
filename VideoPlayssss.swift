@@ -11,7 +11,7 @@ import AVKit
 import UIKit
 
 struct VideoPlay: View {
-    //MARK: - 변수들
+    //@Environment(\.scenePhase) var scenePhase
     @Environment(\.dismiss) private var dismiss
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
@@ -20,6 +20,21 @@ struct VideoPlay: View {
     @State var isiPad = false
     @State var que = false
     @ObservedObject var player = VideoPlayers()
+    //@State var indeterminateProgressKey: String?
+    /*
+    @State var youtubeDL: YoutubeDL?
+    @State var info: Info?
+    @State var url: URL? {
+        didSet {
+            guard let url = url else {
+                return
+            }
+            extractInfo(url: url)
+        }
+    }
+     */
+    //@State var audioUrl = URL(string: "https://dazabamuker.tistory.com")!
+    //@State var videoUrl = URL(string: "https://dazabamuker.tistory.com")!
     @ObservedObject var audioManager = AudioManager()
     @StateObject var downloadManager = MultiPartsDownloadTask()
     @State var tone: Float = 0.0 {
@@ -31,41 +46,21 @@ struct VideoPlay: View {
             } else {}
         }
     }
-    @State var tones: Int = 0 {
-        didSet {
-            if tones != oldValue {
-                if tones > oldValue {
-                    tone += 1
-                } else {
-                    tone -= 1
-                }
-            } else {}
-        }
-    }
     @State var tempo: Float = 1.0 {
         didSet {
-            if tempo > 10.0 {
-                tempo = oldValue
-            } else if tempo < 0.1 {
+            if tempo > 24.0 {
+                tone = oldValue
+            } else if tempo < -24.0 {
                 tempo = oldValue
             } else {}
         }
     }
-    @State var tempos: Int = 1 {
-        didSet {
-            if tempos != oldValue {
-                if tempos > oldValue {
-                    tempo += 0.1
-                } else {
-                    tempo -= 0.1
-                }
-            } else {}
-        }
-    }
+    //@State var itemUrl: URL!
     var videoId: String = ""
     @StateObject var innertube = InnerTube()
     
     @State var tap = false
+    //@State var isPlaying = false
     @State private var isLoading = false
     @State var closes = false
     @Binding var vidFull: Bool
@@ -85,15 +80,80 @@ struct VideoPlay: View {
     @Binding var score: Int
     @State var lowVideoUrl: URL?
     
-    @State var scWidth = 0.0
-    @State var scHeight = 0.0
     
-    @State var pitchPressed = false
-    @State var tempoPressed = false
-    @State var ringAngle: Double = 0.0
+    func rotateLandscape() {
+        if !isLandscape {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+                self.isLandscape = true
+            } else {
+                let value = UIInterfaceOrientation.landscapeLeft.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = true
+            }
+        } else {
+            if #available(iOS 16.0, *) {
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+                self.isLandscape = false
+            } else {
+                let value = UIInterfaceOrientation.portrait.rawValue
+                UIDevice.current.setValue(value, forKey: "orientation")
+                self.isLandscape = false
+            }
+        }
+    }
     
+    func close() {
+        player.close()
+        audioManager.close()
+    }
+    
+    func getTubeInfo() {
+        let hd720 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
+        let hd360 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
+        //let low144 = self.innertube.info?.streamingData.formats.filter{$0.qualityLabel ?? "" == "144p"}.last?.url
+        //print("111 hd360 \(hd360?.qualityLabel)")
+        //print("111 hd720 \(hd720?.mimeType)")
+        
+        
+        var selectedVideo = TubeFormats(audioQuality: "")
+        if resolution == .low || hd720 == nil {
+            /*
+            guard let heightMin = innertube.info?.streamingData.formats?.map({$0.height ?? 1080}).min() else {
+                return
+            }
+            guard let audio = innertube.info?.streamingData.formats?.filter{$0.height == heightMin}.first else {
+                return
+            }
+             */
+            //self.downloadManager.createDownloadParts(url: URL(string: audio.url ?? "http://www.youtube.com")!, size: Int(audio.contentLength ?? "") ?? 0, video: true)
+            //loadAVAssets(url: URL(string: minIndex.url ?? "http://www.youtube.com")!, size: Int(minIndex.contentLength ?? "0") ?? 0)
+            //extractAudio(docUrl: )
+            selectedVideo = hd360 ?? TubeFormats(audioQuality: "")
+        } else {
+            selectedVideo = hd720 ?? TubeFormats(audioQuality: "")
+        }
+        let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
+        player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: false)
+        //player.replaceCurrentItem(with: AVPlayerItem(url: lowVideUrl))
+        envPlayer.player = self.player
+        envPlayer.isOn = true
+        //loadAVAssets(url: URL(string: hd720?.url ?? "http://www.youtube.com")!, size: Int(hd720?.contentLength ?? "") ?? 0)
+        
+    }
+    func audioEngineSet() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileUrl = doc.appendingPathComponent("audio.m4a")
+        audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View audio engine set")
+        self.isAppear = true
+        self.isReady = true
+        self.vidFull = true
+    }
     //MARK: - 뷰 바디 여기 있음
-    /*var body: some View {
+    var body: some View {
         NavigationStack{
             GeometryReader { geometry in
                 
@@ -741,285 +801,6 @@ struct VideoPlay: View {
                     close()
                 }
             }
-        }
-    }*/
-    var body: some View {
-        ZStack{
-            // 화면 크기 파악
-            GeometryReader{ geometry in
-                ZStack{
-                    Spacer()
-                }.onAppear() {
-                    self.scHeight = geometry.size.height
-                    self.scWidth = geometry.size.width
-                    self.vidFull = true
-                    //print(geometry.size.height)
-                }
-                .onChange(of: geometry.size) { _ in
-                    self.scHeight = geometry.size.height
-                    self.scWidth = geometry.size.width
-                    print(geometry.size.height)
-                    print(geometry.size.width)
-                    
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification), perform: { _ in
-                    self.scHeight = 0
-                    self.scWidth = 0
-                })
-            }
-            .ignoresSafeArea(.all)
-            .background(.background)
-            .brightness(-0.02)
-            VStack(spacing: 0.0){
-                if scWidth < scHeight {
-                    HStack{
-                        Spacer()
-                        Text(self.innertube.info?.videoDetails.title ?? "노래방")
-                            .foregroundStyle(.orange)
-                            .bold()
-                            .padding()
-                        Spacer()
-                    }
-                    //.background(.background)
-                    .onTapGesture {
-                        self.vidFull.toggle()
-                    }
-                }
-                PlayerViewController(player: player.player ?? AVPlayer())
-//                    .frame(
-//                        height: scHeight > scWidth ? scWidth * 9 / 16 : scHeight
-//                        
-//                    )
-                    //.opacity(0.0)
-                    //.border(Color.red)
-                    .ignoresSafeArea(.container)
-                if scWidth < scHeight {
-                    
-                    self.pitchView
-                    HStack(spacing: 0){
-                        Text("템포: x")
-                        Text(String(format: "%.2f", self.tempo))
-                    }
-                    ZStack{
-//                        LinearGradient(
-//                            colors: !isPressed ? [.gray.opacity(0.2)] : [.red, .blue],
-//                            startPoint: .bottomLeading,
-//                            endPoint: .bottomTrailing
-//                        )
-                        AngularGradient(
-                            gradient: Gradient(colors: tempoPressed || pitchPressed ? [.white, .red, .blue, .white] : [.white]),
-                            center: .bottom,
-                            angle: .degrees(90))
-                        .mask{
-                            Circle()
-                                .stroke(lineWidth: 60)
-                                .frame(width: scWidth*0.55)
-                            //.brightness(0.3)
-                                .shadow(radius: 8, y: 5)
-                        }
-                        .rotationEffect(.degrees(ringAngle))
-                        .shadow(radius: 8, y: 5)
-                        .frame(width: scWidth, height: scWidth*0.8)
-                        //.border(Color.black)
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 10, height: 70)
-                            .foregroundStyle(.white)
-                            .opacity(tempoPressed || pitchPressed ? 1.0 : 0.0)
-                            .offset(y: scWidth * 0.55 / 2)
-                            .rotationEffect(.degrees(ringAngle))
-                            .gesture(
-                                DragGesture()
-                                    .onChanged({ dot in
-                                        change(location: dot.location)
-                                    })
-                            )
-                        ZStack{
-                            Text("템포")
-                                .frame(width: 80, height: 40, alignment: .center)
-                                .offset(y: -scWidth * 0.55 / 2)
-                                .foregroundStyle(tempoPressed ? .white : .gray)
-                                .opacity(pitchPressed ? 0.0 : 1.0)
-                                .gesture(
-                                    DragGesture(minimumDistance: 0)
-                                        .onChanged({ dot in
-                                            tempoPressed = true
-                                            change(location: dot.location)
-                                        })
-                                        .onEnded({ _ in
-                                            tempoPressed = false
-                                        })
-                                )
-                            
-//                            Spacer()
-//                                .frame(height: 160)
-//                                .foregroundStyle(.foreground)
-                            Text("음정")
-                                .frame(width: 80, height: 40, alignment: .center)
-                                .offset(y: scWidth * 0.55 / 2)
-                                .foregroundStyle(pitchPressed ? .white : .gray)
-                                .opacity(tempoPressed ? 0.0 : 1.0)
-                                .gesture(
-                                    DragGesture(minimumDistance: 0)
-                                    .onChanged({ dot in
-                                        pitchPressed = true
-                                        change(location: dot.location)
-                                    })
-                                    .onEnded({ _ in
-                                        pitchPressed = false
-                                    })
-                            )
-                        }
-                        Button{
-                            audioManager.play()
-                            player.plays()
-                            
-                        } label: {
-                            ZStack{
-                                Circle()
-                                    .foregroundStyle(.thinMaterial)
-                                    .frame(height: 90)
-                                    .shadow(radius: 8, y: 5)
-                                Image(systemName: "play.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 40)
-                                    .offset(x: 5)
-                                    .foregroundStyle(.red)
-                            }
-//                            Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(height: 90)
-//                                .foregroundStyle(.red)
-//                                .shadow(radius: 10)
-                            //.border(.red)
-                        }
-                        .padding(.horizontal ,20)
-                    }
-                    Spacer()
-                        .frame(height: 100)
-                }
-            }
-        }
-    }
-}
-//MARK: 뷰
-extension VideoPlay {
-    var pitchView: some View {
-        HStack(spacing: 2){
-            LinearGradient(colors: [
-                Color.blue,
-                Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0)
-            ],
-                           startPoint: .leading,
-                           endPoint: .trailing
-            )
-            .frame(height: 30)
-            .mask(alignment: .trailing) {
-                if self.tone < 0 {
-                    HStack(spacing: 3){
-                        ForEach(0..<Int(self.tone)*(-1), id: \.self){ _ in
-                            Rectangle()
-                                .cornerRadius(10)
-                                .frame(width: 5, height: 20)
-                        }
-                    }
-                } else {}
-            }
-            Text(String(Int(self.tone)))
-                .padding(10)
-                .shadow(radius: 20)
-            LinearGradient(colors: [
-                Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
-                Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
-            ],
-                           startPoint: .topLeading,
-                           endPoint: .bottomTrailing
-            )
-            .frame(height: 30)
-            .mask(alignment: .leading) {
-                
-                if self.tone > 0 {
-                    HStack(spacing: 3){
-                        ForEach(0..<Int(self.tone), id: \.self){ _ in
-                            Rectangle()
-                                .cornerRadius(10)
-                                .frame(width: 5, height: 20)
-                        }
-                    }
-                } else {}
-            }
-            
-        }.frame(width: self.scWidth)
-    }
-}
-
-//MARK: 함수들
-extension VideoPlay {
-    func rotateLandscape() {
-        if !isLandscape {
-            if #available(iOS 16.0, *) {
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
-                self.isLandscape = true
-            } else {
-                let value = UIInterfaceOrientation.landscapeLeft.rawValue
-                UIDevice.current.setValue(value, forKey: "orientation")
-                self.isLandscape = true
-            }
-        } else {
-            if #available(iOS 16.0, *) {
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
-                self.isLandscape = false
-            } else {
-                let value = UIInterfaceOrientation.portrait.rawValue
-                UIDevice.current.setValue(value, forKey: "orientation")
-                self.isLandscape = false
-            }
-        }
-    }
-    
-    func close() {
-        player.close()
-        audioManager.close()
-    }
-    
-    func getTubeInfo() {
-        let hd720 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
-        let hd360 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
-        var selectedVideo = TubeFormats(audioQuality: "")
-        if resolution == .low || hd720 == nil {
-            selectedVideo = hd360 ?? TubeFormats(audioQuality: "")
-        } else {
-            selectedVideo = hd720 ?? TubeFormats(audioQuality: "")
-        }
-        let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
-        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
-        player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: false)
-        envPlayer.player = self.player
-        envPlayer.isOn = true
-        
-    }
-    func audioEngineSet() {
-        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileUrl = doc.appendingPathComponent("audio.m4a")
-        audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View audio engine set")
-        self.isAppear = true
-        self.isReady = true
-        self.vidFull = true
-    }
-    private func change(location: CGPoint) {
-        let vector = CGVector(dx: location.x - 40, dy: location.y - 20)
-        //print("loca", location.x, location.y)
-        let radian = atan2(vector.dy , vector.dx)
-        var angle = radian * 180 / .pi - 90
-        self.ringAngle = angle > 0 ? angle : angle + 360
-        //print("ring", self.ringAngle)
-        if pitchPressed {
-            self.tones = Int(Float(ringAngle) / 30)
-        } else if tempoPressed {
-            self.tempos = Int(Float(ringAngle) / 30)
         }
     }
 }
