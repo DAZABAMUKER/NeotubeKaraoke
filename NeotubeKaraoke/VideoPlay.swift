@@ -769,6 +769,7 @@ struct VideoPlay: View {
                     self.scWidth = 0
                 })
             }
+            
             .ignoresSafeArea(.all)
             .background(Color(red: 0.13, green: 0.13, blue: 0.13))
 //            .background(Color(red: 0.9412, green: 0.9255, blue: 0.8980))
