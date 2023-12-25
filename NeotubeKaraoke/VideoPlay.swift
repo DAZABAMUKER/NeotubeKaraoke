@@ -170,7 +170,7 @@ struct VideoPlay: View {
                     HStack{
                         Spacer()
                         Text(self.innertube.info?.videoDetails.title ?? "노래방")
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
                             .padding()
                         Spacer()
@@ -198,173 +198,24 @@ struct VideoPlay: View {
                                 player.moveFrame(to: -15.0, spd: self.tempo) // 뒤로 15초
                             }
                         })
+                        .onTapGesture {
+                            tap.toggle()
+                        }
                 } else {
                     //AVPlayer 준비 전 사각형 하나 그려줌(플레이어로 속이는 용도)
                     Rectangle()
                         .DragVid(vidFull: $vidFull)
+                        .foregroundStyle(.black)
                 }
                 if scWidth < scHeight && vidFull { // 화면 세로 모드 및 플레이어 뷰 전체 화면일 경우
-                    //비디오 상태 표시 줄
-                    ZStack(alignment: .leading){
-                        Rectangle()
-                            .frame(width: scWidth, height: 10)
-                            .foregroundColor(.secondary)
-                        Rectangle()
-                            .frame(width: player.currents < 0.9 ? 0 : (scWidth - 15) * player.currents/player.intervals, height: 10)
-                            .foregroundColor(.green)
-                        Image(systemName: "rectangle.portrait.fill")
-                            .scaleEffect(1.5)
-                            .frame(width: player.currents < 0.9 ? 10 : (scWidth) * player.currents/player.intervals, alignment: .trailing)
-                            .vidSlider(duartion: player.intervals, width: scWidth, player: player)
-                            .foregroundStyle(.white)
-                    }
-                    .padding(.top, 4)
-                    // 음정 뷰
-                    self.pitchView
-                    // 템포 숫자 보여줌
-                    HStack(spacing: 0){
-                        Text("템포: x")
-                        Text(String(format: "%.2f", self.tempo))
-                    }
-                    ZStack{
-                        // 휠 누르면 그라데이션으로 변경
-                        AngularGradient(
-                            gradient: Gradient(colors: tempoPressed || pitchPressed ? [.white, .red, .blue, .white] : [.white]),
-                            center: .bottom,
-                            angle: .degrees(90))
-                        .mask{
-                            Circle()
-                                .stroke(lineWidth: 60)
-                                .frame(width: scWidth*0.55)
-                                .shadow(radius: 8, y: 5)
+                    buttons(scLength: scWidth)
+                        .onAppear(){
+                            tap = false
                         }
-                        .rotationEffect(.degrees(ringAngle))
-                        .shadow(radius: 8, y: 5)
-                        .frame(width: scWidth, height: scWidth*0.8)
-                        // 휠 돌릴 때 생기든 도형
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 10, height: 70)
-                            .foregroundStyle(.white)
-                            .opacity(tempoPressed || pitchPressed ? 1.0 : 0.0)
-                            .offset(y: scWidth * 0.55 / 2)
-                            .rotationEffect(.degrees(ringAngle))
-                        ZStack{
-                            // 템포 버튼
-                            Text("템포")
-                                .frame(width: 80, height: 40, alignment: .center)
-                                .offset(y: -scWidth * 0.55 / 2)
-                                .foregroundStyle(tempoPressed ? .white : .gray)
-                                .opacity(pitchPressed ? 0.0 : 1.0)
-                                .gesture(
-                                    DragGesture(minimumDistance: 0)
-                                        .onChanged({ dot in
-                                            tempoPressed = true
-                                            change(location: dot.location)
-                                        })
-                                        .onEnded({ _ in
-                                            tempoPressed = false
-                                        })
-                                )
-                            
-//                            Spacer()
-//                                .frame(height: 160)
-//                                .foregroundStyle(.foreground)
-                            // 음정 버튼
-                            Text("음정")
-                                .frame(width: 80, height: 40, alignment: .center)
-                                .offset(y: scWidth * 0.55 / 2)
-                                .foregroundStyle(pitchPressed ? .white : .gray)
-                                .opacity(tempoPressed ? 0.0 : 1.0)
-                                .gesture(
-                                    DragGesture(minimumDistance: 0)
-                                    .onChanged({ dot in
-                                        pitchPressed = true
-                                        change(location: dot.location)
-                                    })
-                                    .onEnded({ _ in
-                                        pitchPressed = false
-                                    })
-                                )
-                            // 뒤로 15초
-                            Button {
-                                HapticManager.instance.impact(style: .light)
-                                player.moveFrame(to: -15.0, spd: self.tempo)
-                            } label: {
-                                Image(systemName: "gobackward.15")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 30)
-                                    .foregroundStyle(tempoPressed || pitchPressed ? .clear : .gray)
-                            }
-                            .offset(x: -scWidth * 0.55 / 2)
-                            // 앞으로 15초
-                            Button {
-                                HapticManager.instance.impact(style: .light)
-                                player.moveFrame(to: 15.0, spd: self.tempo)
-                            } label: {
-                                Image(systemName: "goforward.15")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 30)
-                                    .foregroundStyle(tempoPressed || pitchPressed ? .clear : .gray)
-                            }
-                            .offset(x: scWidth * 0.55 / 2)
-
-                        }
-                        
-                        //재생 정지 버튼
-                        Button{
-                            audioManager.play()
-                            player.plays()
-                            
-                        } label: {
-                            ZStack{
-                                Circle()
-                                    .foregroundStyle(.white)
-                                    .frame(height: 90)
-                                    .shadow(radius: 8, y: 5)
-                                Image(systemName: player.isplaying ? "pause.fill" : "play.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 40)
-                                    .offset(x: player.isplaying ? 0 : 5)
-                                    .foregroundStyle(.red)
-                            }
-                        }
-                        .padding(.horizontal ,20)
-                    }
-                    HStack{
-                        Spacer()
-                        Button {
-                            audioManager.playClap()
-                        } label: {
-                            Image(systemName: "hands.clap.fill")
-                                .opacity(0.8)
-                                .foregroundStyle(.gray)
-                                .font(.title)
-                        }
-                        Spacer()
-                        Button {
-                            rotateLandscape()
-                        } label: {
-                            Image(systemName: "rectangle.landscape.rotate")
-                                .opacity(0.8)
-                                .foregroundStyle(.gray)
-                                .font(.title)
-                        }
-                        Spacer()
-                        Button {
-                            audioManager.playCrowd()
-                        } label: {
-                            Image(systemName: "person.2.wave.2.fill")
-                                .opacity(0.8)
-                                .foregroundStyle(.gray)
-                                .font(.title)
-                        }
-                        Spacer()
-                    }
-                    .frame(height: 80)
                 }
+            }
+            if scWidth > scHeight && tap {
+                buttons(scLength: scHeight, radius: 0.4)
             }
             // 플레이어 뷰 최소화시 제목 보여줌
             VStack{
@@ -372,12 +223,12 @@ struct VideoPlay: View {
                     HStack{
                         Spacer()
                         Text(self.innertube.info?.videoDetails.title ?? "노래방")
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
                             .padding()
                         Spacer()
                     }
-                    .background(.background)
+                    .background(colorScheme == .dark ? Color(red: 0.13, green: 0.13, blue: 0.13) : Color(red: 0.9412, green: 0.9255, blue: 0.8980))
                     .onTapGesture {
                         self.vidFull.toggle()
                     }
@@ -388,8 +239,175 @@ struct VideoPlay: View {
 }
 //MARK: 뷰
 extension VideoPlay {
+    func buttons(scLength: Double, radius: Double = 0.55) -> some View {
+        VStack{
+            //비디오 상태 표시 줄
+            ZStack(alignment: .leading){
+                Rectangle()
+                    .frame(width: scWidth > scHeight ? scLength*16/9 : scLength, height: 10)
+                    .foregroundColor(.secondary)
+                Rectangle()
+                    .frame(width: player.currents < 0.9 ? 0 : (scWidth > scHeight ? scLength*16/9 : scLength - 15) * player.currents/player.intervals, height: 10)
+                    .foregroundColor(.green)
+                Image(systemName: "rectangle.portrait.fill")
+                    .scaleEffect(1.5)
+                    .frame(width: player.currents < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 : scLength) * player.currents/player.intervals, alignment: .trailing)
+                    .vidSlider(duartion: player.intervals, width: scWidth > scHeight ? scLength*16/9 : scLength, player: player)
+                    .foregroundStyle(.white)
+            }
+            .padding(.top, 4)
+            // 음정 뷰
+            pitchView(scLength: scWidth > scHeight ? scLength*16/9 : scLength)
+            // 템포 숫자 보여줌
+            HStack(spacing: 0){
+                Text("템포: x")
+                Text(String(format: "%.2f", self.tempo))
+            }
+            .foregroundStyle((colorScheme == .light && scWidth < scHeight  ) ? .black : .white)
+            .shadow(color: scWidth < scHeight ? .clear : .black, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+            ZStack{
+                // 휠 누르면 그라데이션으로 변경
+                AngularGradient(
+                    gradient: Gradient(colors: tempoPressed || pitchPressed ? [.white, .red, .blue, .white] : [.white]),
+                    center: .bottom,
+                    angle: .degrees(90))
+                .mask{
+                    Circle()
+                        .stroke(lineWidth: 60)
+                        .frame(width: scLength*radius)
+                        .shadow(radius: 8, y: 5)
+                }
+                .rotationEffect(.degrees(ringAngle))
+                .shadow(radius: 8, y: 5)
+                .frame(
+                    width: scWidth > scHeight ? scLength * 0.55 : scLength,
+                    height: scWidth > scHeight ? scLength * 0.55 : scLength*0.8
+                )
+                // 휠 돌릴 때 생기든 도형
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(width: 10, height: 70)
+                    .foregroundStyle(.white)
+                    .opacity(tempoPressed || pitchPressed ? 1.0 : 0.0)
+                    .offset(y: scLength * radius / 2)
+                    .rotationEffect(.degrees(ringAngle))
+                ZStack{
+                    // 템포 버튼
+                    Text("템포")
+                        .frame(width: 80, height: 40, alignment: .center)
+                        .offset(y: -scLength * radius / 2)
+                        .foregroundStyle(tempoPressed ? .white : .gray)
+                        .opacity(pitchPressed ? 0.0 : 1.0)
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged({ dot in
+                                    tempoPressed = true
+                                    change(location: dot.location)
+                                })
+                                .onEnded({ _ in
+                                    tempoPressed = false
+                                })
+                        )
+                    
+//                            Spacer()
+//                                .frame(height: 160)
+//                                .foregroundStyle(.foreground)
+                    // 음정 버튼
+                    Text("음정")
+                        .frame(width: 80, height: 40, alignment: .center)
+                        .offset(y: scLength * radius / 2)
+                        .foregroundStyle(pitchPressed ? .white : .gray)
+                        .opacity(tempoPressed ? 0.0 : 1.0)
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                            .onChanged({ dot in
+                                pitchPressed = true
+                                change(location: dot.location)
+                            })
+                            .onEnded({ _ in
+                                pitchPressed = false
+                            })
+                        )
+                    // 뒤로 15초
+                    Button {
+                        HapticManager.instance.impact(style: .light)
+                        player.moveFrame(to: -15.0, spd: self.tempo)
+                    } label: {
+                        Image(systemName: "gobackward.15")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 30)
+                            .foregroundStyle(tempoPressed || pitchPressed ? .clear : .gray)
+                    }
+                    .offset(x: -scLength * radius / 2)
+                    // 앞으로 15초
+                    Button {
+                        HapticManager.instance.impact(style: .light)
+                        player.moveFrame(to: 15.0, spd: self.tempo)
+                    } label: {
+                        Image(systemName: "goforward.15")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 30)
+                            .foregroundStyle(tempoPressed || pitchPressed ? .clear : .gray)
+                    }
+                    .offset(x: scLength * radius / 2)
+
+                }
+                
+                //재생 정지 버튼
+                Button{
+                    audioManager.play()
+                    player.plays()
+                    
+                } label: {
+                    ZStack{
+                        Circle()
+                            .foregroundStyle(.white)
+                            .frame(height: 90)
+                            .shadow(radius: 8, y: 5)
+                        Image(systemName: player.isplaying ? "pause.fill" : "play.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 40)
+                            .offset(x: player.isplaying ? 0 : 5)
+                            .foregroundStyle(.red)
+                    }
+                }
+                .padding(.horizontal ,20)
+            }
+            HStack{
+                Spacer()
+                Button {
+                    audioManager.playClap()
+                } label: {
+                    Image(systemName: "hands.clap.fill")
+                        .opacity(0.8)
+                        .font(.title)
+                }
+                Spacer()
+                Button {
+                    rotateLandscape()
+                } label: {
+                    Image(systemName: "rectangle.landscape.rotate")
+                        .opacity(0.8)
+                        .font(.title)
+                }
+                Spacer()
+                Button {
+                    audioManager.playCrowd()
+                } label: {
+                    Image(systemName: "person.2.wave.2.fill")
+                        .opacity(0.8)
+                        .font(.title)
+                }
+                Spacer()
+            }
+            .foregroundStyle((colorScheme == .light && scWidth < scHeight  ) ? .gray : .white)
+                .shadow(color: scWidth < scHeight ? .clear : .black, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+        }
+    }
     // 음정 뷰
-    var pitchView: some View {
+    func pitchView(scLength: Double) -> some View {
         HStack(spacing: 2){
             LinearGradient(colors: [
                 Color.blue,
@@ -415,7 +433,8 @@ extension VideoPlay {
             Text("음정: \(Int(self.tone))")
                 .padding(10)
                 .shadow(radius: 20)
-            
+                .foregroundStyle((colorScheme == .light && scWidth < scHeight  ) ? .black : .white)
+                .shadow(color: scWidth < scHeight ? .clear : .black, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
             LinearGradient(colors: [
                 Color(red: 48 / 255.0, green: 227 / 255.0, blue: 223 / 255.0),
                 Color(red: 249/255, green: 74 / 255.0, blue: 41/255)
@@ -437,7 +456,8 @@ extension VideoPlay {
                 } else {}
             }
             
-        }.frame(width: self.scWidth)
+        }.frame(width: scLength)
+        
     }
 }
 
@@ -450,20 +470,24 @@ extension VideoPlay {
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
                 self.isLandscape = true
+                self.tap = false
             } else {
                 let value = UIInterfaceOrientation.landscapeLeft.rawValue
                 UIDevice.current.setValue(value, forKey: "orientation")
                 self.isLandscape = true
+                self.tap = false
             }
         } else {
             if #available(iOS 16.0, *) {
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
                 self.isLandscape = false
+                self.tap = false
             } else {
                 let value = UIInterfaceOrientation.portrait.rawValue
                 UIDevice.current.setValue(value, forKey: "orientation")
                 self.isLandscape = false
+                self.tap = false
             }
         }
     }
