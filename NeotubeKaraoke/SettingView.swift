@@ -195,24 +195,24 @@ struct SettingView: View {
                         Text("내 노래 점수 보기")
                     }
                     .tint(Color.orange)
-                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
-                        Button {
-                            self.showAlert = false
-                            self.micPermission = false
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
-                            }
-                        } label: {
-                            Text("확인")
-                        }
-                        
-                        Button {
-                            self.showAlert = false
-                            self.micPermission = false
-                        } label: {
-                            Text("취소")
-                        }
-                    }
+//                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
+//                        Button {
+//                            self.showAlert = false
+//                            self.micPermission = false
+//                            if let url = URL(string: UIApplication.openSettingsURLString) {
+//                                UIApplication.shared.open(url)
+//                            }
+//                        } label: {
+//                            Text("확인")
+//                        }
+//                        
+//                        Button {
+//                            self.showAlert = false
+//                            self.micPermission = false
+//                        } label: {
+//                            Text("취소")
+//                        }
+//                    }
                 }
                 
                 

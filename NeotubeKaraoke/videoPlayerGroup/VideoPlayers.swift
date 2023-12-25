@@ -24,7 +24,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
         let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
         return jump
     }
-    weak var audiomanager: AudioManager?
+    var audiomanager: AudioManager?
     
     func plays(){
         if self.player?.timeControlStatus == .playing {
@@ -42,9 +42,13 @@ class VideoPlayers: AVPlayer, ObservableObject {
         self.isplaying = false
     }
     
-    func moveFrame(to: Double) {
+    func moveFrame(to: Double = 15, spd: Float) {
+        //let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
+        //self.audiomanager?.controlFrame(jump: jump + 15)
+        player?.pause()
         player?.seek(to: CMTime(seconds: to, preferredTimescale: 1) + (player?.currentTime())!)
         player?.play()
+        tempo(spd: spd)
     }
     
     func progressSlider(to: Double) {
@@ -90,7 +94,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
         self.player?.currentItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .global(qos: .background), using: { _ in
             if !self.isplaying {
-                self.audiomanager?.pause()
+                //self.audiomanager?.pause()
                 return
             }
             if self.player?.timeControlStatus == .playing {
@@ -117,7 +121,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
                         //                        self.end = false
                         //                    }
                     }
-                    self.audiomanager?.checkVidTime(vidTime: jump)
+                    //self.audiomanager?.checkVidTime(vidTime: jump)
                 }
             }
         })
@@ -167,7 +171,8 @@ class VideoPlayers: AVPlayer, ObservableObject {
                 
             } else if newStatus == .playing {
                 let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
-                print("플레잉",CMTimeGetSeconds( (player?.currentItem!.duration)!))
+                //print("플레잉",CMTimeGetSeconds( (player?.currentItem!.duration)!))
+                print("플레잉", jump)
                 audiomanager?.controlFrame(jump: jump)
                 DispatchQueue.main.async {
                     self.progress = false
@@ -176,7 +181,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
             } else {
                 DispatchQueue.main.async {
                     self.isplaying = false
-                    self.audiomanager?.pause()
+                    //self.audiomanager?.pause()
                 }
             }
         }

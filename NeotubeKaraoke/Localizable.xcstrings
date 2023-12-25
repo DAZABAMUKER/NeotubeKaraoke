@@ -297,6 +297,7 @@
       }
     },
     "마이크 접근을 허용해주세요." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -378,6 +379,9 @@
       }
     },
     "음정" : {
+
+    },
+    "음정: %lld" : {
 
     },
     "응원 멘트를 입력해주세요" : {

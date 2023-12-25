@@ -166,7 +166,8 @@ class AudioManager: ObservableObject {
     }
     
     public func controlFrame(jump: Double) {
-        print(jump)
+        print("오디오",jump)
+        playerNode.pause()
         let jump = jump + self.vidSync
         guard let audioFile = audioFile else { print("오디오 파일 에러"); return }
         let frameLocaition = AVAudioFramePosition(jump * audioFile.processingFormat.sampleRate)
@@ -181,9 +182,12 @@ class AudioManager: ObservableObject {
         if !(numberFrames > 0) {
             numberFrames =  1
         }
-        playerNode.scheduleSegment(audioFile, startingFrame: jumpFrame, frameCount: numberFrames, at: nil)
+        playerNode.scheduleSegment(audioFile, startingFrame: jumpFrame, frameCount: numberFrames, at: nil) {
+            print("did well")
+        }
         
         playerNode.play()
+        print("played")
     }
     
     func playClap() {

@@ -244,7 +244,7 @@ struct searcher: View{
                                     .padding(.top, -geometry.safeAreaInsets.top)
                                     .shadow(radius: 5)
                             } else {
-                                Color.white
+                                Color(red: 0.9412, green: 0.9255, blue: 0.8980)
                                     .edgesIgnoringSafeArea(.horizontal)
                                     .frame(width: geometry.size.width)
                                     .padding(.top, -geometry.safeAreaInsets.top)

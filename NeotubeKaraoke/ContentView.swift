@@ -304,7 +304,7 @@ struct ContentView: View {
                     Circle()
                         .frame(width: 100)
                         .offset(x: self.CircleOffset(tabIndex: tabIndex, geometry: geometry), y: 25)
-                        .foregroundColor(colorResult(light: .white, dark: Color(red: 0.13, green: 0.13, blue: 0.13)))
+                        .foregroundColor(colorResult(light: Color(red: 0.9412, green: 0.9255, blue: 0.8980), dark: Color(red: 0.13, green: 0.13, blue: 0.13)))
                         .animation(.easeInOut(duration: 0.25), value: self.tabIndex)
                         .shadow(radius: 5)
                     HStack(spacing: 0) {
@@ -323,7 +323,7 @@ struct ContentView: View {
                                 .preferredColorScheme(colorSchemeOfSystem == "dark" ? .dark : .light)
                         }
                     }
-                    .background(self.colorScheme == .light ? .white : Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
+                    .background(self.colorScheme == .light ? Color(red: 0.9412, green: 0.9255, blue: 0.8980) : Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))
                     
                 }
 //                VStack{
