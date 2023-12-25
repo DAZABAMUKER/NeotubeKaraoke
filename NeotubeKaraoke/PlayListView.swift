@@ -200,12 +200,12 @@ struct PlayListView: View {
                                         .lineLimit(2)
                                         .frame(width: 160)
                                         .multilineTextAlignment(.center)
-                                        .foregroundStyle(.black)
+                                        .foregroundStyle(.foreground)
                                         .padding(.bottom, 10)
                                 }
                                 .background {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .foregroundStyle(.foreground)
+                                        .foregroundStyle(colorResult(light: .white, dark: .secondary.opacity(0.2)))
                                         .shadow(color: .secondary,radius: 5, x: 0, y: 5)
                                 }
                                 .padding(.bottom)
@@ -246,8 +246,7 @@ struct PlayListView: View {
                                                         .frame(width: heights/9*8, height: heights)
                                                         .padding(5)
                                                         .foregroundColor(Color.white)
-                                                }.frame(height: 90)
-                                                    .padding(.leading,7)
+                                                }
                                             }
                                             Text(recent.title)
                                                 .bold()

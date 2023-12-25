@@ -244,20 +244,26 @@ extension VideoPlay {
             //비디오 상태 표시 줄
             ZStack(alignment: .leading){
                 Rectangle()
-                    .frame(width: scWidth > scHeight ? scLength*16/9 : scLength, height: 10)
+                    .frame(width: scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth : scLength*16/9 : scLength, height: 10)
                     .foregroundColor(.secondary)
                 Rectangle()
-                    .frame(width: player.currents < 0.9 ? 0 : (scWidth > scHeight ? scLength*16/9 : scLength - 15) * player.currents/player.intervals, height: 10)
+                    .frame(
+                        width: player.currents < 0.9 ? 0 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength - 15) * player.currents/player.intervals,
+                        height: 10
+                    )
                     .foregroundColor(.green)
                 Image(systemName: "rectangle.portrait.fill")
                     .scaleEffect(1.5)
-                    .frame(width: player.currents < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 : scLength) * player.currents/player.intervals, alignment: .trailing)
-                    .vidSlider(duartion: player.intervals, width: scWidth > scHeight ? scLength*16/9 : scLength, player: player)
+                    .frame(
+                        width: player.currents < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength) * player.currents/player.intervals,
+                        alignment: .trailing
+                    )
+                    .vidSlider(duartion: player.intervals, width: scWidth > scHeight ?scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength, player: player)
                     .foregroundStyle(.white)
             }
             .padding(.top, 4)
             // 음정 뷰
-            pitchView(scLength: scWidth > scHeight ? scLength*16/9 : scLength)
+            pitchView(scLength: scWidth > scHeight ?scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength)
             // 템포 숫자 보여줌
             HStack(spacing: 0){
                 Text("템포: x")
