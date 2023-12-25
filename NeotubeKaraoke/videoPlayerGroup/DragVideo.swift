@@ -11,6 +11,7 @@ import SwiftUI
 struct DragVideo: ViewModifier {
     
     @Binding var vidFull: Bool
+    @Binding var tap: Bool
     
     public func body(content: Content) -> some View {
         content
@@ -21,6 +22,7 @@ struct DragVideo: ViewModifier {
                 .onEnded({ gesture in
                     if gesture.location.y > 150 {
                         self.vidFull.toggle()
+                        self.tap = false
                     }
                 })
             )
@@ -28,7 +30,7 @@ struct DragVideo: ViewModifier {
 }
 
 extension View {
-    func DragVid(vidFull: Binding<Bool>) -> some View {
-        self.modifier(DragVideo(vidFull: vidFull))
+    func DragVid(vidFull: Binding<Bool>, tap: Binding<Bool>) -> some View {
+        self.modifier(DragVideo(vidFull: vidFull, tap: tap))
     }
 }

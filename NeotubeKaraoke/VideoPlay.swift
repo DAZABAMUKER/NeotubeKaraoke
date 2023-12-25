@@ -176,7 +176,7 @@ struct VideoPlay: View {
                         Spacer()
                     }
                     //.background(.background)
-                    .DragVid(vidFull: $vidFull)
+                    .DragVid(vidFull: $vidFull, tap: $tap)
                     .onTapGesture {
                         self.vidFull.toggle()
                     }
@@ -185,7 +185,7 @@ struct VideoPlay: View {
                 if isAppear{
                     //AVPlayer 아이템 준비 완료 시 뷰 그림
                     PlayerViewController(player: player.player ?? AVPlayer())
-                        .DragVid(vidFull: $vidFull)
+                        .DragVid(vidFull: $vidFull, tap: $tap)
                         .ignoresSafeArea(.container)
                         .onAppear(){
                             player.player?.play()
@@ -204,13 +204,14 @@ struct VideoPlay: View {
                 } else {
                     //AVPlayer 준비 전 사각형 하나 그려줌(플레이어로 속이는 용도)
                     Rectangle()
-                        .DragVid(vidFull: $vidFull)
+                        .DragVid(vidFull: $vidFull, tap: $tap)
                         .foregroundStyle(.black)
                 }
                 if scWidth < scHeight && vidFull { // 화면 세로 모드 및 플레이어 뷰 전체 화면일 경우
-                    buttons(scLength: scWidth)
+                    buttons(scLength: scWidth, radius: scWidth/scHeight > 0.5 ? 0.38 : 0.55)
                         .onAppear(){
                             tap = false
+                            print("화면비", scWidth/scHeight)
                         }
                 }
             }
@@ -279,15 +280,15 @@ extension VideoPlay {
                     angle: .degrees(90))
                 .mask{
                     Circle()
-                        .stroke(lineWidth: 60)
+                        .stroke(lineWidth: (0.6 > scWidth/scHeight && scWidth/scHeight > 0.5) ? 40 : 60)
                         .frame(width: scLength*radius)
                         .shadow(radius: 8, y: 5)
                 }
                 .rotationEffect(.degrees(ringAngle))
                 .shadow(radius: 8, y: 5)
                 .frame(
-                    width: scWidth > scHeight ? scLength * 0.55 : scLength,
-                    height: scWidth > scHeight ? scLength * 0.55 : scLength*0.8
+                    width: scWidth > scHeight ? scLength * 0.55 : scWidth/scHeight > 0.5 ? scLength * 0.55 : scLength,
+                    height: scWidth > scHeight ? scLength * 0.55 : scWidth/scHeight > 0.5 ? scLength * 0.55 : scLength * 0.8
                 )
                 // 휠 돌릴 때 생기든 도형
                 RoundedRectangle(cornerRadius: 10)
@@ -369,7 +370,7 @@ extension VideoPlay {
                     ZStack{
                         Circle()
                             .foregroundStyle(.white)
-                            .frame(height: 90)
+                            .frame(height: (0.6 > scWidth/scHeight && scWidth/scHeight > 0.5) ? 70 : 90)
                             .shadow(radius: 8, y: 5)
                         Image(systemName: player.isplaying ? "pause.fill" : "play.fill")
                             .resizable()

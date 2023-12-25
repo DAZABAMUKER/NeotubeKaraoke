@@ -198,13 +198,16 @@ struct searcher: View{
                                 .onAppear(){
                                     openRecent()
                                 }
+                                .fullScreenCover(isPresented: $showCheer) {
+                                    cheerView
+                                }
                             }
-                            .sheet(isPresented: $showCheer) {
-                                cheerView
-                                    .onAppear(){
-                                        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "Searcher View")
-                                    }
-                            }
+//                            .sheet(isPresented: $showCheer) {
+//                                cheerView
+//                                    .onAppear(){
+//                                        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "Searcher View")
+//                                    }
+//                            }
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
@@ -503,6 +506,14 @@ extension searcher {
                     .frame(height: !isLandscape ? 50 : 10)
             }
         }
+        .gesture(
+        DragGesture()
+            .onEnded({ gesture in
+                if gesture.location.y > 150 {
+                    self.showCheer = false
+                }
+            })
+        )
     }
 }
 
