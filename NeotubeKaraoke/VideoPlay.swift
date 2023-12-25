@@ -12,9 +12,10 @@ import UIKit
 
 struct VideoPlay: View {
     //MARK: - 변수들
-    @Environment(\.dismiss) private var dismiss
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
+    @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
+    @AppStorage("colorSchemeOfSystem") var colorSchemeOfSystem: String = "light"
     @EnvironmentObject var envPlayer: EnvPlayer
     
     @State var isiPad = false
@@ -93,6 +94,11 @@ struct VideoPlay: View {
     @State var pitchPressed = false
     @State var tempoPressed = false
     @State var ringAngle: Double = 0.0
+    
+//    @Binding var colorMode: String
+//    @Binding var colorSchemeOfSystem: ColorScheme
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
     
     //MARK: - 뷰 바디 여기 있음
     /*var body: some View {
@@ -750,6 +756,16 @@ struct VideoPlay: View {
             // 화면 크기 파악
             GeometryReader{ geometry in
                 ZStack{
+                    if colorMode == "dark" {
+                        Spacer()
+                            .preferredColorScheme(.dark)
+                    } else if colorMode == "light" {
+                        Spacer()
+                            .preferredColorScheme(.light)
+                    } else {
+                        Spacer()
+                            .preferredColorScheme(colorSchemeOfSystem == "dark" ? .dark : .light)
+                    }
                     Spacer()
                 }.onAppear() {
                     self.scHeight = geometry.size.height
@@ -771,7 +787,7 @@ struct VideoPlay: View {
             }
             
             .ignoresSafeArea(.all)
-            .background(Color(red: 0.13, green: 0.13, blue: 0.13))
+            .background(colorScheme == .dark ? Color(red: 0.13, green: 0.13, blue: 0.13) : Color(red: 0.9412, green: 0.9255, blue: 0.8980))
 //            .background(Color(red: 0.9412, green: 0.9255, blue: 0.8980))
             .brightness(-0.02)
             VStack(spacing: 0.0){
@@ -790,12 +806,13 @@ struct VideoPlay: View {
                     }
                 }
                 PlayerViewController(player: player.player ?? AVPlayer())
+                    //.preferredColorScheme(colorScheme)
 //                    .frame(
 //                        height: scHeight > scWidth ? scWidth * 9 / 16 : scHeight
 //                        
 //                    )
                     //.opacity(0.0)
-                    //.border(Color.red)
+                    .border(Color.red)
                     .ignoresSafeArea(.container)
                 if scWidth < scHeight {
                     

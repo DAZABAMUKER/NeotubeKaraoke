@@ -20,7 +20,8 @@ enum TabIndex {
 struct ContentView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
-    
+    @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
+    @AppStorage("colorSchemeOfSystem") var colorSchemeOfSystem: String = "light"
     @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var envPlayer: EnvPlayer
@@ -49,8 +50,9 @@ struct ContentView: View {
     @State var addVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var nowVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var isNewitem = false
-    @State var colorMode = "auto"
-    @State var colorSchemeOfSystem: ColorScheme = .dark
+    
+    //@State var colorMode = "auto"
+//    @State var colorSchemeOfSystem: ColorScheme = .dark
     //@State var restartApp = false
     //@State var connectedPeers = [MCPeerID]()
     
@@ -75,7 +77,7 @@ struct ContentView: View {
     
     func colorResult(light: Color, dark: Color) -> Color {
         if self.colorMode == "auto" {
-            if colorSchemeOfSystem == .dark {
+            if colorSchemeOfSystem == "dark" {
                 return dark
             } else {
                 return light
@@ -178,9 +180,9 @@ struct ContentView: View {
                         .environmentObject(self.purchaseManager)
                         .environmentObject(self.entitlementManager)
                         .tag(TabIndex.Home)
-                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo, colorMode: $colorMode, colorSchemeOfSystem: $colorSchemeOfSystem)
+                    PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
                         .tag(TabIndex.PlayList)
-                    SettingView(resolution: $resolution, isLandscape: $isLandscape, colorMode: $colorMode)
+                    SettingView(resolution: $resolution, isLandscape: $isLandscape)
                         .tag(TabIndex.Setting)
                         .environmentObject(self.purchaseManager)
                         .environmentObject(self.entitlementManager)
@@ -190,7 +192,7 @@ struct ContentView: View {
                         .tag(TabIndex.peer)
                 }
                 .onAppear(){
-                    self.colorSchemeOfSystem = self.colorScheme
+                    self.colorSchemeOfSystem = self.colorScheme == .dark ? "dark" : "light"
                 }
                 .onChange(of: self.nowPlayList) { [nowPlayList] newValue in
                     //print(newValue.last, self.nowVideo, nowPlayList.last)
@@ -318,7 +320,7 @@ struct ContentView: View {
                                 .preferredColorScheme(.light)
                         } else {
                             TabButtonSel(tabIndex: .Setting, img: "gear", geometry: geometry)
-                                .preferredColorScheme(self.colorSchemeOfSystem)
+                                .preferredColorScheme(colorSchemeOfSystem == "dark" ? .dark : .light)
                         }
                     }
                     .background(self.colorScheme == .light ? .white : Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)))

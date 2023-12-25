@@ -24,6 +24,7 @@ struct SettingView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
     @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
+    @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
     
     @State var showAlert = false
     @State var sheet = false
@@ -39,7 +40,6 @@ struct SettingView: View {
     private let pasteboard = UIPasteboard.general
     
     //@Environment(\.colorScheme) var colorschome
-    @Binding var colorMode: String
 //    @Binding var colorSchemeOfSystem: ColorScheme
     
     

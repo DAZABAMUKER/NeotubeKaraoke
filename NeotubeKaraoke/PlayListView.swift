@@ -10,6 +10,9 @@ import SwiftUI
 struct PlayListView: View {
     
     //MARK: - PlayListView 변수
+    @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
+    @AppStorage("colorSchemeOfSystem") var colorSchemeOfSystem: String = "light"
+    
     @State var PLAppear: Bool = false
     @State var plusPlayList: Bool = false
     @State var pTitle: String = ""
@@ -30,13 +33,11 @@ struct PlayListView: View {
     @Binding var score: Int
     @Binding var recent: [LikeVideo]
     @Binding var nowVideo: LikeVideo
-    @Binding var colorMode: String
-    @Binding var colorSchemeOfSystem: ColorScheme
     let heights = 100.0
     
     func colorResult(light: Color, dark: Color) -> Color {
         if self.colorMode == "auto" {
-            if colorSchemeOfSystem == .dark {
+            if colorSchemeOfSystem == "dark" {
                 return dark
             } else {
                 return light
