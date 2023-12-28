@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDisplayName</key>
+	<string>너튜브 노래방</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7240659336832390~9495342297</string>
 	<key>ITSAppUsesNonExemptEncryption</key>

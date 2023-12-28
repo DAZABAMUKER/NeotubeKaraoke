@@ -72,6 +72,7 @@
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
 		03D77A2F2935D4E80037061E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2E2935D4E80037061E /* Video.swift */; };
 		03E30DFC2B388C64003EBC6B /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E30DFB2B388C64003EBC6B /* HapticManager.swift */; };
+		03E399DE2B3D9E4A005879FB /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 03E399DD2B3D9E4A005879FB /* InfoPlist.xcstrings */; };
 		03F36CC12963DE61001AEB7A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F36CC02963DE61001AEB7A /* Models.swift */; };
 		03F9189B2A71ED0D003115A1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F9189A2A71ED0D003115A1 /* StoreKit.framework */; };
 		17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE89BAF0DF7E389A8CEFD15 /* Pods_NeotubeKaraoke.framework */; };
@@ -138,6 +139,7 @@
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		03D77A2E2935D4E80037061E /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		03E30DFB2B388C64003EBC6B /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		03E399DD2B3D9E4A005879FB /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		03F36CC02963DE61001AEB7A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		03F9189A2A71ED0D003115A1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		33DD4112FD9FB9295E643CD6 /* Pods-NeotubeKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeotubeKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NeotubeKaraoke/Pods-NeotubeKaraoke.release.xcconfig"; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				03962DD5291F781500A376F3 /* Assets.xcassets */,
 				03962DDA291F781500A376F3 /* Persistence.swift */,
 				03962DDF291F781500A376F3 /* Info.plist */,
+				03E399DD2B3D9E4A005879FB /* InfoPlist.xcstrings */,
 				03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */,
 				03962DD7291F781500A376F3 /* Preview Content */,
 				03962DED2921C80500A376F3 /* ContentView.swift */,
@@ -440,6 +443,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03E399DE2B3D9E4A005879FB /* InfoPlist.xcstrings in Resources */,
 				037D082029B719BC0069ED88 /* me.PNG in Resources */,
 				036658EF2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit in Resources */,
 				03A0A1C92A1481A8000C5159 /* GoogleService-Info.plist in Resources */,
@@ -744,6 +748,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NeotubeKaraoke/Info.plist;
+				"INFOPLIST_KEY_CFBundleDisplayName[sdk=*]" = "너튜브 노래방";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Needed for connecting devicces to reservation.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This is need for karaoke scoring.";

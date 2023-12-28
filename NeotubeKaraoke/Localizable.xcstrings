@@ -29,13 +29,34 @@
 
     },
     "Auto" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
+          }
+        }
+      }
     },
     "Back" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        }
+      }
     },
     "Basic" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basic"
+          }
+        }
+      }
     },
     "Basic이 아닌 1080 이상의 해상도를 선택할 경우 로딩 시간이 늘어날 수 있습니다." : {
       "extractionState" : "stale",
@@ -139,7 +160,14 @@
       }
     },
     "개발자 포트폴리오" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer Portfolio"
+          }
+        }
+      }
     },
     "개발자에게 질문이 있거나 요청이 있으시면 프로필의 이메일을 통하거나 블로그를 통해 연락하십시오." : {
       "extractionState" : "stale",
@@ -254,7 +282,14 @@
       }
     },
     "너튜브 노래방 사용법" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to use this app"
+          }
+        }
+      }
     },
     "노래방 곡번호 검색" : {
       "localizations" : {
@@ -267,16 +302,44 @@
       }
     },
     "노래방에서 사용가능한 기능" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App feature for Karaoke"
+          }
+        }
+      }
     },
     "다른 애플기기에 예약하기" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserve for another Apple Device"
+          }
+        }
+      }
     },
     "다크모드" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darkmode"
+          }
+        }
+      }
     },
     "닫기" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "디바이스 연결" : {
       "localizations" : {
@@ -299,7 +362,14 @@
       }
     },
     "라이트모드" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lightmode"
+          }
+        }
+      }
     },
     "로딩중이에요. 잠시만 기다려주세요." : {
       "localizations" : {
@@ -323,6 +393,17 @@
       }
     },
     "문의 하기" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ask"
+          }
+        }
+      }
+    },
+    "문의하기" : {
 
     },
     "생성된 재생목록" : {
@@ -347,7 +428,14 @@
       }
     },
     "앱 버전" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Version"
+          }
+        }
+      }
     },
     "앱 사용법" : {
       "localizations" : {
@@ -360,7 +448,14 @@
       }
     },
     "앱 사용법 보러가기" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Tutorial"
+          }
+        }
+      }
     },
     "에약되었습니다." : {
       "localizations" : {
@@ -393,10 +488,24 @@
       }
     },
     "음정" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pitch"
+          }
+        }
+      }
     },
     "음정: %lld" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pirch: %lld"
+          }
+        }
+      }
     },
     "응원 멘트를 입력해주세요" : {
       "localizations" : {
@@ -491,7 +600,14 @@
       }
     },
     "최근 재생 영상이 여기 표시됩니다." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Video will be here"
+          }
+        }
+      }
     },
     "최근 플레이리스트" : {
       "localizations" : {
@@ -535,7 +651,14 @@
       }
     },
     "카카오톡 ID:" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kakaotkal ID:"
+          }
+        }
+      }
     },
     "카카오톡 아이디" : {
       "extractionState" : "stale",
@@ -569,7 +692,14 @@
       }
     },
     "템포 및 음정 조작법" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to control Pitch & Tempo"
+          }
+        }
+      }
     },
     "템포: x" : {
       "localizations" : {

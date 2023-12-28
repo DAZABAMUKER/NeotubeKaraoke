@@ -234,7 +234,7 @@ struct SettingView: View {
                         Button{
                             self.profile = true
                         } label: {
-                            Text("문의 하기")
+                            Text("문의하기")
                             //.foregroundStyle(.orange)
                         }
                         .sheet(isPresented: $profile) {
