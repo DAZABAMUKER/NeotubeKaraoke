@@ -52,6 +52,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
     }
     
     func progressSlider(to: Double) {
+        player?.pause()
         player?.seek(to: CMTime(seconds: to, preferredTimescale: 1))
         player?.play()
     }

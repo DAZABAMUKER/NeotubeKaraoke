@@ -46,185 +46,186 @@ struct SettingView: View {
     
     
     var body: some View {
-        VStack{
-            if self.micPermission {
-                VStack{}.onAppear(){
-                    AVAudioSession.sharedInstance().requestRecordPermission { (status) in
-                        if !status {
-                            self.micPermission = false
-                            self.showAlert = true
-                        } else {
-                            self.micPermission = true
+        NavigationStack{
+            VStack{
+                if self.micPermission {
+                    VStack{}.onAppear(){
+                        AVAudioSession.sharedInstance().requestRecordPermission { (status) in
+                            if !status {
+                                self.micPermission = false
+                                self.showAlert = true
+                            } else {
+                                self.micPermission = true
+                            }
                         }
                     }
                 }
-            }
-            
-            if !entitlementManager.hasPro {
-                BannerAd()
-                    .frame(height: 60)
-            }
-            List{
-                Section {
-                    VStack{
-                        if entitlementManager.hasPro {
-                            Text("헉!! 감동이에요! 🥰")
-                                .font(.title3)
-                            Button {
-                                self.refund = true
-                            } label: {
-                                HStack{
-                                    Spacer()
-                                    Image(systemName: "shippingbox.and.arrow.backward.fill")
-                                    Text("환불하기")
-                                    Spacer()
-                                }
-                                .foregroundColor(.white)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .strokeBorder(lineWidth: 3)
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 50)
-                                        .padding(.vertical, -10)
-                                }
-                                .padding(5)
-                            }
-                            .sheet(isPresented: $refund) {
-                                MakeRefund(products: purchaseManager.products)
-                            }
-                        } else {
-                            ForEach(purchaseManager.products) { product in
+                
+                if !entitlementManager.hasPro {
+                    BannerAd()
+                        .frame(height: 60)
+                }
+                List{
+                    Section {
+                        VStack{
+                            if entitlementManager.hasPro {
+                                Text("헉!! 감동이에요! 🥰")
+                                    .font(.title3)
                                 Button {
-                                    Task{
-                                        do {
-                                            try await purchaseManager.purchase(product)
-                                        }
-                                        catch {
-                                            print(#function, error)
-                                        }
-                                    }
-                                } label: {
-                                    if purchaseManager.products.isEmpty {
-                                        Text("로딩중이에요. 잠시만 기다려주세요.")
-                                    } else {
-                                        HStack{
-                                            Image(systemName: "video.slash.fill")
-                                            //.foregroundColor(.white)
-                                            Text(product.displayName)
-                                            //.foregroundColor(.white)
-                                            Spacer()
-                                            HStack{
-                                                Text(product.displayPrice)
-                                                //.foregroundColor(.white)
-                                            }
-                                            .padding(5)
-                                            .padding(.horizontal, 10)
-                                            .background {
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .strokeBorder(lineWidth: 2)
-                                                //.foregroundColor(.white)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            HStack{
-                                Image(systemName: "checkmark.circle")
-                                Text("구매 복원하기")
-                                Spacer()
-                                Button {
-                                    Task{
-                                        do {
-                                            try await AppStore.sync()
-                                        }
-                                        catch {
-                                            print("구매복원 오류: ", error)
-                                        }
-                                    }
+                                    self.refund = true
                                 } label: {
                                     HStack{
-                                        Image(systemName: "cart.fill")
-                                        Text("구매 복원하기")
+                                        Spacer()
+                                        Image(systemName: "shippingbox.and.arrow.backward.fill")
+                                        Text("환불하기")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.white)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .strokeBorder(lineWidth: 3)
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 50)
+                                            .padding(.vertical, -10)
                                     }
                                     .padding(5)
-                                    .padding(.horizontal, 10)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .strokeBorder(lineWidth: 2)
-                                        //.foregroundColor(.white)
+                                }
+                                .sheet(isPresented: $refund) {
+                                    MakeRefund(products: purchaseManager.products)
+                                }
+                            } else {
+                                ForEach(purchaseManager.products) { product in
+                                    Button {
+                                        Task{
+                                            do {
+                                                try await purchaseManager.purchase(product)
+                                            }
+                                            catch {
+                                                print(#function, error)
+                                            }
+                                        }
+                                    } label: {
+                                        if purchaseManager.products.isEmpty {
+                                            Text("로딩중이에요. 잠시만 기다려주세요.")
+                                        } else {
+                                            HStack{
+                                                Image(systemName: "video.slash.fill")
+                                                //.foregroundColor(.white)
+                                                Text(product.displayName)
+                                                //.foregroundColor(.white)
+                                                Spacer()
+                                                HStack{
+                                                    Text(product.displayPrice)
+                                                    //.foregroundColor(.white)
+                                                }
+                                                .padding(5)
+                                                .padding(.horizontal, 10)
+                                                .background {
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .strokeBorder(lineWidth: 2)
+                                                    //.foregroundColor(.white)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                HStack{
+                                    Image(systemName: "checkmark.circle")
+                                    Text("구매 복원하기")
+                                    Spacer()
+                                    Button {
+                                        Task{
+                                            do {
+                                                try await AppStore.sync()
+                                            }
+                                            catch {
+                                                print("구매복원 오류: ", error)
+                                            }
+                                        }
+                                    } label: {
+                                        HStack{
+                                            Image(systemName: "cart.fill")
+                                            Text("구매 복원하기")
+                                        }
+                                        .padding(5)
+                                        .padding(.horizontal, 10)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .strokeBorder(lineWidth: 2)
+                                            //.foregroundColor(.white)
+                                        }
                                     }
                                 }
                             }
+                        }.task {
+                            do {
+                                try await purchaseManager.loadProducts()
+                            }
+                            catch {
+                                print("Loading Store Info error: ", error)
+                            }
                         }
-                    }.task {
-                        do {
-                            try await purchaseManager.loadProducts()
+                    } header: {
+                        Text("광고 제거하기")
+                    }
+                    VStack {
+                        Picker("해상도 선택", selection: $resolution) {
+                            Text("Low").tag(Resolution.low)
+                            Text("Basic").tag(Resolution.basic)
+                            Text("1080").tag(Resolution.high)
+                            Text("1080+").tag(Resolution.ultra)
                         }
-                        catch {
-                            print("Loading Store Info error: ", error)
+                        .pickerStyle(.menu)
+                        .tint(Color.orange)
+                        Picker("영상 건너뛰기 시간 선택", selection: $goBackTime) {
+                            Text("5s").tag(5.0)
+                            Text("15s").tag(15.0)
+                            Text("30s").tag(30.0)
+                            Text("60s").tag(60.0)
                         }
+                        .pickerStyle(.menu)
+                        .tint(Color.orange)
+                        Picker("다크모드", selection: $colorMode) {
+                            Text("다크모드").tag("dark")
+                            Text("라이트모드").tag("light")
+                            Text("Auto").tag("auto")
+                        }
+                        .pickerStyle(.menu)
+                        .tint(Color.orange)
+                        Toggle(isOn: $micPermission) {
+                            Text("내 노래 점수 보기")
+                        }
+                        .tint(Color.orange)
+                        //                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
+                        //                        Button {
+                        //                            self.showAlert = false
+                        //                            self.micPermission = false
+                        //                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                        //                                UIApplication.shared.open(url)
+                        //                            }
+                        //                        } label: {
+                        //                            Text("확인")
+                        //                        }
+                        //                        
+                        //                        Button {
+                        //                            self.showAlert = false
+                        //                            self.micPermission = false
+                        //                        } label: {
+                        //                            Text("취소")
+                        //                        }
+                        //                    }
                     }
-                } header: {
-                    Text("광고 제거하기")
-                }
-                VStack {
-                    Picker("해상도 선택", selection: $resolution) {
-                        Text("Low").tag(Resolution.low)
-                        Text("Basic").tag(Resolution.basic)
-                        Text("1080").tag(Resolution.high)
-                        Text("1080+").tag(Resolution.ultra)
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.orange)
-                    Picker("영상 건너뛰기 시간 선택", selection: $goBackTime) {
-                        Text("5s").tag(5.0)
-                        Text("15s").tag(15.0)
-                        Text("30s").tag(30.0)
-                        Text("60s").tag(60.0)
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.orange)
-                    Picker("다크모드", selection: $colorMode) {
-                        Text("다크모드").tag("dark")
-                        Text("라이트모드").tag("light")
-                        Text("Auto").tag("auto")
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.orange)
-                    Toggle(isOn: $micPermission) {
-                        Text("내 노래 점수 보기")
-                    }
-                    .tint(Color.orange)
-//                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
-//                        Button {
-//                            self.showAlert = false
-//                            self.micPermission = false
-//                            if let url = URL(string: UIApplication.openSettingsURLString) {
-//                                UIApplication.shared.open(url)
-//                            }
-//                        } label: {
-//                            Text("확인")
-//                        }
-//                        
-//                        Button {
-//                            self.showAlert = false
-//                            self.micPermission = false
-//                        } label: {
-//                            Text("취소")
-//                        }
-//                    }
-                }
-                
-                
-                
-                Section{
-                    //                        Button {
-                    //                            self.showCheer.toggle()
-                    //                        } label: {
-                    //                            Text(self.cheer)
-                    //                        }
-                    //                        
-                    VStack(alignment: .leading, spacing: 10){
+                    
+                    
+                    
+                    Section{
+                        //                        Button {
+                        //                            self.showCheer.toggle()
+                        //                        } label: {
+                        //                            Text(self.cheer)
+                        //                        }
+                        //                        
+                        //VStack(alignment: .leading, spacing: 20){
                         HStack{
                             Text("앱 버전")
                             Spacer()
@@ -234,28 +235,27 @@ struct SettingView: View {
                             self.profile = true
                         } label: {
                             Text("문의 하기")
-                                //.foregroundStyle(.orange)
+                            //.foregroundStyle(.orange)
                         }
                         .sheet(isPresented: $profile) {
                             profileView
                                 .presentationDetents([.medium])
                                 .presentationDragIndicator(.visible)
                         }
-                        Button {
-                            
-                        } label: {
-                            Text("앱 사용 법")
-                                //.foregroundStyle(.orange)
+                        NavigationLink("앱 사용법") {
+                            ManualList()
                         }
                         
+                        //}
+                    } header: {
+                        Text("Contact")
                     }
-                } header: {
-                    Text("Contact")
                 }
+                .listStyle(.plain)
             }
-            .listStyle(.plain)
         }
     }
+    
     var profileView: some View {
         VStack(spacing: 10){
             Image("me")

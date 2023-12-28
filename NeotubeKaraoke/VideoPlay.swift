@@ -259,7 +259,8 @@ extension VideoPlay {
                         width: player.currents < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength) * player.currents/player.intervals,
                         alignment: .trailing
                     )
-                    .vidSlider(duartion: player.intervals, width: scWidth > scHeight ?scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength, player: player)
+                    .vidSlider(duartion: player.intervals, 
+                               width: scWidth > scHeight ? (scLength*16/9 > scWidth ? scWidth :  scLength*16/9) : scLength, player: player)
                     .foregroundStyle(.white)
             }
             .padding(.top, 4)

@@ -21,6 +21,7 @@
 		035657FD29E8286D000227D9 /* ExternalDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035657FC29E8286D000227D9 /* ExternalDisplay.swift */; };
 		0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0356F76C29A496F40005EE2D /* downloadManager.swift */; };
 		035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 035BF63929DDBDD00010398B /* ArgumentParser */; };
+		0361D55E2B39CA5C009C2C42 /* ManualView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0361D55D2B39CA5C009C2C42 /* ManualView.swift */; };
 		036658EF2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 036658EE2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit */; };
 		036658F12A6525E9001C5BB9 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036658F02A6525E9001C5BB9 /* PurchaseManager.swift */; };
 		0369980129D1CCBE00656D28 /* crowd.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0369980029D1CCBE00656D28 /* crowd.wav */; };
@@ -90,6 +91,7 @@
 		034EF0212AFDF0D10085188C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/Localizables.strings; sourceTree = "<group>"; };
 		035657FC29E8286D000227D9 /* ExternalDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalDisplay.swift; sourceTree = "<group>"; };
 		0356F76C29A496F40005EE2D /* downloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = downloadManager.swift; sourceTree = "<group>"; };
+		0361D55D2B39CA5C009C2C42 /* ManualView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualView.swift; sourceTree = "<group>"; };
 		036658EE2A651ADB001C5BB9 /* NeotubeKaraokeStoreKitConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; name = NeotubeKaraokeStoreKitConfiguration.storekit; path = NeotubeKaraoke/NeotubeKaraokeStoreKitConfiguration.storekit; sourceTree = "<group>"; };
 		036658F02A6525E9001C5BB9 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		0369980029D1CCBE00656D28 /* crowd.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = crowd.wav; sourceTree = "<group>"; };
@@ -285,8 +287,8 @@
 				038B76E529EFE5150016522A /* TopChart.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
-				03E30DFB2B388C64003EBC6B /* HapticManager.swift */,
 				037A998B2A02B0BB00A05065 /* FindingView.swift */,
+				0361D55D2B39CA5C009C2C42 /* ManualView.swift */,
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
 				034EF01A2AFDD4C10085188C /* Localizable.xcstrings */,
 				036658F02A6525E9001C5BB9 /* PurchaseManager.swift */,
@@ -327,6 +329,7 @@
 		03F6F2B529AE18E700A4F9DE /* videoPlayerGroup */ = {
 			isa = PBXGroup;
 			children = (
+				03E30DFB2B388C64003EBC6B /* HapticManager.swift */,
 				0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */,
 				036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */,
 				034744352999DFF800F2EBEE /* AudioManager.swift */,
@@ -533,6 +536,7 @@
 				033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */,
 				032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */,
 				037D081A29B580290069ED88 /* DragVideo.swift in Sources */,
+				0361D55E2B39CA5C009C2C42 /* ManualView.swift in Sources */,
 				03E30DFC2B388C64003EBC6B /* HapticManager.swift in Sources */,
 				037A998E2A02B0EB00A05065 /* ConnectPeer.swift in Sources */,
 				036658F12A6525E9001C5BB9 /* PurchaseManager.swift in Sources */,
@@ -712,7 +716,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.2.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -750,7 +754,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.2.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";

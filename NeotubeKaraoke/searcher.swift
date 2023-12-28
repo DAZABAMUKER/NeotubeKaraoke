@@ -287,18 +287,17 @@ struct searcher: View{
                                 } label: {
                                     Text("영상 공유하기")
                                 }
-                                .listRowBackground(Color.black.opacity(0.5))
+                                //.listRowBackground(Color.black.opacity(0.5))
                                 Button {
                                     self.lastNowPL.toggle()
                                 } label: {
                                     HStack{
                                         Text("현재 재생목록 마지막에 추가")
-                                            .listRowBackground(Color.black.opacity(0.5))
                                         Spacer()
                                         Image(systemName: self.lastNowPL ? "checkmark.circle.fill" : "circle")
                                     }
                                 }
-                                .listRowBackground(Color.black.opacity(0.5))
+                                //.listRowBackground(Color.black.opacity(0.5))
                                 Button {
                                     self.rightAfterNowPL.toggle()
                                 } label: {
@@ -308,7 +307,7 @@ struct searcher: View{
                                         Image(systemName: self.rightAfterNowPL ? "checkmark.circle.fill" : "circle")
                                     }
                                 }
-                                .listRowBackground(Color.black.opacity(0.5))
+                                //.listRowBackground(Color.black.opacity(0.5))
                                 ForEach(0..<self.playlist.count, id: \.self) { i in
                                     Button {
                                         self.playlist[i].isSelected.toggle()
@@ -319,11 +318,11 @@ struct searcher: View{
                                             Image(systemName: self.playlist[i].isSelected ? "checkmark.circle.fill" : "circle")
                                         }
                                     }
-                                    .listRowBackground(Color.black.opacity(0.5))
+                                    //.listRowBackground(Color.black.opacity(0.5))
                                 }
                             }
                             .listStyle(.plain)
-                            .background(.clear)
+                            //.background(.clear)
                             HStack{
                                 //취소버튼
                                 Button {
