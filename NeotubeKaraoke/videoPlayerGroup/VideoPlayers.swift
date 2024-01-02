@@ -37,6 +37,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
     }
     
     func close() {
+        self.player = AVPlayer()
         self.player?.pause()
         self.audiomanager?.pause()
         self.isplaying = false

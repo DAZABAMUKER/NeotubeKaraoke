@@ -12,8 +12,8 @@ import UIKit
 
 struct VideoPlay: View {
     //MARK: - 변수들
-    @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
-    @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
+    //@AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
+    //@AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
     @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
     @AppStorage("colorSchemeOfSystem") var colorSchemeOfSystem: String = "light"
     @EnvironmentObject var envPlayer: EnvPlayer
@@ -163,6 +163,11 @@ struct VideoPlay: View {
                     self.vidFull = false
                 }
             }
+            if vidEnd {
+                Spacer().onAppear(){
+                    self.close()
+                }
+            }
             
             //MARK: - 진짜 보이는 뷰
             VStack(spacing: 0.0){
@@ -233,6 +238,14 @@ struct VideoPlay: View {
                     .onTapGesture {
                         self.vidFull.toggle()
                     }
+                    .gesture(
+                        DragGesture()
+                            .onEnded({ gesture in
+                                if gesture.translation.width < -150 {
+                                    vidEnd = true
+                                }
+                            })
+                    )
                 }
             }
         }
@@ -500,7 +513,7 @@ extension VideoPlay {
         }
     }
     // 플레이어 닫음
-    func close() {
+    public func close() {
         player.close()
         audioManager.close()
     }

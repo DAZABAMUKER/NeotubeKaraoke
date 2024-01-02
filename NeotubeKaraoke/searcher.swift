@@ -103,6 +103,7 @@ struct searcher: View{
                                                 self.vidEnd = true
                                                 self.isReady = false
                                                 self.clickVid = true
+                                                //videoPlay.close()
                                                 videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                                 reloads = true
                                                 //print("리로드")
