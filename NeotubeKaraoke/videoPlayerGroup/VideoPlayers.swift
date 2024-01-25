@@ -100,10 +100,10 @@ class VideoPlayers: AVPlayer, ObservableObject {
                 return
             }
             if self.player?.timeControlStatus == .playing {
-                let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime())!)
+                let jump: Double = CMTimeGetSeconds( (self.player?.currentItem?.currentTime()) ?? CMTime.zero)
                 DispatchQueue.main.async {
                     self.currents = jump
-                    self.intervals = CMTimeGetSeconds( (self.player?.currentItem!.duration)!)
+                    self.intervals = CMTimeGetSeconds((self.player?.currentItem?.duration) ?? CMTime.zero)
                     if isOk {
                         self.intervals = self.intervals/2
                     }

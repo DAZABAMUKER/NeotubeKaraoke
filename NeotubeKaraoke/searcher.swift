@@ -32,23 +32,24 @@ struct searcher: View{
     @State var isAnimation = false
     @State var audioManager = AudioManager()
     
-    @Binding var videoPlay: VideoPlay
-    @Binding var reloads: Bool
+    //@Binding var videoPlay: VideoPlay
+    //@Binding var reloads: Bool
     @Binding var tabIndex: TabIndex
     @Binding var vidFull: Bool
     @Binding var nowPlayList: [LikeVideo]
     @Binding var vidEnd: Bool
     @Binding var clickVid: Bool
     @Binding var videoOrder: Int
-    @Binding var isReady: Bool
+    //@Binding var isReady: Bool
     @Binding var resolution: Resolution
     @Binding var searching: Bool
     @Binding var inputVal: String
     @Binding var isLandscape: Bool
-    @Binding var score: Int
+    //@Binding var score: Int
     @Binding var recent: [LikeVideo]
     @Binding var addVideo: LikeVideo
     @Binding var nowVideo: LikeVideo
+    @Binding var vidID: String
     
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
@@ -101,11 +102,12 @@ struct searcher: View{
                                             //videoPlay.closes = true
                                             //if self.isReady {
                                                 self.vidEnd = true
-                                                self.isReady = false
+                                                //self.isReady = false
                                                 self.clickVid = true
                                                 //videoPlay.close()
-                                                videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                                                reloads = true
+//                                                videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
+                                            self.vidID = responseitems.videoId
+                                                //reloads = true
                                                 //print("리로드")
                                                 self.nowVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
                                                 self.nowPlayList.append(self.nowVideo)

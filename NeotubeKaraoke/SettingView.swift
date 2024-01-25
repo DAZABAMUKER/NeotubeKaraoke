@@ -27,10 +27,10 @@ struct SettingView: View {
     @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
     
     @State var showAlert = false
-    @State var sheet = false
+    //@State var sheet = false
     @State var profile = false
-    @State var isEditing: Bool = false
-    @StateObject private var getPopularChart = GetPopularChart()
+    //@State var isEditing: Bool = false
+    //@StateObject private var getPopularChart = GetPopularChart()
     @State var refund = false
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager

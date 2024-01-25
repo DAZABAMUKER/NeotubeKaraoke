@@ -74,9 +74,6 @@ let api_keys = [
                 }
                 DispatchQueue.main.async {
                     do {
-                        //print("1")
-                        //print(String(data: data!, encoding: .utf8))
-                        
                         self.info = try JSONDecoder().decode(TubeResponse.self, from: data!)
                         if self.info?.streamingData.hlsManifestUrl != nil {
                             self.HLSManifest = true
@@ -84,10 +81,6 @@ let api_keys = [
                             return
                         }
                         self.infoReady = true
-                        //print("2")
-                        //print(tubeResponse.streamingData.formats.first?.contentLength)
-                        //print(tubeResponse.streamingData.formats.last?.url)
-                        //print(String(data: data!, encoding: .utf8))
                     }
                     catch {
                         print(error, #function)

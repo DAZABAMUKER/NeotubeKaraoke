@@ -8,7 +8,7 @@
 import SwiftUI
 import AVKit
 //import PythonKit
-import UIKit
+//import UIKit
 
 struct VideoPlay: View {
     //MARK: - 변수들
@@ -18,8 +18,8 @@ struct VideoPlay: View {
     @AppStorage("colorSchemeOfSystem") var colorSchemeOfSystem: String = "light"
     @EnvironmentObject var envPlayer: EnvPlayer
     
-    @State var isiPad = false
-    @State var que = false
+    //@State var isiPad = false
+    //@State var que = false
     @StateObject var player = VideoPlayers()
     @StateObject var audioManager = AudioManager()
     @StateObject var downloadManager = MultiPartsDownloadTask()
@@ -68,28 +68,28 @@ struct VideoPlay: View {
             } else {}
         }
     }
-    var videoId: String = ""
+    @Binding var videoId: String
     @StateObject var innertube = InnerTube()
     
     @State var tap = false
-    @State private var isLoading = false
-    @State var closes = false
+//    @State private var isLoading = false
+//    @State var closes = false
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
     @State var isAppear: Bool = false
-    @Binding var isReady: Bool
-    @State var isBle: Bool = false
+    //@Binding var isReady: Bool
+    //@State var isBle: Bool = false
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
     
-    @State var session: AVAudioSession!
-    @State var recorder: AVAudioRecorder!
-    @State var record: Bool = false
-    @State var sample = [Float]()
-    @State var isMicOn = false
-    @State var vidSync = 0.0
-    @Binding var score: Int
-    @State var lowVideoUrl: URL?
+    //@State var session: AVAudioSession!
+    //@State var recorder: AVAudioRecorder!
+    //@State var record: Bool = false
+    //@State var sample = [Float]()
+    //@State var isMicOn = false
+    //@State var vidSync = 0.0
+    //@Binding var score: Int
+    //@State var lowVideoUrl: URL?
     
     @State var scWidth = 0.0
     @State var scHeight = 0.0
@@ -97,6 +97,8 @@ struct VideoPlay: View {
     @State var pitchPressed = false
     @State var tempoPressed = false
     @State var ringAngle: Double = 0.0
+    @Binding var clickVid: Bool
+    @State var playing: Bool = false
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) var colorScheme
@@ -121,8 +123,8 @@ struct VideoPlay: View {
                 }.onAppear() {
                     self.scHeight = geometry.size.height
                     self.scWidth = geometry.size.width
-                    self.vidFull = true // 전체 화면
-                    self.innertube.player(videoId: videoId) // 영상 정보 함수 실행
+                    //self.vidFull = true // 전체 화면
+                    //self.innertube.player(videoId: videoId) // 영상 정보 함수 실행
                     self.vidEnd = false // 영상 종료
                     //print(geometry.size.height)
                 }
@@ -168,13 +170,13 @@ struct VideoPlay: View {
                     self.close()
                 }
             }
-            
             //MARK: - 진짜 보이는 뷰
             VStack(spacing: 0.0){
                 if scWidth < scHeight { //세로 보드 영상 제목 뷰
                     HStack{
                         Spacer()
                         Text(self.innertube.info?.videoDetails.title ?? "노래방")
+                            .lineLimit(2)
                             .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
                             .padding()
@@ -232,6 +234,17 @@ struct VideoPlay: View {
                             .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
                             .padding()
+                        //MARK: - 찾기
+                            .onChange(of: self.videoId) { _ in
+                                self.playing = false
+                                self.audioManager.pause()
+                                self.isAppear = false
+                                //self.isReady = false
+                                self.downloadManager.reset()
+                                self.innertube.infoReady = false
+                                self.innertube.player(videoId: self.videoId)
+                                self.clickVid = false
+                            }
                         Spacer()
                     }
                     .background(colorScheme == .dark ? Color(red: 0.13, green: 0.13, blue: 0.13) : Color(red: 0.9412, green: 0.9255, blue: 0.8980))
@@ -519,20 +532,22 @@ extension VideoPlay {
     }
     // 유튜브 영상 정보 가져와서 세팅
     func getTubeInfo() {
-        let hd720 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
-        let hd360 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
-        var selectedVideo = TubeFormats(audioQuality: "")
-        if resolution == .low || hd720 == nil {
-            selectedVideo = hd360 ?? TubeFormats(audioQuality: "")
-        } else {
-            selectedVideo = hd720 ?? TubeFormats(audioQuality: "")
+        if !playing {
+            let hd720 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
+            let hd360 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
+            var selectedVideo = TubeFormats(audioQuality: "")
+            if resolution == .low || hd720 == nil {
+                selectedVideo = hd360 ?? TubeFormats(audioQuality: "")
+            } else {
+                selectedVideo = hd720 ?? TubeFormats(audioQuality: "")
+            }
+            let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
+            player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: false)
+            
+            envPlayer.player = self.player
+            envPlayer.isOn = true
         }
-        let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
-        self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
-        player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: false)
-        envPlayer.player = self.player
-        envPlayer.isOn = true
-        
     }
     // 오디오 세팅
     func audioEngineSet() {
@@ -540,8 +555,9 @@ extension VideoPlay {
         let fileUrl = doc.appendingPathComponent("audio.m4a")
         audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View audio engine set")
         self.isAppear = true
-        self.isReady = true
+        //self.isReady = true
         self.vidFull = true
+        self.playing = true
     }
     // 휠 돌아감 측정
     private func change(location: CGPoint) {

@@ -64,6 +64,16 @@ class MultiPartsDownloadTask: ObservableObject{
         self.destination = self.doc.appendingPathComponent("audio.m4a")
         print(self.destination)
     }
+    func reset(parts: [DownloadTask] = [DownloadTask](), que: Int = 0) {
+        self.que = false
+        self.parts = parts
+        for i in 0..<numberOfRequests {
+            let fileUrl = doc.appendingPathComponent("audio_\(i).m4a")
+            self.urls.append(fileUrl)
+        }
+        self.destination = self.doc.appendingPathComponent("audio.m4a")
+        print(self.destination)
+    }
     func createDownloadParts(url: URL, size: Int, video: Bool) {
         //print(size)
         self.urls = []

@@ -11,9 +11,9 @@ import MultipeerConnectivity
 struct FindingView: View {
     @StateObject var peers = ConnectPeer()
     @State var isbrowser = false
-    @State var isAd = false
+    //@State var isAd = false
     @State var isOn = false
-    @State var showPopOver = false
+    //@State var showPopOver = false
     @State var connectedPeers = [MCPeerID]()
     @Binding var addVideo: LikeVideo
     @Binding var nowPlayList: [LikeVideo]

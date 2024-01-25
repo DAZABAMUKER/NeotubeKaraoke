@@ -85,11 +85,11 @@ class AudioManager: ObservableObject {
         self.audioEngine.pause()
         self.audioEngine.stop()
         let mixer = audioEngine.mainMixerNode
-//        audioEngine.connect(crowdNode, to: mixer, format: mixer.outputFormat(forBus: 0))
-//        audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
-//        audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
-//        audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
-//        audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(crowdNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(clapNode, to: mixer, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(playerNode, to: pitchNode, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(pitchNode, to: EQNode, format: mixer.outputFormat(forBus: 0))
+        audioEngine.connect(EQNode, to: mixer, format: mixer.outputFormat(forBus: 0))
         audioEngine.connect(mixer, to: audioEngine.outputNode, format: mixer.outputFormat(forBus: 0))
         audioEngine.prepare()
         do {

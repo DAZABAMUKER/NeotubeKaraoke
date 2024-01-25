@@ -25,33 +25,33 @@ struct ContentView: View {
     @AppStorage("userOnboarded") var userOnboarded: Bool = false
     @Environment(\.colorScheme) var colorScheme
     
-    @EnvironmentObject var envPlayer: EnvPlayer
-    @EnvironmentObject var purchaseManager: PurchaseManager
-    @EnvironmentObject var entitlementManager: EntitlementManager
-    @State var adViewControllerRepresentable = AdViewControllerRepresentable()
-    @StateObject var adCoordinator = AdCoordinator()
-    @State var isLandscape = false
-    @State var searching: Bool = false
-    @State var inputVal: String = ""
-    @State var vidFull = false
-    @State var tabIndex: TabIndex = .Home
-    @State var videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: .constant(false), score: .constant(0))
-    @State var reloads = false
-    @State var closes = false
+    @EnvironmentObject var envPlayer: EnvPlayer // 유선 연결 디스플레이
+    @EnvironmentObject var purchaseManager: PurchaseManager //앱내구입 관련
+    @EnvironmentObject var entitlementManager: EntitlementManager //앱내구입 관련
+    @State var adViewControllerRepresentable = AdViewControllerRepresentable() //광고
+    @StateObject var adCoordinator = AdCoordinator() // 광고
+    @State var isLandscape = false //가로모드 확인용
+    @State var searching: Bool = false // 노래방 차트 shearcher 뷰로 이동하기 위해 사용
+    @State var inputVal: String = "" // searcher 입력 값
+    @State var vidFull = false // 플레이어 전체 화면
+    @State var tabIndex: TabIndex = .Home // 탭뷰 인데스
+    //@State var reloads = false
+    //@State var closes = false
     @State var nowPlayList = [LikeVideo]()
-    @State var vidEnd = false
-    @State var clickVid = false
+    @State var vidEnd = false //비디오 끝 종료 확인
+    @State var clickVid = false // 광고 재생 위해 영상 클릭했는지 검사
     @State var videoOrder: Int = 0
-    @State var isReady: Bool = true
-    @State var resolution: Resolution = .basic
-    @State var once = false
-    @State var score: Int = 0
-    @State var showScore = false
-    @State var recent = [LikeVideo]()
+    //@State var isReady: Bool = true
+    @State var resolution: Resolution = .basic //말그대로 영상 해상도
+    //@State var once = false
+    //@State var score: Int = 0
+    //@State var showScore = false
+    @State var recent = [LikeVideo]() //최근플레이한 비디오 리스트
     @State var addVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
     @State var nowVideo: LikeVideo = LikeVideo(videoId: "nil", title: "None", thumbnail: "nil", channelTitle: "None")
-    @State var isNewitem = false
-    @State var manualopen = false
+    @State var isNewitem = false // 다른 디바이스 예약 확인 알림 창 띄우기 용
+    @State var manualopen = false // 메뉴얼 사용법
+    @State var vidID: String = "노래방" //비디오 아이디
     
     //@State var colorMode = "auto"
 //    @State var colorSchemeOfSystem: ColorScheme = .dark
@@ -178,12 +178,12 @@ struct ContentView: View {
             GeometryReader { geometry in
                 ZStack(alignment: .bottom){
                     TabView(selection: $tabIndex) {
-                        searcher( videoPlay: $videoPlay, reloads: $reloads, tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape, score: $score, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo)
+                        searcher(tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder/*, isReady: $isReady*/, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape/*, score: $score*/, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo, vidID: $vidID)
                             .toolbar(.hidden, for: .tabBar)
                             .environmentObject(self.purchaseManager)
                             .environmentObject(self.entitlementManager)
                             .tag(TabIndex.Home)
-                        PlayListView(nowPlayList: $nowPlayList, videoPlay: $videoPlay, reloads: $reloads, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, isReady: $isReady, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, score: $score, recent: $recent, nowVideo: $nowVideo)
+                        PlayListView(nowPlayList: $nowPlayList, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, /*isReady: $isReady,*/ resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, /*score: $score,*/ recent: $recent, nowVideo: $nowVideo, vidID: $vidID)
                             .tag(TabIndex.PlayList)
                         SettingView(resolution: $resolution, isLandscape: $isLandscape)
                             .tag(TabIndex.Setting)
@@ -209,26 +209,26 @@ struct ContentView: View {
                     //탭뷰 위에 플레이어화면을 올려줌
                     VStack{
                         ZStack{
-                            if vidFull && UIDevice.current.model == "iPad" {
-                                VStack{}.onAppear(){
-                                    self.isLandscape = true
-                                }
-                            }
-                            if UIDevice.current.model != "iPad" {
-                                if UIDevice.current.orientation.isLandscape {
-                                    VStack{}.onAppear(){
-                                        isLandscape = true
-                                    }
-                                } else {
-                                    VStack{}.onAppear(){
-                                        isLandscape = false
-                                    }
-                                }
-                            } else {
-                                VStack{}.onAppear(){
-                                    isLandscape = true
-                                }
-                            }
+//                            if vidFull && UIDevice.current.model == "iPad" {
+//                                VStack{}.onAppear(){
+//                                    self.isLandscape = true
+//                                }
+//                            }
+//                            if UIDevice.current.model != "iPad" {
+//                                if UIDevice.current.orientation.isLandscape {
+//                                    VStack{}.onAppear(){
+//                                        isLandscape = true
+//                                    }
+//                                } else {
+//                                    VStack{}.onAppear(){
+//                                        isLandscape = false
+//                                    }
+//                                }
+//                            } else {
+//                                VStack{}.onAppear(){
+//                                    isLandscape = true
+//                                }
+//                            }
                             if searching {
                                 VStack{}.onAppear(){
                                     self.tabIndex = .Home
@@ -244,46 +244,48 @@ struct ContentView: View {
                             if self.vidEnd {
                                 VStack{}.onAppear(){
                                     print(vidEnd)
-                                    self.showScore = true
+                                    //self.showScore = true
                                     if isLandscape {
                                         rotateLandscape()
                                     }
                                     
-                                    if isReady {
+                                    //if isReady {
                                         //self.adCount += 1
-                                        if nowPlayList.count - 1 > videoOrder {
-                                            vidFull = false
-                                            videoOrder += 1
-                                            self.isReady = false
-                                            self.clickVid = true
-                                            videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                                            reloads = true
-                                            print("리로드")
-                                        } else {
-                                            videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: $isLandscape, score: $score)
-                                            reloads = true
-                                        }
+                                    if nowPlayList.count - 1 > videoOrder {
+                                        vidFull = false
+                                        videoOrder += 1
+                                        //self.isReady = false
+                                        self.clickVid = true
+                                        self.vidID = nowPlayList[videoOrder].videoId
+                                        /*videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)*/
+                                        //reloads = true
+                                        //print("리로드")
+                                    } else {
+                                        /*videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: $isLandscape, score: $score)*/
+                                        //reloads = true
                                     }
+                                    //}
                                 }
                             }
+                            VideoPlay(videoId: $vidID, vidFull: $vidFull, vidEnd: $vidEnd, /*isReady: $isReady,*/ resolution: $resolution, isLandscape: $isLandscape/*, score: $score*/, clickVid: $clickVid)
                             // 플레이어를 새로 그리기 위해 시간 텀이 필요
-                            if reloads {
-                                Text("loading")
-                                    .frame(width: geometry.size.width, height: 60)
-                                    .onAppear(){
-                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-                                            self.reloads = false
-                                            self.envPlayer.isOn = false
-                                            self.clickVid = false
-                                        }
-                                    }
-                                // 플레이어 뷰 첫 화면
-                            } else if videoPlay.videoId == "nil" && !reloads {
-                            } else {
-                                //찐 플레이어 뷰
-                                videoPlay
-                                    .environmentObject(envPlayer)
-                            }
+//                            if reloads {
+//                                Text("loading")
+//                                    .frame(width: geometry.size.width, height: 60)
+//                                    .onAppear(){
+//                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+//                                            self.reloads = false
+//                                            self.envPlayer.isOn = false
+//                                            self.clickVid = false
+//                                        }
+//                                    }
+//                                // 플레이어 뷰 첫 화면
+//                            } else if videoPlay.videoId == "nil" && !reloads {
+//                            } else {
+//                                //찐 플레이어 뷰
+//                                videoPlay
+//                                    .environmentObject(envPlayer)
+//                            }
                         }
                         .frame(height: vidFull ? geometry.size.height : 60)
                         .animation(.easeInOut(duration: 0.5), value: vidFull)
@@ -330,27 +332,27 @@ struct ContentView: View {
                         
                     }
                     
-                    if self.showScore && self.micPermission {
-                        if score != 0{
-                            VStack{
-                                Spacer()
-                                HStack{
-                                    StrokeText(text: "Score:", width: 2, color: .white)
-                                    StrokeText(text: "\(self.score) ~", width: 2, color: .white)
-                                }
-                                Spacer()
-                                Spacer()
-                            }
-                            .frame(width: geometry.size.width)
-                            .background(Color.black.opacity(0.5))
-                            .animation(.easeInOut, value: self.score == 0)
-                            .onAppear(){
-                                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5 ) {
-                                    self.showScore = false
-                                }
-                            }
-                        }
-                    }
+//                    if self.showScore && self.micPermission {
+//                        if score != 0{
+//                            VStack{
+//                                Spacer()
+//                                HStack{
+//                                    StrokeText(text: "Score:", width: 2, color: .white)
+//                                    StrokeText(text: "\(self.score) ~", width: 2, color: .white)
+//                                }
+//                                Spacer()
+//                                Spacer()
+//                            }
+//                            .frame(width: geometry.size.width)
+//                            .background(Color.black.opacity(0.5))
+//                            .animation(.easeInOut, value: self.score == 0)
+//                            .onAppear(){
+//                                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5 ) {
+//                                    self.showScore = false
+//                                }
+//                            }
+//                        }
+//                    }
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
