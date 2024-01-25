@@ -125,7 +125,7 @@ struct VideoPlay: View {
                     self.scWidth = geometry.size.width
                     //self.vidFull = true // 전체 화면
                     //self.innertube.player(videoId: videoId) // 영상 정보 함수 실행
-                    self.vidEnd = false // 영상 종료
+                    self.vidEnd = false // 영상 종료 아님 확인
                     //print(geometry.size.height)
                 }
                 .onChange(of: geometry.size) { _ in // 뷰 사이즈는 계속 변화함으로
@@ -165,11 +165,11 @@ struct VideoPlay: View {
                     self.vidFull = false
                 }
             }
-            if vidEnd {
-                Spacer().onAppear(){
-                    self.close()
-                }
-            }
+//            if vidEnd {
+//                Spacer().onAppear(){
+//                    self.close()
+//                }
+//            }
             //MARK: - 진짜 보이는 뷰
             VStack(spacing: 0.0){
                 if scWidth < scHeight { //세로 보드 영상 제목 뷰
@@ -237,6 +237,7 @@ struct VideoPlay: View {
                         //MARK: - 찾기
                             .onChange(of: self.videoId) { _ in
                                 self.playing = false
+                                self.vidEnd = false
                                 self.audioManager.pause()
                                 self.isAppear = false
                                 //self.isReady = false
@@ -553,11 +554,12 @@ extension VideoPlay {
     func audioEngineSet() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileUrl = doc.appendingPathComponent("audio.m4a")
-        audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View audio engine set")
+        audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View - audio engine set")
         self.isAppear = true
         //self.isReady = true
         self.vidFull = true
         self.playing = true
+        player.end = false
     }
     // 휠 돌아감 측정
     private func change(location: CGPoint) {

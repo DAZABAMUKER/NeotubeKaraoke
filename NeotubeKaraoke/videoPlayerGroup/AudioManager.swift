@@ -184,11 +184,11 @@ class AudioManager: ObservableObject {
             numberFrames =  1
         }
         playerNode.scheduleSegment(audioFile, startingFrame: jumpFrame, frameCount: numberFrames, at: nil) {
-            print("did well")
+            print("control Frame - scheduleSegment OK")
         }
         
         playerNode.play()
-        print("played")
+        print("control Frame - node play OK")
     }
     
     func playClap() {

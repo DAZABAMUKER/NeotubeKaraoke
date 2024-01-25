@@ -243,7 +243,7 @@ struct ContentView: View {
                             }
                             if self.vidEnd {
                                 VStack{}.onAppear(){
-                                    print(vidEnd)
+                                    print("vidEnd")
                                     //self.showScore = true
                                     if isLandscape {
                                         rotateLandscape()
@@ -251,6 +251,7 @@ struct ContentView: View {
                                     
                                     //if isReady {
                                         //self.adCount += 1
+                                    print("video: ",nowPlayList.count - 1, videoOrder)
                                     if nowPlayList.count - 1 > videoOrder {
                                         vidFull = false
                                         videoOrder += 1
