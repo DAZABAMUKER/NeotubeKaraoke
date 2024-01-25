@@ -72,13 +72,9 @@ struct VideoPlay: View {
     @StateObject var innertube = InnerTube()
     
     @State var tap = false
-//    @State private var isLoading = false
-//    @State var closes = false
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
     @State var isAppear: Bool = false
-    //@Binding var isReady: Bool
-    //@State var isBle: Bool = false
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
     
@@ -165,11 +161,6 @@ struct VideoPlay: View {
                     self.vidFull = false
                 }
             }
-//            if vidEnd {
-//                Spacer().onAppear(){
-//                    self.close()
-//                }
-//            }
             //MARK: - 진짜 보이는 뷰
             VStack(spacing: 0.0){
                 if scWidth < scHeight { //세로 보드 영상 제목 뷰
@@ -525,11 +516,6 @@ extension VideoPlay {
                 self.tap = false
             }
         }
-    }
-    // 플레이어 닫음
-    public func close() {
-        player.close()
-        audioManager.close()
     }
     // 유튜브 영상 정보 가져와서 세팅
     func getTubeInfo() {

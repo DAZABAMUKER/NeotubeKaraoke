@@ -25,7 +25,6 @@ struct TopChart: View {
     @State var titleOfSong = ""
     
     @Environment(\.colorScheme) var colorscheme
-    //@Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack{
@@ -46,11 +45,6 @@ struct TopChart: View {
             }
             VStack{
                 HStack(spacing: 0){
-                    //Image(systemName: "crown")
-//                    Text("곡검색")
-//                        .foregroundStyle(.clear)
-//                        .padding()
-//                    Spacer()
                     Text("인기차트")
                         .font(.title)
                         .foregroundStyle(.orange)

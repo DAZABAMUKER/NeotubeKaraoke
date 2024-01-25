@@ -35,15 +35,11 @@ struct ContentView: View {
     @State var inputVal: String = "" // searcher 입력 값
     @State var vidFull = false // 플레이어 전체 화면
     @State var tabIndex: TabIndex = .Home // 탭뷰 인데스
-    //@State var reloads = false
-    //@State var closes = false
     @State var nowPlayList = [LikeVideo]()
     @State var vidEnd = false //비디오 끝 종료 확인
     @State var clickVid = false // 광고 재생 위해 영상 클릭했는지 검사
     @State var videoOrder: Int = 0
-    //@State var isReady: Bool = true
     @State var resolution: Resolution = .basic //말그대로 영상 해상도
-    //@State var once = false
     //@State var score: Int = 0
     //@State var showScore = false
     @State var recent = [LikeVideo]() //최근플레이한 비디오 리스트
@@ -53,9 +49,6 @@ struct ContentView: View {
     @State var manualopen = false // 메뉴얼 사용법
     @State var vidID: String = "노래방" //비디오 아이디
     
-    //@State var colorMode = "auto"
-//    @State var colorSchemeOfSystem: ColorScheme = .dark
-    //@State var restartApp = false
     //@State var connectedPeers = [MCPeerID]()
     
     @State var adCount: Int = 0 {
@@ -178,12 +171,12 @@ struct ContentView: View {
             GeometryReader { geometry in
                 ZStack(alignment: .bottom){
                     TabView(selection: $tabIndex) {
-                        searcher(tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder/*, isReady: $isReady*/, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape/*, score: $score*/, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo, vidID: $vidID)
+                        searcher(tabIndex: $tabIndex, vidFull: $vidFull, nowPlayList: $nowPlayList, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, resolution: $resolution, searching: $searching, inputVal: $inputVal, isLandscape: $isLandscape/*, score: $score*/, recent: $recent, addVideo: $addVideo, nowVideo: $nowVideo, vidID: $vidID)
                             .toolbar(.hidden, for: .tabBar)
                             .environmentObject(self.purchaseManager)
                             .environmentObject(self.entitlementManager)
                             .tag(TabIndex.Home)
-                        PlayListView(nowPlayList: $nowPlayList, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, /*isReady: $isReady,*/ resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, /*score: $score,*/ recent: $recent, nowVideo: $nowVideo, vidID: $vidID)
+                        PlayListView(nowPlayList: $nowPlayList, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, resolution: $resolution, inputVal: $inputVal, searching: $searching, isLandscape: $isLandscape, /*score: $score,*/ recent: $recent, nowVideo: $nowVideo, vidID: $vidID)
                             .tag(TabIndex.PlayList)
                         SettingView(resolution: $resolution, isLandscape: $isLandscape)
                             .tag(TabIndex.Setting)
@@ -209,26 +202,6 @@ struct ContentView: View {
                     //탭뷰 위에 플레이어화면을 올려줌
                     VStack{
                         ZStack{
-//                            if vidFull && UIDevice.current.model == "iPad" {
-//                                VStack{}.onAppear(){
-//                                    self.isLandscape = true
-//                                }
-//                            }
-//                            if UIDevice.current.model != "iPad" {
-//                                if UIDevice.current.orientation.isLandscape {
-//                                    VStack{}.onAppear(){
-//                                        isLandscape = true
-//                                    }
-//                                } else {
-//                                    VStack{}.onAppear(){
-//                                        isLandscape = false
-//                                    }
-//                                }
-//                            } else {
-//                                VStack{}.onAppear(){
-//                                    isLandscape = true
-//                                }
-//                            }
                             if searching {
                                 VStack{}.onAppear(){
                                     self.tabIndex = .Home
@@ -248,9 +221,6 @@ struct ContentView: View {
                                     if isLandscape {
                                         rotateLandscape()
                                     }
-                                    
-                                    //if isReady {
-                                        //self.adCount += 1
                                     print("video: ",nowPlayList.count - 1, videoOrder)
                                     if nowPlayList.count - 1 > videoOrder {
                                         vidFull = false
@@ -258,35 +228,10 @@ struct ContentView: View {
                                         //self.isReady = false
                                         self.clickVid = true
                                         self.vidID = nowPlayList[videoOrder].videoId
-                                        /*videoPlay = VideoPlay(videoId: nowPlayList[videoOrder].videoId, vidFull: $vidFull, vidEnd: self.$vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)*/
-                                        //reloads = true
-                                        //print("리로드")
-                                    } else {
-                                        /*videoPlay = VideoPlay(videoId: "nil", vidFull: .constant(false), vidEnd: .constant(false), isReady: .constant(true), resolution: .constant(.basic), isLandscape: $isLandscape, score: $score)*/
-                                        //reloads = true
                                     }
-                                    //}
                                 }
                             }
-                            VideoPlay(videoId: $vidID, vidFull: $vidFull, vidEnd: $vidEnd, /*isReady: $isReady,*/ resolution: $resolution, isLandscape: $isLandscape/*, score: $score*/, clickVid: $clickVid)
-                            // 플레이어를 새로 그리기 위해 시간 텀이 필요
-//                            if reloads {
-//                                Text("loading")
-//                                    .frame(width: geometry.size.width, height: 60)
-//                                    .onAppear(){
-//                                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-//                                            self.reloads = false
-//                                            self.envPlayer.isOn = false
-//                                            self.clickVid = false
-//                                        }
-//                                    }
-//                                // 플레이어 뷰 첫 화면
-//                            } else if videoPlay.videoId == "nil" && !reloads {
-//                            } else {
-//                                //찐 플레이어 뷰
-//                                videoPlay
-//                                    .environmentObject(envPlayer)
-//                            }
+                            VideoPlay(videoId: $vidID, vidFull: $vidFull, vidEnd: $vidEnd, resolution: $resolution, isLandscape: $isLandscape/*, score: $score*/, clickVid: $clickVid)
                         }
                         .frame(height: vidFull ? geometry.size.height : 60)
                         .animation(.easeInOut(duration: 0.5), value: vidFull)

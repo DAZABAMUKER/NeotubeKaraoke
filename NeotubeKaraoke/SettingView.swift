@@ -27,10 +27,7 @@ struct SettingView: View {
     @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
     
     @State var showAlert = false
-    //@State var sheet = false
     @State var profile = false
-    //@State var isEditing: Bool = false
-    //@StateObject private var getPopularChart = GetPopularChart()
     @State var refund = false
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var entitlementManager: EntitlementManager
@@ -38,12 +35,6 @@ struct SettingView: View {
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
     private let pasteboard = UIPasteboard.general
-    
-    //@Environment(\.colorScheme) var colorschome
-//    @Binding var colorSchemeOfSystem: ColorScheme
-    
-    
-    
     
     var body: some View {
         NavigationStack{
@@ -192,10 +183,10 @@ struct SettingView: View {
                         }
                         .pickerStyle(.menu)
                         .tint(Color.orange)
-                        Toggle(isOn: $micPermission) {
-                            Text("내 노래 점수 보기")
-                        }
-                        .tint(Color.orange)
+//                        Toggle(isOn: $micPermission) {
+//                            Text("내 노래 점수 보기")
+//                        }
+//                        .tint(Color.orange)
                         //                    .alert(Text("마이크 접근을 허용해주세요."), isPresented: $showAlert) {
                         //                        Button {
                         //                            self.showAlert = false
@@ -219,13 +210,6 @@ struct SettingView: View {
                     
                     
                     Section{
-                        //                        Button {
-                        //                            self.showCheer.toggle()
-                        //                        } label: {
-                        //                            Text(self.cheer)
-                        //                        }
-                        //                        
-                        //VStack(alignment: .leading, spacing: 20){
                         HStack{
                             Text("앱 버전")
                             Spacer()

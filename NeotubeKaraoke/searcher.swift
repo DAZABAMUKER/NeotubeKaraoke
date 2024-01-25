@@ -31,16 +31,12 @@ struct searcher: View{
     @State var ment = ""
     @State var isAnimation = false
     @State var audioManager = AudioManager()
-    
-    //@Binding var videoPlay: VideoPlay
-    //@Binding var reloads: Bool
     @Binding var tabIndex: TabIndex
     @Binding var vidFull: Bool
     @Binding var nowPlayList: [LikeVideo]
     @Binding var vidEnd: Bool
     @Binding var clickVid: Bool
     @Binding var videoOrder: Int
-    //@Binding var isReady: Bool
     @Binding var resolution: Resolution
     @Binding var searching: Bool
     @Binding var inputVal: String
@@ -99,21 +95,13 @@ struct searcher: View{
                                     }
                                     ForEach(self.ytVideos, id: \.videoId){ responseitems in
                                         Button {
-                                            //videoPlay.closes = true
-                                            //if self.isReady {
                                                 self.vidEnd = true
-                                                //self.isReady = false
                                                 self.clickVid = true
-                                                //videoPlay.close()
-//                                                videoPlay = VideoPlay(videoId: responseitems.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
                                             self.vidID = responseitems.videoId
-                                                //reloads = true
-                                                //print("리로드")
                                                 self.nowVideo = LikeVideo(videoId: responseitems.videoId, title: responseitems.title, thumbnail: responseitems.thumbnail, channelTitle: responseitems.channelTitle)
                                                 self.nowPlayList.append(self.nowVideo)
                                                 self.videoOrder = nowPlayList.count - 1
                                                 saveRecent(video: responseitems)
-                                            //}
                                         } label: {
                                             HStack(spacing: 0){
                                                 ListView(Video: responseitems)
@@ -205,12 +193,6 @@ struct searcher: View{
                                     cheerView
                                 }
                             }
-//                            .sheet(isPresented: $showCheer) {
-//                                cheerView
-//                                    .onAppear(){
-//                                        self.audioManager.setEngine(file: Bundle.main.url(forResource: "clap", withExtension: "wav")!, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "Searcher View")
-//                                    }
-//                            }
                             TextField("", text: $inputVal, onEditingChanged: {isEditing = $0 })
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)

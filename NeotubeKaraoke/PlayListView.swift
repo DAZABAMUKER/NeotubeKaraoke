@@ -19,13 +19,10 @@ struct PlayListView: View {
     @State var playlist = [String]()
     @State var showNowPL = false // 현재 재생 목록 보여줄지 말자 결정하는 변수
     @Binding var nowPlayList: [LikeVideo]
-    //@Binding var videoPlay: VideoPlay
-    //@Binding var reloads: Bool
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
     @Binding var clickVid: Bool
     @Binding var videoOrder: Int
-    //@Binding var isReady: Bool
     @Binding var resolution: Resolution
     @Binding var inputVal: String
     @Binding var searching: Bool
@@ -128,22 +125,6 @@ struct PlayListView: View {
                             .padding()
                             //.foregroundStyle(Color(red: 152/255, green: 216/255, blue: 170/255))
                             .foregroundStyle(Color.green)
-//
-//                        LinearGradient(colors: [
-//                            Color(red: 1, green: 112 / 255.0, blue: 0),
-//                            Color(red: 226 / 255.0, green: 247 / 255.0, blue: 5 / 255.0)
-//                        ],
-//                                       startPoint: .topLeading,
-//                                       endPoint: .bottomTrailing
-//                        )
-//                        .frame(height: 60)
-//                        .mask(alignment: .leading) {
-//                            Text("Playlist")
-//                                .italic()
-//                                .bold()
-//                                .font(.largeTitle)
-//                                .padding(.horizontal, 20)
-//                        }
                         Spacer()
                             .onAppear(){
                                 decodePList() // 네비게이션 그려지면 플레이리스트 가져오기
@@ -216,8 +197,6 @@ struct PlayListView: View {
                                         //self.isReady = false
                                         self.clickVid = true
                                         self.vidID = recent.videoId
-//                                        videoPlay = VideoPlay(videoId: recent.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                                        //reloads = true
                                         self.nowVideo = LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle)
                                         self.nowPlayList.append(self.nowVideo)
                                         //                                    addToNowPlaying(vid: LikeVideo(videoId: recent.videoId, title: recent.title, thumbnail: recent.thumbnail, channelTitle: recent.channelTitle))
@@ -268,20 +247,7 @@ struct PlayListView: View {
                                     }
                                     //.padding(.horizontal, 5)
                                 }
-                        }
-                            /*
-                            Button {
-                                self.showNowPL.toggle()
-                            } label: {
-                                VStack{
-                                    Image("playlist")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 100)
-                                    Text("현재 재생목록")
-                                }
                             }
-                             */
                         }
                         .tint(colorResult(light: .white, dark: .secondary.opacity(0.2)))
                         .font(.caption)
@@ -319,8 +285,6 @@ struct PlayListView: View {
                                             //self.isReady = false
                                             self.clickVid = true
                                             self.vidID = list.videoId
-//                                            videoPlay = VideoPlay(videoId: list.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                                            //reloads = true
                                             self.videoOrder = self.nowPlayList.firstIndex(of: list) ?? -1
                                             saveRecent(video: list)
                                             print("video order: ", videoOrder)
@@ -353,7 +317,7 @@ struct PlayListView: View {
                             ForEach(self.playlist, id: \.self) { item in
                                 //TableCell(Video: video)
                                 NavigationLink {
-                                    showList(listName: item, nowPlayList: $nowPlayList, /*videoPlay: $videoPlay, reloads: $reloads,*/ vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder/*, isReady: $isReady*/, resolution: $resolution, isLandscape: $isLandscape/*, score: $score*/, recent: $recent, vidID: $vidID) // 해당 재생목록 영상 리스트 뷰로 이동
+                                    showList(listName: item, nowPlayList: $nowPlayList, vidFull: $vidFull, vidEnd: $vidEnd, clickVid: $clickVid, videoOrder: $videoOrder, resolution: $resolution, isLandscape: $isLandscape/*, score: $score*/, recent: $recent, vidID: $vidID) // 해당 재생목록 영상 리스트 뷰로 이동
                                         .onAppear(){
                                             self.PLAppear = true
                                         }
@@ -390,7 +354,6 @@ struct PlayListView: View {
                         .listStyle(.plain)
                     }
                 }
-                //.preferredColorScheme(.dark)
                 
                 
                 //MARK: 재생목록 추가 뷰
@@ -481,13 +444,10 @@ struct showList: View {
     var listName: String
     @State var playlist = [LikeVideo]()
     @Binding var nowPlayList: [LikeVideo]
-    //@Binding var videoPlay: VideoPlay
-    //@Binding var reloads: Bool
     @Binding var vidFull: Bool
     @Binding var vidEnd: Bool
     @Binding var clickVid: Bool
     @Binding var videoOrder: Int
-    //@Binding var isReady: Bool
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
     //@Binding var score: Int
@@ -563,8 +523,6 @@ struct showList: View {
                     //self.isReady = false
                     self.clickVid = true
                     self.vidID = playlist.videoId
-//                    videoPlay = VideoPlay(videoId: playlist.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                    //reloads = true
                     self.videoOrder = self.playlist.firstIndex(of: playlist) ?? -1
                     print("video order: ",videoOrder)
                     saveRecent(video: playlist)
@@ -581,7 +539,6 @@ struct showList: View {
                     .tint(.red)
 
                 }
-                //.disabled(!isReady)
             }
             VStack{}.frame(height: 70)
         }
@@ -600,8 +557,6 @@ struct showList: View {
                     Button {
                         self.nowPlayList = playlist
                         self.vidID = nowPlayList.first?.videoId ?? ""
-//                        videoPlay = VideoPlay(videoId: nowPlayList.first!.videoId, vidFull: $vidFull, vidEnd: $vidEnd, isReady: $isReady, resolution: $resolution, isLandscape: $isLandscape, score: $score)
-                        //reloads = true
                     } label: {
                         Image(systemName: "play.fill")
                     }
