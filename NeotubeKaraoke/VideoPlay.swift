@@ -221,7 +221,7 @@ struct VideoPlay: View {
                 if !vidFull {
                     HStack{
                         Spacer()
-                        Text(self.innertube.info?.videoDetails.title ?? "노래방")
+                        Text(self.innertube.info?.videoDetails.title ?? "선곡해주세요")
                             .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
                             .padding()
@@ -238,19 +238,33 @@ struct VideoPlay: View {
                                 self.clickVid = false
                             }
                         Spacer()
+                        Button{
+                            audioManager.play()
+                            player.plays()
+                        } label: {
+                            Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 30)
+                                .padding(.horizontal, 5)
+                        }
+                        .disabled(!isAppear)
+                        .tint(Color.orange)
                     }
                     .background(colorScheme == .dark ? Color(red: 0.13, green: 0.13, blue: 0.13) : Color(red: 0.9412, green: 0.9255, blue: 0.8980))
                     .onTapGesture {
                         self.vidFull.toggle()
                     }
-                    .gesture(
-                        DragGesture()
-                            .onEnded({ gesture in
-                                if gesture.translation.width < -150 {
-                                    vidEnd = true
-                                }
-                            })
-                    )
+//                    .gesture(
+//                        DragGesture()
+//                            .onEnded({ gesture in
+//                                if gesture.translation.width < -150 {
+//                                    vidEnd = true
+//                                    audioManager.play()
+//                                    player.plays()
+//                                }
+//                            })
+//                    )
                 }
             }
         }

@@ -69,6 +69,9 @@
         }
       }
     },
+    "Button" : {
+
+    },
     "Contact" : {
 
     },
@@ -266,6 +269,7 @@
       }
     },
     "내 노래 점수 보기" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -398,7 +402,14 @@
       }
     },
     "문의하기" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact"
+          }
+        }
+      }
     },
     "생성된 재생목록" : {
       "localizations" : {
@@ -455,8 +466,14 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Reserved."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "예약되었습니다."
           }
         }
       }
