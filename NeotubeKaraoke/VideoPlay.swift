@@ -159,6 +159,7 @@ struct VideoPlay: View {
                 Spacer().onAppear(){
                     self.vidEnd = true
                     self.vidFull = false
+                    self.isAppear = false
                 }
             }
             //MARK: - 진짜 보이는 뷰
@@ -225,7 +226,7 @@ struct VideoPlay: View {
                             .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
                             .padding()
-                        //MARK: - 찾기
+                        //MARK: - 처음 시작
                             .onChange(of: self.videoId) { _ in
                                 self.playing = false
                                 self.vidEnd = false
@@ -340,8 +341,10 @@ extension VideoPlay {
                         .gesture(
                             DragGesture(minimumDistance: 0)
                                 .onChanged({ dot in
-                                    tempoPressed = true
-                                    change(location: dot.location)
+                                    if isAppear{
+                                        tempoPressed = true
+                                        change(location: dot.location)
+                                    }
                                 })
                                 .onEnded({ _ in
                                     tempoPressed = false
@@ -360,8 +363,10 @@ extension VideoPlay {
                         .gesture(
                             DragGesture(minimumDistance: 0)
                             .onChanged({ dot in
-                                pitchPressed = true
-                                change(location: dot.location)
+                                if isAppear{
+                                    pitchPressed = true
+                                    change(location: dot.location)
+                                }
                             })
                             .onEnded({ _ in
                                 pitchPressed = false
@@ -379,6 +384,7 @@ extension VideoPlay {
                             .foregroundStyle(tempoPressed || pitchPressed ? .clear : .gray)
                     }
                     .offset(x: -scLength * radius / 2)
+                    .disabled(!isAppear)
                     // 앞으로 15초
                     Button {
                         HapticManager.instance.impact(style: .light)
@@ -391,7 +397,7 @@ extension VideoPlay {
                             .foregroundStyle(tempoPressed || pitchPressed ? .clear : .gray)
                     }
                     .offset(x: scLength * radius / 2)
-
+                    .disabled(!isAppear)
                 }
                 
                 //재생 정지 버튼
@@ -414,6 +420,7 @@ extension VideoPlay {
                     }
                 }
                 .padding(.horizontal ,20)
+                .disabled(!isAppear)
             }
             HStack{
                 Spacer()
@@ -424,6 +431,7 @@ extension VideoPlay {
                         .opacity(0.8)
                         .font(.title)
                 }
+                .disabled(!isAppear)
                 Spacer()
                 Button {
                     rotateLandscape()
@@ -432,6 +440,7 @@ extension VideoPlay {
                         .opacity(0.8)
                         .font(.title)
                 }
+                .disabled(!isAppear)
                 Spacer()
                 Button {
                     audioManager.playCrowd()
@@ -440,6 +449,7 @@ extension VideoPlay {
                         .opacity(0.8)
                         .font(.title)
                 }
+                .disabled(!isAppear)
                 Spacer()
             }
             .foregroundStyle((colorScheme == .light && scWidth < scHeight  ) ? .gray : .white)
@@ -555,6 +565,8 @@ extension VideoPlay {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileUrl = doc.appendingPathComponent("audio.m4a")
         audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View - audio engine set")
+        self.tone = 0.0
+        self.tempo = 1.0
         self.isAppear = true
         //self.isReady = true
         self.vidFull = true

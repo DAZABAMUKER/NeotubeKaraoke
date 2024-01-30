@@ -16,13 +16,23 @@ class DownloadTask {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields?["Range"] = "bytes=\(start)-\(end - 1)"
         session.downloadTask(with: request, completionHandler: { tempUrl, response, error in
+            if error != nil || response == nil {
+                //self.dowmloadtask(for: url, from: start, to: end, in: session, order: num, taskClass: taskClass, video: video)
+                print(#function, "completionHandler error or response nil occur")
+                return
+            }
+            guard let tempUrl = tempUrl else {
+                print(#function, "tempUrl Unwrap error")
+                return
+            }
             do {
                 let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 let fileUrl = doc.appendingPathComponent("audio_\(num).\(video ? "mp4" : "m4a")")
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
                     try FileManager.default.removeItem(at: fileUrl)
                 }
-                try FileManager.default.copyItem(at: tempUrl!, to: fileUrl)
+                
+                try FileManager.default.copyItem(at: tempUrl , to: fileUrl)
                 //AudioManager().setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0)
                 self.done = true
                 if taskClass.parts.filter({$0.done == true}).count == taskClass.numberOfRequests {
@@ -43,7 +53,7 @@ class DownloadTask {
                 }
             }
             catch {
-                
+                print(#function, error)
             }
         }).resume()
     }
