@@ -86,12 +86,13 @@ class VideoPlayers: AVPlayer, ObservableObject {
         let item = AVPlayerItem(asset: asset)
         self.player = AVPlayer(playerItem: item)
         self.player?.isMuted = true
+        self.player?.currentItem?.audioTimePitchAlgorithm  = AVAudioTimePitchAlgorithm.spectral
         self.player?.usesExternalPlaybackWhileExternalScreenIsActive = true
-        NotificationCenter.default.addObserver(forName: Notification.Name.AVAudioEngineConfigurationChange, object: nil, queue: nil) { notification in
-            audioManager.reconnect(vidTime: self.currents)
-            print("reconnect")
-            //self.player?.pause()
-        }
+//        NotificationCenter.default.addObserver(forName: Notification.Name.AVAudioEngineConfigurationChange, object: nil, queue: nil) { notification in
+//            audioManager.reconnect(vidTime: self.currents)
+//            print("reconnect")
+//            //self.player?.pause()
+//        }
         self.player?.addObserver(self, forKeyPath: "timeControlStatus",options: [.old, .new], context: nil)
         self.player?.currentItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .global(qos: .background), using: { _ in
@@ -110,14 +111,11 @@ class VideoPlayers: AVPlayer, ObservableObject {
                     if self.intervals - jump < 0.1 {
                         self.player?.pause()
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                            DispatchQueue.main.async {
                                 self.end = true
                                 self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
                                 //self.player?.removeObserver(self, forKeyPath: "status")
                                 return
-                            }
                         }
-                        
                     } else {
                         //                    DispatchQueue.main.async {
                         //                        self.end = false

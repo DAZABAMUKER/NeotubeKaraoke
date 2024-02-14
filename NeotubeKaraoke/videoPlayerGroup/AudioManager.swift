@@ -17,7 +17,7 @@ class AudioManager: ObservableObject {
     let audioEngine = AVAudioEngine()
     var pitchNode: AVAudioUnitTimePitch!
     var EQNode: AVAudioUnitEQ!
-    var audioFileBuffer: AVAudioPCMBuffer!
+    //var audioFileBuffer: AVAudioPCMBuffer!
     var audioFile: AVAudioFile!
     var clap: AVAudioFile!
     var crowd: AVAudioFile!
@@ -61,7 +61,9 @@ class AudioManager: ObservableObject {
         if playerNode.isPlaying {
             playerNode.pause()
         } else {
-            playerNode.play()
+            if audioFile != nil {
+                playerNode.play()
+            }
         }
     }
     func pause() {
@@ -103,6 +105,7 @@ class AudioManager: ObservableObject {
     
     func setEngine(file: URL, frequency: [Int], tone: Float, views: String) {
         do {
+            audioEngine.stop()
             audioEngine.reset()
             try AVAudioSession.sharedInstance().setCategory(.playback)
             print("실행중")
@@ -193,12 +196,18 @@ class AudioManager: ObservableObject {
     
     func playClap() {
         //clapNode.stop()
+        if self.clap == nil {
+            return
+        }
         clapNode.scheduleFile(clap, at: nil, completionHandler: nil)
         clapNode.play()
     }
     
     func playCrowd() {
         //clapNode.stop()
+        if self.crowd == nil {
+            return
+        }
         crowdNode.scheduleFile(crowd, at: nil, completionHandler: nil)
         crowdNode.play()
     }
