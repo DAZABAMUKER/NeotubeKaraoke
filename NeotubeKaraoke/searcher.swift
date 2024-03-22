@@ -85,14 +85,16 @@ struct searcher: View{
                     VStack(spacing: 9){
                         Spacer()
                             .frame(height: 60)
+                        if !entitlementManager.hasPro{
+                            BannerAd()
+                                .frame(width: geometry.size.width, height: 70)
+                        }
                         if !self.ytVideos.isEmpty {
                             //MARK: - 리스트
+                            
                             ScrollView{
                                 VStack{
-                                    if !entitlementManager.hasPro{
-                                        BannerAd()
-                                            .frame(width: geometry.size.width, height: 70)
-                                    }
+                                    
                                     ForEach(self.ytVideos, id: \.videoId){ responseitems in
                                         Button {
                                                 self.vidEnd = true
@@ -124,10 +126,10 @@ struct searcher: View{
                                         }
                                         //.disabled(!isReady)
                                     }
-                                    if !entitlementManager.hasPro {
-                                        BannerAd()
-                                            .frame(width: geometry.size.width, height: 70)
-                                    }
+//                                    if !entitlementManager.hasPro {
+//                                        BannerAd()
+//                                            .frame(width: geometry.size.width, height: 70)
+//                                    }
                                     VStack{}
                                         .frame(height: 200)
                                 }

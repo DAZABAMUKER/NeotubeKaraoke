@@ -18,6 +18,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
     @Published var isAppears = false
     @Published var isplaying = false
     @Published var intervals = 0.0
+    private var timeObserver: Any?
     var vidSync = 0.0
     
     var currrnts: Double {
@@ -33,6 +34,9 @@ class VideoPlayers: AVPlayer, ObservableObject {
         } else {
             self.player?.play()
             self.isplaying = true
+            if audiomanager?.audioEngine.isRunning == false {
+                audiomanager?.reconnect(vidTime: self.currents)
+            }
         }
     }
     
@@ -94,8 +98,8 @@ class VideoPlayers: AVPlayer, ObservableObject {
 //            //self.player?.pause()
 //        }
         self.player?.addObserver(self, forKeyPath: "timeControlStatus",options: [.old, .new], context: nil)
-        self.player?.currentItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
-        self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .global(qos: .background), using: { _ in
+        //self.player?.currentItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+        timeObserver =  self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 2), queue: .global(qos: .background), using: { _ in
             if !self.isplaying {
                 //self.audiomanager?.pause()
                 return
@@ -105,6 +109,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
                 DispatchQueue.main.async {
                     self.currents = jump
                     self.intervals = CMTimeGetSeconds((self.player?.currentItem?.duration) ?? CMTime.zero)
+                    self.player?.isMuted = true
                     if isOk {
                         self.intervals = self.intervals/2
                     }
@@ -112,7 +117,10 @@ class VideoPlayers: AVPlayer, ObservableObject {
                         self.player?.pause()
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                                 self.end = true
-                                self.player?.removeObserver(self, forKeyPath: "timeControlStatus")
+                            guard let timeObserver = self.timeObserver else { return }
+                            
+                            self.player?.removeTimeObserver(timeObserver)
+                            self.timeObserver = nil
                                 //self.player?.removeObserver(self, forKeyPath: "status")
                                 return
                         }
@@ -161,8 +169,9 @@ class VideoPlayers: AVPlayer, ObservableObject {
             let newStatus = AVPlayer.TimeControlStatus(rawValue: newValue)
             
             if newStatus == .waitingToPlayAtSpecifiedRate {
-                audiomanager?.pause()
-                
+                if audiomanager?.audioEngine.isRunning == true {
+                    audiomanager?.pause()
+                }
                 DispatchQueue.main.async {
                     print("플레이 기다리는 중")
                     self.progress = true

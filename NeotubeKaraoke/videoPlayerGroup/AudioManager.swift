@@ -61,9 +61,12 @@ class AudioManager: ObservableObject {
         if playerNode.isPlaying {
             playerNode.pause()
         } else {
-            if audioFile != nil {
-                playerNode.play()
+            if audioFile == nil {
+                return
+            } else if self.audioEngine.isRunning == false {
+                return
             }
+            playerNode.play()
         }
     }
     func pause() {
@@ -99,7 +102,7 @@ class AudioManager: ObservableObject {
         } catch {
             assertionFailure("failed to audioEngine start. Error: \(error)")
         }
-        //controlFrame(jump: vidTime)
+        controlFrame(jump: vidTime)
     }
         
     
@@ -180,6 +183,7 @@ class AudioManager: ObservableObject {
         jumpFrame = max(jumpFrame, 0)
         jumpFrame = min(jumpFrame, audioFileLength)
         offsetFrame = jump
+        playerNode.pause()
         playerNode.stop()
         
         var numberFrames = AVAudioFrameCount(audioFileLength - jumpFrame)
