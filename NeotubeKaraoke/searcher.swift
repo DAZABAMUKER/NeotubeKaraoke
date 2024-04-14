@@ -51,7 +51,6 @@ struct searcher: View{
     @EnvironmentObject var entitlementManager: EntitlementManager
     @Environment(\.colorScheme) var colorScheme
     
-    
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
@@ -169,6 +168,23 @@ struct searcher: View{
                         Color.black.opacity(!self.ytVideos.isEmpty ? 0.0 : 0.05)
                     }
                     .edgesIgnoringSafeArea(.bottom)
+                    if self.isEditing {
+                        //MARK: 키보드 숨김 뷰 버튼
+                        VStack{
+                            Spacer()
+                                .frame(height: 60)
+                            VStack{}
+                                .ignoresSafeArea(.all)
+                                .frame(width: geometry.size.width, height: geometry.size.height-60)
+                                .background {
+                                    Color.black.opacity(0.01)
+                                }
+                                .onTapGesture {
+                                    hideKeyboard()
+                                }
+                        }
+                    }
+
                     VStack{
                         HStack(spacing: 0){
                             //MARK: - SearchBar
@@ -223,6 +239,7 @@ struct searcher: View{
                                 }
                             }
                         }
+                        .modifier(ShowQuery(query: $inputVal, editing: $isEditing, model: models))
                         .onAppear(){
                             decodePList()
                         }
@@ -242,22 +259,6 @@ struct searcher: View{
                             }
                         }
                         Spacer()
-                    }
-                    if self.isEditing {
-                        //MARK: 키보드 숨김 뷰 버튼
-                        VStack{
-                            Spacer()
-                                .frame(height: 60)
-                            VStack{}
-                                .ignoresSafeArea(.all)
-                                .frame(width: geometry.size.width, height: geometry.size.height-60)
-                                .background {
-                                    Color.black.opacity(0.01)
-                                }
-                                .onTapGesture {
-                                    hideKeyboard()
-                                }
-                        }
                     }
                     
                     //MARK: 재생목록 추가 뷰

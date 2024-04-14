@@ -48,6 +48,7 @@
 		0383C97229E3EAE800A625EC /* GetPopurlarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0383C97129E3EAE800A625EC /* GetPopurlarChart.swift */; };
 		0383C97529E3F39800A625EC /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 0383C97429E3F39800A625EC /* SwiftSoup */; };
 		0383C97829E6662F00A625EC /* ScoreWavedata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0383C97729E6662F00A625EC /* ScoreWavedata.swift */; };
+		03888F1A2BCBDB4900D73986 /* YTQuerySuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03888F192BCBDB4900D73986 /* YTQuerySuggest.swift */; };
 		038B76E229EC09290016522A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038B76E129EC09290016522A /* SceneDelegate.swift */; };
 		038B76E429EC0AAC0016522A /* EnvPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038B76E329EC0AAC0016522A /* EnvPlayer.swift */; };
 		038B76E629EFE5150016522A /* TopChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038B76E529EFE5150016522A /* TopChart.swift */; };
@@ -118,6 +119,7 @@
 		037DC4882AD92D5C008D7281 /* default_clients_response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = default_clients_response.swift; sourceTree = "<group>"; };
 		0383C97129E3EAE800A625EC /* GetPopurlarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopurlarChart.swift; sourceTree = "<group>"; };
 		0383C97729E6662F00A625EC /* ScoreWavedata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWavedata.swift; sourceTree = "<group>"; };
+		03888F192BCBDB4900D73986 /* YTQuerySuggest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTQuerySuggest.swift; sourceTree = "<group>"; };
 		038B76E129EC09290016522A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		038B76E329EC0AAC0016522A /* EnvPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvPlayer.swift; sourceTree = "<group>"; };
 		038B76E529EFE5150016522A /* TopChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChart.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				036658F02A6525E9001C5BB9 /* PurchaseManager.swift */,
 				03B17CB02A71FF7B00FA7AAF /* MakeRefund.swift */,
 				037DC4842AD841B6008D7281 /* fortestView.swift */,
+				03888F192BCBDB4900D73986 /* YTQuerySuggest.swift */,
 				03A0A1C82A1481A8000C5159 /* GoogleService-Info.plist */,
 				037DC47B2AD50E61008D7281 /* get_Vides */,
 				037A99912A02B18500A05065 /* Peers */,
@@ -516,6 +519,7 @@
 				03F36CC12963DE61001AEB7A /* Models.swift in Sources */,
 				038B76E229EC09290016522A /* SceneDelegate.swift in Sources */,
 				037D082229B724E60069ED88 /* PlayListView.swift in Sources */,
+				03888F1A2BCBDB4900D73986 /* YTQuerySuggest.swift in Sources */,
 				037DC47D2AD50EAC008D7281 /* yt_main.swift in Sources */,
 				03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */,
 				037DC4852AD841B6008D7281 /* fortestView.swift in Sources */,
@@ -724,7 +728,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.6;
+				MARKETING_VERSION = 1.2.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -763,7 +767,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.6;
+				MARKETING_VERSION = 1.2.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";

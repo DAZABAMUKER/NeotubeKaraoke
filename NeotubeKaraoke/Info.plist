@@ -10,8 +10,20 @@
 	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>suggestqueries.google.com</key>
+			<string></string>
+		</dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
+		<key>NSAllowsArbitraryLoadsUsageDescription</key>
+		<dict>
+			<key>NSATSExceptionUsage</key>
+			<dict/>
+		</dict>
 		<key>NSAllowsArbitraryLoadsForMedia</key>
 		<true/>
 	</dict>
