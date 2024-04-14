@@ -95,6 +95,7 @@ struct VideoPlay: View {
     @State var ringAngle: Double = 0.0
     @Binding var clickVid: Bool
     @State var playing: Bool = false
+    //@Binding var canPlay: Bool
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) var colorScheme
@@ -280,21 +281,26 @@ extension VideoPlay {
                 Rectangle()
                     .frame(width: scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth : scLength*16/9 : scLength, height: 10)
                     .foregroundColor(.secondary)
-                Rectangle()
-                    .frame(
-                        width: player.currents < 0.9 ? 0 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength - 15) * player.currents/player.intervals,
-                        height: 10
-                    )
-                    .foregroundColor(.green)
-                Image(systemName: "rectangle.portrait.fill")
-                    .scaleEffect(1.5)
-                    .frame(
-                        width: player.currents < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength) * player.currents/player.intervals,
-                        alignment: .trailing
-                    )
-                    .vidSlider(duartion: player.intervals, 
-                               width: scWidth > scHeight ? (scLength*16/9 > scWidth ? scWidth :  scLength*16/9) : scLength, player: player)
-                    .foregroundStyle(.white)
+                if !player.intervals.isNaN {
+                    Rectangle()
+                        .frame(
+                            width: player.currents < 0.9 ? 0 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength - 15) * player.currents/player.intervals,
+                            height: 10
+                        )
+                        .foregroundColor(.green)
+                        .onAppear() {
+                            print("interval: ", player.intervals)
+                        }
+                    Image(systemName: "rectangle.portrait.fill")
+                        .scaleEffect(1.5)
+                        .frame(
+                            width: player.currents < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength) * player.currents/player.intervals,
+                            alignment: .trailing
+                        )
+                        .vidSlider(duartion: player.intervals, 
+                                   width: scWidth > scHeight ? (scLength*16/9 > scWidth ? scWidth :  scLength*16/9) : scLength, player: player)
+                        .foregroundStyle(.white)
+                }
             }
             .padding(.top, 4)
             // 음정 뷰

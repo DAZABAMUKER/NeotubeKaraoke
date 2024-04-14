@@ -55,6 +55,7 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate, ObservableObject {
         }
     }
     @Published var isAdTwice: Bool = false
+    @Published var canPlay: Bool = true
     //@Published var showScore = false
     func loadAd() {
         GADInterstitialAd.load(
@@ -103,6 +104,7 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate, ObservableObject {
     }
     
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        self.canPlay = true
         print("\(#function) called")
     }
 }

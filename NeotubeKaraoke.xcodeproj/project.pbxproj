@@ -68,6 +68,7 @@
 		03B17CB12A71FF7B00FA7AAF /* MakeRefund.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B17CB02A71FF7B00FA7AAF /* MakeRefund.swift */; };
 		03C9B62F2A07987600BCA61A /* Pop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C9B62E2A07987600BCA61A /* Pop.swift */; };
 		03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CA4C8A29BDD13800507E26 /* ListView.swift */; };
+		03CCE1912BAD8C3100BAF2B0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 03CCE1902BAD8C3100BAF2B0 /* PrivacyInfo.xcprivacy */; };
 		03D22C6929A1E53C001D8B24 /* YoutubeDL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */; };
 		03D77A2D2935D2290037061E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2C2935D2290037061E /* Constant.swift */; };
 		03D77A2F2935D4E80037061E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D77A2E2935D4E80037061E /* Video.swift */; };
@@ -135,6 +136,7 @@
 		03B17CB02A71FF7B00FA7AAF /* MakeRefund.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRefund.swift; sourceTree = "<group>"; };
 		03C9B62E2A07987600BCA61A /* Pop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pop.swift; sourceTree = "<group>"; };
 		03CA4C8A29BDD13800507E26 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		03CCE1902BAD8C3100BAF2B0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubeDL.swift; sourceTree = "<group>"; };
 		03D77A2C2935D2290037061E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		03D77A2E2935D4E80037061E /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */,
 				03962DD7291F781500A376F3 /* Preview Content */,
 				03962DED2921C80500A376F3 /* ContentView.swift */,
+				03CCE1902BAD8C3100BAF2B0 /* PrivacyInfo.xcprivacy */,
 				037D082129B724E50069ED88 /* PlayListView.swift */,
 				038B76E529EFE5150016522A /* TopChart.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
@@ -449,6 +452,7 @@
 				03A0A1C92A1481A8000C5159 /* GoogleService-Info.plist in Resources */,
 				033C57F029D2DAC600340988 /* Localizables.strings in Resources */,
 				0369980129D1CCBE00656D28 /* crowd.wav in Resources */,
+				03CCE1912BAD8C3100BAF2B0 /* PrivacyInfo.xcprivacy in Resources */,
 				033C57F129D2DAC600340988 /* Localizables.strings in Resources */,
 				034EF01B2AFDD4C10085188C /* Localizable.xcstrings in Resources */,
 				037D081829B4780B0069ED88 /* clap.wav in Resources */,

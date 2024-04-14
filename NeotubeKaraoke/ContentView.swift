@@ -60,6 +60,7 @@ struct ContentView: View {
                         print(self.adCount)
                         //adCoordinator.loadAd()
                         //print(adCoordinator.ad)
+                        //adCoordinator.canPlay = false
                         adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
                     } else {
                         print("홀수")
@@ -231,7 +232,7 @@ struct ContentView: View {
                                     }
                                 }
                             }
-                            VideoPlay(videoId: $vidID, vidFull: $vidFull, vidEnd: $vidEnd, resolution: $resolution, isLandscape: $isLandscape/*, score: $score*/, clickVid: $clickVid)
+                            VideoPlay(videoId: $vidID, vidFull: $vidFull, vidEnd: $vidEnd, resolution: $resolution, isLandscape: $isLandscape/*, score: $score*/, clickVid: $clickVid/*, canPlay: $adCoordinator.canPlay*/)
                         }
                         .frame(height: vidFull ? geometry.size.height : 60)
                         .animation(.easeInOut(duration: 0.5), value: vidFull)
