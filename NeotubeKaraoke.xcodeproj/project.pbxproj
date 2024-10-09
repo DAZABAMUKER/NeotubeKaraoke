@@ -60,10 +60,6 @@
 		03962DEE2921C80500A376F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DED2921C80500A376F3 /* ContentView.swift */; };
 		03962DF029230D7D00A376F3 /* searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEF29230D7C00A376F3 /* searcher.swift */; };
 		0397116029D9D38E005ADE0E /* HTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0397115F29D9D38E005ADE0E /* HTMLParser.swift */; };
-		03A0A1C12A147C25000C5159 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C02A147C25000C5159 /* FirebaseAnalytics */; };
-		03A0A1C32A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C22A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion */; };
-		03A0A1C52A147C25000C5159 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C42A147C25000C5159 /* FirebaseAnalyticsSwift */; };
-		03A0A1C72A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 03A0A1C62A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		03A0A1C92A1481A8000C5159 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03A0A1C82A1481A8000C5159 /* GoogleService-Info.plist */; };
 		03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEE50129D5163C001B66E3 /* MyWebView.swift */; };
 		03B17CB12A71FF7B00FA7AAF /* MakeRefund.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B17CB02A71FF7B00FA7AAF /* MakeRefund.swift */; };
@@ -156,14 +152,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03A0A1C52A147C25000C5159 /* FirebaseAnalyticsSwift in Frameworks */,
-				03A0A1C72A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
-				03A0A1C12A147C25000C5159 /* FirebaseAnalytics in Frameworks */,
 				17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */,
 				035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */,
 				0379B1AC29E04DCB0044F997 /* YouTubeiOSPlayerHelper in Frameworks */,
 				0383C97529E3F39800A625EC /* SwiftSoup in Frameworks */,
-				03A0A1C32A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				03F9189B2A71ED0D003115A1 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -395,10 +387,6 @@
 				035BF63929DDBDD00010398B /* ArgumentParser */,
 				0379B1AB29E04DCB0044F997 /* YouTubeiOSPlayerHelper */,
 				0383C97429E3F39800A625EC /* SwiftSoup */,
-				03A0A1C02A147C25000C5159 /* FirebaseAnalytics */,
-				03A0A1C22A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion */,
-				03A0A1C42A147C25000C5159 /* FirebaseAnalyticsSwift */,
-				03A0A1C62A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -854,26 +842,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0383C97329E3F39800A625EC /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
-		};
-		03A0A1C02A147C25000C5159 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		03A0A1C22A147C25000C5159 /* FirebaseAnalyticsOnDeviceConversion */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsOnDeviceConversion;
-		};
-		03A0A1C42A147C25000C5159 /* FirebaseAnalyticsSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsSwift;
-		};
-		03A0A1C62A147C25000C5159 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 
