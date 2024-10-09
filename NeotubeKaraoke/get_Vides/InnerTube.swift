@@ -39,9 +39,9 @@ let api_keys = [
         decoder.dateDecodingStrategy = .iso8601
         do {
             let response = try decoder.decode(Default_clients.self, from: default_clients.data)
-            self.api_key = response.ANDROID_CREATOR.api_key
-            self.context = response.ANDROID_CREATOR.context
-            self.header = response.ANDROID_CREATOR.header
+            self.api_key = response.IOS.api_key
+            self.context = response.IOS.context
+            self.header = response.IOS.header
             //player(videoId: videoId)
         }
         catch {
@@ -70,15 +70,17 @@ let api_keys = [
             //print(String(data: contextData, encoding: .utf8))
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if error != nil || data == nil {
+                    print("!!@@!!")
                     return
                 }
                 DispatchQueue.main.async {
                     do {
+                        print(String(data: data ?? Data(), encoding: .utf8))
                         self.info = try JSONDecoder().decode(TubeResponse.self, from: data!)
                         if self.info?.streamingData.hlsManifestUrl != nil {
                             self.HLSManifest = true
                             print("HLS Manifest url")
-                            return
+                            //return
                         }
                         self.infoReady = true
                     }
