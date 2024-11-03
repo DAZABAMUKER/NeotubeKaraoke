@@ -28,21 +28,21 @@ struct TopChart: View {
     
     var body: some View {
         ZStack{
-            GeometryReader{ geometry in
-                ZStack{Spacer()}.onAppear() {
-                    self.scHeight = geometry.size.height
-                    self.scWidth = geometry.size.width
-                    //print(geometry.size.height)
-                }
-                .onChange(of: geometry.size) { _ in
-                    self.scHeight = geometry.size.height
-                    self.scWidth = geometry.size.width
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification), perform: { _ in
-                    self.scHeight = 0
-                    self.scWidth = 0
-                })
-            }
+//            GeometryReader{ geometry in
+//                ZStack{Spacer()}.onAppear() {
+//                    self.scHeight = geometry.size.height
+//                    self.scWidth = geometry.size.width
+//                    //print(geometry.size.height)
+//                }
+//                .onChange(of: geometry.size) { _ in
+//                    self.scHeight = geometry.size.height
+//                    self.scWidth = geometry.size.width
+//                }
+//                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification), perform: { _ in
+//                    self.scHeight = 0
+//                    self.scWidth = 0
+//                })
+//            }
             VStack{
                 HStack(spacing: 0){
                     Text("인기차트")
@@ -333,7 +333,7 @@ struct TopChart: View {
                 }
             }
             .background(Color.secondary.opacity(0.1))
-            .frame(width: self.scWidth)
+            //.frame(width: self.scWidth)
         }
     }
 }

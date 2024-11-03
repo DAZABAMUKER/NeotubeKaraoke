@@ -324,7 +324,7 @@ extension VideoPlay {
                         .frame(width: scLength*radius)
                         .shadow(radius: 8, y: 5)
                 }
-                .rotationEffect(.degrees(ringAngle))
+                .rotationEffect(.degrees(ringAngle+30))
                 .shadow(radius: 8, y: 5)
                 .frame(
                     width: scWidth > scHeight ? scLength * 0.55 : scWidth/scHeight > 0.5 ? scLength * 0.55 : scLength,
@@ -336,7 +336,7 @@ extension VideoPlay {
                     .foregroundStyle(.white)
                     .opacity(tempoPressed || pitchPressed ? 1.0 : 0.0)
                     .offset(y: scLength * radius / 2)
-                    .rotationEffect(.degrees(ringAngle))
+                    .rotationEffect(.degrees(ringAngle+30))
                 ZStack{
                     // 템포 버튼
                     Text("템포")
