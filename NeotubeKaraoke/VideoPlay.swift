@@ -13,7 +13,7 @@ import AVKit
 struct VideoPlay: View {
     //MARK: - 변수들
     //@AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
-    //@AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
+    @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
     @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
     @AppStorage("colorSchemeOfSystem") var colorSchemeOfSystem: String = "light"
     @EnvironmentObject var envPlayer: EnvPlayer
@@ -190,12 +190,12 @@ struct VideoPlay: View {
                         .onAppear(){
                             player.player?.play()
                         }
-                    //더블 탭 건너뛰기 15초
+                    //더블 탭 건너뛰기
                         .onTapGesture(count: 2, perform: { dot in
                             if dot.x > scWidth * 0.66  {
-                                player.moveFrame(to: 15.0, spd: self.tempo) // 앞으로 15초
+                                player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
                             } else if dot.x < scWidth * 0.33 {
-                                player.moveFrame(to: -15.0, spd: self.tempo) // 뒤로 15초
+                                player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo) // 뒤로 15초
                             }
                         })
                         .onTapGesture {
@@ -381,9 +381,9 @@ extension VideoPlay {
                     // 뒤로 15초
                     Button {
                         HapticManager.instance.impact(style: .light)
-                        player.moveFrame(to: -15.0, spd: self.tempo)
+                        player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo)
                     } label: {
-                        Image(systemName: "gobackward.15")
+                        Image(systemName: "gobackward.\(Int(self.goBackTime))")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 30)
@@ -394,9 +394,9 @@ extension VideoPlay {
                     // 앞으로 15초
                     Button {
                         HapticManager.instance.impact(style: .light)
-                        player.moveFrame(to: 15.0, spd: self.tempo)
+                        player.moveFrame(to: self.goBackTime, spd: self.tempo)
                     } label: {
-                        Image(systemName: "goforward.15")
+                        Image(systemName: "goforward.\(Int(self.goBackTime))")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 30)
