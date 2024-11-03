@@ -35,7 +35,7 @@ struct VideoPlay: View {
     }
     @State var tones: Int = 0 {
         didSet {
-            if tones != oldValue {
+            if tones != oldValue && abs(tones - oldValue) < 3 && pitchPressed == true {
                 if tones > oldValue {
                     tone += 1
                 } else {
@@ -58,7 +58,7 @@ struct VideoPlay: View {
     }
     @State var tempos: Int = 1 {
         didSet {
-            if tempos != oldValue {
+            if tempos != oldValue && abs(tempos - oldValue) < 3 && tempoPressed == true {
                 if tempos > oldValue {
                     tempo += 0.02
                 } else {
@@ -324,7 +324,7 @@ extension VideoPlay {
                         .frame(width: scLength*radius)
                         .shadow(radius: 8, y: 5)
                 }
-                .rotationEffect(.degrees(ringAngle+30))
+                .rotationEffect(.degrees(ringAngle))
                 .shadow(radius: 8, y: 5)
                 .frame(
                     width: scWidth > scHeight ? scLength * 0.55 : scWidth/scHeight > 0.5 ? scLength * 0.55 : scLength,
@@ -336,7 +336,7 @@ extension VideoPlay {
                     .foregroundStyle(.white)
                     .opacity(tempoPressed || pitchPressed ? 1.0 : 0.0)
                     .offset(y: scLength * radius / 2)
-                    .rotationEffect(.degrees(ringAngle+30))
+                    .rotationEffect(.degrees(ringAngle))
                 ZStack{
                     // 템포 버튼
                     Text("템포")
@@ -354,6 +354,7 @@ extension VideoPlay {
                                 })
                                 .onEnded({ _ in
                                     tempoPressed = false
+                                    self.tempos = 1
                                 })
                         )
                     
@@ -376,6 +377,7 @@ extension VideoPlay {
                             })
                             .onEnded({ _ in
                                 pitchPressed = false
+                                self.tones = 0
                             })
                         )
                     // 뒤로 15초
@@ -589,13 +591,12 @@ extension VideoPlay {
         let vector = CGVector(dx: location.x - 40, dy: location.y - 20)
         //print("loca", location.x, location.y)
         let radian = atan2(vector.dy , vector.dx)
-        let angle = radian * 180 / .pi - 90
+        let angle = radian * 180 / .pi - 75
         self.ringAngle = angle > 0 ? angle : angle + 360
-        //print("ring", self.ringAngle)
         if pitchPressed {
             self.tones = Int(Float(ringAngle) / 30)
         } else if tempoPressed {
-            self.tempos = Int(Float(ringAngle) / 30)
+            self.tempos = Int(Float(ringAngle) / 30) - 5
         }
     }
 }
