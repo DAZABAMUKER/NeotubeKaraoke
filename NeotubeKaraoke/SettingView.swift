@@ -23,7 +23,7 @@ enum Karaoke {
 struct SettingView: View {
     
     @AppStorage("micPermission") var micPermission: Bool = UserDefaults.standard.bool(forKey: "micPermission")
-    @AppStorage("moveFrameTime") var goBackTime: Double = UserDefaults.standard.double(forKey: "moveFrameTime")
+    @AppStorage("moveFrameTime") var goBackTime: Double = 15.0
     @AppStorage("colorMode") var colorMode: String = (UserDefaults.standard.string(forKey: "colorMode") ?? "auto")
     
     @State var showAlert = false

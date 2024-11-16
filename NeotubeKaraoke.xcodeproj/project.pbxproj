@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		030FF2D72CE7467E0033C269 /* VLCKitSPM in Frameworks */ = {isa = PBXBuildFile; productRef = 030FF2D62CE7467E0033C269 /* VLCKitSPM */; };
+		030FF2DB2CE8E4F40033C269 /* vlcTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2DA2CE8E4F40033C269 /* vlcTest.swift */; };
+		030FF2DD2CE8E6AE0033C269 /* VLCPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */; };
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
 		0324413F2A03A21D003C1300 /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0324413E2A03A21D003C1300 /* Swipe.swift */; };
@@ -77,6 +80,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		030FF2DA2CE8E4F40033C269 /* vlcTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vlcTest.swift; sourceTree = "<group>"; };
+		030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCPlayerView.swift; sourceTree = "<group>"; };
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		0324413E2A03A21D003C1300 /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
@@ -152,6 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				030FF2D72CE7467E0033C269 /* VLCKitSPM in Frameworks */,
 				17AF03C11E07A6832C3ACFD3 /* Pods_NeotubeKaraoke.framework in Frameworks */,
 				035BF63A29DDBDD00010398B /* ArgumentParser in Frameworks */,
 				0379B1AC29E04DCB0044F997 /* YouTubeiOSPlayerHelper in Frameworks */,
@@ -287,6 +293,7 @@
 				038B76E529EFE5150016522A /* TopChart.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
+				030FF2DA2CE8E4F40033C269 /* vlcTest.swift */,
 				037A998B2A02B0BB00A05065 /* FindingView.swift */,
 				0361D55D2B39CA5C009C2C42 /* ManualView.swift */,
 				037D081D29B5D18A0069ED88 /* SettingView.swift */,
@@ -332,6 +339,7 @@
 			children = (
 				03E30DFB2B388C64003EBC6B /* HapticManager.swift */,
 				0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */,
+				030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */,
 				036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */,
 				034744352999DFF800F2EBEE /* AudioManager.swift */,
 				03D22C6829A1E53C001D8B24 /* YoutubeDL.swift */,
@@ -387,6 +395,7 @@
 				035BF63929DDBDD00010398B /* ArgumentParser */,
 				0379B1AB29E04DCB0044F997 /* YouTubeiOSPlayerHelper */,
 				0383C97429E3F39800A625EC /* SwiftSoup */,
+				030FF2D62CE7467E0033C269 /* VLCKitSPM */,
 			);
 			productName = NeotubeKaraoke;
 			productReference = 03962DCE291F781400A376F3 /* NeotubeKaraoke.app */;
@@ -422,6 +431,7 @@
 				0379B1AA29E04DCB0044F997 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				0383C97329E3F39800A625EC /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				03A0A1BF2A147C25000C5159 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				030FF2D52CE7467E0033C269 /* XCRemoteSwiftPackageReference "vlckit-spm" */,
 			);
 			productRefGroup = 03962DCF291F781400A376F3 /* Products */;
 			projectDirPath = "";
@@ -516,6 +526,7 @@
 				037DC4832AD52420008D7281 /* Parse.swift in Sources */,
 				0356F76D29A496F40005EE2D /* downloadManager.swift in Sources */,
 				034744362999DFF800F2EBEE /* AudioManager.swift in Sources */,
+				030FF2DD2CE8E6AE0033C269 /* VLCPlayerView.swift in Sources */,
 				037DC4812AD511A8008D7281 /* Extract.swift in Sources */,
 				0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */,
 				03962DEE2921C80500A376F3 /* ContentView.swift in Sources */,
@@ -549,6 +560,7 @@
 				037DC4892AD92D5C008D7281 /* default_clients_response.swift in Sources */,
 				037D081E29B5D18A0069ED88 /* SettingView.swift in Sources */,
 				03D77A2D2935D2290037061E /* Constant.swift in Sources */,
+				030FF2DB2CE8E4F40033C269 /* vlcTest.swift in Sources */,
 				03962DF029230D7D00A376F3 /* searcher.swift in Sources */,
 				03962DDE291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld in Sources */,
 			);
@@ -716,7 +728,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.8;
+				MARKETING_VERSION = 1.3.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -755,7 +767,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.8;
+				MARKETING_VERSION = 1.3.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -793,6 +805,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		030FF2D52CE7467E0033C269 /* XCRemoteSwiftPackageReference "vlckit-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tylerjonesio/vlckit-spm";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
@@ -828,6 +848,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		030FF2D62CE7467E0033C269 /* VLCKitSPM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 030FF2D52CE7467E0033C269 /* XCRemoteSwiftPackageReference "vlckit-spm" */;
+			productName = VLCKitSPM;
+		};
 		035BF63929DDBDD00010398B /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 035BF63829DDBDD00010398B /* XCRemoteSwiftPackageReference "swift-argument-parser" */;

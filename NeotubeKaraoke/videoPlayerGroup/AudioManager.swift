@@ -24,6 +24,7 @@ class AudioManager: ObservableObject {
     var audioFileLength: AVAudioFramePosition = 0
     var offsetFrame: Double = 0
     var intervalLimit: Double = 0.1
+    var ready: Bool = false
     var currentFrame: AVAudioFramePosition {
         guard
             let lastRenderTime = playerNode.lastRenderTime,

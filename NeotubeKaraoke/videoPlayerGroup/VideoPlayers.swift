@@ -86,8 +86,27 @@ class VideoPlayers: AVPlayer, ObservableObject {
         //let vidAssetItem = AVPlayerItem(asset: vidAsset)
         
         //downloadVidonlyFile(url: url, fileSize: fileSize)
-        let asset = AVAsset(url: url)
+        //let asset = AVAsset(url: url)
+        let options: [String: Any] = [
+            "Connection" : "keep-alive",
+            "Accept-Encoding" : "identity;q=1, *;q=0",
+            "Accept-Language" : "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+            "User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+            "Accept-Ranges" : "bytes",
+            "Referer" : "\(url)",
+            "X-YouTube-Client-Version" : "2.202",
+            "sec-ch-ua-platform" : "ios",
+            "sec-ch-ua" : "\"Chromium\";v=\"90.0.4430.93\"",
+            "sec-ch-ua-mobile" : "?0",
+            "Accept" : "\"/\"",
+            "Sec-Fetch-Site" : "same-origin",
+            "Sec-Fetch-Mode" : "no-cors",
+            "Sec-Fetch-Dest" : "video"
+            ]
+        
+        let asset  = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": options])
         let item = AVPlayerItem(asset: asset)
+        item.preferredForwardBufferDuration = 0.5
         self.player = AVPlayer(playerItem: item)
         self.player?.isMuted = true
         self.player?.currentItem?.audioTimePitchAlgorithm  = AVAudioTimePitchAlgorithm.spectral
