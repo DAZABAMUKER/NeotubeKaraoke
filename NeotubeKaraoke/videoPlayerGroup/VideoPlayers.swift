@@ -192,7 +192,7 @@ class VideoPlayers: AVPlayer, ObservableObject {
                     audiomanager?.pause()
                 }
                 DispatchQueue.main.async {
-                    print("플레이 기다리는 중")
+                    //print("플레이 기다리는 중")
                     self.progress = true
                     self.isplaying = false
                 }

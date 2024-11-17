@@ -10,6 +10,8 @@
 		030FF2D72CE7467E0033C269 /* VLCKitSPM in Frameworks */ = {isa = PBXBuildFile; productRef = 030FF2D62CE7467E0033C269 /* VLCKitSPM */; };
 		030FF2DB2CE8E4F40033C269 /* vlcTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2DA2CE8E4F40033C269 /* vlcTest.swift */; };
 		030FF2DD2CE8E6AE0033C269 /* VLCPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */; };
+		030FF2E12CE982440033C269 /* vlcPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2E02CE982440033C269 /* vlcPlayerController.swift */; };
+		030FF2E32CE9C38E0033C269 /* VLCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2E22CE9C38E0033C269 /* VLCView.swift */; };
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
 		0324413F2A03A21D003C1300 /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0324413E2A03A21D003C1300 /* Swipe.swift */; };
@@ -82,6 +84,8 @@
 /* Begin PBXFileReference section */
 		030FF2DA2CE8E4F40033C269 /* vlcTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vlcTest.swift; sourceTree = "<group>"; };
 		030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCPlayerView.swift; sourceTree = "<group>"; };
+		030FF2E02CE982440033C269 /* vlcPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vlcPlayerController.swift; sourceTree = "<group>"; };
+		030FF2E22CE9C38E0033C269 /* VLCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCView.swift; sourceTree = "<group>"; };
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		0324413E2A03A21D003C1300 /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
@@ -339,6 +343,8 @@
 			children = (
 				03E30DFB2B388C64003EBC6B /* HapticManager.swift */,
 				0330C4E229A1B94000B3E6D3 /* VideoPlayers.swift */,
+				030FF2E02CE982440033C269 /* vlcPlayerController.swift */,
+				030FF2E22CE9C38E0033C269 /* VLCView.swift */,
 				030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */,
 				036DDD9B29A9C3A000396B94 /* PlayerViewController.swift */,
 				034744352999DFF800F2EBEE /* AudioManager.swift */,
@@ -511,6 +517,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				030FF2E32CE9C38E0033C269 /* VLCView.swift in Sources */,
 				0324413F2A03A21D003C1300 /* Swipe.swift in Sources */,
 				038B76E429EC0AAC0016522A /* EnvPlayer.swift in Sources */,
 				0316559E295BAC5C00B18342 /* TableCell.swift in Sources */,
@@ -558,6 +565,7 @@
 				0379B1AE29E04E480044F997 /* YTWrapper.swift in Sources */,
 				03D77A2F2935D4E80037061E /* Video.swift in Sources */,
 				037DC4892AD92D5C008D7281 /* default_clients_response.swift in Sources */,
+				030FF2E12CE982440033C269 /* vlcPlayerController.swift in Sources */,
 				037D081E29B5D18A0069ED88 /* SettingView.swift in Sources */,
 				03D77A2D2935D2290037061E /* Constant.swift in Sources */,
 				030FF2DB2CE8E4F40033C269 /* vlcTest.swift in Sources */,

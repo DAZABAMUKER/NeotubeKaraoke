@@ -32,15 +32,15 @@ struct NeotubeKaraokeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            vlcTest()
-//            ContentView(tabIndex: .Home)
-//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-//                .environmentObject(envPlayer)
-//                .environmentObject(purchaseManager)
-//                .environmentObject(entitlementManager)
-//                .task {
-//                    await purchaseManager.updatePurchasedProducts()
-//                }
+            //vlcTest()
+            ContentView(tabIndex: .Home)
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(envPlayer)
+                .environmentObject(purchaseManager)
+                .environmentObject(entitlementManager)
+                .task {
+                    await purchaseManager.updatePurchasedProducts()
+                }
         }
     }
     init() {

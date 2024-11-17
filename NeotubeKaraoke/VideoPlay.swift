@@ -21,7 +21,7 @@ struct VideoPlay: View {
     
     //@State var isiPad = false
     //@State var que = false
-    @StateObject var player = VideoPlayers()
+    @StateObject var player = vlcPlayerController()
     @StateObject var audioManager = AudioManager()
     @StateObject var downloadManager = MultiPartsDownloadTask()
     @State var tone: Float = 0.0 {
@@ -53,7 +53,7 @@ struct VideoPlay: View {
             } else if tempo < 0.1 {
                 tempo = oldValue
             } else {}
-            player.tempo(spd: tempo)
+            //player.tempo(spd: tempo)
             audioManager.tempo(spd: tempo)
         }
     }
@@ -74,7 +74,14 @@ struct VideoPlay: View {
     
     @State var tap = false
     @Binding var vidFull: Bool
-    @Binding var vidEnd: Bool
+    @Binding var vidEnd: Bool {
+        didSet {
+            if vidEnd == true {
+                self.vidFull = false
+                self.isAppear = false
+            }
+        }
+    }
     @State var isAppear: Bool = false
     @Binding var resolution: Resolution
     @Binding var isLandscape: Bool
@@ -96,7 +103,17 @@ struct VideoPlay: View {
     @State var ringAngle: Double = 0.0
     @Binding var clickVid: Bool
     @State var playing: Bool = false
-    @State var vidurl: URL?
+    @State var isPlaying: Bool = false
+//   @State var vidurl: URL?
+//    @State var vidLength: Double = 0.0
+//    @State var time: Double = 0.0
+//    @State var forawardOrRewind: String = ""
+    @State var setTime: Int32 = 0 {
+        didSet {
+            self.player.time = VLCTime(int: setTime)
+        }
+    }
+    
     //@Binding var canPlay: Bool
     
     @Environment(\.dismiss) private var dismiss
@@ -158,13 +175,13 @@ struct VideoPlay: View {
                 }
             }
             //비디오 종료 시
-            if player.end {
-                Spacer().onAppear(){
-                    self.vidEnd = true
-                    self.vidFull = false
-                    self.isAppear = false
-                }
-            }
+//            if player.end {
+//                Spacer().onAppear(){
+//                    self.vidEnd = true
+//                    self.vidFull = false
+//                    self.isAppear = false
+//                }
+//            }
             //MARK: - 진짜 보이는 뷰
             VStack(spacing: 0.0){
                 if scWidth < scHeight { //세로 보드 영상 제목 뷰
@@ -188,18 +205,23 @@ struct VideoPlay: View {
                     //AVPlayer 아이템 준비 완료 시 뷰 그림
             
                     //PlayerViewController(player: player.player ?? AVPlayer())
-                    VLCPlayerView(url: $vidurl)
+                    VLCView(player: player)
+                    //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
                         .DragVid(vidFull: $vidFull, tap: $tap)
                         .ignoresSafeArea(.container)
-                        .onAppear(){
-                            player.player?.play()
-                        }
+//                        .onAppear(){
+//                            player.player?.play()
+//                        }
                     //더블 탭 건너뛰기
                         .onTapGesture(count: 2, perform: { dot in
                             if dot.x > scWidth * 0.66  {
-                                player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
+                                //player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
+                                //self.forawardOrRewind = "+"
+                                self.player.moveFrame(to: Int32(self.goBackTime))
                             } else if dot.x < scWidth * 0.33 {
-                                player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo) // 뒤로 15초
+                                //player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo) // 뒤로 15초
+                                //self.forawardOrRewind = "-"
+                                self.player.moveFrame(to: Int32(-self.goBackTime))
                             }
                         })
                         .onTapGesture {
@@ -246,9 +268,9 @@ struct VideoPlay: View {
                         Spacer()
                         Button{
                             audioManager.play()
-                            player.plays()
+                            self.isPlaying = true
                         } label: {
-                            Image(systemName: player.isplaying ? "pause.circle.fill" : "play.circle.fill")
+                            Image(systemName: self.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 30)
@@ -285,24 +307,24 @@ extension VideoPlay {
                 Rectangle()
                     .frame(width: scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth : scLength*16/9 : scLength, height: 10)
                     .foregroundColor(.secondary)
-                if !player.intervals.isNaN {
+                if self.player.state == .playing{
                     Rectangle()
                         .frame(
-                            width: player.currents < 0.9 ? 0 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength - 15) * player.currents/player.intervals,
+                            width: self.player.currentTIme < 0.9 ? 0 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength - 15) * self.player.currentTIme/self.player.length,
                             height: 10
                         )
                         .foregroundColor(.green)
                         .onAppear() {
-                            print("interval: ", player.intervals)
+                            print("interval: ", self.player.length)
                         }
                     Image(systemName: "rectangle.portrait.fill")
                         .scaleEffect(1.5)
                         .frame(
-                            width: player.currents < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength) * player.currents/player.intervals,
+                            width: self.player.currentTIme < 0.9 ? 10 : (scWidth > scHeight ? scLength*16/9 > scWidth ? scWidth :  scLength*16/9 : scLength) * self.player.currentTIme/self.player.length,
                             alignment: .trailing
                         )
-                        .vidSlider(duartion: player.intervals, 
-                                   width: scWidth > scHeight ? (scLength*16/9 > scWidth ? scWidth :  scLength*16/9) : scLength, player: player)
+                        .vidSlider(duartion: self.player.length,
+                                   width: scWidth > scHeight ? (scLength*16/9 > scWidth ? scWidth :  scLength*16/9) : scLength, setTime: $setTime)
                         .foregroundStyle(.white)
                 }
             }
@@ -387,7 +409,9 @@ extension VideoPlay {
                     // 뒤로 15초
                     Button {
                         HapticManager.instance.impact(style: .light)
-                        player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo)
+                        //player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo)
+                        //self.forawardOrRewind = "+"
+                        self.player.moveFrame(to: Int32(self.goBackTime))
                     } label: {
                         Image(systemName: "gobackward.\(Int(self.goBackTime))")
                             .resizable()
@@ -400,7 +424,8 @@ extension VideoPlay {
                     // 앞으로 15초
                     Button {
                         HapticManager.instance.impact(style: .light)
-                        player.moveFrame(to: self.goBackTime, spd: self.tempo)
+                        //self.forawardOrRewind = "+"
+                        self.player.moveFrame(to: Int32(-self.goBackTime))
                     } label: {
                         Image(systemName: "goforward.\(Int(self.goBackTime))")
                             .resizable()
@@ -415,7 +440,8 @@ extension VideoPlay {
                 //재생 정지 버튼
                 Button{
                     audioManager.play()
-                    player.plays()
+                    self.player.plays()
+                    self.isPlaying.toggle()
                     
                 } label: {
                     ZStack{
@@ -423,11 +449,11 @@ extension VideoPlay {
                             .foregroundStyle(.white)
                             .frame(height: (0.6 > scWidth/scHeight && scWidth/scHeight > 0.5) ? 70 : 90)
                             .shadow(radius: 8, y: 5)
-                        Image(systemName: player.isplaying ? "pause.fill" : "play.fill")
+                        Image(systemName: self.isPlaying ? "pause.fill" : "play.fill")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 40)
-                            .offset(x: player.isplaying ? 0 : 5)
+                            .offset(x: self.isPlaying ? 0 : 5)
                             .foregroundStyle(.red)
                     }
                 }
@@ -571,11 +597,12 @@ extension VideoPlay {
             }
             let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
             self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
-            player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
-            self.vidurl = URL(string: "https://rr1---sn-npoeenll.googlevideo.com/videoplayback?expire=1731795284&ei=88Q4Z_WzOYfUxN8PwN2gkAw&ip=2c0f%3Aeb58%3A601%3A7400%3A70f4%3Afbbf%3A564d%3A2a86&id=o-AKLpdf1zJPy9TvIXKsQT_RDui6yuL67sRI9tGIvgfIUS&itag=400&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&vprv=1&svpuc=1&mime=video%2Fmp4&rqh=1&gir=yes&clen=162357252&dur=207.323&lmt=1726467659179788&keepalive=yes&fexp=24350590,24350675,24350705,24350737,51299154,51312688,51326932&c=ANDROID_VR&txp=5532434&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cvprv%2Csvpuc%2Cmime%2Crqh%2Cgir%2Cclen%2Cdur%2Clmt&sig=AJfQdSswRQIhAKBIKUF9pGLjwQCOksbCFUGbgWwLO6ftggG7I-1YrmJYAiB8VZ3A0FsxVuuE_ZFAKOTGuO_drnYvhwQiv2n5fGPVSg%3D%3D&rm=sn-bgv02x8p8xoqp-v05l7e&rrc=79,80&req_id=33d8134fbf3ba3ee&cmsv=e&redirect_counter=2&cm2rm=sn-avnz7l&cms_redirect=yes&met=1731773745,&mh=9V&mip=115.22.123.42&mm=34&mn=sn-npoeenll&ms=ltu&mt=1731773325&mv=m&mvi=1&pl=18&rms=ltu,au&lsparams=met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=AGluJ3MwRAIgTpX2ciYz9FGvrBuK6DnWmukxxFuMkeb6_CuIr4cvG-UCIA-4aq6HT8Hwef3weVVhMh3ZAhH0VfKsaieUuWqOdJ4Z")
-            
-            envPlayer.player = self.player
-            envPlayer.isOn = true
+//            player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
+            let length = Double(self.innertube.info?.videoDetails.lengthSeconds ?? "0") ?? 0
+            let vidurl = URL(string: selectedVideo.url ?? "http://www.youtube.com")
+            self.player.loadVideo(url: vidurl, vidLength: length, audioManager: self.audioManager)
+            //envPlayer.player = self.player
+            //envPlayer.isOn = true
         }
     }
     // 오디오 세팅
@@ -589,7 +616,7 @@ extension VideoPlay {
         //self.isReady = true
         self.vidFull = true
         self.playing = true
-        player.end = false
+        self.vidEnd = false
     }
     // 휠 돌아감 측정
     private func change(location: CGPoint) {

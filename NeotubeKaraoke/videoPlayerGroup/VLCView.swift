@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import MobileVLCKit
 
-struct VLCView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct VLCView: UIViewRepresentable {
+    func updateUIView(_ uiView: UIView, context: Context) {
+        
     }
-}
-
-#Preview {
-    VLCView()
+    
+    typealias UIViewType = UIView
+    @State var player: VLCMediaPlayer
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        player.drawable = view
+        return view
+    }
 }
