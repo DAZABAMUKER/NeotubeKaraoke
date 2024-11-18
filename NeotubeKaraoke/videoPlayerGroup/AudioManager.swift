@@ -23,7 +23,7 @@ class AudioManager: ObservableObject {
     var crowd: AVAudioFile!
     var audioFileLength: AVAudioFramePosition = 0
     var offsetFrame: Double = 0
-    var intervalLimit: Double = 0.1
+    var intervalLimit: Double = 0.5
     var ready: Bool = false
     var currentFrame: AVAudioFramePosition {
         guard
@@ -123,6 +123,7 @@ class AudioManager: ObservableObject {
             self.clap = try AVAudioFile(forReading: clapSound!)
             self.crowd = try AVAudioFile(forReading: crowdSound!)
             offsetFrame = 0
+            self.ready = true
             //audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             //try audioFile.read(into: audioFileBuffer)
         }
@@ -218,12 +219,19 @@ class AudioManager: ObservableObject {
     }
     
     public func checkVidTime(vidTime: Double) {
-        let audiTime = offsetFrame + Double(currentFrame)/44100.0
-        var interval = audiTime - vidTime - self.vidSync
-        //print(interval)
-        if interval < 0 {
-            interval *= -1
+        guard
+            let lastRenderTime = playerNode.lastRenderTime, let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime)
+        else {
+            return
         }
+        //print("매니저",Double(playerTime.sampleTime)/44100.0)
+        
+        let audiTime = offsetFrame + Double(playerTime.sampleTime)/playerTime.sampleRate
+        var interval = abs(audiTime - vidTime - self.vidSync)
+        //print(interval)
+//        if interval < 0 {
+//            interval *= -1
+//        }
         if Double(audioFileLength / 44100) - audiTime < 1 {
             playerNode.stop()
             //audioEngine.stop()

@@ -12,8 +12,8 @@ struct DragVidProgress: ViewModifier {
     @State var offset = 0.0
     var duration: Double
     var width: Double
-    @Binding var progressLocation: Int32
-    //var player: VideoPlayers
+    @State var progressLocation: Int32 = 0
+    var player: vlcPlayerController
     public func body(content: Content) -> some View {
         content
             .offset(x: self.offset)
@@ -24,9 +24,9 @@ struct DragVidProgress: ViewModifier {
                 })
                 .onEnded({ gesture in
                     print(self.offset)
-                    self.progressLocation = Int32(gesture.location.x*duration/width)
+                    self.progressLocation = Int32(gesture.location.x*duration*1000/width)
                     print(progressLocation)
-                    //player.progressSlider(to: progressLocation)
+                    player.progressSlider(to: progressLocation)
                     self.offset = 0
                 })
             )
@@ -35,7 +35,7 @@ struct DragVidProgress: ViewModifier {
 }
 
 extension View {
-    func vidSlider(duartion: Double, width: Double, setTime: Binding<Int32>/*, player: VideoPlayers*/) -> some View {
-        modifier(DragVidProgress(duration: duartion, width: width, progressLocation: setTime/*, player: player*/))
+    func vidSlider(duartion: Double, width: Double, player: vlcPlayerController) -> some View {
+        modifier(DragVidProgress(duration: duartion, width: width, player: player))
     }
 }

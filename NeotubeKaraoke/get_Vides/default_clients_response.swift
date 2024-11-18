@@ -144,4 +144,16 @@ struct VideoDetails: Codable {
     var videoId: String?
     var title: String?
     var lengthSeconds: String?
+    var thumbnail : Thumbnails?
+
+}
+struct Thumbnails: Codable {
+    var thumbnails: [ThumbnailImage]?
+    
+}
+
+struct ThumbnailImage: Codable {
+    var url: String?
+    let width: Int?
+    let height: Int?
 }

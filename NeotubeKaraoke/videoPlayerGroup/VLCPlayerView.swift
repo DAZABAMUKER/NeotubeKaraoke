@@ -57,29 +57,30 @@ struct VLCPlayerView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
         player.drawable = view
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "timeObserver"), object: nil)
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "vlccState"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "time"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "state"), object: nil)
 //        self.player.removeObserver(self.player.time, forKeyPath: "timeObserver")
-        self.player.addObserver(self.player.time, forKeyPath: "timeObserver", options:[.old, .new] , context: nil)
+        //self.player.addObserver(self.player.time, forKeyPath: "timeObserver", options:[.old, .new] , context: nil)
         //player.audio?.isMuted = false
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "timeObserver"), object: self.player.time, queue: .main) { value in
-            if self.player.state != .playing {
-                return
-            } else {
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "time"), object: self.player, queue: .main) { value in
+//            if self.player.state != .playing {
+//                return
+//            } else {
+            print(self.time)
                 if self.vidLength < Double(truncating: player.media?.length.value ?? 0) {
                     self.time = Double(truncating: player.time.value ?? 0) / 2000
                 } else {
                     self.time = Double(truncating: player.time.value ?? 0) / 1000
                 }
-                if self.vidLength - time < 0.05 {
-                    self.player.pause()
-                    self.end = true
-                }
+//                if self.vidLength - time < 0.05 {
+//                    self.player.pause()
+//                    self.end = true
+//                }
                 
-            }
+//            }
         }
         
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "vlccState"), object: self.player.state, queue: .main) { value in
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "state"), object: self.player, queue: .main) { value in
             if self.player.state == .opening {
                 //print("플레이 기다리는 중")
             } else if self.player.state == .playing {
