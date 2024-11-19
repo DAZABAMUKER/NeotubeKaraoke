@@ -490,7 +490,7 @@ extension VideoPlay {
                             .resizable()
                             .scaledToFit()
                             .frame(height: 40)
-                            .offset(x: self.isPlaying ? 0 : 5)
+                            .offset(x: self.player.ready ? 0 : 5)
                             .foregroundStyle(.red)
                     }
                 }

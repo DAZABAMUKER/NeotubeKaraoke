@@ -164,6 +164,10 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
             } else if self.state == .ended {
                 print("ended\(self.state.rawValue)")
                 print("동영상 완전히 끝")
+                self.audioManager?.close()
+                self.ready = false
+                self.removeObserver(self, forKeyPath: "time")
+                self.removeObserver(self, forKeyPath: "state")
             } else if self.state == .error {
                 print("error\(self.state.rawValue)")
             } else if self.state == .esAdded {
