@@ -10,11 +10,10 @@ import MobileVLCKit
 
 struct VLCView: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: Context) {
-        
     }
     
     typealias UIViewType = UIView
-    @State var player: VLCMediaPlayer
+    @State var player: vlcPlayerController
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
         player.drawable = view

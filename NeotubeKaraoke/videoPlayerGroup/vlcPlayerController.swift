@@ -9,6 +9,7 @@ import SwiftUI
 import MobileVLCKit
 
 class vlcPlayerController: VLCMediaPlayer, ObservableObject {
+    
     //@Published var player: VLCMediaPlayer?
     var audioManager: AudioManager?
     @Published var currentTIme: Double = 0.0
@@ -17,7 +18,10 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
     @Published var vidState: VLCMediaPlayerState? = nil
     @Published var ready: Bool = false
     
+    
+    
     func loadVideo(url: URL?, vidLength: Double, audioManager: AudioManager) {
+        self.stop()
         guard let url = url else { return }
         self.audioManager = audioManager
         self.media = VLCMedia(url: url)
@@ -29,6 +33,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
         //NotificationCenter.default.post(name: Notification.Name(rawValue: "timeObserver"), object: self)
         //NotificationCenter.default.post(name: Notification.Name(rawValue: "vlccState"), object: self)
         self.plays()
+        
     }
     
     func tempo(spd: Float) {
@@ -91,6 +96,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "time" {
+            self.vidState = .playing
             if !ready {
                 
                 if self.audioManager?.ready ?? false {
@@ -136,6 +142,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
                 print("플레이 기다리는 중")
                 self.ready = false
                 self.audioManager?.pause()
+                self.vidState = .buffering
                 //self.play()
                 //self.audioManager?.play()
             } else if self.state == .playing {
@@ -165,6 +172,8 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
                 print("ended\(self.state.rawValue)")
                 print("동영상 완전히 끝")
                 self.audioManager?.close()
+                self.stop()
+                self.vidState = .ended
                 self.ready = false
                 self.removeObserver(self, forKeyPath: "time")
                 self.removeObserver(self, forKeyPath: "state")

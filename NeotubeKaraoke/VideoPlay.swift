@@ -21,7 +21,7 @@ struct VideoPlay: View {
     
     //@State var isiPad = false
     //@State var que = false
-    @StateObject var player = vlcPlayerController()
+    @StateObject var player: vlcPlayerController = vlcPlayerController()
     @StateObject var audioManager = AudioManager()
     @StateObject var downloadManager = MultiPartsDownloadTask()
     @State var tone: Float = 0.0 {
@@ -202,10 +202,8 @@ struct VideoPlay: View {
                 }
                 //Text("\(self.scWidth)\(self.scHeight)")
                 //영상 플레이어 뷰
-                if isAppear{
-                    //AVPlayer 아이템 준비 완료 시 뷰 그림
                     ZStack{
-                        if self.player.vidState == .buffering {
+                        if !self.player.isPlaying {
                             AsyncImage(url: URL(string: self.innertube.info?.videoDetails.thumbnail?.thumbnails?.last?.url ?? "")){ image in
                                 image
                                     .resizable()
@@ -245,11 +243,8 @@ struct VideoPlay: View {
                                 //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
                                     .DragVid(vidFull: $vidFull, tap: $tap)
                                     .ignoresSafeArea(.container)
-                                //                        .onAppear(){
-                                //                            player.player?.play()
-                                //
-                                //더블 탭 건너뛰기
-                                    .onTapGesture(count: 2, perform: { dot in
+                                    .border(.red)
+                                    .onTapGesture(count: 2, perform: { dot in //더블 탭 건너뛰기
                                         if dot.x > scWidth * 0.66  {
                                             //player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
                                             //self.forawardOrRewind = "+"
@@ -263,14 +258,16 @@ struct VideoPlay: View {
                                     .onTapGesture {
                                         tap.toggle()
                                     }
-                        
+                        //                        .onAppear(){
+                        //                            player.player?.play()
+                        //
                     }
-                } else {
-                    //AVPlayer 준비 전 사각형 하나 그려줌(플레이어로 속이는 용도)
-                    Rectangle()
-                        .DragVid(vidFull: $vidFull, tap: $tap)
-                        .foregroundStyle(.black)
-                }
+//                } else {
+//                    //AVPlayer 준비 전 사각형 하나 그려줌(플레이어로 속이는 용도)
+//                    Rectangle()
+//                        .DragVid(vidFull: $vidFull, tap: $tap)
+//                        .foregroundStyle(.black)
+//                }
                 if scWidth < scHeight && vidFull { // 화면 세로 모드 및 플레이어 뷰 전체 화면일 경우
                     buttons(scLength: scWidth, radius: scWidth/scHeight > 0.5 ? 0.38 : 0.55)
                         .onAppear(){
