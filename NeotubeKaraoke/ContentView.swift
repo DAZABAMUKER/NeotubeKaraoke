@@ -61,10 +61,10 @@ struct ContentView: View {
                         //adCoordinator.loadAd()
                         //print(adCoordinator.ad)
                         //adCoordinator.canPlay = false
-                        adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
+                        //adCoordinator.presentAd(from: adViewControllerRepresentable.viewController)
                     } else {
                         print("홀수")
-                        adCoordinator.loadAd()
+                        //adCoordinator.loadAd()
                     }
                 }
             }
