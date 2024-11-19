@@ -32,7 +32,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
         self.addObserver(self, forKeyPath: "state",options: [.old, .new], context: nil)
         //NotificationCenter.default.post(name: Notification.Name(rawValue: "timeObserver"), object: self)
         //NotificationCenter.default.post(name: Notification.Name(rawValue: "vlccState"), object: self)
-        self.plays()
+        self.play()
         
     }
     
@@ -62,35 +62,40 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
     }
     
     func plays() {
+        if self.isPlaying {
+            self.pause()
+        } else {
+            self.play()
+        }
 //        self.play()
 //        print(self.state.rawValue)
 //        self.pause()
 //        print(self.state.rawValue)
 //        self.stop()
 //        print(self.state.rawValue)
-        if self.state == .buffering {
-            print("Button-buffer(2)\(self.state.rawValue)")
-            self.play()
-        } else if self.state == .ended {
-            print("Button-ended(3)\(self.state.rawValue)")
-        } else if self.state == .error {
-            print("Button-error\(self.state.rawValue)")
-        } else if self.state == .esAdded {
-            print("Button-add(7)\(self.state.rawValue)")
-        } else if self.state == .opening {
-            print("Button-open(1)\(self.state.rawValue)")
-        } else if self.state == .paused {
-            self.play()
-            print("Button-pause(6)\(self.state.rawValue)")
-        } else if self.state == .playing {
-            self.pause()
-            print("Button-play(5)\(self.state.rawValue)")
-        } else if self.state == .stopped {
-            print("Button-stop(0)\(self.state.rawValue)")
-            self.play()
-        } else if self.state == .none {
-            print("Button-none\(self.state.rawValue)")
-        }
+//        if self.state == .buffering {
+//            print("Button-buffer(2)\(self.state.rawValue)")
+//            //self.play()
+//        } else if self.state == .ended {
+//            print("Button-ended(3)\(self.state.rawValue)")
+//        } else if self.state == .error {
+//            print("Button-error\(self.state.rawValue)")
+//        } else if self.state == .esAdded {
+//            print("Button-add(7)\(self.state.rawValue)")
+//        } else if self.state == .opening {
+//            print("Button-open(1)\(self.state.rawValue)")
+//        } else if self.state == .paused {
+//            self.play()
+//            print("Button-pause(6)\(self.state.rawValue)")
+//        } else if self.state == .playing {
+//            self.pause()
+//            print("Button-play(5)\(self.state.rawValue)")
+//        } else if self.state == .stopped {
+//            print("Button-stop(0)\(self.state.rawValue)")
+//            //self.play()
+//        } else if self.state == .none {
+//            print("Button-none\(self.state.rawValue)")
+//        }
         
     }
     
@@ -108,7 +113,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
                     self.rate = 0.001
                 }
             }
-            print(Double(truncating: self.time.value ?? 0)/2000)
+            //print(Double(truncating: self.time.value ?? 0)/2000)
             if self.length * 1.1 < Double(truncating: self.media!.length.value ?? 0)/1000 {
                 self.currentTIme = Double(truncating: self.time.value ?? 0) / 2000
             } else {

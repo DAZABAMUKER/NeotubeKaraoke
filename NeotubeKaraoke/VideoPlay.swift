@@ -103,7 +103,7 @@ struct VideoPlay: View {
     @State var ringAngle: Double = 0.0
     @Binding var clickVid: Bool
     @State var playing: Bool = false
-    @State var isPlaying: Bool = false
+    //@State var isPlaying: Bool = false
 //   @State var vidurl: URL?
     @State var vidLength: Double = 0.1
 //    @State var time: Double = 0.0
@@ -203,20 +203,45 @@ struct VideoPlay: View {
                 //Text("\(self.scWidth)\(self.scHeight)")
                 //영상 플레이어 뷰
                     ZStack{
-                        if !self.player.isPlaying {
+                        
+                                //PlayerViewController(player: player.player ?? AVPlayer())
+                                VLCView(player: player)
+                                //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
+                                    .DragVid(vidFull: $vidFull, tap: $tap)
+                                    .ignoresSafeArea(.container)
+                                    .onTapGesture(count: 2, perform: { dot in //더블 탭 건너뛰기
+                                        if dot.x > scWidth * 0.66  {
+                                            //player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
+                                            //self.forawardOrRewind = "+"
+                                            self.player.moveFrame(to: Int32(self.goBackTime))
+                                        } else if dot.x < scWidth * 0.33 {
+                                            //player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo) // 뒤로 15초
+                                            //self.forawardOrRewind = "-"
+                                            self.player.moveFrame(to: Int32(-self.goBackTime))
+                                        }
+                                    })
+                                    .simultaneousGesture(
+                                        TapGesture(count: 1).onEnded{
+                                            
+                                            tap.toggle()
+                                            print("Tap")
+                                        }
+                                    )
+                                    
+                        if !self.player.ready && self.vidFull {
                             AsyncImage(url: URL(string: self.innertube.info?.videoDetails.thumbnail?.thumbnails?.last?.url ?? "")){ image in
                                 image
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: self.scHeight, height: scWidth*9/16)
+                                    .frame(width: self.scWidth, height: scWidth*9/16)
                                     .clipShape(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .size(width: self.scHeight, height: scWidth*9/16)
-                                            .offset(x: 0, y: scWidth*9/16/6)
-                                        
+                                        RoundedRectangle(cornerRadius: 0)
+                                            .size(width: self.scWidth, height: scWidth*27/64)
+                                            .offset(x: 0, y: scWidth*9/128)
                                     )
-                                //.border(.red)
-                                    .frame(width: 70/9*16, height: 70)
+                                    .scaleEffect(4/3)
+                                    .DragVid(vidFull: $vidFull, tap: $tap)
+                                    //.frame(width: self.scWidth, height: self.scWidth*9/16)
                                 //.border(.green)
                                 //.shadow(color: .black,radius: 10, x: 0, y: 10)
                             } placeholder: {
@@ -235,38 +260,20 @@ struct VideoPlay: View {
                                 }
                                 .frame(height: 90)
                                 .padding(.leading,7)
+                                .DragVid(vidFull: $vidFull, tap: $tap)
                             }
                             .aspectRatio(16/12, contentMode: .fit)
+                            
+                        } else if !self.player.isPlaying {
+                            //AVPlayer 준비 전 사각형 하나 그려줌(플레이어로 속이는 용도)
+                            Rectangle()
+                                .foregroundStyle(.background)
+                                .brightness(-0.3)
                         }
-                                //PlayerViewController(player: player.player ?? AVPlayer())
-                                VLCView(player: player)
-                                //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
-                                    .DragVid(vidFull: $vidFull, tap: $tap)
-                                    .ignoresSafeArea(.container)
-                                    .border(.red)
-                                    .onTapGesture(count: 2, perform: { dot in //더블 탭 건너뛰기
-                                        if dot.x > scWidth * 0.66  {
-                                            //player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
-                                            //self.forawardOrRewind = "+"
-                                            self.player.moveFrame(to: Int32(self.goBackTime))
-                                        } else if dot.x < scWidth * 0.33 {
-                                            //player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo) // 뒤로 15초
-                                            //self.forawardOrRewind = "-"
-                                            self.player.moveFrame(to: Int32(-self.goBackTime))
-                                        }
-                                    })
-                                    .onTapGesture {
-                                        tap.toggle()
-                                    }
                         //                        .onAppear(){
                         //                            player.player?.play()
                         //
                     }
-//                } else {
-//                    //AVPlayer 준비 전 사각형 하나 그려줌(플레이어로 속이는 용도)
-//                    Rectangle()
-//                        .DragVid(vidFull: $vidFull, tap: $tap)
-//                        .foregroundStyle(.black)
 //                }
                 if scWidth < scHeight && vidFull { // 화면 세로 모드 및 플레이어 뷰 전체 화면일 경우
                     buttons(scLength: scWidth, radius: scWidth/scHeight > 0.5 ? 0.38 : 0.55)
@@ -303,9 +310,9 @@ struct VideoPlay: View {
                         Spacer()
                         Button{
                             audioManager.play()
-                            self.isPlaying = true
+                            self.player.plays()
                         } label: {
-                            Image(systemName: self.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                            Image(systemName: self.player.ready ? "pause.circle.fill" : "play.circle.fill")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 30)
@@ -475,8 +482,6 @@ extension VideoPlay {
                 Button{
                     audioManager.play()
                     self.player.plays()
-                    self.isPlaying.toggle()
-                    
                 } label: {
                     ZStack{
                         Circle()
