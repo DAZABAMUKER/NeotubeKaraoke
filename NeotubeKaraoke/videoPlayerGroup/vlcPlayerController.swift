@@ -119,7 +119,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
             } else {
                 self.currentTIme = Double(truncating: self.time.value ?? 0) / 1000
             }
-            if self.audioManager?.ready ?? false {
+            if self.audioManager?.ready ?? false && (self.length - currentTIme > 5.0) {
                 self.audioManager?.checkVidTime(vidTime: currentTIme)
             }
             

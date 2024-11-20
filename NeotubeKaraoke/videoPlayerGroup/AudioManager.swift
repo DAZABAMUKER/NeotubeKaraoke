@@ -239,6 +239,7 @@ class AudioManager: ObservableObject {
         //print("체크",vidTime, audiTime, interval)
         if interval > self.intervalLimit {
             playerNode.pause()
+            print("나임")
             controlFrame(jump: vidTime)
         }
     }
