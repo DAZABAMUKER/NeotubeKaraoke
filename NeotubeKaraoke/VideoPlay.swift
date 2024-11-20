@@ -202,45 +202,59 @@ struct VideoPlay: View {
                 }
                 //Text("\(self.scWidth)\(self.scHeight)")
                 //영상 플레이어 뷰
-                    ZStack{
-                        
-                                //PlayerViewController(player: player.player ?? AVPlayer())
-                                VLCView(player: player)
-                                //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
-                                    .DragVid(vidFull: $vidFull, tap: $tap)
-                                    .ignoresSafeArea(.container)
-                                    .onTapGesture(count: 2, perform: { dot in //더블 탭 건너뛰기
-                                        if dot.x > scWidth * 0.66  {
-                                            //player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
-                                            //self.forawardOrRewind = "+"
-                                            self.player.moveFrame(to: Int32(self.goBackTime))
-                                        } else if dot.x < scWidth * 0.33 {
-                                            //player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo) // 뒤로 15초
-                                            //self.forawardOrRewind = "-"
-                                            self.player.moveFrame(to: Int32(-self.goBackTime))
-                                        }
-                                    })
-                                    .simultaneousGesture(
-                                        TapGesture(count: 1).onEnded{
-                                            
-                                            tap.toggle()
-                                            print("Tap")
-                                        }
-                                    )
-                                    
+                ZStack{
+                    
+                    //PlayerViewController(player: player.player ?? AVPlayer())
+                    VLCView(player: player)
+                    //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
+                        .DragVid(vidFull: $vidFull, tap: $tap)
+                        .ignoresSafeArea(.container)
+                        .onTapGesture(count: 2, perform: { dot in //더블 탭 건너뛰기
+                            if dot.x > scWidth * 0.66  {
+                                //player.moveFrame(to: self.goBackTime, spd: self.tempo) // 앞으로 15초
+                                //self.forawardOrRewind = "+"
+                                self.player.moveFrame(to: Int32(self.goBackTime))
+                            } else if dot.x < scWidth * 0.33 {
+                                //player.moveFrame(to: -1 * self.goBackTime, spd: self.tempo) // 뒤로 15초
+                                //self.forawardOrRewind = "-"
+                                self.player.moveFrame(to: Int32(-self.goBackTime))
+                            }
+                        })
+                        .simultaneousGesture(
+                            TapGesture(count: 1).onEnded{
+                                
+                                tap.toggle()
+                                print("Tap")
+                            }
+                        )
+                    
                         if !self.player.ready && self.vidFull {
                             AsyncImage(url: URL(string: self.innertube.info?.videoDetails.thumbnail?.thumbnails?.last?.url ?? "")){ image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: self.scWidth, height: scWidth*9/16)
-                                    .clipShape(
-                                        RoundedRectangle(cornerRadius: 0)
-                                            .size(width: self.scWidth, height: scWidth*27/64)
-                                            .offset(x: 0, y: scWidth*9/128)
-                                    )
-                                    .scaleEffect(4/3)
-                                    .DragVid(vidFull: $vidFull, tap: $tap)
+                                if self.scWidth < self.scHeight {
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: self.scWidth, height: scWidth*9/16)
+                                        .clipShape(
+                                            RoundedRectangle(cornerRadius: 0)
+                                                .size(width: self.scWidth, height: scWidth*27/64)
+                                                .offset(x: 0, y: scWidth*9/128)
+                                        )
+                                        .scaleEffect(4/3)
+                                        .DragVid(vidFull: $vidFull, tap: $tap)
+                                } else {
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: self.scHeight*16/9, height: self.scHeight)
+                                        .clipShape(
+                                            RoundedRectangle(cornerRadius: 0)
+                                                .size(width: self.scHeight*27/64, height: self.scHeight*3/4)
+                                                .offset(x: 0, y: self.scHeight/8)
+                                        )
+                                        .scaleEffect(4/3)
+                                        .DragVid(vidFull: $vidFull, tap: $tap)
+                                }
                                     //.frame(width: self.scWidth, height: self.scWidth*9/16)
                                 //.border(.green)
                                 //.shadow(color: .black,radius: 10, x: 0, y: 10)
