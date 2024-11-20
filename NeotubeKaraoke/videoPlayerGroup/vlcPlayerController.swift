@@ -163,6 +163,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
                 //self.audioManager?.controlFrame(jump: self.currentTIme)
                 self.currentTIme = Double(truncating: self.time.value ?? 0) / 1000
                 self.audioManager?.pause()
+                self.vidState = .paused
                 print("pauseeeee")
                 //self.pause()
             } else if self.state == .opening {

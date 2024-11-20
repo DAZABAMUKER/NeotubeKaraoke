@@ -502,11 +502,11 @@ extension VideoPlay {
                             .foregroundStyle(.white)
                             .frame(height: (0.6 > scWidth/scHeight && scWidth/scHeight > 0.5) ? 70 : 90)
                             .shadow(radius: 8, y: 5)
-                        Image(systemName: self.player.ready ? "pause.fill" : "play.fill")
+                        Image(systemName: self.player.vidState == .playing ? "pause.fill" : "play.fill")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 40)
-                            .offset(x: self.player.ready ? 0 : 5)
+                            .offset(x: self.player.vidState == .playing ? 0 : 5)
                             .foregroundStyle(.red)
                     }
                 }
