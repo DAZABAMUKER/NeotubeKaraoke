@@ -278,7 +278,7 @@ struct VideoPlay: View {
                             }
                             .aspectRatio(16/12, contentMode: .fit)
                             
-                        } else if !self.player.isPlaying {
+                        } else if !self.player.isPlaying && !self.vidFull {
                             //AVPlayer 준비 전 사각형 하나 그려줌(플레이어로 속이는 용도)
                             Rectangle()
                                 .foregroundStyle(.background)
