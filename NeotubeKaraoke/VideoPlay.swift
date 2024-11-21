@@ -204,15 +204,8 @@ struct VideoPlay: View {
                 //영상 플레이어 뷰
                 ZStack{
                     //PlayerViewController(player: player.player ?? AVPlayer())
-                    if self.envPlayer.isOn && self.vidFull {
-                        Image(systemName: "display")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: self.scWidth/2, height: self.scWidth/2)
-                            .foregroundStyle(.gray)
-                    } else {
-                        VLCView(player: player)
-                        //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
+                    VLCView(player: player)
+                    //VLCPlayerView(url: $vidurl, audioManager: audioManager, vidLength: $vidLength, time: $time, end: $vidEnd, isPlaying: $isPlaying, tempo: $tempo, forawardOrRewind: $forawardOrRewind, setTIme: $setTime)
                         .DragVid(vidFull: $vidFull, tap: $tap)
                         .ignoresSafeArea(.container)
                         .onTapGesture(count: 2, perform: { dot in //더블 탭 건너뛰기
@@ -233,8 +226,8 @@ struct VideoPlay: View {
                                 print("Tap")
                             }
                         )
-                        
-                        if !self.player.ready && self.vidFull {
+                    
+                    if !self.player.ready && self.vidFull && !self.envPlayer.isOn {
                             AsyncImage(url: URL(string: self.innertube.info?.videoDetails.thumbnail?.thumbnails?.last?.url ?? "")){ image in
                                 if self.scWidth < self.scHeight {
                                     image
@@ -261,7 +254,7 @@ struct VideoPlay: View {
                                         .scaleEffect(4/3)
                                         .DragVid(vidFull: $vidFull, tap: $tap)
                                 }
-                                //.frame(width: self.scWidth, height: self.scWidth*9/16)
+                                    //.frame(width: self.scWidth, height: self.scWidth*9/16)
                                 //.border(.green)
                                 //.shadow(color: .black,radius: 10, x: 0, y: 10)
                             } placeholder: {
@@ -290,11 +283,20 @@ struct VideoPlay: View {
                                 .foregroundStyle(.background)
                                 .brightness(-0.3)
                         }
-                    //                        .onAppear(){
-                    //                            player.player?.play()
-                    //
-                }
-            }
+                    if self.envPlayer.isOn && self.vidFull {
+                        Image(systemName: "display")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: self.scWidth < self.scHeight ? self.scWidth : self.scHeight*27/64,
+                                height:  self.scWidth < self.scHeight ? self.scWidth*27/64 : self.scHeight*3/4
+                            )
+                            .foregroundStyle(.gray)
+                    }
+                        //                        .onAppear(){
+                        //                            player.player?.play()
+                        //
+                    }
 //                }
                 if scWidth < scHeight && vidFull { // 화면 세로 모드 및 플레이어 뷰 전체 화면일 경우
                     buttons(scLength: scWidth, radius: scWidth/scHeight > 0.5 ? 0.38 : 0.55)
