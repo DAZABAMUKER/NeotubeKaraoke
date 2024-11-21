@@ -8,10 +8,10 @@
 import Foundation
 
 final class EnvPlayer: ObservableObject {
-    @Published var player: VideoPlayers
+    @Published var player: vlcPlayerController
     @Published var isOn: Bool
-    static let shared = EnvPlayer(VideoPlayers(), isOn: false)
-    init(_ player: VideoPlayers, isOn: Bool) {
+    static let shared = EnvPlayer(vlcPlayerController(), isOn: false)
+    init(_ player: vlcPlayerController, isOn: Bool) {
         self.player = player
         self.isOn = isOn
     }

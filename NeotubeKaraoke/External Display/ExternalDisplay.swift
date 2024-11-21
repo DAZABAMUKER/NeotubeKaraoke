@@ -19,7 +19,8 @@ struct ExternalDisplay: View {
                     .frame(width: geometry.size.width ,height: geometry.size.height)
                     .opacity(0.3)
                 if player.isOn{
-                    PlayerViewController(player: player.player.player ?? AVPlayer())
+                    //PlayerViewController(player: player.player.player ?? AVPlayer())
+                    VLCView(player: player.player)
                         .onAppear(){
                             print("플레이어 설정 됨")
                         }
