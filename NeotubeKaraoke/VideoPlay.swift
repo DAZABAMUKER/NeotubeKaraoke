@@ -175,13 +175,13 @@ struct VideoPlay: View {
                 }
             }
             //비디오 종료 시
-//            if player.end {
-//                Spacer().onAppear(){
-//                    self.vidEnd = true
-//                    self.vidFull = false
-//                    self.isAppear = false
-//                }
-//            }
+            if self.player.vidEnd {
+                Spacer().onAppear(){
+                    self.vidEnd = true
+                    self.vidFull = false
+                    self.isAppear = false
+                }
+            }
             //MARK: - 진짜 보이는 뷰
             VStack(spacing: 0.0){
                 if scWidth < scHeight { //세로 보드 영상 제목 뷰

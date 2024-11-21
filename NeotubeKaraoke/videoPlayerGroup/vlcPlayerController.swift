@@ -180,6 +180,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
                 self.audioManager?.close()
                 self.stop()
                 self.vidState = .ended
+                self.vidEnd = true
                 self.ready = false
                 self.removeObserver(self, forKeyPath: "time")
                 self.removeObserver(self, forKeyPath: "state")
