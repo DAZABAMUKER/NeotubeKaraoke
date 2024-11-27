@@ -89,6 +89,7 @@ struct TubeStreamingData: Codable {
     var adaptiveFormats: [TubeAdaptiveFormats]?
     var expiresInSeconds: String
     var hlsManifestUrl: String?
+    var serverAbrStreamingUrl: String?
 }
 
 struct TubeFormats: Codable {
@@ -128,7 +129,12 @@ struct TubeAdaptiveFormats: Codable {
     var projectionType: String?
     var averageBitrate: Int?
     var approxDurationMs: String?
+    var highReplication: Bool?
     var audioQuality: String?
+    var audioSampleRate: String?
+    var audioChannels: Int?
+    var loudnessDb: Double?
+    var signatureCipher: String?
     ///////
 }
 
@@ -157,3 +163,104 @@ struct ThumbnailImage: Codable {
     let width: Int?
     let height: Int?
 }
+
+struct TubeResponseBrowser: Codable {
+    //var responsecontext: TUBE
+    //var annotations
+    var videodetails: VideoDetailsBrowser?
+//    var storyboards
+    var playabilitystatus: TubeavailabilityBrowser?
+//    var frameworkupdates
+//    var microformat
+//    var messages
+//    var playerconfig
+//    var attestation
+//    var videoqualitypromosupportedrenderers
+//    var playerads
+    var streamingdata: TubeStreamingDataBrowser?
+//    var trackingparams
+//    var adslots
+//    var playbacktracking
+//    var adbreakheartbeatparams
+//    var adplacements
+//    var cards
+}
+
+
+
+struct TubeavailabilityBrowser: Codable {
+    var status: String?
+    var playableInEmbed: Bool?
+}
+
+struct TubeStreamingDataBrowser: Codable {
+    var formats: [TubeFormatsBrowser]?
+    var adaptiveformats: [TubeAdaptiveFormatsBrowser]?
+    var expiresinseconds: String
+    var hlsManifestUrl: String?
+    var serverabrstreamingurl: String?
+}
+
+struct TubeFormatsBrowser: Codable {
+    var itag: Int?
+    var url: String?
+    var mimetype: String?
+    var bitrate: Int?
+    var width: Int?
+    var height: Int?
+    var lastmodified: String?
+    var contentlength: String?
+    var quality: String?
+    var fps: Int?
+    var qualitylabel: String?
+    var projectiontype: String?
+    var averagebitrate: Int?
+    var audioquality: String
+    var approxdurationMs: String?
+    var audiosampleRate: String?
+    var audiochannels: Int?
+    var signaturecipher: String?
+}
+
+struct TubeAdaptiveFormatsBrowser: Codable {
+    var itag: Int?
+    var url: String?
+    var mimetype: String?
+    var bitrate: Int?
+    var width: Int?
+    var height: Int?
+    var initrange: TubeAdaptiveFormatsRange?
+    var indexrange: TubeAdaptiveFormatsRange?
+    var lastModified: String?
+    var contentlength: String?
+    var quality: String?
+    var fps: Int?
+    var qualitylabel: String?
+    var projectiontype: String?
+    var averagebitrate: Int?
+    var approxdurationMs: String?
+    var highreplication: Bool?
+    var audioquality: String?
+    var audiosamplerate: String?
+    var audiochannels: Int?
+    var loudnessdb: Double?
+    var signaturecipher: String?
+    ///////
+}
+
+struct TubeAdaptiveFormatsRangeBrowser: Codable {
+    var start: String
+    var end: String
+}
+//struct streamingData: Decodable {
+//    var format
+//}
+
+struct VideoDetailsBrowser: Codable {
+    var videoId: String?
+    var title: String?
+    var lengthseconds: String?
+    var thumbnail : Thumbnails?
+
+}
+

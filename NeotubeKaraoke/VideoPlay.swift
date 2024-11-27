@@ -644,28 +644,29 @@ extension VideoPlay {
     // 유튜브 영상 정보 가져와서 세팅
     func getTubeInfo() {
         if !playing {
+            Parse().get_Parse(url:"https://youtube.com/watch?v=\(self.videoId)")
             //let hd720 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
             //let hd360 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
-            let hd1080 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "1080p"}.last
-            let hd720 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "720p"}.last
-            let hd360 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "360p"}.last
-            var selectedVideo = /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats()
-            if resolution == .low || hd720 == nil {
-                selectedVideo = hd360 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
-            } else if resolution == .basic {
-                selectedVideo = hd720 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
-            } else {
-                selectedVideo = hd1080 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
-            }
-            let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
-            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
-//            player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
-            let length = Double(self.innertube.info?.videoDetails.lengthSeconds ?? "0") ?? 0
-            self.vidLength = length
-            let vidurl = URL(string: selectedVideo.url ?? "http://www.youtube.com")
-            self.player.loadVideo(url: vidurl, vidLength: length, audioManager: self.audioManager)
-            envPlayer.player = self.player
-            envPlayer.isOn = true
+//            let hd1080 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "1080p"}.last
+//            let hd720 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "720p"}.last
+//            let hd360 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "360p"}.last
+//            var selectedVideo = /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats()
+//            if resolution == .low || hd720 == nil {
+//                selectedVideo = hd360 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
+//            } else if resolution == .basic {
+//                selectedVideo = hd720 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
+//            } else {
+//                selectedVideo = hd1080 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
+//            }
+//            let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+//            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
+////            player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
+//            let length = Double(self.innertube.info?.videoDetails.lengthSeconds ?? "0") ?? 0
+//            self.vidLength = length
+//            let vidurl = URL(string: selectedVideo.url ?? "http://www.youtube.com")
+//            self.player.loadVideo(url: vidurl, vidLength: length, audioManager: self.audioManager)
+//            envPlayer.player = self.player
+//            envPlayer.isOn = true
         }
     }
     // 오디오 세팅
