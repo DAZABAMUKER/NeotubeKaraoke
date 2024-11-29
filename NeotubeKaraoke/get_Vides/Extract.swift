@@ -21,6 +21,7 @@ class Extract {
             //#"window\[['\"]ytInitialPlayerResponse['\"]]\s*=\s*"#,
             //#"window\[['"]ytInitialPlayerResponse['"]\]\s*=\s*"#,
             //#"ytInitialPlayerResponse\s*=\s*"#,
+            #"jsUrl":"(.*?)"#,
             #"ytInitialPlayerResponse\s*=\s*"#
         ]
         for pattern in patterns {
@@ -39,6 +40,38 @@ class Extract {
 //        }
         return ""
     }
+    
+    func get_ytplayer_config(watch_html: String){
+        /*
+         Get the YouTube player configuration data from the watch html.
+
+            Extract the ``ytplayer_config``, which is json data embedded within the
+            watch html and serves as the primary source of obtaining the stream
+            manifest data.
+
+            :param str html:
+                The html contents of the watch page.
+            :rtype: str
+            :returns:
+                Substring of the html containing the encoded manifest data.
+            */
+        let patterns = [
+            //#"window\[['\"]ytInitialPlayerResponse['\"]]\s*=\s*"#,
+            //#"window\[['"]ytInitialPlayerResponse['"]\]\s*=\s*"#,
+            //#"ytInitialPlayerResponse\s*=\s*"#,
+            #"ytplayer\.config\s*=\s*"#,
+            #"ytInitialPlayerResponse\s*=\s*"#
+        ]
+        for pattern in patterns {
+            do {
+                Parse().parse_for_object(html: watch_html, preceding_regex: pattern)
+            } catch {
+                print(#function, error)
+                //return "HTML could not be parsed"
+            }
+        }
+    }
+    
     
     func playabilityStatus(video_id: String) {
         /*Return the playability status and status explanation of a video.

@@ -9,7 +9,7 @@ import Foundation
 
 class Parse {
     
-    func get_Parse(url: String) {
+    func get_Parse(url: String, video: Bool = true) {
         let watchUrl = URL(string: url)!
         var request = URLRequest(url: watchUrl)
         request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
@@ -22,7 +22,14 @@ class Parse {
             do {
                 let content = String(data: data!, encoding: .utf8) ?? ""
                 //print(content)
-                Extract().initial_player_response(watch_html: content)
+                if video {
+                    let extract = Extract()
+                    extract.initial_player_response(watch_html: content)
+                } else {
+                    Decipher().getMainFunction(jsFile: content)
+                    //print(content)
+                }
+                //extract.get_ytplayer_config(watch_html: content)
 //                guard let regData = content.range(of: #"ytInitialPlayerResponse\s*=\s*"#, options: .regularExpression) else {
 //                    return
 //                }
@@ -208,40 +215,23 @@ class Parse {
          */
         do {
             let regex = try NSRegularExpression(pattern: preceding_regex)
-            print(regex)
+            //print(regex)
             let range = NSRange(location: 0, length: html.count)
-            print(range)
+            //print(range)
             if let matches = regex.firstMatch(in: html, options: [], range: range) {
                 //let match = matches.first
                 print("있음")
                 let start = html.range(of: preceding_regex, options: .regularExpression)?.lowerBound//matches.range.upperBound
+                //print(html[html.range(of: preceding_regex, options: .regularExpression)!])
                 //let startIndex = html.utf8.index(html.startIndex, offsetBy: start)
                 //print(start)
                 //let end = html.utf8.index(html.startIndex, offsetBy: start)
-                var object = String(html[(start ?? html.startIndex)..<html.endIndex]).lowercased()
-                let openCloser = object.range(of: #"{"#, options: .regularExpression)?.lowerBound
-                let closeCloser = object.range(of: #"</script>"#, options: .regularExpression)?.lowerBound
-                object = String(object[(openCloser ?? object.startIndex)..<(closeCloser ?? object.endIndex)])
-                //print(object)
-                let jsonString = try findNestedObjectFastBytes(from: object, startPoint: 0)
-                //let info = try JSONDecoder().decode(TubeResponse.self, from: jsonString.data(using: .utf8) ?? Data())
-                //print(info.streamingData.adaptiveFormats?.first?.signatureCipher!)
-                //let json = try JSONSerialization.jsonObject(with: jsonString.data(using: .utf8) ?? Data()) as! [String: Any]
-                let jsonConverted = try JSONDecoder().decode(TubeResponseBrowser.self, from: jsonString.data(using: .utf8) ?? Data())
-                print(jsonConverted.streamingdata?.adaptiveformats?.first?.signaturecipher)
-                let sig = jsonConverted.streamingdata?.adaptiveformats?.first?.signaturecipher
-                let sOpen = sig?.ranges(of: #"s="#).first?.lowerBound
-                let sClose = sig?.ranges(of: #"&"#).first?.lowerBound
-                //let sRange = sOpen..<sClose
-                let s = sig?.substring(with: sOpen!..<sClose!) ?? ""
-                print(s)
-                //print(json.keys)
-                //let jsonStream = json["streamingdata"] as! NSDictionary
-                //let adaptive = (jsonStream["adaptiveformats"] as! NSArray).firstObject as! NSDictionary
-                //print(adaptive["signaturecipher"])
-                //let streamData = try JSONSerialization.jsonObject(with: jsonStream) as! [String: Any]
-                //print(json["streamingdata"] ?? "no Value")
-                //find_object_from_startpoint(html: object, start_point: object.startIndex)
+                var object = String(html[(start ?? html.startIndex)..<html.endIndex])
+                if preceding_regex == #"ytInitialPlayerResponse\s*=\s*"#{
+                    getSignature(object: object)
+                } else {
+                    getJs(object: object)
+                }
             }
         } catch {
             print(#function, error)
@@ -250,5 +240,60 @@ class Parse {
     
     func parseForObjectFromStartPoint() {
         
+    }
+    
+    func getSignature(object: String) {
+        do {
+            var object = object
+            let openCloser = object.range(of: #"{"#, options: .regularExpression)?.lowerBound
+            let closeCloser = object.range(of: #"</script>"#, options: .regularExpression)?.lowerBound
+            object = String(object[(openCloser ?? object.startIndex)..<(closeCloser ?? object.endIndex)])
+            //print(object)
+            let jsonString = try findNestedObjectFastBytes(from: object, startPoint: 0)
+            //let info = try JSONDecoder().decode(TubeResponse.self, from: jsonString.data(using: .utf8) ?? Data())
+            //print(info.streamingData.adaptiveFormats?.first?.signatureCipher!)
+            //let json = try JSONSerialization.jsonObject(with: jsonString.data(using: .utf8) ?? Data()) as! [String: Any]
+            let jsonConverted = try JSONDecoder().decode(TubeResponse.self, from: jsonString.data(using: .utf8) ?? Data())
+            //print(jsonConverted.streamingdata?.adaptiveformats?.first?.signaturecipher ?? "")
+            let sig = jsonConverted.streamingData.adaptiveFormats?.first?.signatureCipher ?? ""
+            let sOpen = sig.index(sig.ranges(of: #"s="#).first?.lowerBound ?? sig.startIndex, offsetBy: 2)
+            let urlOpen = sig.index(sig.ranges(of: #"url="#).first?.lowerBound ?? sig.startIndex, offsetBy: 4)
+            //let sOpenOffset
+            //let a = sig.ranges(of: #"s="#).first?.lowerBound
+            let sClose = sig.ranges(of: #"&"#).first?.lowerBound
+            //let sRange = sOpen..<sClose
+            let s = sig[sOpen..<sClose!]
+            let url = sig[urlOpen...]
+            //print(s)
+            //print(url)
+            //print(json.keys)
+            //let jsonStream = json["streamingdata"] as! NSDictionary
+            //let adaptive = (jsonStream["adaptiveformats"] as! NSArray).firstObject as! NSDictionary
+            //print(adaptive["signaturecipher"])
+            //let streamData = try JSONSerialization.jsonObject(with: jsonStream) as! [String: Any]
+            //print(json["streamingdata"] ?? "no Value")
+            //find_object_from_startpoint(html: object, start_point: object.startIndex)
+            
+        }
+        catch {
+            print(#function, error)
+        }
+    }
+    
+    func getJs(object: String) {
+        do {
+            var object = object
+            let open = object.firstIndex(of: "/") ?? "".startIndex
+            let close = object.range(of: "base.js", options: .regularExpression)?.lowerBound ?? "".endIndex
+            //print(object[open!..<close!])
+            let jsUrl = "https://youtube.com\(object[open..<close])base.js"
+            print(jsUrl)
+            let jsFile = get_Parse(url: jsUrl, video: false)
+            //print(jsFile)
+            
+        }
+        catch {
+            
+        }
     }
 }

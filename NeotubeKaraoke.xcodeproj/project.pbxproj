@@ -12,6 +12,7 @@
 		030FF2DD2CE8E6AE0033C269 /* VLCPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */; };
 		030FF2E12CE982440033C269 /* vlcPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2E02CE982440033C269 /* vlcPlayerController.swift */; };
 		030FF2E32CE9C38E0033C269 /* VLCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2E22CE9C38E0033C269 /* VLCView.swift */; };
+		030FF2E52CFA4A370033C269 /* Decipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FF2E42CFA4A370033C269 /* Decipher.swift */; };
 		0316559C295AAC6F00B18342 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */; };
 		0316559E295BAC5C00B18342 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0316559D295BAC5C00B18342 /* TableCell.swift */; };
 		0324413F2A03A21D003C1300 /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0324413E2A03A21D003C1300 /* Swipe.swift */; };
@@ -86,6 +87,7 @@
 		030FF2DC2CE8E6AE0033C269 /* VLCPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCPlayerView.swift; sourceTree = "<group>"; };
 		030FF2E02CE982440033C269 /* vlcPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vlcPlayerController.swift; sourceTree = "<group>"; };
 		030FF2E22CE9C38E0033C269 /* VLCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCView.swift; sourceTree = "<group>"; };
+		030FF2E42CFA4A370033C269 /* Decipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decipher.swift; sourceTree = "<group>"; };
 		0316559B295AAC6F00B18342 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		0316559D295BAC5C00B18342 /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		0324413E2A03A21D003C1300 /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				037DC4862AD8F410008D7281 /* InnerTube.swift */,
 				037DC47E2AD5107F008D7281 /* quary.swift */,
 				037DC4802AD511A8008D7281 /* Extract.swift */,
+				030FF2E42CFA4A370033C269 /* Decipher.swift */,
 				037DC4822AD52420008D7281 /* Parse.swift */,
 				037DC4882AD92D5C008D7281 /* default_clients_response.swift */,
 			);
@@ -554,6 +557,7 @@
 				033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */,
 				032DE3E329AEDAC50097C58A /* videoClass.swift in Sources */,
 				037D081A29B580290069ED88 /* DragVideo.swift in Sources */,
+				030FF2E52CFA4A370033C269 /* Decipher.swift in Sources */,
 				0361D55E2B39CA5C009C2C42 /* ManualView.swift in Sources */,
 				03E30DFC2B388C64003EBC6B /* HapticManager.swift in Sources */,
 				037A998E2A02B0EB00A05065 /* ConnectPeer.swift in Sources */,
