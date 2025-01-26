@@ -44,7 +44,6 @@ struct NeotubeKaraokeApp: App {
         }
     }
     init() {
-        //PythonSupport.initialize()
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         let entitlementManager = EntitlementManager()
         let purchaseManager = PurchaseManager(entitlementManager: entitlementManager)

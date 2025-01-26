@@ -187,7 +187,7 @@ struct VideoPlay: View {
                 if scWidth < scHeight { //세로 보드 영상 제목 뷰
                     HStack{
                         Spacer()
-                        Text(self.innertube.info?.videoDetails.title ?? "노래방")
+                        Text(self.innertube.info?.videoDetails?.title ?? "노래방")
                             .lineLimit(2)
                             .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
@@ -228,7 +228,7 @@ struct VideoPlay: View {
                         )
                     
                     if !self.player.ready && self.vidFull && !self.envPlayer.isOn {
-                            AsyncImage(url: URL(string: self.innertube.info?.videoDetails.thumbnail?.thumbnails?.last?.url ?? "")){ image in
+                            AsyncImage(url: URL(string: self.innertube.info?.videoDetails?.thumbnail?.thumbnails?.last?.url ?? "")){ image in
                                 if self.scWidth < self.scHeight {
                                     image
                                         .resizable()
@@ -253,9 +253,10 @@ struct VideoPlay: View {
                                         )
                                         .scaleEffect(4/3)
                                         .DragVid(vidFull: $vidFull, tap: $tap)
+                                        .border(.red, width: 3.0)
                                 }
+                                    
                                     //.frame(width: self.scWidth, height: self.scWidth*9/16)
-                                //.border(.green)
                                 //.shadow(color: .black,radius: 10, x: 0, y: 10)
                             } placeholder: {
                                 ZStack{
@@ -314,7 +315,7 @@ struct VideoPlay: View {
                 if !vidFull {
                     HStack{
                         Spacer()
-                        Text(self.innertube.info?.videoDetails.title ?? "선곡해주세요")
+                        Text(self.innertube.info?.videoDetails?.title ?? "선곡해주세요")
                             .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .bold()
                             .padding()
@@ -327,7 +328,9 @@ struct VideoPlay: View {
                                 //self.isReady = false
                                 self.downloadManager.reset()
                                 self.innertube.infoReady = false
+                                
                                 self.innertube.player(videoId: self.videoId)
+                                //Parse().get_Parse(url:"https://youtube.com/watch?v=\(self.videoId)")
                                 self.clickVid = false
                             }
                         Spacer()
@@ -644,29 +647,31 @@ extension VideoPlay {
     // 유튜브 영상 정보 가져와서 세팅
     func getTubeInfo() {
         if !playing {
-            Parse().get_Parse(url:"https://youtube.com/watch?v=\(self.videoId)")
-            //let hd720 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
-            //let hd360 = self.innertube.info?.streamingData.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
-//            let hd1080 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "1080p"}.last
-//            let hd720 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "720p"}.last
-//            let hd360 = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "360p"}.last
-//            var selectedVideo = /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats()
-//            if resolution == .low || hd720 == nil {
-//                selectedVideo = hd360 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
-//            } else if resolution == .basic {
-//                selectedVideo = hd720 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
-//            } else {
-//                selectedVideo = hd1080 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
-//            }
-//            let audio = self.innertube.info?.streamingData.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
-//            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
-////            player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
-//            let length = Double(self.innertube.info?.videoDetails.lengthSeconds ?? "0") ?? 0
-//            self.vidLength = length
-//            let vidurl = URL(string: selectedVideo.url ?? "http://www.youtube.com")
-//            self.player.loadVideo(url: vidurl, vidLength: length, audioManager: self.audioManager)
-//            envPlayer.player = self.player
-//            envPlayer.isOn = true
+            //let hd720 = self.innertube.info?.streamingData?.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
+            //let hd360 = self.innertube.info?.streamingData?.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
+            let hd1080 = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "1080p"}.last
+            let hd720 = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "720p"}.last
+            let hd360 = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "360p"}.last
+            var selectedVideo = /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats()
+            if resolution == .low || hd720 == nil {
+                selectedVideo = hd360 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
+            } else if resolution == .basic {
+                selectedVideo = hd720 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
+            } else {
+                selectedVideo = hd1080 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
+            }
+            let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
+            //self.player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
+            let length = Double(self.innertube.info?.videoDetails?.lengthSeconds ?? "0") ?? 0
+            self.vidLength = length
+            let vidurl = URL(string: selectedVideo.url ?? "http://www.youtube.com")
+            print(selectedVideo.url)
+            self.player.loadVideo(url: vidurl, vidLength: length, audioManager: self.audioManager)
+            envPlayer.player = self.player
+            if envPlayer.isConnected {
+                envPlayer.isOn = true
+            }
         }
     }
     // 오디오 세팅

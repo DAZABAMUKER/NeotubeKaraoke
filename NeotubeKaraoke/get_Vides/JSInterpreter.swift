@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+class JSInterpreter {
+    func extract_function_code(funcname: String){
+        
+    }
+}

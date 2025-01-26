@@ -10,6 +10,7 @@ import AVKit
 
 struct ExternalDisplay: View {
     @EnvironmentObject var player: EnvPlayer
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .center){
@@ -18,6 +19,12 @@ struct ExternalDisplay: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: geometry.size.width ,height: geometry.size.height)
                     .opacity(0.3)
+                    .onAppear(){
+                        player.isConnected = true
+                    }
+                    .onDisappear(){
+                        player.isConnected = false
+                    }
                 if player.isOn{
                     //PlayerViewController(player: player.player.player ?? AVPlayer())
                     VLCView(player: player.player)

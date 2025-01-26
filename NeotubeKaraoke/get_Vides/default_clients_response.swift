@@ -26,18 +26,23 @@ struct Default_clients: Codable {
     
     var MWEB: Client_response
     var TV_EMBED: Client_response
+    var ios: Client_response
 }
 
 struct Client_response: Codable{
     var context: Contexts
-    var header: Header
-    var api_key: String
+    var header: Header?
+    var api_key: String?
+    var videoId: String?
+    
+    
     
     enum CodingKeys: String, CodingKey {
         //case client
         case context
         case header
         case api_key
+        case videoId
     }
     
 }
@@ -48,6 +53,7 @@ struct Contexts: Codable {
 
 struct ContentContaioner: Codable {
     var context: Contexts
+    var videoId: String?
 }
 
 struct Header: Codable {
@@ -63,6 +69,13 @@ struct Client: Codable {
     var deviceModel: String?
     var androidSdkVersion: Int?
     var clientScreen: String?
+    var osVersion: String?
+    var osName: String?
+    var userAgent: String?
+    var deviceMake: String?
+    var hl: String?
+    var timezone: String?
+    var utcOffsetMinutes: Int?
     
     enum CodingKeys: CodingKey {
         case clientName
@@ -75,13 +88,19 @@ struct Client: Codable {
 
 struct TubeResponse: Codable {
     var playabilityStatus: Tubeavailability
-    var streamingData: TubeStreamingData
-    var videoDetails: VideoDetails
+    var streamingData: TubeStreamingData?
+    var videoDetails: VideoDetails?
+    var responseContext: ResponseCOntext?
 }
+
+struct ResponseCOntext: Codable {
+    var visitorData: String?
+}
+
 
 struct Tubeavailability: Codable {
     var status: String
-    var playableInEmbed: Bool
+    var playableInEmbed: Bool?
 }
 
 struct TubeStreamingData: Codable {
@@ -110,6 +129,7 @@ struct TubeFormats: Codable {
     var approxDurationMs: String?
     var audioSampleRate: String?
     var audioChannels: Int?
+    var signatureCipher: String?
 }
 
 struct TubeAdaptiveFormats: Codable {
@@ -135,6 +155,7 @@ struct TubeAdaptiveFormats: Codable {
     var audioChannels: Int?
     var loudnessDb: Double?
     var signatureCipher: String?
+    var codecs: String?
     ///////
 }
 

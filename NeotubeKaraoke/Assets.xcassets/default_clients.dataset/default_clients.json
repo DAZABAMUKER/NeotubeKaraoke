@@ -11,6 +11,18 @@
         },
         "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
+    "WEB_SAFARI": {
+        "context": {
+            "client": {
+                "clientName": "WEB",
+                "clientVersion": "2.20200720.00.02"
+            }
+        },
+        "header": {
+            "User-Agent": "Mozilla/5.0"
+        },
+        "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
+    },
     "ANDROID": {
         "context": {
             "client": {
@@ -28,8 +40,14 @@
         "context": {
             "client": {
                 "clientName": "IOS",
-                "clientVersion": "17.33.2",
-                "deviceModel": "iPhone14,3"
+                "clientVersion": "20.03.02",
+                "deviceModel": "iPhone16,2",
+                "deviceMake": "Apple",
+                "osVersion": "18.2.1.22C161",
+                "osName": "iPhone",
+                "userAgent" : "com.google.ios.youtube/20.03.02 (iPhone16,2; U; CPU iOS 18_2_1 like Mac OS X;)"
+                
+                
             }
         },
         "header": {
@@ -37,6 +55,33 @@
         },
         "api_key": "AIzaSyDegHUx5l5yGfcu3VK3zfhQmdS8iSChQzM"
     },
+    "ios": {
+        "context": {
+            "client": {
+              "clientName": "IOS",
+              "clientVersion": "19.45.4",
+              "deviceMake": "Apple",
+              "deviceModel": "iPhone16,2",
+              "userAgent": "com.google.ios.youtube/19.45.4 (iPhone16,2; U; CPU iOS 18_1_0 like Mac OS X;)",
+              "osName": "iPhone",
+              "osVersion": "18.1.0.22B83",
+              "hl": "en",
+              "timeZone": "UTC",
+              "utcOffsetMinutes": 0
+            }
+          },
+          "videoId": "PfFylTVQaQ4",
+          "playbackContext": {
+            "contentPlaybackContext": {
+              "html5Preference": "HTML5_PREF_WANTS",
+              "signatureTimestamp": 20110
+            }
+          },
+          "contentCheckOk": true,
+          "racyCheckOk": true
+    },
+    
+    
 
     "WEB_EMBED": {
         "context": {

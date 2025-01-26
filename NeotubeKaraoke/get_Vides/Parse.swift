@@ -9,6 +9,9 @@ import Foundation
 
 class Parse {
     
+    var signature = ""
+    var signUrl = ""
+    
     func get_Parse(url: String, video: Bool = true) {
         let watchUrl = URL(string: url)!
         var request = URLRequest(url: watchUrl)
@@ -25,9 +28,16 @@ class Parse {
                 if video {
                     let extract = Extract()
                     extract.initial_player_response(watch_html: content)
-                } else {
-                    Decipher().getMainFunction(jsFile: content)
                     //print(content)
+                    
+                } else {
+                    let decrypt = Decipher().getMainFunction(jsFile: content, signature: self.signature, pattern: #"[\{\d\w\(\)\\.="]*?;(..\...\(.\,..?\);){3,}.*?\}"#, sig: true)
+                    let nFunc = Decipher().getMainFunction(jsFile: content, signature: self.signature, pattern: #"(?:.get\("n"\)\)&&\(b=|(?:b=String\.fromCharCode\(110\)|(?:[a-zA-Z0-9_$.]+)&&\(b="nn"\[\+.+?\])(?:,[a-zA-Z0-9_$]+\(a\))?,c=a\.(?:get\(b\)|[a-zA-Z0-9_$]+\[b\]\|\|null)\)&&\(c=|\b(?:[a-zA-Z0-9_$]+)=)(?:[a-zA-Z0-9_$]+)(?:\[(?:\d+)\])?\([a-zA-Z]\)(?:,[a-zA-Z0-9_$]+\.set\((?:"n+"|[a-zA-Z0-9_$]+),([a-zA-Z0-9_$]+)\))"#, sig: false)
+                                                             
+                    //print(self.signUrl.removingPercentEncoding ?? "" + "&sig=\(decrypt)")
+                    //print(self.signature)
+                    //print(decrypt)
+                    //print("\(self.signUrl.removingPercentEncoding ?? "")&sig=\(decrypt)")
                 }
                 //extract.get_ytplayer_config(watch_html: content)
 //                guard let regData = content.range(of: #"ytInitialPlayerResponse\s*=\s*"#, options: .regularExpression) else {
@@ -228,7 +238,7 @@ class Parse {
                 //let end = html.utf8.index(html.startIndex, offsetBy: start)
                 var object = String(html[(start ?? html.startIndex)..<html.endIndex])
                 if preceding_regex == #"ytInitialPlayerResponse\s*=\s*"#{
-                    getSignature(object: object)
+                    getSignature(object: object, html: html)
                 } else {
                     getJs(object: object)
                 }
@@ -242,7 +252,7 @@ class Parse {
         
     }
     
-    func getSignature(object: String) {
+    func getSignature(object: String, html: String) {
         do {
             var object = object
             let openCloser = object.range(of: #"{"#, options: .regularExpression)?.lowerBound
@@ -255,17 +265,22 @@ class Parse {
             //let json = try JSONSerialization.jsonObject(with: jsonString.data(using: .utf8) ?? Data()) as! [String: Any]
             let jsonConverted = try JSONDecoder().decode(TubeResponse.self, from: jsonString.data(using: .utf8) ?? Data())
             //print(jsonConverted.streamingdata?.adaptiveformats?.first?.signaturecipher ?? "")
-            let sig = jsonConverted.streamingData.adaptiveFormats?.first?.signatureCipher ?? ""
+            let sig = jsonConverted.streamingData?.formats?.first?.signatureCipher ?? ""
+            print(jsonConverted.streamingData?.formats.map{$0.map{$0.mimeType}})
             let sOpen = sig.index(sig.ranges(of: #"s="#).first?.lowerBound ?? sig.startIndex, offsetBy: 2)
             let urlOpen = sig.index(sig.ranges(of: #"url="#).first?.lowerBound ?? sig.startIndex, offsetBy: 4)
             //let sOpenOffset
             //let a = sig.ranges(of: #"s="#).first?.lowerBound
             let sClose = sig.ranges(of: #"&"#).first?.lowerBound
             //let sRange = sOpen..<sClose
-            let s = sig[sOpen..<sClose!]
-            let url = sig[urlOpen...]
-            //print(s)
-            //print(url)
+            self.signature = String(sig[sOpen..<sClose!])//.replacingOccurrences(of: "%253D", with: "%3D").replacingOccurrences(of: "%3D", with: "=")
+            self.signUrl = String(sig[urlOpen...])
+            //print(signUrl.removingPercentEncoding)
+            parse_for_object(html: html, preceding_regex: #"jsUrl":"(.*?)"#)
+            
+            print(self.signature)
+            print(signUrl)
+            //print(sig)
             //print(json.keys)
             //let jsonStream = json["streamingdata"] as! NSDictionary
             //let adaptive = (jsonStream["adaptiveformats"] as! NSArray).firstObject as! NSDictionary
@@ -286,7 +301,8 @@ class Parse {
             let open = object.firstIndex(of: "/") ?? "".startIndex
             let close = object.range(of: "base.js", options: .regularExpression)?.lowerBound ?? "".endIndex
             //print(object[open!..<close!])
-            let jsUrl = "https://youtube.com\(object[open..<close])base.js"
+            //let jsUrl = "https://youtube.com\(object[open..<close])base.js"
+            let jsUrl = "https://www.youtube.com/s/player/2f1832d2/player_ias.vflset/en_US/base.js"
             print(jsUrl)
             let jsFile = get_Parse(url: jsUrl, video: false)
             //print(jsFile)

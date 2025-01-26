@@ -10,10 +10,12 @@ import Foundation
 final class EnvPlayer: ObservableObject {
     @Published var player: vlcPlayerController
     @Published var isOn: Bool
+    @Published var isConnected: Bool
     //var audioManager: AudioManager?
     static let shared = EnvPlayer(vlcPlayerController(), isOn: false)
-    init(_ player: vlcPlayerController, isOn: Bool) {
+    init(_ player: vlcPlayerController, isOn: Bool, isConnected: Bool = false) {
         self.player = player
         self.isOn = isOn
+        self.isConnected = false
     }
 }
