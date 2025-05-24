@@ -23,7 +23,8 @@ class Parse {
                 return
             }
             do {
-                let content = String(data: data!, encoding: .utf8) ?? ""
+                guard let data = data else { return print(#function, "Data Unwarpping Failed") }
+                let content = String(data: data, encoding: .utf8) ?? ""
                 //print(content)
                 if video {
                     let extract = Extract()
@@ -133,8 +134,8 @@ class Parse {
             if !currentChar.isWhitespace {
                 lastChar = currentChar
             }
-            
-            if let closer = closers[stack.last!], currentChar == closer {
+            let lastStack = stack.last ?? " "
+            if let closer = closers[lastStack], currentChar == closer {
                 stack.popLast()
             } else if closers.keys.contains(currentChar) {
                 if !(currentChar == "/" && !["(", ",", "=", ":", "[", "!", "&", "|", "?", "{", "}", ";"].contains(lastChar)) {
@@ -271,9 +272,9 @@ class Parse {
             let urlOpen = sig.index(sig.ranges(of: #"url="#).first?.lowerBound ?? sig.startIndex, offsetBy: 4)
             //let sOpenOffset
             //let a = sig.ranges(of: #"s="#).first?.lowerBound
-            let sClose = sig.ranges(of: #"&"#).first?.lowerBound
+            guard let sClose = sig.ranges(of: #"&"#).first?.lowerBound else {return print(#function, "get signature sclose variable failed")}
             //let sRange = sOpen..<sClose
-            self.signature = String(sig[sOpen..<sClose!])//.replacingOccurrences(of: "%253D", with: "%3D").replacingOccurrences(of: "%3D", with: "=")
+            self.signature = String(sig[sOpen..<sClose])//.replacingOccurrences(of: "%253D", with: "%3D").replacingOccurrences(of: "%3D", with: "=")
             self.signUrl = String(sig[urlOpen...])
             //print(signUrl.removingPercentEncoding)
             parse_for_object(html: html, preceding_regex: #"jsUrl":"(.*?)"#)

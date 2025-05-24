@@ -213,7 +213,12 @@ struct SettingView: View {
                         HStack{
                             Text("앱 버전")
                             Spacer()
-                            Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String)
+                            if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+                                Text("앱 버전: \(version)")
+                            } else {
+                                Text("앱 버전 정보를 찾을 수 없습니다.")
+                                    .foregroundColor(.red)
+                            }
                         }
                         Button{
                             self.profile = true

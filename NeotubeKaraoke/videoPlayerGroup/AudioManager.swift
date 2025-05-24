@@ -117,11 +117,11 @@ class AudioManager: ObservableObject {
                 print(" 파일 안나오잖아")
                 return
             }*/
-            let clapSound = Bundle.main.url(forResource: "clap", withExtension: "wav")
-            let crowdSound = Bundle.main.url(forResource: "crowd", withExtension: "wav")
+            guard let clapSound = Bundle.main.url(forResource: "clap", withExtension: "wav") else {return}
+            guard let crowdSound = Bundle.main.url(forResource: "crowd", withExtension: "wav") else {return}
             self.audioFile = try AVAudioFile(forReading: file)
-            self.clap = try AVAudioFile(forReading: clapSound!)
-            self.crowd = try AVAudioFile(forReading: crowdSound!)
+            self.clap = try AVAudioFile(forReading: clapSound)
+            self.crowd = try AVAudioFile(forReading: crowdSound)
             offsetFrame = 0
             self.ready = true
             //audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))

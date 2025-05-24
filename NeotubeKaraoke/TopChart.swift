@@ -10,8 +10,8 @@ import SwiftUI
 struct TopChart: View {
     @Binding var inputVal: String
     @Binding var searching: Bool
-    @State var showTjChart = true // tj 노래방 차트
-    @State var showKYChart = false // 금영 노래방 차트
+    @State var showTjChart = false // tj 노래방 차트
+    @State var showKYChart = true // 금영 노래방 차트
     @State var showtjPopChart = false
     @State var showTjJPopChart = false
     
@@ -50,6 +50,9 @@ struct TopChart: View {
                         .foregroundStyle(.orange)
                         .padding()
                         .bold()
+                        .onAppear(){
+                            getPopularChart.KYKaraoke()
+                        }
                     Spacer()
                     Button {
                         self.searchToggle = true
@@ -89,7 +92,7 @@ struct TopChart: View {
                             }
                         }
                         Picker("노래방 곡번호 검색", selection: $karaoke) {
-                            Text("Tj").tag(Karaoke.Tj)
+                            //Text("Tj").tag(Karaoke.Tj)
                             Text("KY").tag(Karaoke.KY)
                         }
                         .pickerStyle(.segmented)
@@ -156,6 +159,7 @@ struct TopChart: View {
                 //                ScrollView(.horizontal){
                 HStack{
                     //Spacer()
+                    /*
                     Button {
                         getPopularChart.tjKaraoke()
                         self.showTjChart = true
@@ -229,6 +233,7 @@ struct TopChart: View {
                     }
                     //.shadow(color: Color.black.opacity(0.8), radius: 7)
                     //.padding(.horizontal, 10)
+                    */
                     Button {
                         getPopularChart.KYKaraoke()
                         self.showTjChart = false
@@ -257,7 +262,7 @@ struct TopChart: View {
                 //.border(.red)
                 //                }
                 //                .frame(height: 200)
-                if showTjChart || showtjPopChart || showTjJPopChart {
+                /*if showTjChart || showtjPopChart || showTjJPopChart {
                     List{
                         Section{
                             ForEach(0..<getPopularChart.tjChartTitle.count, id: \.self) { index in
@@ -301,13 +306,13 @@ struct TopChart: View {
                         }
                     }
                     //.listStyle(.plain)
-                }
+                }*/
                 if showKYChart {
                     List{
                         Section{
                             ForEach(0..<getPopularChart.KYChartTitle.count, id: \.self) { index in
                                 Button {
-                                    self.inputVal = "\(getPopularChart.KYChartTitle[index]) \(getPopularChart.KYChartMusician[index]) 금영 노래방"
+                                    self.inputVal = "\(getPopularChart.KYChartTitle[index]) \(getPopularChart.KYChartMusician[index]) 노래방"
                                     self.searching = true
                                 } label: {
                                     HStack{

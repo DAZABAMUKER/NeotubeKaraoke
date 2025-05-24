@@ -84,8 +84,9 @@ let api_keys = [
                 }
                 DispatchQueue.main.async {
                     do {
+                        guard let data = data else {return}
                         print(String(data: data ?? Data(), encoding: .utf8))
-                        self.info = try JSONDecoder().decode(TubeResponse.self, from: data!)
+                        self.info = try JSONDecoder().decode(TubeResponse.self, from: data)
                         if self.info?.playabilityStatus.status == "LOGIN_REQUIRED" {
                             self.visitorData = self.info?.responseContext?.visitorData ?? ""
                             self.player(videoId: videoId)

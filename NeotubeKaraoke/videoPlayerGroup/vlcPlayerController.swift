@@ -114,7 +114,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
                 }
             }
             //print(Double(truncating: self.time.value ?? 0)/2000)
-            if self.length * 1.1 < Double(truncating: self.media!.length.value ?? 0)/1000 {
+            if self.length * 1.1 < Double(truncating: self.media?.length.value ?? 0)/1000 {
                 self.currentTIme = Double(truncating: self.time.value ?? 0) / 2000
             } else {
                 self.currentTIme = Double(truncating: self.time.value ?? 0) / 1000
@@ -135,7 +135,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
         }
         if keyPath == "state", let change = change, let newValue = change[NSKeyValueChangeKey.newKey] as? Int , let oldValue = change[NSKeyValueChangeKey.oldKey] as? Int {
             if oldValue == 5 {
-                self.length = Double(truncating: self.media!.length.value ?? 0)/1000
+                self.length = Double(truncating: self.media?.length.value ?? 0)/1000
                 
                 //self.pause()
                 //self.audioManager?.pause()
@@ -151,7 +151,7 @@ class vlcPlayerController: VLCMediaPlayer, ObservableObject {
                 //self.play()
                 //self.audioManager?.play()
             } else if self.state == .playing {
-                if self.length * 1.1 < Double(truncating: self.media!.length.value ?? 0)/1000 {
+                if self.length * 1.1 < Double(truncating: self.media?.length.value ?? 0)/1000 {
                     self.currentTIme = Double(truncating: self.time.value ?? 0) / 2000
                 } else {
                     self.currentTIme = Double(truncating: self.time.value ?? 0) / 1000

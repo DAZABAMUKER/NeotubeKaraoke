@@ -21,20 +21,21 @@ class GetPopularChart: ObservableObject {
     func searchSongOfTj(val: String) {
         let baseUrl = "http://m.tjmedia.com/tjsong/song_search_result.asp?strCond=1&natType=&strType=0&strText=\(val)"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
+        guard let url = URL(string: urlEncoded) else {return}
         DispatchQueue.main.async {
             self.Numbers = []
             self.Titles = []
             self.Singers = []
         }
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(decoding: data!, as: UTF8.self)
+                guard let data = data else { return print(#function, "TJ Data Failed") }
+                let content = String(decoding: data, as: UTF8.self)
                 self.searchTjSongParse(html: content)
             }
         }.resume()
@@ -43,20 +44,21 @@ class GetPopularChart: ObservableObject {
     func searchSongOfKY(val: String) {
         let baseUrl = "https://kysing.kr/search/?category=2&keyword=\(val)"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
+        guard let url = URL(string: urlEncoded) else {return}
         DispatchQueue.main.async {
             self.Numbers = []
             self.Titles = []
             self.Singers = []
         }
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(decoding: data!, as: UTF8.self)
+                guard let data = data else { return print(#function, "KY Data Unwarpping Failed") }
+                let content = String(decoding: data, as: UTF8.self)
                 self.searchKYSongParse(html: content)
             }
         }.resume()
@@ -65,17 +67,19 @@ class GetPopularChart: ObservableObject {
     func tjKaraoke() {
         self.tjChartMusician = [String]()
         self.tjChartTitle = [String]()
-        let baseUrl = "https://www.tjmedia.com/tjsong/song_monthPopular.asp"
+        let baseUrl = "https://www.tjmedia.com/chart/top100"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        guard let url = URL(string: urlEncoded) else {return}
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(decoding: data!, as: UTF8.self)
+                guard let data = data else { return print(#function, "Data Unwarpping Failed") }
+                let content = String(decoding: data, as: UTF8.self)
+                print(content)
                 self.tjParse(html: content)
             }
         }.resume()
@@ -84,17 +88,18 @@ class GetPopularChart: ObservableObject {
     func tjKaraokePop() {
         self.tjChartMusician = [String]()
         self.tjChartTitle = [String]()
-        let baseUrl = "https://www.tjmedia.com/tjsong/song_monthPopular.asp?strType=2"
+        let baseUrl = "https://www.tjmedia.com/chart/top100" //"https://www.tjmedia.com/tjsong/song_monthPopular.asp?strType=2"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        guard let url = URL(string: urlEncoded) else {return}
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(decoding: data!, as: UTF8.self)
+                guard let data = data else { return print(#function, "tj Data Unwarpping Failed") }
+                let content = String(decoding: data, as: UTF8.self)
                 self.tjParse(html: content)
             }
         }.resume()
@@ -105,15 +110,16 @@ class GetPopularChart: ObservableObject {
         self.tjChartTitle = [String]()
         let baseUrl = "https://www.tjmedia.com/tjsong/song_monthPopular.asp?strType=3"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        guard let url = URL(string: urlEncoded) else {return}
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(decoding: data!, as: UTF8.self)
+                guard let data = data else { return print(#function, "tj jpop Data Unwarpping Failed") }
+                let content = String(decoding: data, as: UTF8.self)
                 self.tjParse(html: content)
             }
         }.resume()
@@ -123,16 +129,26 @@ class GetPopularChart: ObservableObject {
         do {
             let document = try SwiftSoup.parse(html)
             print(document.charset())
-            guard let body = document.body() else {
-                return
-            }
-            var MusicianChart = try body.getElementById("BoardType1")?.getElementsByTag("tr").map{try $0.select("td:nth-child(4)")}.map{try $0.text()}
-            let titleChart = try body.getElementById("BoardType1")?.getElementsByClass("left").map{try $0.text()}
-            MusicianChart?.remove(at: 0)
-            DispatchQueue.main.async {
-                self.tjChartMusician = MusicianChart!
-                self.tjChartTitle = titleChart!
-            }
+//            guard let body = document.body() else {
+//                return
+//            }
+            
+            let firstLinkTitles:Elements = try document.select(".flex-box").select("p").select("span") //.은 클래스
+                    for i in firstLinkTitles {
+                        print("title: ", try i.text())
+                    }
+            
+            //var MusicianChart = try document.select("#wrap > div > div.content.chart > div.chart-top > ul > li:nth-child(2) > ul > li.grid-item.title > div > p:nth-child(3)")
+            //print(try MusicianChart.map{try $0.text()})
+            // .getElementById("BoardType1")?.getElementsByTag("tr").map{try $0.select("td:nth-child(4)")}.map{try $0.text()}
+            //#wrap > div > div.content.chart > div.chart-top > ul > li:nth-child(2) > ul > li.grid-item.title > div > p:nth-child(3)
+            
+            //let titleChart = try body.getElementById("BoardType1")?.getElementsByClass("left").map{try $0.text()}
+//            MusicianChart?.remove(at: 0)
+//            DispatchQueue.main.async {
+//                self.tjChartMusician = MusicianChart ?? []
+//                self.tjChartTitle = titleChart ?? []
+//            }
         }
         catch {
             print("tj Parse error:", error)
@@ -147,12 +163,15 @@ class GetPopularChart: ObservableObject {
                 return
             }
             let numbers = try body.getElementById("BoardType1")?.getElementsByTag("tr").map{try $0.select("td:nth-child(1)")}.map{try $0.text()}
+            guard let numbersUnwraped = numbers else {return}
             let singers = try body.getElementById("BoardType1")?.getElementsByTag("tr").map{try $0.select("td:nth-child(3)")}.map{try $0.text()}
+            guard let singersUnwraped = singers else {return}
             let titles = try body.getElementById("BoardType1")?.getElementsByClass("left").map{try $0.text()}
+            guard let titlesUnwraped = titles else {return}
             DispatchQueue.main.async {
-                self.Numbers = numbers!.filter{!$0.isEmpty}
-                self.Singers = singers!.filter{!$0.isEmpty}
-                self.Titles = titles!
+                self.Numbers = numbersUnwraped.filter{!$0.isEmpty}
+                self.Singers = singersUnwraped.filter{!$0.isEmpty}
+                self.Titles = titlesUnwraped
                 print(self.Numbers)
                 print(self.Singers)
                 print(self.Titles)
@@ -193,21 +212,22 @@ class GetPopularChart: ObservableObject {
         self.KYChartMusician = [String]()
         let baseUrl = "https://kygabang.com/chart/new_week.php"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        guard let url = URL(string: urlEncoded) else {return}
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(decoding: data!, as: UTF8.self)
+                guard let data = data else { return print(#function, "Data Unwarpping Failed") }
+                let content = String(decoding: data, as: UTF8.self)
                 self.KYParse(html: content)
                 if content.contains("scode=") {
-                    let firsts = content.ranges(of: "scode=")
-                    let ends = content.ranges(of: "&&amp")
+                    guard let firsts = content.ranges(of: "scode=").first?.lowerBound else {return}
+                    guard let ends = content.ranges(of: "&&amp").first?.lowerBound else {return}
                     //let index = content.distance(from: content.startIndex, to: firsts.last!.lowerBound)
-                    let scode = String(content[content.index(firsts.first!.lowerBound, offsetBy: 6)...content.index(before: ends.first!.lowerBound)])
+                    let scode = String(content[content.index(firsts, offsetBy: 6)...content.index(before: ends)])
                     print(scode)
                     self.KYKaraokePages(page: 2, scode: scode)
                 }
@@ -223,15 +243,16 @@ class GetPopularChart: ObservableObject {
         }
         let baseUrl = "https://kygabang.com/chart/new_week.php?scode=\(scode)&&page=\(page)"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        guard let url = URL(string: urlEncoded) else {return}
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(decoding: data!, as: UTF8.self)
+                guard let data = data else { return print(#function, "tj jpop Data Unwarpping Failed") }
+                let content = String(decoding: data, as: UTF8.self)
                 self.KYParse(html: content)
                 self.KYKaraokePages(page: page + 1, scode: scode)
             }

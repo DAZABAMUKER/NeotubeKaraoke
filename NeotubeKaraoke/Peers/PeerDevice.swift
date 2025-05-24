@@ -55,8 +55,8 @@ struct PeerDevice : ViewModifier {
                 HStack{
                     Button {
                         do {
-                            let data = "clap".data(using: .utf8)
-                            try mcSession.send(data!, toPeers: [device], with: .reliable)
+                            guard let data = "clap".data(using: .utf8) else {return}
+                            try mcSession.send(data, toPeers: [device], with: .reliable)
                         }
                         catch {
                             print("clap error: ", error)
@@ -68,8 +68,8 @@ struct PeerDevice : ViewModifier {
                     Divider()
                     Button {
                         do {
-                            let data = "환호".data(using: .utf8)
-                            try mcSession.send(data!, toPeers: [device], with: .reliable)
+                            guard let data = "환호".data(using: .utf8) else {return}
+                            try mcSession.send(data, toPeers: [device], with: .reliable)
                         }
                         catch {
                             print("환호 error:", error)

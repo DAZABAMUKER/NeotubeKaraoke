@@ -49,7 +49,8 @@ struct PlayListView: View {
     
     func addToNowPlaying(vid: LikeVideo) {
         if self.nowPlayList.contains(vid) {
-            self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: vid)!)
+            guard let index = self.nowPlayList.firstIndex(of: vid) else { return print("해당 비디오가 없어 현재 플레이리스트에 제거할 것 없음.") }
+            self.nowPlayList.remove(at: index)
         }
         self.nowPlayList.append(vid)
     }
@@ -62,8 +63,8 @@ struct PlayListView: View {
         if FileManager.default.fileExists(atPath: fileurl.path()) {
             guard let js = NSData(contentsOf: fileurl) else { return }
             let decoder = JSONDecoder()
-            let myData = try? decoder.decode([String].self, from: js as Data)
-            self.playlist = myData!
+            guard let myData = try? decoder.decode([String].self, from: js as Data) else {return print("json parsing error at decodePList")}
+            self.playlist = myData
         }
     }
     
@@ -71,7 +72,8 @@ struct PlayListView: View {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
         if self.recent.contains(video) {
-            self.recent.remove(at: self.recent.firstIndex(of: video)!)
+            guard let index = self.recent.firstIndex(of: video) else {return print("해당 비디오가 없어 현재 플레이리스트에 제거할 것 없음.")}
+            self.recent.remove(at: index)
         }
         if self.recent.count > 10 {
             self.recent.removeLast()
@@ -97,8 +99,9 @@ struct PlayListView: View {
         }
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
-        let data = try! JSONEncoder().encode(self.playlist)
+        
         do {
+            let data = try JSONEncoder().encode(self.playlist)
             if FileManager.default.fileExists(atPath: fileurl.path()) {
                 try FileManager.default.removeItem(at: fileurl)
             }
@@ -293,7 +296,8 @@ struct PlayListView: View {
                                         }
                                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                             Button {
-                                                self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: list)!)
+                                                guard let index = self.nowPlayList.firstIndex(of: list) else {return print("해당 리스트 없음")}
+                                                self.nowPlayList.remove(at: index)
                                             } label: {
                                                 Image(systemName: "trash")
                                             }
@@ -331,8 +335,8 @@ struct PlayListView: View {
                                     Button {
                                         //재생목록 제거
                                         print("제거")
-                                        let listIndex = self.playlist.firstIndex(of: item)
-                                        self.playlist.remove(at: listIndex!)
+                                        guard let listIndex = self.playlist.firstIndex(of: item) else {return}
+                                        self.playlist.remove(at: listIndex)
                                         savePlayList(title: "")
                                         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                                         let existPlaylist = doc.appendingPathComponent(item, conformingTo: .json)
@@ -492,7 +496,8 @@ struct showList: View {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
         if self.recent.contains(video) {
-            self.recent.remove(at: self.recent.firstIndex(of: video)!)
+            guard let index = self.recent.firstIndex(of: video) else { return }
+            self.recent.remove(at: index)
         }
         if self.recent.count > 10 {
             self.recent.removeLast()
@@ -531,7 +536,8 @@ struct showList: View {
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button {
-                        self.playlist.remove(at: self.playlist.firstIndex(of: playlist)!)
+                        guard let index = self.playlist.firstIndex(of: playlist) else { return }
+                        self.playlist.remove(at: index)
                         saveLists()
                     } label: {
                         Image(systemName: "trash")

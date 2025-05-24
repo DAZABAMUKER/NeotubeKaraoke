@@ -78,12 +78,6 @@
     "KY" : {
 
     },
-    "KY J-Pop" : {
-
-    },
-    "KY Pop" : {
-
-    },
     "KY 가요" : {
       "localizations" : {
         "en" : {
@@ -106,16 +100,8 @@
     "Purchased " : {
 
     },
-    "Tj" : {
-
-    },
-    "TJ J-Pop Top100" : {
-
-    },
-    "TJ Pop Top100" : {
-
-    },
     "TJ 가요" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -126,6 +112,7 @@
       }
     },
     "TJ 가요 Top100" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -441,6 +428,12 @@
           }
         }
       }
+    },
+    "앱 버전 정보를 찾을 수 없습니다." : {
+
+    },
+    "앱 버전: %@" : {
+
     },
     "앱 사용법" : {
       "localizations" : {

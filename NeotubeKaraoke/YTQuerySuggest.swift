@@ -24,21 +24,23 @@ class YTQuerySuggest: ObservableObject {
         let baseUrl = "https://suggestqueries.google.com/complete/search?hl=ko&ds=yt&hjson=t&client=youtube&q=" + query
         //let baseUrl = "http://mynf.codershigh.com"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        guard let url = URL(string: urlEncoded) else {return print("Url Unwarapping Error")}
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
+                guard let data = data else { return print("쿼리 데이터 없음.") }
                 let encodingEUCKR = CFStringConvertEncodingToNSStringEncoding(0x0422)
-                var strUTF8 = String(data: data!, encoding: String.Encoding(rawValue: encodingEUCKR)) ?? ""
+                var strUTF8 = String(data: data, encoding: String.Encoding(rawValue: encodingEUCKR)) ?? ""
                 
                 while strUTF8.contains("[\"") {
-                    let first = strUTF8.ranges(of: "[\"")
-                    let last = strUTF8.ranges(of: "\",")
-                    let word = strUTF8[strUTF8.index(first.first!.lowerBound, offsetBy: 2)...strUTF8.index(before: last.first!.lowerBound)]
+                    guard let first = strUTF8.ranges(of: "[\"").first?.lowerBound else {return}
+                    guard let last = strUTF8.ranges(of: "\",").first?.lowerBound else {return}
+                    
+                    let word = strUTF8[strUTF8.index(first, offsetBy: 2)...strUTF8.index(before: last)]
                     print(word)
                     DispatchQueue.main.async {
                         let pre = String(word)
@@ -48,7 +50,7 @@ class YTQuerySuggest: ObservableObject {
                         }
                         self.results.append(value)
                     }
-                    strUTF8.removeSubrange(strUTF8.index(first.first!.lowerBound, offsetBy: 1)...strUTF8.index(last.first!.lowerBound, offsetBy: 1))
+                    strUTF8.removeSubrange(strUTF8.index(first, offsetBy: 1)...strUTF8.index(last, offsetBy: 1))
                 }
                 if !strUTF8.contains("[\"") {
                     print("Done!!")

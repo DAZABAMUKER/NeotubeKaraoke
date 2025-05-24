@@ -544,7 +544,8 @@ extension searcher {
     
     func addToNowPlaying(vid: LikeVideo) {
         if self.nowPlayList.contains(vid) {
-            self.nowPlayList.remove(at: self.nowPlayList.firstIndex(of: vid)!)
+            guard let index = self.nowPlayList.firstIndex(of: vid) else { return }
+            self.nowPlayList.remove(at: index)
         }
         self.nowPlayList.append(vid)
     }
@@ -553,7 +554,8 @@ extension searcher {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("recent", conformingTo: .json)
         if self.recent.contains(video) {
-            self.recent.remove(at: self.recent.firstIndex(of: video)!)
+            guard let index = self.recent.firstIndex(of: video) else { return }
+            self.recent.remove(at: index)
         }
         if self.recent.count > 10 {
             self.recent.removeLast()
@@ -579,19 +581,23 @@ extension searcher {
         if FileManager.default.fileExists(atPath: fileurl.path()) {
             guard let js = NSData(contentsOf: fileurl) else { return }
             let decoder = JSONDecoder()
-            let myData = try? decoder.decode([LikeVideo].self, from: js as Data)
-            self.recent = myData!
+            guard let myData = try? decoder.decode([LikeVideo].self, from: js as Data) else {return print("error to open recent")}
+            self.recent = myData
         }
     }
     
     func decodePList() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("playlist", conformingTo: .json)
-        if FileManager.default.fileExists(atPath: fileurl.path()) {
-            guard let js = NSData(contentsOf: fileurl) else { return }
-            let decoder = JSONDecoder()
-            let myData = try? decoder.decode([String].self, from: js as Data)
-            self.playlist = myData!.map { playlists(name: $0)}
+        do {
+            if FileManager.default.fileExists(atPath: fileurl.path()) {
+                guard let js = NSData(contentsOf: fileurl) else { return }
+                let decoder = JSONDecoder()
+                let myData = try decoder.decode([String].self, from: js as Data)
+                self.playlist = myData.map { playlists(name: $0)}
+            }
+        } catch {
+            print("Playlist decode error", error)
         }
     }
     
@@ -607,14 +613,14 @@ extension searcher {
                 print(fileurl)
                 let js = try Data(contentsOf: fileurl)
                 let decoder = JSONDecoder()
-                var myData = try? decoder.decode([LikeVideo].self, from: js as Data)
-                print(myData?.count ?? 0)
-                if myData!.contains(item) {
+                var myData = try decoder.decode([LikeVideo].self, from: js as Data)
+                print(myData.count)
+                if myData.contains(item) {
                     self.alreadyHave = true
                     return
                 }
-                myData?.append(item)
-                print(myData?.count ?? 0)
+                myData.append(item)
+                print(myData.count)
                 try FileManager.default.removeItem(at: fileurl)
                 let data = try JSONEncoder().encode(myData)
                 FileManager.default.createFile(atPath: fileurl.path(percentEncoded: false), contents: data)

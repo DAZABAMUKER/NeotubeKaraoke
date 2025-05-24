@@ -23,11 +23,11 @@ class Models: ObservableObject {
         //vals += " karaoke"
         let urls = "https://www.googleapis.com/youtube/v3/search?part=\(Constant.API_PART)&q=\(vals)&order=relevance&type=video&maxResults=20&key=\(Constant.API_KEY)"
         let urlEncoded = urls.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
+        guard let url = URL(string: urlEncoded) else {return}
         
-        guard url != nil else {
-            return
-        }
+//        guard url != nil else {
+//            return
+//        }
         
         //Get URL Session Object
         let session = URLSession.shared
@@ -45,13 +45,14 @@ class Models: ObservableObject {
         
         
         //Get dataTask form URL Session Object
-        let dataTask = session.dataTask(with: url!) { data, response, error in
+        let dataTask = session.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 return
             }
             
             do {
+                guard let data = data else {return}
                 let httpResponse = response as? HTTPURLResponse
                 let responsStatusCode = httpResponse?.statusCode ?? 0
                 guard httpResponse?.statusCode ?? 000 < 300 else {
@@ -67,7 +68,7 @@ class Models: ObservableObject {
                 //parsing the data into video onject
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
-                let response = try decoder.decode(Response.self, from: data!)
+                let response = try decoder.decode(Response.self, from: data)
                 DispatchQueue.main.async {
                     if response.items != nil {
                         self.nothings = false

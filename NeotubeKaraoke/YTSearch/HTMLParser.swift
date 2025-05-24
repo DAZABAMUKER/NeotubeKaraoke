@@ -22,29 +22,31 @@ class HTMLParser: ObservableObject {
         let baseUrl = "https://m.youtube.com/results?search_query=" + values
         //let baseUrl = "http://mynf.codershigh.com"
         let urlEncoded = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: urlEncoded)
-        URLSession.shared.dataTask(with: url!) { data, response, error in
+        guard let url = URL(string: urlEncoded) else {return}
+        URLSession.shared.dataTask(with: url) { data, response, error in
             // if there were any error
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                let content = String(data: data!, encoding: .utf8)
-                self.parse(html: content!)
+                guard let data = data else { return print(#function, "tj jpop Data Unwarpping Failed") }
+                guard let content = String(data: data, encoding: .utf8) else {return}
+                self.parse(html: content)
             }
         }.resume()
     }
     
     public func callYTDLVersion() {
-        let latestVersionUrl = URL(string: "https://github.com/yt-dlp/yt-dlp/releases/latest")
-        URLSession.shared.dataTask(with: latestVersionUrl!) { data, response, error in
+        guard let latestVersionUrl = URL(string: "https://github.com/yt-dlp/yt-dlp/releases/latest") else {return}
+        URLSession.shared.dataTask(with: latestVersionUrl) { data, response, error in
             if error != nil || data == nil {
                 print(error as Any)
                 return
             }
             do {
-                _ = String(data: data!, encoding: .utf8)
+                guard let data = data else { return print(#function, "tj jpop Data Unwarpping Failed") }
+                _ = String(data: data, encoding: .utf8)
                 do {
                     
                 }
@@ -57,16 +59,18 @@ class HTMLParser: ObservableObject {
         do {
             if html.contains("ytInitialData") {
                 print("html.contains(ytInitialData)")
-                let firsts = html.ranges(of: "ytInitialData")
-                let ends = html.ranges(of: "';<")
+                guard let firsts = html.ranges(of: "ytInitialData").first?.lowerBound else {return}
+                guard let ends = html.ranges(of: "';<").first?.lowerBound else {return}
                 //let index = html.distance(from: html.startIndex, to: firsts.first!.lowerBound)
-                let ytData = html[html.index(firsts.first!.lowerBound, offsetBy: 17)...html.index(before: ends.first!.lowerBound)].replacingOccurrences(of: "\\x22", with: "\"").replacingOccurrences(of: "\\x7b", with: "{").replacingOccurrences(of: "\\x7d", with: "}").replacingOccurrences(of: "\\x3d", with: "=").replacingOccurrences(of: "\\x5b", with: "[").replacingOccurrences(of: "\\x5d", with: "]").replacingOccurrences(of: "\\x27", with: "'").replacingOccurrences(of: "u0026", with: "&").replacingOccurrences(of: "\\\"", with: "다자바무커").replacingOccurrences(of: "\\", with: "").replacingOccurrences(of: "다자바무커", with: "\\\"")
+                let ytData = html[html.index(firsts, offsetBy: 17)...html.index(before: ends)].replacingOccurrences(of: "\\x22", with: "\"").replacingOccurrences(of: "\\x7b", with: "{").replacingOccurrences(of: "\\x7d", with: "}").replacingOccurrences(of: "\\x3d", with: "=").replacingOccurrences(of: "\\x5b", with: "[").replacingOccurrences(of: "\\x5d", with: "]").replacingOccurrences(of: "\\x27", with: "'").replacingOccurrences(of: "u0026", with: "&").replacingOccurrences(of: "\\\"", with: "다자바무커").replacingOccurrences(of: "\\", with: "").replacingOccurrences(of: "다자바무커", with: "\\\"")
                 //print(ytData)
-                let ytJson = ytData.data(using: .utf8)
+                guard let ytJson = ytData.data(using: .utf8) else {return}
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
-                let temp = try decoder.decode(VidSearch.self, from: ytJson!).next.filter{$0.results != nil}.map{$0.results!}
-                //print(temp)
+                let temp = try decoder.decode(VidSearch.self, from: ytJson).next.filter{$0.results != nil}.reduce(into: [[VideoWithContextRenderer]]()) { partialResult, cell in
+                    guard let data = cell.results else { return }
+                    partialResult.append(data)
+                }
                 let response = temp.filter{!$0.isEmpty}.first ?? []
                 //print(response)
                 //let response = temp1.filter{$0}/*.first?.results?.filter{$0.videoId != "nil"} ?? []*/
