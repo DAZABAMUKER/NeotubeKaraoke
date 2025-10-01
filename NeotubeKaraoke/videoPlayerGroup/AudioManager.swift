@@ -18,9 +18,9 @@ class AudioManager: ObservableObject {
     var pitchNode: AVAudioUnitTimePitch!
     var EQNode: AVAudioUnitEQ!
     //var audioFileBuffer: AVAudioPCMBuffer!
-    var audioFile: AVAudioFile!
-    var clap: AVAudioFile!
-    var crowd: AVAudioFile!
+    var audioFile: AVAudioFile?
+    var clap: AVAudioFile?
+    var crowd: AVAudioFile?
     var audioFileLength: AVAudioFramePosition = 0
     var offsetFrame: Double = 0
     var intervalLimit: Double = 0.5
@@ -106,12 +106,20 @@ class AudioManager: ObservableObject {
         controlFrame(jump: vidTime)
     }
         
+    private func setActiveSession() throws {
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(.playback)
+        try session.setActive(true)
+    }
     
     func setEngine(file: URL, frequency: [Int], tone: Float, views: String) {
         do {
             audioEngine.stop()
             audioEngine.reset()
-            try AVAudioSession.sharedInstance().setCategory(.playback)
+            
+            try setActiveSession()
+            
+            
             print("실행중")
             /*guard let musicUrl = Bundle.main.url(forResource: "sample", withExtension: "mp3") else {
                 print(" 파일 안나오잖아")
@@ -120,6 +128,7 @@ class AudioManager: ObservableObject {
             guard let clapSound = Bundle.main.url(forResource: "clap", withExtension: "wav") else {return}
             guard let crowdSound = Bundle.main.url(forResource: "crowd", withExtension: "wav") else {return}
             self.audioFile = try AVAudioFile(forReading: file)
+            
             self.clap = try AVAudioFile(forReading: clapSound)
             self.crowd = try AVAudioFile(forReading: crowdSound)
             offsetFrame = 0
@@ -132,8 +141,8 @@ class AudioManager: ObservableObject {
             print(error)
             return
         }
-        
-        audioFileLength = audioFile.length 
+        guard let audioFile = audioFile else {return}
+        audioFileLength = audioFile.length
         print(views)
         print("오디오 파일 길이",audioFileLength/44100)
         pitchNode = AVAudioUnitTimePitch()
@@ -205,6 +214,9 @@ class AudioManager: ObservableObject {
         if self.clap == nil {
             return
         }
+        guard let clap = self.clap else {
+            return
+        }
         clapNode.scheduleFile(clap, at: nil, completionHandler: nil)
         clapNode.play()
     }
@@ -214,25 +226,33 @@ class AudioManager: ObservableObject {
         if self.crowd == nil {
             return
         }
+        guard let crowd = self.crowd else {
+            return
+        }
+        
         crowdNode.scheduleFile(crowd, at: nil, completionHandler: nil)
         crowdNode.play()
     }
     
     public func checkVidTime(vidTime: Double) {
         guard
-            let lastRenderTime = playerNode.lastRenderTime, let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime)
+            let lastRenderTime = playerNode.lastRenderTime,
+            let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime)
         else {
+            return
+        }
+        guard let audioFile = self.audioFile else {
             return
         }
         //print("매니저",Double(playerTime.sampleTime)/44100.0)
         
         let audiTime = offsetFrame + Double(playerTime.sampleTime)/playerTime.sampleRate
-        var interval = abs(audiTime - vidTime - self.vidSync)
+        let interval = abs(audiTime - vidTime - self.vidSync)
         //print(interval)
 //        if interval < 0 {
 //            interval *= -1
 //        }
-        if Double(audioFileLength / 44100) - audiTime < 1 {
+        if Double(audioFileLength) / audioFile.processingFormat.sampleRate - audiTime < 1 {
             playerNode.stop()
             //audioEngine.stop()
         }

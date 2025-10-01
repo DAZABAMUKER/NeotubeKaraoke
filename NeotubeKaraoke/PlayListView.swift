@@ -543,7 +543,26 @@ struct showList: View {
                         Image(systemName: "trash")
                     }
                     .tint(.red)
-
+                    Button {
+                        guard let index = self.playlist.firstIndex(of: playlist) else { return }
+                        if nowPlayList.isEmpty {
+                            nowPlayList.append(self.playlist[index])
+                        } else {
+                            nowPlayList.insert(self.playlist[index], at: videoOrder + 1)
+                        }
+                    } label: {
+                        Image(systemName: "text.line.magnify")
+                    }
+                    .tint(.green)
+                    Button {
+                        guard let index = self.playlist.firstIndex(of: playlist) else { return }
+                        nowPlayList.append(self.playlist[index])
+                    } label: {
+                        Image(systemName: "text.line.last.and.arrowtriangle.forward")
+                        Text("현재 재생목록 마지막에 추가")
+                            
+                    }
+                    .tint(.blue)
                 }
             }
             VStack{}.frame(height: 70)
