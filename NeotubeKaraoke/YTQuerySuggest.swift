@@ -40,8 +40,12 @@ class YTQuerySuggest: ObservableObject {
                     guard let first = strUTF8.ranges(of: "[\"").first?.lowerBound else {return}
                     guard let last = strUTF8.ranges(of: "\",").first?.lowerBound else {return}
                     
-                    let word = strUTF8[strUTF8.index(first, offsetBy: 2)...strUTF8.index(before: last)]
-                    print(word)
+                    var word : String.SubSequence =  String.SubSequence(cString: "노래방")
+                    if first < last {
+                        word = strUTF8[strUTF8.index(first, offsetBy: 2)...strUTF8.index(before: last)]
+                    } else {
+                        return print("word index error")
+                    }
                     DispatchQueue.main.async {
                         let pre = String(word)
                         var value = pre

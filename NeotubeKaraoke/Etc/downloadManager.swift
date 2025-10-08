@@ -15,6 +15,8 @@ class DownloadTask {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields?["Range"] = "bytes=\(start)-\(end - 1)"
+        request.setValue("com.google.ios.youtube/19.45.4 (iPhone16,2; U; CPU iOS 18_1_0 like Mac OS X;)", forHTTPHeaderField: "User-Agent")
+        request.setValue("en-US,en", forHTTPHeaderField: "accept-language")
         session.downloadTask(with: request, completionHandler: { tempUrl, response, error in
             if error != nil || response == nil {
                 //self.dowmloadtask(for: url, from: start, to: end, in: session, order: num, taskClass: taskClass, video: video)
@@ -26,6 +28,7 @@ class DownloadTask {
                 return
             }
             do {
+                print(response)
                 let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 let fileUrl = doc.appendingPathComponent("audio_\(num).\(video ? "mp4" : "m4a")")
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {

@@ -679,8 +679,8 @@ extension VideoPlay {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileUrl = doc.appendingPathComponent("audio.m4a")
         audioManager.setEngine(file: fileUrl, frequency: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000], tone: 0.0, views: "VideoPlay View - audio engine set")
-        self.tone = 0.0
-        self.tempo = 1.0
+        //self.tone = 0.0
+        //self.tempo = 1.0
         self.isAppear = true
         //self.isReady = true
         self.vidFull = true
