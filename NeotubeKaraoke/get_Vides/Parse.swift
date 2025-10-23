@@ -6,17 +6,23 @@
 //
 
 import Foundation
+import JavaScriptCore
 
 class Parse {
     
     var signature = ""
     var signUrl = ""
     
-    func get_Parse(url: String, video: Bool = true) {
+    func get_Parse(url: String, video: Bool = true, videoId: String = "", sigParam: [String:String] = [:]) {
         let watchUrl = URL(string: url)!
         var request = URLRequest(url: watchUrl)
         request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
-        request.setValue("en-US,en", forHTTPHeaderField: "accept-language")
+        request.setValue("www.youtube.com", forHTTPHeaderField: "Host")
+        request.setValue("*/*", forHTTPHeaderField: "Accept")
+        request.setValue("gzip, deflate, br", forHTTPHeaderField: "Accept-Encoding")
+        request.setValue("https://www.youtube.com/watch?v=\(videoId)", forHTTPHeaderField: "Referer")
+        request.setValue("https://www.youtube.com/)", forHTTPHeaderField: "Origin")
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil || data == nil {
                 print(error as Any)
@@ -32,8 +38,49 @@ class Parse {
                     //print(content)
                     
                 } else {
-                    let decrypt = Decipher().getMainFunction(jsFile: content, signature: self.signature, pattern: #"[\{\d\w\(\)\\.="]*?;(..\...\(.\,..?\);){3,}.*?\}"#, sig: true)
-                    let nFunc = Decipher().getMainFunction(jsFile: content, signature: self.signature, pattern: #"(?:.get\("n"\)\)&&\(b=|(?:b=String\.fromCharCode\(110\)|(?:[a-zA-Z0-9_$.]+)&&\(b="nn"\[\+.+?\])(?:,[a-zA-Z0-9_$]+\(a\))?,c=a\.(?:get\(b\)|[a-zA-Z0-9_$]+\[b\]\|\|null)\)&&\(c=|\b(?:[a-zA-Z0-9_$]+)=)(?:[a-zA-Z0-9_$]+)(?:\[(?:\d+)\])?\([a-zA-Z]\)(?:,[a-zA-Z0-9_$]+\.set\((?:"n+"|[a-zA-Z0-9_$]+),([a-zA-Z0-9_$]+)\))"#, sig: false)
+                    //print(content)
+                    if let funcName = Decipher().extractSignatureFunctionName(from: content),
+                       let varCode = Decipher().signatureFunctionVaricode(from: content),
+                       let funcCode = Decipher().extract_function_code(from: content, functionName: funcName, variableName: varCode[0])
+                    {
+                        print("Signature function name: \(funcName)")
+                        
+                        //print("Signature variable code: \(varCode)")
+                        //print("Signature function code: \(funcCode)")
+                        let context = JSContext()
+                        print("✅✅✅✅✅✅✅✅✅✅✅✅")
+                        print(varCode.last)
+                        context?.evaluateScript(varCode.last)
+                        for helper in funcCode {
+                            print(helper)
+                            context?.evaluateScript(helper)
+                        }
+                        let signature = sigParam["s"]
+                        print(context?.debugDescription ?? "No Context")
+                        
+                        if let decrypted = context?.objectForKeyedSubscript(funcName) {
+                            //let encryptedSignature = " // 암호화된 서명
+                            print("✅", signature)
+                            let result = decrypted.call(withArguments: [signature])
+                            //result?.context.
+                            print(funcName)
+                            print("~~~~~", decrypted)
+                            print("Decrypted signature: \(result?.toString() ?? "Error")")
+                            let sigs = "&"+(sigParam["sp"] ?? "sig")+"="+((result?.toString() ?? "Error").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+                            let finalURL = (sigParam["url"] ?? "")+sigs
+                            
+                            print("Final URL", finalURL)
+                        }
+                        
+                    } else {
+                        print("Signature function name not found.")
+                        
+                    }
+                    
+                    
+                    //let decrypt = Decipher().getMainFunction(jsFile: content, signature: self.signature, pattern: #"[\{\d\w\(\)\\.="]*?;(..\...\(.\,..?\);){3,}.*?\}"#, sig: true)
+                    
+                    //let nFunc = Decipher().getMainFunction(jsFile: content, signature: self.signature, pattern: #"(?:.get\("n"\)\)&&\(b=|(?:b=String\.fromCharCode\(110\)|(?:[a-zA-Z0-9_$.]+)&&\(b="nn"\[\+.+?\])(?:,[a-zA-Z0-9_$]+\(a\))?,c=a\.(?:get\(b\)|[a-zA-Z0-9_$]+\[b\]\|\|null)\)&&\(c=|\b(?:[a-zA-Z0-9_$]+)=)(?:[a-zA-Z0-9_$]+)(?:\[(?:\d+)\])?\([a-zA-Z]\)(?:,[a-zA-Z0-9_$]+\.set\((?:"n+"|[a-zA-Z0-9_$]+),([a-zA-Z0-9_$]+)\))"#, sig: false)
                                                              
                     //print(self.signUrl.removingPercentEncoding ?? "" + "&sig=\(decrypt)")
                     //print(self.signature)

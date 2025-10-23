@@ -66,6 +66,8 @@
 		03962DDE291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */; };
 		03962DEE2921C80500A376F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DED2921C80500A376F3 /* ContentView.swift */; };
 		03962DF029230D7D00A376F3 /* searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03962DEF29230D7C00A376F3 /* searcher.swift */; };
+		0396881C2E9896CF003CC225 /* LiquidGlassTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0396881B2E9896CF003CC225 /* LiquidGlassTestView.swift */; };
+		0396883C2E98A20E003CC225 /* ContentViewLiquid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0396883B2E98A206003CC225 /* ContentViewLiquid.swift */; };
 		0397116029D9D38E005ADE0E /* HTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0397115F29D9D38E005ADE0E /* HTMLParser.swift */; };
 		03A0A1C92A1481A8000C5159 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03A0A1C82A1481A8000C5159 /* GoogleService-Info.plist */; };
 		03AEE50229D5163C001B66E3 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEE50129D5163C001B66E3 /* MyWebView.swift */; };
@@ -141,6 +143,8 @@
 		03962DDF291F781500A376F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03962DED2921C80500A376F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		03962DEF29230D7C00A376F3 /* searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searcher.swift; sourceTree = "<group>"; };
+		0396881B2E9896CF003CC225 /* LiquidGlassTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlassTestView.swift; sourceTree = "<group>"; };
+		0396883B2E98A206003CC225 /* ContentViewLiquid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewLiquid.swift; sourceTree = "<group>"; };
 		0397115F29D9D38E005ADE0E /* HTMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLParser.swift; sourceTree = "<group>"; };
 		03A0A1C82A1481A8000C5159 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		03AEE50129D5163C001B66E3 /* MyWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
@@ -298,11 +302,13 @@
 				03962DDC291F781500A376F3 /* NeotubeKaraoke.xcdatamodeld */,
 				03962DD7291F781500A376F3 /* Preview Content */,
 				03962DED2921C80500A376F3 /* ContentView.swift */,
+				0396883B2E98A206003CC225 /* ContentViewLiquid.swift */,
 				03CCE1902BAD8C3100BAF2B0 /* PrivacyInfo.xcprivacy */,
 				037D082129B724E50069ED88 /* PlayListView.swift */,
 				038B76E529EFE5150016522A /* TopChart.swift */,
 				03962DEF29230D7C00A376F3 /* searcher.swift */,
 				0337C0CB2972650D0069899A /* VideoPlay.swift */,
+				0396881B2E9896CF003CC225 /* LiquidGlassTestView.swift */,
 				030FF2DA2CE8E4F40033C269 /* vlcTest.swift */,
 				037A998B2A02B0BB00A05065 /* FindingView.swift */,
 				0361D55D2B39CA5C009C2C42 /* ManualView.swift */,
@@ -537,6 +543,7 @@
 				03888F1A2BCBDB4900D73986 /* YTQuerySuggest.swift in Sources */,
 				037DC47D2AD50EAC008D7281 /* yt_main.swift in Sources */,
 				03CA4C8B29BDD13800507E26 /* ListView.swift in Sources */,
+				0396883C2E98A20E003CC225 /* ContentViewLiquid.swift in Sources */,
 				037DC4852AD841B6008D7281 /* fortestView.swift in Sources */,
 				037A998C2A02B0BB00A05065 /* FindingView.swift in Sources */,
 				037DC4872AD8F410008D7281 /* InnerTube.swift in Sources */,
@@ -559,6 +566,7 @@
 				03B17CB12A71FF7B00FA7AAF /* MakeRefund.swift in Sources */,
 				03C9B62F2A07987600BCA61A /* Pop.swift in Sources */,
 				037DC47F2AD5107F008D7281 /* quary.swift in Sources */,
+				0396881C2E9896CF003CC225 /* LiquidGlassTestView.swift in Sources */,
 				03962DD2291F781400A376F3 /* NeotubeKaraokeApp.swift in Sources */,
 				036EF0092955559E00789D57 /* Response.swift in Sources */,
 				033C57F629D31DC400340988 /* GADInterstitialAd.swift in Sources */,
@@ -744,11 +752,12 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.4;
+				MARKETING_VERSION = 1.3.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -783,11 +792,12 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.4;
+				MARKETING_VERSION = 1.3.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dazabamuker.NeotubeKaraoke;
 				PRODUCT_NAME = "$(TARGET_NAME)";

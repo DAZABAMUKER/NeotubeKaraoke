@@ -140,7 +140,7 @@ struct VideoPlay: View {
                     self.scHeight = geometry.size.height
                     self.scWidth = geometry.size.width
                     //self.vidFull = true // 전체 화면
-                    //self.innertube.player(videoId: videoId) // 영상 정보 함수 실행
+                    //self.innertube.initialWebPageData(videoId: videoId) //MARK: !!!!!!!!!!영상 정보 함수 실행
                     self.vidEnd = false // 영상 종료 아님 확인
                     //print(geometry.size.height)
                 }
@@ -329,7 +329,7 @@ struct VideoPlay: View {
                                 self.downloadManager.reset()
                                 self.innertube.infoReady = false
                                 
-                                self.innertube.player(videoId: self.videoId)
+                                self.innertube.initialWebPageData(videoId: self.videoId)
                                 //Parse().get_Parse(url:"https://youtube.com/watch?v=\(self.videoId)")
                                 self.clickVid = false
                             }
@@ -646,7 +646,7 @@ extension VideoPlay {
     }
     // 유튜브 영상 정보 가져와서 세팅
     func getTubeInfo() {
-        if !playing {
+        if false/*!playing*/ {
             //let hd720 = self.innertube.info?.streamingData?.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
             //let hd360 = self.innertube.info?.streamingData?.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
             let hd1080 = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "1080p"}.last

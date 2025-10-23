@@ -3,7 +3,7 @@ import WebKit
 
 struct MyWebView: UIViewRepresentable {
     
-    var UrlTOLoad: String = "https://www.youtube.com/results?search_query=go"
+    var UrlTOLoad: String = "https://www.youtube.com/embed/h_S_Un3YoFo"
     
     //var webView: WKWebView = WKWebView()
     

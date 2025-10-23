@@ -87,7 +87,7 @@ struct Client: Codable {
 }
 
 struct TubeResponse: Codable {
-    var playabilityStatus: Tubeavailability
+    var playabilityStatus: Tubeavailability?
     var streamingData: TubeStreamingData?
     var videoDetails: VideoDetails?
     var responseContext: ResponseCOntext?
@@ -217,9 +217,9 @@ struct TubeavailabilityBrowser: Codable {
 struct TubeStreamingDataBrowser: Codable {
     var formats: [TubeFormatsBrowser]?
     var adaptiveformats: [TubeAdaptiveFormatsBrowser]?
-    var expiresinseconds: String
+    var expiresinseconds: String?
     var hlsManifestUrl: String?
-    var serverabrstreamingurl: String?
+    var serverAbrStreamingUrl: String?
 }
 
 struct TubeFormatsBrowser: Codable {
@@ -236,7 +236,7 @@ struct TubeFormatsBrowser: Codable {
     var qualitylabel: String?
     var projectiontype: String?
     var averagebitrate: Int?
-    var audioquality: String
+    var audioquality: String?
     var approxdurationMs: String?
     var audiosampleRate: String?
     var audiochannels: Int?
@@ -270,8 +270,8 @@ struct TubeAdaptiveFormatsBrowser: Codable {
 }
 
 struct TubeAdaptiveFormatsRangeBrowser: Codable {
-    var start: String
-    var end: String
+    var start: String?
+    var end: String?
 }
 //struct streamingData: Decodable {
 //    var format
