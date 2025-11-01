@@ -663,9 +663,9 @@ extension VideoPlay {
             }
 //            let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
             
-            let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.mimeType?.contains("audio/mp4") ?? true}.last
-            print("🙏🙏🙏🙏🙏🙏🙏🙏🙏",audio?.mimeType)
-            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
+            guard let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.mimeType?.contains("audio/mp4") ?? true}.last else {return}
+            print("🙏🙏🙏🙏🙏🙏🙏🙏🙏",audio.mimeType)
+            self.downloadManager.createDownloadParts(url: URL(string: audio.url ?? "")!, size: Int(audio.contentLength ?? "") ?? 0, video: false )
             //self.player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
             let length = Double(self.innertube.info?.videoDetails?.lengthSeconds ?? "0") ?? 0
             self.vidLength = length
