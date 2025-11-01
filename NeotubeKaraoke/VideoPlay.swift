@@ -329,7 +329,8 @@ struct VideoPlay: View {
                                 self.downloadManager.reset()
                                 self.innertube.infoReady = false
                                 
-                                self.innertube.initialWebPageData(videoId: self.videoId)
+                                self.innertube.player(videoId: videoId)
+                                //self.innertube.initialWebPageData(videoId: self.videoId)
                                 //Parse().get_Parse(url:"https://youtube.com/watch?v=\(self.videoId)")
                                 self.clickVid = false
                             }
@@ -646,7 +647,7 @@ extension VideoPlay {
     }
     // 유튜브 영상 정보 가져와서 세팅
     func getTubeInfo() {
-        if false/*!playing*/ {
+        if !playing {
             //let hd720 = self.innertube.info?.streamingData?.formats?.filter{$0.qualityLabel ?? "" == "720p"}.last
             //let hd360 = self.innertube.info?.streamingData?.formats?.filter{$0.qualityLabel ?? "" == "360p"}.last
             let hd1080 = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.qualityLabel ?? "" == "1080p"}.last
@@ -660,8 +661,11 @@ extension VideoPlay {
             } else {
                 selectedVideo = hd1080 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
             }
-            let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
-            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "http://www.youtube.com")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
+//            let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
+            
+            let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.mimeType?.contains("audio/mp4") ?? true}.last
+            print("🙏🙏🙏🙏🙏🙏🙏🙏🙏",audio?.mimeType)
+            self.downloadManager.createDownloadParts(url: URL(string: audio?.url ?? "")!, size: Int(audio?.contentLength ?? "") ?? 0, video: false )
             //self.player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
             let length = Double(self.innertube.info?.videoDetails?.lengthSeconds ?? "0") ?? 0
             self.vidLength = length

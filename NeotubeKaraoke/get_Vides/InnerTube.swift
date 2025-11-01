@@ -35,7 +35,7 @@ let api_keys = [
     @AppStorage("visitorData") var visitorData: String = ""
     
     
-    init(client: String = "IOS", use_oath: Bool = false, allow_cache: Bool = false) {
+    init(client: String = "ANDROID_VR", use_oath: Bool = false, allow_cache: Bool = false) {
         self.allow_cache = allow_cache
         self.use_Oath = use_oath
         guard let default_clients = NSDataAsset(name: "default_clients") else { return }
@@ -43,13 +43,13 @@ let api_keys = [
         decoder.dateDecodingStrategy = .iso8601
         do {
             let response = try decoder.decode(Default_clients.self, from: default_clients.data)
-            self.api_key = response.ios.api_key
-            self.context = response.ios.context
-            self.header = response.ios.header
+            self.api_key = response.ANDROID_VR.api_key
+            self.context = response.ANDROID_VR.context
+            self.header = response.ANDROID_VR.header
             //player(videoId: videoId)
         }
         catch {
-            print("!!!!")
+            print("client error")
         }
         
         if self.use_Oath && self.allow_cache {
@@ -59,6 +59,64 @@ let api_keys = [
         
     }
     
+    func player(videoId: String) {
+    //        guard let key = self.api_key else {
+    //            return
+    //        }
+            //let endPointURL = URL(string: "https://www.youtube.com/youtubei/v1/player?videoId=\(videoId)&key=\(key)&contentCheckOk=True&racyCheckOk=True")!
+            let endPointURL = URL(string: "https://www.youtube.com/youtubei/v1/player?prettyPrint=false")!
+            //print(endPointURL.absoluteString)
+            //print(self.header.user_agent)
+            var request = URLRequest(url: endPointURL)
+            request.httpMethod = "POST"
+//            request.setValue("application/json", forHTTPHeaderField: "Content-type")
+//            request.setValue("com.google.ios.youtube/19.45.4 (iPhone16,2; U; CPU iOS 18_1_0 like Mac OS X;)", forHTTPHeaderField: "User-Agent")
+        request.setValue("application/json", forHTTPHeaderField: "Content-type")
+        request.setValue("com.google.android.apps.youtube.vr.oculus/1.60.19 (Linux; U; Android 12L; eureka-user Build/SQ3A.220605.009.A1) gzip", forHTTPHeaderField: "User-Agent")
+        request.setValue("28", forHTTPHeaderField: "X-Youtube-Client-Name")
+            request.setValue("\(self.visitorData)", forHTTPHeaderField: "X-Goog-Visitor-Id")
+        print(self.visitorData, "@@@@@@@@")
+
+            do {
+                let contextData = try JSONEncoder().encode(ContentContaioner(context: self.context, videoId: videoId))
+                request.httpBody = contextData
+                //print(String(data: contextData, encoding: .utf8))
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    if error != nil || data == nil {
+                        print("!!@@!!")
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        do {
+                            guard let data = data else {return}
+                            print("🚗🚗🚗🚗🚗🚗", String(data: data ?? Data(), encoding: .utf8), "🚗🚗🚗🚗🚗")
+                            self.info = try JSONDecoder().decode(TubeResponse.self, from: data)
+                            if self.info?.playabilityStatus?.status == "LOGIN_REQUIRED" {
+                                
+                                self.player(videoId: videoId)
+                                return
+                            }
+                            self.visitorData = self.info?.responseContext?.visitorData ?? ""
+                            
+                            //print("🚗🚗🚗🚗🚗🚗🚗🚗", self.info, "🚗🚗🚗🚗🚗🚗🚗🚗🚗")
+                            if self.info?.streamingData?.hlsManifestUrl != nil {
+                                self.HLSManifest = true
+                                print("HLS Manifest url", self.info?.streamingData?.hlsManifestUrl)
+                                //return
+                            }
+                            self.infoReady = true
+                        }
+                        catch {
+                            print(error, #function)
+                        }
+                    }
+                }.resume()
+            } catch {
+                print("Json encode error: ")
+                print(error)
+            }
+            
+        }
     
     func initialWebPageData(videoId: String) {
         //let endPointURL = URL(string: "https://www.youtube.com/embed/\(videoId)")!
@@ -132,7 +190,7 @@ let api_keys = [
 //                                        print("✅ Parsed jsUrl :", playerString)
 //                                    }
                                     let json = try JSONDecoder().decode(EmbedInitialData.self, from: jsonData)
-                                    self.player(videoId: videoId, jsonData: json, jsUrl: jsUrl)
+                                    self.playerForExtract(videoId: videoId, jsonData: json, jsUrl: jsUrl)
                                     guard let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {return}
                                     //print("✅ Parsed ytcfg:", json)
                                     //print("✅ Parsed ytcfg:", json)
@@ -152,7 +210,15 @@ let api_keys = [
         }
     }
     
-    func player(videoId: String, jsonData: EmbedInitialData, jsUrl: String) {
+    
+    
+    
+    
+    
+    
+    
+    
+    func playerForExtract(videoId: String, jsonData: EmbedInitialData, jsUrl: String) {
         if videoId == "노래방" {
             return
         }

@@ -44,7 +44,7 @@ class JavaScriptFunctionExtractor {
         return regex.firstMatch(in: code, options: [], range: NSRange(code.startIndex..<code.endIndex, in: code))
     }
 
-    private func separateAtParen(from code: String) -> (body: String, remaining: String)? {
+    func separateAtParen(from code: String) -> (body: String, remaining: String)? {
         var openParenCount = 0
         var body = ""
         var remaining = ""
@@ -297,6 +297,86 @@ class Decipher {
         return "sig func not found"
     }
     
+    func extract_nFunction(from jsCode: String, value: String, name: String)->[String]? {
+        
+        var nFuncArray: [String] = []
+        
+        let value = value.replacingOccurrences(of: "\'\"/[;{\'", with: "\"\"")
+        print(value)
+        if let data = value.data(using: .utf8) {
+            let decoder = JSONDecoder()
+            do {
+                // Data를 [String] 타입으로 디코딩 시도
+//                        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String]
+//                        print("⚙️⚙️", json)
+                let stringArray = try decoder.decode([String].self, from: data)
+                let nFuncReturn = stringArray.filter{$0.contains("-_w8_")}.first
+                print(nFuncReturn ?? "")
+                let nFuncGlobalVarIndex = stringArray.firstIndex(of: nFuncReturn ?? "")
+                print(nFuncGlobalVarIndex)
+                
+            
+        
+        let patternN = #"(?x)\{\s*return\s+\#(NSRegularExpression.escapedPattern(for: name))\[\#(nFuncGlobalVarIndex ?? 39)\]\s*\+\s*(?<argname>[a-zA-Z0-9_$]+)\s*\}"#
+        if let regexN = try? NSRegularExpression(pattern: patternN, options: []) {
+            let rangeN = NSRange(jsCode.startIndex..<jsCode.endIndex, in: jsCode)
+            if let matchN = regexN.firstMatch(in: jsCode, options: [], range: rangeN){
+                let argname = String(jsCode[Range(matchN.range(withName: "argname"), in: jsCode)!]).reversed()
+                let matchIndex = matchN.range(at: 0).location
+                let index = jsCode.index(jsCode.startIndex, offsetBy: matchIndex)
+                let jsCode_reversed = String(jsCode[..<index].reversed())
+                let patternN2 = #"""
+\{\s*\)\#(NSRegularExpression.escapedPattern(for: String(argname)))\(\s*
+(?:
+(?<funcnameA>[a-zA-Z0-9_$]+)\s*noitcnuf\s*
+|
+noitcnuf\s*=\s*(?<funcnameB>[a-zA-Z0-9_$]+)(?:\s+rav)?
+)
+[;\n]
+"""#
+                //let testRegex = try NSRegularExpression(pattern: patternN2, options: [.allowCommentsAndWhitespace])
+                
+                
+                if let regexN2 = try? NSRegularExpression(pattern: patternN2, options: [.allowCommentsAndWhitespace]) {
+                    let rangeN2 = NSRange(jsCode_reversed.startIndex..<jsCode_reversed.endIndex, in: jsCode_reversed)
+                    if let matchN2 = regexN2.firstMatch(in: jsCode_reversed, options: [], range: rangeN2){
+                        let nMatchRange = Range(matchN2.range(at: 0), in: jsCode_reversed)!
+                        var NfuncName = ""
+                        if let funcname_a = Range(matchN2.range(withName: "funcnameA"), in: jsCode_reversed) {
+                            NfuncName = String(jsCode_reversed[funcname_a].reversed())
+                        } else if let funcname_b = Range(matchN2.range(withName: "funcnameB"), in: jsCode_reversed) {
+                            NfuncName = String(jsCode_reversed[funcname_b].reversed())
+                        }
+//                                        let funcname_a = String(jsCode_reversed[Range(matchN2.range(withName: "funcnameA"), in: jsCode_reversed)!])
+//                                        let funcname_b = String(jsCode_reversed[Range(matchN2.range(withName: "funcnameB"), in: jsCode_reversed)!])
+//                                        print("🔍", funcname_a, funcname_b)
+                        print("🔍", NfuncName)
+                        nFuncArray.append(NfuncName)
+                        let nFuncCode = extract_function_code_for_n(from: jsCode, functionName: NfuncName, variableName: nil)
+                        nFuncArray.append(nFuncCode ?? "")
+                        
+                        
+                        
+                        return nFuncArray
+                    }
+                } else{
+                    print("아마 정규식 에러")
+                }
+                
+                
+            }
+        }
+            } catch {
+                print("JSON 디코딩 오류: \(error)")
+            }
+        }
+        return ["nFunction Not Found."]
+    }
+    
+    
+    
+    
+    
     func signatureFunctionVaricode(from jsCode: String)->[String]? {
         let pattern = #"['"]use\s+strict['"];\s*(?<code>var\s+(?<name>[A-Za-z0-9_$]+)\s*=\s*(?<value>(["'])(?:(?!\4).|\\.)+\4\.split\((["'])(?:(?!\5).)+\5\)|\[\s*(?:(["'])(?:(?!\6).|\\.)*\6\s*,?\s*)+\]))[;,]"#
         
@@ -307,68 +387,11 @@ class Decipher {
                let nameRange = Range(match.range(withName: "name"), in: jsCode),
                let valueRange = Range(match.range(withName: "value"), in: jsCode)
             {
-                let value = String(jsCode[valueRange]).replacingOccurrences(of: "\'\"/[;{\'", with: "\"\"")
-                print(value)
-                if let data = value.data(using: .utf8) {
-                    let decoder = JSONDecoder()
-                    do {
-                        // Data를 [String] 타입으로 디코딩 시도
-//                        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String]
-//                        print("⚙️⚙️", json)
-                        let stringArray = try decoder.decode([String].self, from: data)
-                        let nFuncReturn = stringArray.filter{$0.contains("-_w8_")}.first
-                        print(nFuncReturn ?? "")
-                        let nFuncGlobalVarIndex = stringArray.firstIndex(of: nFuncReturn ?? "")
-                        print(nFuncGlobalVarIndex)
-                        
-                        let patternN = #"(?x)\{\s*return\s+\#(NSRegularExpression.escapedPattern(for: String(jsCode[nameRange])))\[\#(nFuncGlobalVarIndex ?? 39)\]\s*\+\s*(?<argname>[a-zA-Z0-9_$]+)\s*\}"#
-                        if let regexN = try? NSRegularExpression(pattern: patternN, options: []) {
-                            let rangeN = NSRange(jsCode.startIndex..<jsCode.endIndex, in: jsCode)
-                            if let matchN = regexN.firstMatch(in: jsCode, options: [], range: rangeN){
-                                let argname = String(jsCode[Range(matchN.range(withName: "argname"), in: jsCode)!]).reversed()
-                                let matchIndex = matchN.range(at: 0).location
-                                let index = jsCode.index(jsCode.startIndex, offsetBy: matchIndex)
-                                let jsCode_reversed = String(jsCode[..<index].reversed())
-                                let patternN2 = #"""
-\{\s*\)\#(NSRegularExpression.escapedPattern(for: String(argname)))\(\s*
-(?:
-(?<funcnameA>[a-zA-Z0-9_$]+)\s*noitcnuf\s*
-|
-noitcnuf\s*=\s*(?<funcnameB>[a-zA-Z0-9_$]+)(?:\s+rav)?
-)
-[;\n]
-"""#
-                                //let testRegex = try NSRegularExpression(pattern: patternN2, options: [.allowCommentsAndWhitespace])
-                                
-                                
-                                if let regexN2 = try? NSRegularExpression(pattern: patternN2, options: [.allowCommentsAndWhitespace]) {
-                                    let rangeN2 = NSRange(jsCode_reversed.startIndex..<jsCode_reversed.endIndex, in: jsCode_reversed)
-                                    if let matchN2 = regexN2.firstMatch(in: jsCode_reversed, options: [], range: rangeN2){
-                                        let nMatchRange = Range(matchN2.range(at: 0), in: jsCode_reversed)!
-                                        var NfuncName = ""
-                                        if let funcname_a = Range(matchN2.range(withName: "funcnameA"), in: jsCode_reversed) {
-                                            NfuncName = String(jsCode_reversed[funcname_a].reversed())
-                                        } else if let funcname_b = Range(matchN2.range(withName: "funcnameB"), in: jsCode_reversed) {
-                                            NfuncName = String(jsCode_reversed[funcname_b].reversed())
-                                        }
-//                                        let funcname_a = String(jsCode_reversed[Range(matchN2.range(withName: "funcnameA"), in: jsCode_reversed)!])
-//                                        let funcname_b = String(jsCode_reversed[Range(matchN2.range(withName: "funcnameB"), in: jsCode_reversed)!])
-//                                        print("🔍", funcname_a, funcname_b)
-                                        print("🔍", NfuncName)
-                                    }
-                                } else{
-                                    print("아마 정규식 에러")
-                                }
-                            }
-                        }
-                    } catch {
-                        print("JSON 디코딩 오류: \(error)")
-                    }
-                }
+                
                 
                 
                 //print("funVarName : ",jsCode[nameRange], "funcVarValue : ",jsCode[valueRange])
-                return [ String(jsCode[nameRange]), String(jsCode[codeRaange])]
+                return [ String(jsCode[nameRange]), String(jsCode[codeRaange]), String(jsCode[valueRange])]
             }
         }
         return ["sig var not found"]
@@ -376,7 +399,7 @@ noitcnuf\s*=\s*(?<funcnameB>[a-zA-Z0-9_$]+)(?:\s+rav)?
     
     func extract_function_code(from jsCode: String, functionName: String, variableName: String?)->[String]? {
         let escapedName = functionName.escapedForRegex
-        let pattern = #"(?x)(?:function\s+\#(escapedName)|[\{;,]\s*\#(escapedName)\s*=\s*function|(?:var|const|let)\s+\#(escapedName)\s*=\s*function)\s*\((?<args>[^)]*)\)\s*(?<code>\{[\s\S]*?\})"#
+        let pattern = #"(?x)(?s)(?:function\s+\#(escapedName)|[\{;,]\s*\#(escapedName)\s*=\s*function|(?:var|const|let)\s+\#(escapedName)\s*=\s*function)\s*\((?<args>[^)]*)\)\s*(?<code>\{.+?\})"#
         print(pattern)
         
         if let regex = try? NSRegularExpression(pattern: pattern, options: [.allowCommentsAndWhitespace, .dotMatchesLineSeparators]) {
@@ -388,19 +411,70 @@ noitcnuf\s*=\s*(?<funcnameB>[a-zA-Z0-9_$]+)(?:\s+rav)?
                 print("✅ 인자: \(args)")
                 print("✅ 코드: \(code)")
                 
-                let helpers = extract_helper(from: code, args: args, variableName: variableName)
-                let helperFunc = extract_helper_code(from: jsCode, helpers: helpers)
-                
-                var helps = [String(allCdoe)]
-                helps.append(contentsOf: helperFunc ?? [])
-                
-                return helps
+                if variableName != nil {
+                    let helpers = extract_helper(from: code, args: args, variableName: variableName)
+                    let helperFunc = extract_helper_code(from: jsCode, helpers: helpers)
+                    var helps = [String(allCdoe)]
+                    helps.append(contentsOf: helperFunc ?? [])
+                    
+                    return helps
+                }
+                return [String(allCdoe)]
             }
         } else {
             print("❌ 정규식 생성 오류")
         }
         
         return ["decrypt function code not found"]
+    }
+    
+    func extract_function_code_for_n(from jsCode: String, functionName: String, variableName: String?)->String? {
+        let escapedName = functionName.escapedForRegex
+        let pattern = #"(?x)(?s)(?:function\s+\#(escapedName)|[\{;,]\s*\#(escapedName)\s*=\s*function|(?:var|const|let)\s+\#(escapedName)\s*=\s*function)\s*\((?<args>[^)]*)\)\s*"#
+        print(pattern)
+        
+        if let regex = try? NSRegularExpression(pattern: pattern, options: [.allowCommentsAndWhitespace, .dotMatchesLineSeparators]) {
+            let range = NSRange(jsCode.startIndex..<jsCode.endIndex, in: jsCode)
+            if let match = regex.firstMatch(in: jsCode, range: range) {
+                let args = String(jsCode[Range(match.range(withName: "args"), in: jsCode)!])
+                
+                guard let match_index = Range(NSRange(location: match.range.location, length: 0), in: jsCode)?.lowerBound else {return nil}
+                //print(String(jsCode[match_index...]))
+                guard let code = multiBrace(from: String(jsCode[match_index...])) else {return nil}
+                print("✅ 인자: \(args)")
+                print("✅ 코드: \(code)")
+                
+                return String(code)
+            }
+        } else {
+            print("❌ 정규식 생성 오류")
+        }
+        
+        return "decrypt N function code not found"
+    }
+    
+    func multiBrace(from jsCode: String) -> String? {
+        guard let braceStartIndex = jsCode.firstIndex(of: "{") else {
+                return nil
+            }
+
+            var braceCount = 0
+            var currentIndex = braceStartIndex
+
+            while currentIndex < jsCode.endIndex {
+                if jsCode[currentIndex] == "{" {
+                    braceCount += 1
+                } else if jsCode[currentIndex] == "}" {
+                    braceCount -= 1
+                    if braceCount == 0 {
+                        // 중괄호 블록 끝 찾음
+                        return String(jsCode[...jsCode.index(after: currentIndex)])
+                    }
+                }
+                currentIndex = jsCode.index(after: currentIndex)
+            }
+
+            return nil
     }
     
     func extract_helper(from jsFunctionCode: String, args: String, variableName: String?)->[String]{

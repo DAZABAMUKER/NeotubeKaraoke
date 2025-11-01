@@ -41,16 +41,19 @@ class Parse {
                     //print(content)
                     if let funcName = Decipher().extractSignatureFunctionName(from: content),
                        let varCode = Decipher().signatureFunctionVaricode(from: content),
-                       let funcCode = Decipher().extract_function_code(from: content, functionName: funcName, variableName: varCode[0])
+                       let funcCode = Decipher().extract_function_code(from: content, functionName: funcName, variableName: varCode[0]),
+                       let nFuncCode = Decipher().extract_nFunction(from: content, value: varCode.last ?? "", name: varCode.first ?? "")
                     {
                         print("Signature function name: \(funcName)")
                         
                         //print("Signature variable code: \(varCode)")
                         //print("Signature function code: \(funcCode)")
                         let context = JSContext()
+                        //context?.evaluateScript(content)
                         print("✅✅✅✅✅✅✅✅✅✅✅✅")
-                        print(varCode.last)
-                        context?.evaluateScript(varCode.last)
+                        print(nFuncCode.last)
+                        context?.evaluateScript(varCode[1])
+                        context?.evaluateScript(nFuncCode.last)
                         for helper in funcCode {
                             print(helper)
                             context?.evaluateScript(helper)
@@ -66,10 +69,22 @@ class Parse {
                             print(funcName)
                             print("~~~~~", decrypted)
                             print("Decrypted signature: \(result?.toString() ?? "Error")")
-                            let sigs = "&"+(sigParam["sp"] ?? "sig")+"="+((result?.toString() ?? "Error").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-                            let finalURL = (sigParam["url"] ?? "")+sigs
                             
-                            print("Final URL", finalURL)
+                            if let decryptedN = context?.objectForKeyedSubscript(nFuncCode.first) {
+                                guard let url = sigParam["url"]?.removingPercentEncoding,
+                                      let urlComponent = URLComponents(string: url),
+                                      let queryItems = urlComponent.queryItems,
+                                      let nQueryItems = queryItems.filter({ $0.name == "n" }) as [URLQueryItem]?,
+                                      let nQuery = nQueryItems.first?.value
+                                else {
+                                    return
+                                }
+                                print("🌳", nQuery)
+                                
+                                let Nresult = decryptedN.call(withArguments: [nQuery])
+                                print( "🌳", Nresult?.toString() ?? "Error")
+                            }
+                            
                         }
                         
                     } else {
@@ -361,3 +376,4 @@ class Parse {
         }
     }
 }
+

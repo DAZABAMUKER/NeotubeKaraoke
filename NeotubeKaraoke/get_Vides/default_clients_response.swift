@@ -27,6 +27,9 @@ struct Default_clients: Codable {
     var MWEB: Client_response
     var TV_EMBED: Client_response
     var ios: Client_response
+    
+    var ANDROID_VR: Client_response
+
 }
 
 struct Client_response: Codable{
@@ -67,7 +70,7 @@ struct Client: Codable {
     var clientName: String
     var clientVersion: String?
     var deviceModel: String?
-    var androidSdkVersion: Int?
+    var androidSdkVersion: String?
     var clientScreen: String?
     var osVersion: String?
     var osName: String?
@@ -76,14 +79,6 @@ struct Client: Codable {
     var hl: String?
     var timezone: String?
     var utcOffsetMinutes: Int?
-    
-    enum CodingKeys: CodingKey {
-        case clientName
-        case clientVersion
-        case deviceModel
-        case androidSdkVersion
-        case clientScreen
-    }
 }
 
 struct TubeResponse: Codable {
