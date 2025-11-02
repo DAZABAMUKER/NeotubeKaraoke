@@ -32,7 +32,7 @@ class DownloadTask {
         request.allHTTPHeaderFields?["Range"] = "bytes=\(start)-\(end - 1)"
         request.setValue("com.google.android.apps.youtube.vr.oculus/1.60.19 (Linux; U; Android 12L; eureka-user Build/SQ3A.220605.009.A1) gzip", forHTTPHeaderField: "User-Agent")
         request.setValue("en-US,en", forHTTPHeaderField: "accept-language")
-        request.setValue("\(self.visitorData)", forHTTPHeaderField: "X-Goog-Visitor-Id")
+        //request.setValue("\(self.visitorData)", forHTTPHeaderField: "X-Goog-Visitor-Id")
         request.setValue("https://www.youtube.com", forHTTPHeaderField: "Referer")
         request.setValue("https://www.youtube.com", forHTTPHeaderField: "Origin")
         

@@ -74,13 +74,20 @@ let api_keys = [
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         request.setValue("com.google.android.apps.youtube.vr.oculus/1.60.19 (Linux; U; Android 12L; eureka-user Build/SQ3A.220605.009.A1) gzip", forHTTPHeaderField: "User-Agent")
         request.setValue("28", forHTTPHeaderField: "X-Youtube-Client-Name")
-            request.setValue("\(self.visitorData)", forHTTPHeaderField: "X-Goog-Visitor-Id")
+        request.setValue("en-US,en", forHTTPHeaderField: "accept-language")
+            //request.setValue("\(self.visitorData)", forHTTPHeaderField: "X-Goog-Visitor-Id")
+        
+        
         print(self.visitorData, "@@@@@@@@")
 
             do {
-                let contextData = try JSONEncoder().encode(ContentContaioner(context: self.context, videoId: videoId))
+                
+                self.context.client.visitorData = self.visitorData
+                let contextData = try JSONEncoder().encode(ContentContaioner(context: self.context, videoId: videoId, contentCheckOk: "true"))
                 request.httpBody = contextData
                 //print(String(data: contextData, encoding: .utf8))
+                print(request.httpBody)
+                print(request.allHTTPHeaderFields)
                 URLSession.shared.dataTask(with: request) { data, response, error in
                     if error != nil || data == nil {
                         print("!!@@!!")
@@ -93,8 +100,8 @@ let api_keys = [
                             self.info = try JSONDecoder().decode(TubeResponse.self, from: data)
                             if self.info?.playabilityStatus?.status == "LOGIN_REQUIRED" {
                                 
-                                self.player(videoId: videoId)
-                                return
+                                //self.player(videoId: videoId)
+                                
                             }
                             self.visitorData = self.info?.responseContext?.visitorData ?? ""
                             

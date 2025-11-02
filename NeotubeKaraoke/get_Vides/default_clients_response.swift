@@ -57,6 +57,7 @@ struct Contexts: Codable {
 struct ContentContaioner: Codable {
     var context: Contexts
     var videoId: String?
+    var contentCheckOk: String?
 }
 
 struct Header: Codable {
@@ -79,6 +80,7 @@ struct Client: Codable {
     var hl: String?
     var timezone: String?
     var utcOffsetMinutes: Int?
+    var visitorData: String?
 }
 
 struct TubeResponse: Codable {
