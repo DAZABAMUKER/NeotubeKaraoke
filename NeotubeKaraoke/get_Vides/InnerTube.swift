@@ -59,10 +59,14 @@ let api_keys = [
         
     }
     
-    func player(videoId: String) {
+    func player(videoId: String, try_again: Int = 0) {
     //        guard let key = self.api_key else {
     //            return
     //        }
+        
+        if try_again > 2 {
+            return
+        }
             //let endPointURL = URL(string: "https://www.youtube.com/youtubei/v1/player?videoId=\(videoId)&key=\(key)&contentCheckOk=True&racyCheckOk=True")!
             let endPointURL = URL(string: "https://www.youtube.com/youtubei/v1/player?prettyPrint=false")!
             //print(endPointURL.absoluteString)
@@ -99,8 +103,7 @@ let api_keys = [
                             print("🚗🚗🚗🚗🚗🚗", String(data: data ?? Data(), encoding: .utf8), "🚗🚗🚗🚗🚗")
                             self.info = try JSONDecoder().decode(TubeResponse.self, from: data)
                             if self.info?.playabilityStatus?.status == "LOGIN_REQUIRED" {
-                                
-                                //self.player(videoId: videoId)
+                                self.player(videoId: videoId, try_again: try_again + 1)
                                 
                             }
                             self.visitorData = self.info?.responseContext?.visitorData ?? ""
