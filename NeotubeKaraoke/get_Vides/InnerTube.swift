@@ -102,19 +102,19 @@ let api_keys = [
                             guard let data = data else {return}
                             print("🚗🚗🚗🚗🚗🚗", String(data: data ?? Data(), encoding: .utf8), "🚗🚗🚗🚗🚗")
                             self.info = try JSONDecoder().decode(TubeResponse.self, from: data)
+                            self.visitorData = self.info?.responseContext?.visitorData ?? ""
                             if self.info?.playabilityStatus?.status == "LOGIN_REQUIRED" {
                                 self.player(videoId: videoId, try_again: try_again + 1)
+                            } else {
+                                //print("🚗🚗🚗🚗🚗🚗🚗🚗", self.info, "🚗🚗🚗🚗🚗🚗🚗🚗🚗")
+                                if self.info?.streamingData?.hlsManifestUrl != nil {
+                                    self.HLSManifest = true
+                                    print("HLS Manifest url", self.info?.streamingData?.hlsManifestUrl)
+                                    //return
+                                }
                                 
+                                self.infoReady = true
                             }
-                            self.visitorData = self.info?.responseContext?.visitorData ?? ""
-                            
-                            //print("🚗🚗🚗🚗🚗🚗🚗🚗", self.info, "🚗🚗🚗🚗🚗🚗🚗🚗🚗")
-                            if self.info?.streamingData?.hlsManifestUrl != nil {
-                                self.HLSManifest = true
-                                print("HLS Manifest url", self.info?.streamingData?.hlsManifestUrl)
-                                //return
-                            }
-                            self.infoReady = true
                         }
                         catch {
                             print(error, #function)

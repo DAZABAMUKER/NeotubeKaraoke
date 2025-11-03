@@ -662,8 +662,8 @@ extension VideoPlay {
                 selectedVideo = hd1080 ?? /*TubeFormats(audioQuality: "")*/ TubeAdaptiveFormats(audioQuality: "")
             }
 //            let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.audioQuality == "AUDIO_QUALITY_MEDIUM"}.first
-            
-            guard let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.mimeType?.contains("audio/mp4") ?? true}.last else {return}
+            print("🙏🙏🙏🙏🙏🙏🙏🙏🙏", self.innertube.info?.streamingData?.adaptiveFormats?.map { $0 })
+            guard let audio = self.innertube.info?.streamingData?.adaptiveFormats?.filter{$0.mimeType?.contains("audio") ?? true && $0.mimeType?.contains("mp4") ?? true}.last else {return}
             print("🙏🙏🙏🙏🙏🙏🙏🙏🙏",audio.mimeType)
             self.downloadManager.createDownloadParts(url: URL(string: audio.url ?? "")!, size: Int(audio.contentLength ?? "") ?? 0, video: false )
             //self.player.prepareToPlay(url: URL(string: selectedVideo.url ?? "http://www.youtube.com")!, audioManager: audioManager, fileSize: Int(selectedVideo.contentLength ?? "") ?? 0, isOk: true)
@@ -705,3 +705,4 @@ extension VideoPlay {
         }
     }
 }
+

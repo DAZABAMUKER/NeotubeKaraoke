@@ -47,7 +47,7 @@ class DownloadTask {
                 return
             }
             do {
-                //print(response)
+                print(response)
                 let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 let fileUrl = doc.appendingPathComponent("audio_\(num).\(video ? "mp4" : "m4a")")
                 if FileManager.default.fileExists(atPath: fileUrl.path()) {
