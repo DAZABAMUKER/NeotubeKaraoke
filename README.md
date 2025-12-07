@@ -1,9 +1,8 @@
 # 너튜브 노래방 앱 제작
  - 출시 준비중
-## 사용한 도구들
- - YoutubeDL
- - yt-dl ios package
+## 사용한 도구
  - YouTube API(쿠오타 무료라 제한 결려있음.)
+ - vlc kit
 ### 앱 아이콘과 이미지
 <img
   src="https://github.com/DAZABAMUKER/NeotubeKaraoke/blob/main/NeotubeKaraoke/Assets.xcassets/AppIcon.appiconset/AppIcon.png?raw=true"
